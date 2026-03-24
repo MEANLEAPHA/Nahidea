@@ -1,5 +1,5 @@
 const pool = require("../../config/db");
-const Error = async ({
+const Errors = async ({
   message,
   code = "UNKNOWN",
   location = "UNKNOWN",
@@ -35,4 +35,4 @@ const Error = async ({
   }
 };
 
-module.exports = { Error };
+module.exports = { Errors };

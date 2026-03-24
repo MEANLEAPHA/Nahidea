@@ -92,7 +92,7 @@
 
 // module.exports = { content, upload };
 const pool = require("../../config/db");
-const { Error } = require("../../util/error/error");
+const { Errors } = require("../../util/error/error");
 const ftp = require("basic-ftp");
 const path = require("path");
 const multer = require("multer");
@@ -153,6 +153,7 @@ const content = async (req, res) => {
         res.status(200).json({ success: true, contentId, mediaUrl });
     } catch (error) {
         console.error("Error creating content:", error);
+        await Errors(error.message, error.code, "contentController", error.stack);
         // Send full error details to frontend
         return res.status(500).json({
             success: false,
