@@ -51,7 +51,8 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
         <FontAwesomeIcon icon={currentTheme ? faMoon : faSun} onClick={onToggleTheme} className="not-mobile-tool bar-icon"/>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="mobile-tool bar-icon"/>
         <FontAwesomeIcon icon={faBell} className='bar-icon'/>
-        <button><FontAwesomeIcon icon={faSquarePlus} className='bar-icon'/> Create</button>
+        <button onClick={()=>navigate('/create/content')
+        }><FontAwesomeIcon icon={faSquarePlus} className='bar-icon'/> Create</button>
         <FontAwesomeIcon icon={faMessage} className='bar-icon'/>
         <div className="not-mobile-tool"><big style={{opacity:0.5}} className='not-mobile-tool'>|</big></div> 
         <div className="profile-div not-mobile-tool" ref={wrapperRef}>
