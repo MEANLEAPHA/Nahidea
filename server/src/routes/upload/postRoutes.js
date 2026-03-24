@@ -8,7 +8,8 @@ const {
   markSolved,
 } = require("../../controllers/upload/postController");
 const {
-  content
+  content,
+  upload
 } = require("../../controllers/upload/contentController");
 
 const { addComment } = require("../../controllers/upload/commentController");
