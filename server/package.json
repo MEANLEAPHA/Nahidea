@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/package",
   "name": "node",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.887.0",
     "@aws-sdk/lib-storage": "^3.887.0",
