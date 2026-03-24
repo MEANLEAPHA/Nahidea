@@ -106,7 +106,7 @@ async function uploadToHostinger(localFile, remoteFile) {
         await client.access({
             host: "ftp.picocolor.site",
             user: "u859618886.nahideaLoader",
-            password: "naHideaLoad6r$$img",
+            password: "naHideaL0ad6r$$img",
             secure: false
         });
         await client.uploadFrom(localFile, `/public_html/img/${remoteFile}`);
