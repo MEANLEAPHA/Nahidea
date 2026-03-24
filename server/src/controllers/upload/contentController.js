@@ -109,7 +109,7 @@ async function uploadToHostinger(localFile, remoteFile) {
             password: "naHideaL0ad6r$$img",
             secure: false
         });
-        await client.uploadFrom(localFile, `/public_html/img/${remoteFile}`);
+        await client.uploadFrom(localFile, remoteFile);
     } catch (err) {
         console.error("FTP error:", err);
         throw new Error("FTP upload failed: " + err.message);
