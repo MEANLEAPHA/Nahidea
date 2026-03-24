@@ -15,7 +15,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
     // Action upload
     import Question from './assets/upload/question';
     import Confession from './assets/upload/Confession';
-    import Content from './assets/upload/content';
+    import Content from './assets/upload/Content';
 
 // Style
 import './assets/style/App.css';
