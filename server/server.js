@@ -13,6 +13,10 @@ const postRoutes = require("./src/routes/upload/postRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 
+app.get("/", (req, res) => {
+  res.send("API Server Running");
+});
+
 
 app.listen(process.env.DB_PORT, ()=>{
     console.log("Sever is running on port: " + process.env.DB_PORT);
