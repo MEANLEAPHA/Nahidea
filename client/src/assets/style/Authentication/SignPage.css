@@ -1,0 +1,138 @@
+:root{
+    /* --background-color:white; */
+     --background-color: rgb(234, 234, 234);
+    --primary-color:#fd7648;
+    /* --secondary-color: gainsboro; */
+     --secondary-color: rgba(107, 107, 107, 0.318);
+    /* --font-color:rgb(65, 65, 65); */
+    --font-color:rgb(0, 0, 0);
+
+    --back-con:rgb(245, 245, 245);
+    --primary-font:monospace;
+}
+.dark-theme{
+    --background-color:rgb(32, 32, 32);
+    --primary-color:#fd7648;
+    --secondary-color: rgba(220, 220, 220, 0.318);
+    --font-color:rgb(255, 255, 255);
+     --back-con:rgb(40, 40, 40);
+}
+
+.container-form{
+    width: 100%;
+    height: 100vh;
+   margin: 0;
+   padding: 0;
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size:cover;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+       background-image: url(../../img/otthorwall.png);
+}
+p{
+    color: white;
+}
+.container-form form{
+    width: 50%;
+    display: flex;
+  justify-content: center;
+    flex-direction: column;
+    align-items: center;
+     background-color: rgba(54, 54, 54, 0.508);
+  backdrop-filter: blur(3px);
+  height: 100%;
+
+  border-top-right-radius: 30%;
+  border-bottom-right-radius: 80%;
+  box-shadow: 1px 1px 10px 0px #1e1e1e94;
+}
+.form-center{
+     display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.p-page{
+    color: white;
+    display: flex;
+    gap: 5px;
+    margin:0;
+    font-family: monospace;
+}
+.p-page span:first-child{
+    font-size: xx-large;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.p-page span:last-child{
+    font-size: small;
+    color: white;
+    opacity: 0.5;
+    cursor: pointer;
+}
+.p-page span:last-child:hover{
+    color: var(--primary-color);
+    opacity: 1;
+}
+.warm-welcome-p{
+    font-family: monospace;
+    margin-top: 10px;
+    font-size: 16px;
+}
+label{
+    color: white;
+    opacity: 0.7;
+}
+.div-input{
+    width: 90%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+    color: white;
+    align-items: center;
+     margin-bottom: 15px;
+}
+.div-submit{
+    display: flex;
+    justify-content: space-between;
+    width: 81%;
+    align-items: center;
+    margin-top: 5px;
+}
+.div-checkBox{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 60%;
+}
+.div-checkBox label{
+    font-size:14px;
+}
+input{
+    width: 90%;
+    background: none;
+border-radius: 3px;
+padding: 4px;
+border: 1px solid antiquewhite;
+color: white;
+}
+.show-password-icon{
+    opacity: 0.6;
+}
+.div-submit button{
+    width: 27%;
+    background-color: #FCD999;
+
+    border-radius: 2px;
+    border: none;
+}
+.div-submit span{
+    color: rgb(238, 62, 31);
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+ 
+   cursor: pointer;
+}
