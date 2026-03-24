@@ -26,5 +26,5 @@ router.post("/:id/vote", protect, vote);
 router.patch("/:id/solve", protect, markSolved);
 
 
-router.post("/create/content", protect, upload.array("media", 5), content);
+router.post("/create/content", upload.array("media", 5), content);
 module.exports = router;

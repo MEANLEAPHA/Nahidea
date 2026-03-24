@@ -50,8 +50,8 @@ async function uploadToHostinger(localFile, remoteFile) {
 
 const content = async (req, res) => {
     try {
-        const userId = req.user.userId;
-        const { type, title, isAnonymous } = req.body;
+        // const userId = req.user.userId;
+        const { userId, type, title, isAnonymous } = req.body;
 
         let mediaUrl = [];
         let mediaType = [];

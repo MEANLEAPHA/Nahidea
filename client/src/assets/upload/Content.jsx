@@ -87,6 +87,7 @@ const Section = () =>{
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append("userId", 1)
     formData.append("title", "My Post");
     formData.append("type", "advice");
     formData.append("isAnonymous", false);
