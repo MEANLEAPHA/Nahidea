@@ -18,6 +18,6 @@ app.get("/", (req, res) => {
 });
 
 
-app.listen(process.env.DB_PORT, ()=>{
-    console.log("Sever is running on port: " + process.env.DB_PORT);
+app.listen(3000, ()=>{
+    console.log("Sever is running on port: 3000");
 });
