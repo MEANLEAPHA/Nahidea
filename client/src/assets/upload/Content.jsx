@@ -88,12 +88,12 @@ const Section = () =>{
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", "My Post");
-    formData.append("type", "post");
+    formData.append("type", "advice");
     formData.append("isAnonymous", false);
 
     files.forEach((file) => {
       if (file) {
-        formData.append("media", file); // multiple files under same field
+        formData.append("media", file); 
       }
     });
 

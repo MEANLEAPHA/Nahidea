@@ -3,7 +3,10 @@ const express = require("express");
 const cor = require("cors");
 
 const app = express();
-app.use(cor());
+// app.use(cor());
+app.use(cor({
+  origin: "https://nahidea.onrender.com/"
+})); 
 app.use(express.json());
 
 const authRoutes = require("./src/routes/authentication/authRoutes");
