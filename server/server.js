@@ -5,7 +5,9 @@ const cor = require("cors");
 const app = express();
 // app.use(cor());
 app.use(cor({
-  origin: "https://nahidea.onrender.com/"
+  origin: "https://nahidea.onrender.com",
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"]
 })); 
 app.use(express.json());
 
