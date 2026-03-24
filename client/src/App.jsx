@@ -13,7 +13,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
     import Register from './assets/Authentication/Register';
 
     // Action upload
-    import Question from './assets/upload/question';
+    import Question from './assets/upload/Question';
     import Confession from './assets/upload/Confession';
     import Content from './assets/upload/Content';
 
