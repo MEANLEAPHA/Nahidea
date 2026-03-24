@@ -99,7 +99,7 @@ const Section = () =>{
 
     try {
       const res = await axios.post(
-        "https://nahIdeaBackend.onrender.com/create/content",
+        "https://nahidea-sever-backend.onrender.com/api/posts/create/content",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

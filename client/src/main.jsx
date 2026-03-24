@@ -6,14 +6,14 @@ import App from './App.jsx'
 
 const main = document.getElementById('root');
 const root = createRoot(main);
-import ContextProvider from "./assets/context/context.jsx";
+// import ContextProvider from "./assets/context/context.jsx";
 
 root.render(
   <>
     <StrictMode>
-      <ContextProvider>
+      {/* <ContextProvider> */}
           <App />
-      </ContextProvider>
+      {/* </ContextProvider> */}
     </StrictMode>
   </>
 
