@@ -83,32 +83,61 @@ const Section = () =>{
     newFiles[index] = null;
     setFiles(newFiles);
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append("userId", 1);
+  formData.append("title", "My Post");
+  formData.append("type", "advice");
+  formData.append("isAnonymous", false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("userId", 1)
-    formData.append("title", "My Post");
-    formData.append("type", "advice");
-    formData.append("isAnonymous", false);
-
-    files.forEach((file) => {
-      if (file) {
-        formData.append("media", file); 
-      }
-    });
-
-    try {
-      const res = await axios.post(
-        "https://nahidea-sever-backend.onrender.com/api/posts/create/content",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      console.log("Upload success:", res.data);
-    } catch (err) {
-      console.error("Upload failed:", err);
+  files.forEach((file) => {
+    if (file) {
+      formData.append("media", file);
     }
-  };
+  });
+
+  try {
+    const res = await axios.post(
+      "https://nahidea-sever-backend.onrender.com/api/posts/create/content",
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    console.log("Upload success:", res.data);
+  } catch (err) {
+    if (err.response) {
+      console.error("Upload failed:", err.response.data);
+    } else {
+      console.error("Upload failed:", err.message);
+    }
+  }
+};
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("userId", 1)
+  //   formData.append("title", "My Post");
+  //   formData.append("type", "advice");
+  //   formData.append("isAnonymous", false);
+
+  //   files.forEach((file) => {
+  //     if (file) {
+  //       formData.append("media", file); 
+  //     }
+  //   });
+
+  //   try {
+  //     const res = await axios.post(
+  //       "https://nahidea-sever-backend.onrender.com/api/posts/create/content",
+  //       formData,
+  //       { headers: { "Content-Type": "multipart/form-data" } }
+  //     );
+  //     console.log("Upload success:", res.data);
+  //   } catch (err) {
+  //     console.error("Upload failed:", err);
+  //   }
+  // };
     return (
     <form onSubmit={handleSubmit}>
       <h3>Upload up to 5 images/videos</h3>
