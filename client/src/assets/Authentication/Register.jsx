@@ -1,6 +1,6 @@
 
 // export default Register;
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ const checks = {
   upper: /[A-Z]/,
   number: /\d/,
   symbol: /[^A-Za-z\d]/,
-  length: /^.{6,10}$/
+  length: /^.{6,8}$/
 };
 
 const Register = () => {
@@ -32,13 +32,61 @@ const Register = () => {
   const [strength, setStrength] = useState(0);
   const [loading, setLoading] = useState(false);
 
+   const [showInstruction, setShowInstruction] = useState("none");
+
+   const [isUpperCase, setIsUpperCase] = useState("white");
+   const [isLowerCase, setIsLowerCase] = useState("white");
+   const [isNumber, setIsNumber] = useState("white");
+   const [isSymbol, setIsSymbol] = useState("white");
+   const [isLength, setIsLength] = useState("white");
+  
+   const handleFocus = ()=>{
+    
+      setShowInstruction("block");
+    
+    
+   }
+   const handleBlur = () => {
+  setShowInstruction("none");
+};
+
   const calculateStrength = (value) => {
     let score = 0;
-    if (checks.lower.test(value)) score++;
-    if (checks.upper.test(value)) score++;
-    if (checks.number.test(value)) score++;
-    if (checks.symbol.test(value)) score++;
-    if (checks.length.test(value)) score++;
+    if (checks.lower.test(value)){
+      score++;
+      setIsLowerCase("green");
+    };
+    if(!checks.lower.test(value)){
+      setIsLowerCase("white");
+    }
+    if (checks.upper.test(value)){
+      score++;
+      setIsUpperCase("green");
+    };
+    if(!checks.upper.test(value)){
+      setIsUpperCase("white");
+    }
+    if (checks.number.test(value)){
+      score++;
+      setIsNumber("green");
+    };
+    if(!checks.number.test(value)){
+      setIsNumber("white");
+    }
+    if (checks.symbol.test(value)){
+      score++;
+      setIsSymbol("green");
+    };
+    if(!checks.symbol.test(value)){
+      setIsSymbol("white");
+    }
+    if (checks.length.test(value)){
+      score++;
+      setIsLength("green");
+    };
+    if(!checks.length.test(value)){
+      setIsLength("white");
+    }
     return score;
   };
 
@@ -74,7 +122,7 @@ const Register = () => {
     inputPassword &&
     inputConfirmPassword &&
     inputPassword === inputConfirmPassword &&
-    strength >= 4;
+    strength >= 5;
 
   const submitRegister = async () => {
     if (!isValid) return;
@@ -116,24 +164,19 @@ const Register = () => {
   };
 
   return (
+ 
+   
     <div className="container-form">
-      <ToastContainer position="top-right" autoClose={2000} />
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          submitRegister();
-        }}
-      >
+      <div className='toast-feedback'>
+          <ToastContainer position="top-right" autoClose={2000}/>
+      </div>
+      <form onSubmit={(e) => { e.preventDefault(); submitRegister(); }}>
         <div className="form-center">
-
           <p className="p-page">
             <span>Signup</span> |{" "}
             <span onClick={() => navigate("/login")}>Login</span>
           </p>
-
           <p className="warm-welcome-p">Create your account</p>
-
           <label>Username</label>
           <input
             type="text"
@@ -142,7 +185,6 @@ const Register = () => {
             onChange={handleValue}
             required
           />
-
           <label>Email</label>
           <input
             type="email"
@@ -151,7 +193,6 @@ const Register = () => {
             onChange={handleValue}
             required
           />
-
           <label>Password</label>
           <div className="div-input">
             <input
@@ -160,6 +201,9 @@ const Register = () => {
               value={inputPassword}
               onChange={handleValue}
               required
+              // ref={passwordRef}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
             <FontAwesomeIcon
               icon={eye}
@@ -182,6 +226,18 @@ const Register = () => {
               />
             ))}
           </div>
+
+          {/* Instruction */}
+
+          <div className = 'password-instruction' style={{display:showInstruction}}>
+            <p>Password must include:</p>
+            <p style={{color:isUpperCase}}>Uppercase</p>
+            <p style={{color:isLowerCase}}>Lowercase</p>
+            <p style={{color:isNumber}}>Number</p>
+            <p style={{color:isSymbol}}>Symbol</p>
+            <p style={{color:isLength}}>Min 6 and Max 8</p>
+          </div>
+
 
           <label>Confirm Password</label>
           <input
@@ -206,6 +262,7 @@ const Register = () => {
         </div>
       </form>
     </div>
+
   );
 };
 

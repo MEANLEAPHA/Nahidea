@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
-import "../style/Authentication/SignPage.css";
+
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import "../style/Authentication/SignPage.css";
 const API_URL = "https://nahIdeaBackend.onrender.com/api";
 
 const Login = () => {
@@ -75,81 +75,70 @@ const Login = () => {
   };
 
   return (
-    <div className="container-form">
 
-      <ToastContainer position="top-right" autoClose={2000} />
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          SubmitLogin();
-        }}
-      >
-        <div className="form-center">
-
-          <p className="p-page">
-            <span>Login </span> | 
-            <span onClick={() => navigate("/register")}>Sign up</span>
-          </p>
-
-          <p className="warm-welcome-p">Welcome back</p>
-
-          <label>Email</label>
-          <div className="div-input">
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter Email"
-              value={inputEmail}
-              onChange={handleValue}
-              required
-            />
-          </div>
-
-          <label>Password</label>
-          <div className="div-input">
-            <input
-              type={viewPassword}
-              name="password"
-              placeholder="Enter Password"
-              value={inputPassword}
-              onChange={handleValue}
-              required
-            />
-
-            <FontAwesomeIcon
-              icon={eye}
-              className="show-password-icon"
-              onClick={() => {
-                setViewPassword(viewPassword === "password" ? "text" : "password");
-                setEye(viewPassword === "password" ? faEye : faEyeLowVision);
-              }}
-            />
-          </div>
-
-          <div className="div-input div-submit">
-            <button
-              type="submit"
-              disabled={!isValid || loading}
-              style={{
-                opacity: !isValid || loading ? 0.5 : 1,
-                cursor: !isValid || loading ? "not-allowed" : "pointer"
-              }}
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
-
-            <span><u>Forget Password?</u></span>
-          </div>
-
-          <p className="warm-welcome-p">
-            Don't have an account?{" "}
-            <u onClick={() => navigate("/register")}>Create one</u>
-          </p>
-
+  
+      <div className="container-form">
+        <div className='toast-feedback'>
+        <ToastContainer position="top-right" autoClose={2000} />
         </div>
-      </form>
-    </div>
+        <form onSubmit={(e) => { e.preventDefault(); SubmitLogin(); }} >
+        <div className="form-center">
+            <p className="p-page">
+              <span>Login </span> | 
+              <span onClick={() => navigate("/register")}>Sign up</span>
+            </p>
+            <p className="warm-welcome-p">Welcome back</p>
+            <label>Email</label>
+            <div className="div-input">
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter Email"
+                value={inputEmail}
+                onChange={handleValue}
+                required
+              />
+            </div>
+            <label>Password</label>
+            <div className="div-input">
+              <input
+                type={viewPassword}
+                name="password"
+                placeholder="Enter Password"
+                value={inputPassword}
+                onChange={handleValue}
+                required
+              />
+              <FontAwesomeIcon
+                icon={eye}
+                className="show-password-icon"
+                onClick={() => {
+                  setViewPassword(viewPassword === "password" ? "text" : "password");
+                  setEye(viewPassword === "password" ? faEye : faEyeLowVision);
+                }}
+              />
+            </div>
+            <div className="div-input div-submit">
+              <button
+                type="submit"
+                disabled={!isValid || loading}
+                style={{
+                  opacity: !isValid || loading ? 0.5 : 1,
+                  cursor: !isValid || loading ? "not-allowed" : "pointer"
+                }}
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+              <span><u>Forget Password?</u></span>
+            </div>
+            <p className="warm-welcome-p">
+              Don't have an account?{" "}
+              <u onClick={() => navigate("/register")}>Create one</u>
+            </p>
+          </div>
+        </form>
+      </div>
+  
   );
 };
 

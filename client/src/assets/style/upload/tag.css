@@ -1,0 +1,51 @@
+.tags-input-wrapper { margin: 12px 0; font-family: Arial, sans-serif; }
+.tags-label { display:block; margin-bottom:6px; font-weight:600; }
+.tags-input { display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:6px; border:1px solid #ccc; border-radius:6px; min-height:44px; }
+.tags-input.has-error { border-color:#e74c3c; }
+.tag { display:inline-flex; align-items:center; background:#eef6ff; color:#034; padding:4px 8px; border-radius:16px; font-size:14px; }
+.tag-text { margin-right:6px; }
+.tag-remove { background:transparent; border:0; cursor:pointer; font-size:16px; line-height:1; color:#333; }
+.tag-input { border:0; outline:none; min-width:120px; font-size:14px; padding:6px 4px; }
+.tags-controls { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.btn-clear { background:#007bff; color:white; border:0; padding:6px 10px; border-radius:6px; cursor:pointer; }
+.btn-clear:disabled { opacity:0.5; cursor:not-allowed; }
+.tags-count { font-size:14px; color:#333; }
+.tags-error { color:#e74c3c; margin-top:6px; }
+.tags-hint { font-size:12px; color:#666; margin-top:6px; }
+
+
+ /* .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toggle-switch input {
+            display: none;
+        }
+        .toggle-switch label {
+            width: 45px;
+            height: 22px;
+            background: #ccc;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .toggle-switch input:checked + label {
+            background:rgb(10, 89, 145);
+        }
+        .toggle-switch label::before {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            transition: 0.3s;
+        }
+        .toggle-switch input:checked + label::before {
+            left: 25px;
+        } */
