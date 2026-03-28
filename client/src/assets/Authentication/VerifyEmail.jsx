@@ -10,10 +10,10 @@ export const VerifyEmail = () => {
   const [cooldown, setCooldown] = useState(0);
   const navigate = useNavigate();
 
-  const verifyEmail = localStorage.getItem("verifyEmail");
+  const email = localStorage.getItem("verifyEmail");
 
   const handleSubmit = async () => {
-    if (!verifyEmail){
+    if (!email){
        navigate("/verifyemail");
        return;
     };
@@ -31,7 +31,7 @@ export const VerifyEmail = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ pin }),
+        body: JSON.stringify({ pin, email }),
       });
 
       const data = await res.json();
@@ -56,7 +56,7 @@ export const VerifyEmail = () => {
   };
 
   const handleResendPin = async () => {
-    if (!verifyEmail){
+    if (!email){
        navigate("/verifyemail");
        return;
     };
