@@ -11,6 +11,10 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
     // Authentication
     import Login  from './assets/Authentication/Login';
     import Register from './assets/Authentication/Register';
+    import { VerifyEmail } from './assets/Authentication/VerifyEmail';
+    import { ForgetPassword } from './assets/Authentication/ForgetPassword';
+    import { VerifyEmailForgetPassword } from './assets/Authentication/VerifyEmailForgetPassword';
+    import { NewPassword } from './assets/Authentication/NewPassword';
 
     // Action upload
     import Question from './assets/upload/Question';
@@ -19,6 +23,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
 // Style
 import './assets/style/App.css';
+
+
 
 
 
@@ -34,6 +40,10 @@ const App = () =>{
                 {/* Authentication */}
                 <Route path='/login' element={<Login/>}></Route>
                 <Route path='/register' element={<Register/>}></Route>
+                <Route path='/verifyemail' element={<VerifyEmail/>}></Route>
+                <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
+                <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
+                <Route path='/newpassword' element={<NewPassword/>}></Route>
 
                 {/* Action Upload page */}
                 <Route path='/create/question' element={<Question/>}></Route>

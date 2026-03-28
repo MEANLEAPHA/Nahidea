@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../style/Authentication/SignPage.css";
-const API_URL = "https://nahIdeaBackend.onrender.com/api";
+const API_URL = import.meta.env.VITE_SERVER_URL;  
 
 const Login = () => {
   const navigate = useNavigate();

@@ -8,7 +8,7 @@ import "../style/Authentication/SignPage.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "https://nahIdeaBackend.onrender.com/api";
+const API_URL = import.meta.env.VITE_SERVER_URL; 
 
 const checks = {
   lower: /[a-z]/,
@@ -41,10 +41,7 @@ const Register = () => {
    const [isLength, setIsLength] = useState("white");
   
    const handleFocus = ()=>{
-    
       setShowInstruction("block");
-    
-    
    }
    const handleBlur = () => {
   setShowInstruction("none");
@@ -148,9 +145,9 @@ const Register = () => {
 
       if (response.ok) {
         toast.success("Account created! Redirecting...");
-
+        localStorage.setItem("verifyEmail", data.email);
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/verifyemail");
         }, 3000);
       } else {
         toast.error(data.message || "Registration failed");
