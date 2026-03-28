@@ -92,7 +92,7 @@ export const NewPassword = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/set-new-password`, {
+      const res = await fetch(`${API_URL}/api/set-new-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

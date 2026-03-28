@@ -26,7 +26,7 @@ export const VerifyEmail = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/verify-email`, {
+      const res = await fetch(`${API_URL}/api/verify-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

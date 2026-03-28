@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
 
 export const VerifyEmailForgetPassword = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState(
     localStorage.getItem("resetEmail") || ""
   );
@@ -23,7 +25,7 @@ export const VerifyEmailForgetPassword = () => {
 
     try {
       const res = await fetch(
-        `${API_URL}/verify-forget-password-pin`,
+        `${API_URL}/api/verify-forget-password-pin`,
         {
           method: "POST",
           headers: {
@@ -42,7 +44,8 @@ export const VerifyEmailForgetPassword = () => {
         toast.success("PIN verified");
 
         setTimeout(() => {
-          window.location.href = "/reset-password";
+      
+          navigate("/newpassword");
         }, 2000);
       } else {
         toast.error(data.message);
