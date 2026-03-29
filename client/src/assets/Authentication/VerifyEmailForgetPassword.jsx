@@ -47,7 +47,7 @@ export const VerifyEmailForgetPassword = () => {
           navigate("/newpassword");
         }, 2000);
       } else {
-         if(data.status === 429){
+         if(res.status === 429){
           toast.warning(data.message);
           
         }
@@ -96,7 +96,7 @@ export const VerifyEmailForgetPassword = () => {
         }, 1000);
 
       } else {
-        if(data.status === 429){
+        if(res.status === 429){
           toast.warning(data.message);
         }
         // toast.error(data.message);
