@@ -22,6 +22,15 @@ export const NewPassword = () => {
   const [strength, setStrength] = useState(0);
   const [loading, setLoading] = useState(false);
 
+   const [showInstruction, setShowInstruction] = useState("none");
+
+      const handleFocus = ()=>{
+      setShowInstruction("block");
+   }
+   const handleBlur = () => {
+  setShowInstruction("none");
+};
+
   const [viewPassword, setViewPassword] = useState("password");
   const [eye, setEye] = useState(faEyeLowVision);
 
@@ -141,6 +150,8 @@ export const NewPassword = () => {
             placeholder="New Password"
             value={password}
             onChange={handlePasswordChange}
+             onFocus={handleFocus}
+              onBlur={handleBlur}
           />
 
           <FontAwesomeIcon
