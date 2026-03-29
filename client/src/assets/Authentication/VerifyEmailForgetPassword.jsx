@@ -7,9 +7,8 @@ const API_URL = import.meta.env.VITE_SERVER_URL;
 
 export const VerifyEmailForgetPassword = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState(
-    localStorage.getItem("resetEmail") || ""
-  );
+  const email = localStorage.getItem("resetEmail");
+  
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
@@ -114,13 +113,7 @@ export const VerifyEmailForgetPassword = () => {
           handleSubmit();
         }}
       >
-        <input
-          type="text"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        
 
         <input
           type="text"
