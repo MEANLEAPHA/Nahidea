@@ -63,7 +63,7 @@ export const VerifyEmailForgetPassword = () => {
 
     try {
       const res = await fetch(
-        `${API_URL}/resend-forget-password-pin`,
+        `${API_URL}/api/resend-forget-password-pin`,
         {
           method: "POST",
           headers: {

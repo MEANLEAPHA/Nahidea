@@ -63,7 +63,7 @@ export const VerifyEmail = () => {
     if (cooldown > 0) return;
 
     try {
-      const res = await fetch(`${API_URL}/resend-verify-email-pin`, {
+      const res = await fetch(`${API_URL}/api/resend-verify-email-pin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
