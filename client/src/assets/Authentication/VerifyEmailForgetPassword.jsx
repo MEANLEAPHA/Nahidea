@@ -47,7 +47,11 @@ export const VerifyEmailForgetPassword = () => {
           navigate("/newpassword");
         }, 2000);
       } else {
-        toast.error(data.message);
+         if(data.status === 429){
+          toast.warning(data.message);
+          
+        }
+        // toast.error(data.message);
       }
 
     } catch (err) {
@@ -92,7 +96,10 @@ export const VerifyEmailForgetPassword = () => {
         }, 1000);
 
       } else {
-        toast.error(data.message);
+        if(data.status === 429){
+          toast.warning(data.message);
+        }
+        // toast.error(data.message);
       }
 
     } catch (err) {
