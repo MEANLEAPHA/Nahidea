@@ -129,7 +129,7 @@ const Login = () => {
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <span><u>Forget Password?</u></span>
+              <span onClick={() => navigate('/forgetpassword')}><u>Forget Password?</u></span>
             </div>
             <p className="warm-welcome-p">
               Don't have an account?{" "}
