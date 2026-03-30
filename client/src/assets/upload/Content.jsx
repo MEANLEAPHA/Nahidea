@@ -149,10 +149,11 @@ const handleSubmit = async (e) => {
   // Option A: append tags as multiple fields tags[]
   // Option B: append tags as a single JSON string (uncomment if you prefer)
    // formData.append("tags", JSON.stringify(tags));
-  formData.append("userId", 1);
-  formData.append("title", "My Post");
-  formData.append("type", selectType?.value ?? "general");
-
+  // formData.append("userId", 1);
+  
+  formData.append("confession_title", "My Post");
+  formData.append("confession_type", selectType?.value ?? "general");
+  formData.append("post_type", "content");
 
   formData.append("isAnonymous", isAnnoymous);
 
@@ -166,7 +167,7 @@ files.forEach((file) => {
 // mediaFiles.forEach((f) => formData.append("media", f));
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/posts/create/content`,
+      `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
@@ -220,7 +221,18 @@ const options = [
   { value: "politics", label: "Politics" },
   { value: "career", label: "Career" },
   { value: "lifestyle", label: "Lifestyle" },
+
+  // ➕ Added categories
+  { value: "gaming", label: "Gaming" },
+  { value: "environment", label: "Environment" },
+  { value: "history", label: "History" },
+  { value: "parenting", label: "Parenting" },
+  { value: "philosophy", label: "Philosophy" },
+  { value: "diy", label: "DIY" },
+  { value: "fashion", label: "Fashion" },
+  { value: "motivation", label: "Motivation" },
 ];
+
 
     return (
     <form onSubmit={handleSubmit}>
@@ -305,11 +317,11 @@ const TagInput = ({value = [], onChange, maxTags = 5}) =>{
       addTag(input);
       setInput("");
     } 
-    //else if (e.key === "Backspace" && input === "" && tags.length) {
-      //const next = tags.slice(0, -1);
-      //setTags(next);
-      //onChange?.(next);
-    //}
+    else if (e.key === "Backspace" && input === "" && tags.length) {
+      const next = tags.slice(0, -1);
+      setTags(next);
+      onChange?.(next);
+    }
   };
 
   const handleBlur = () => {

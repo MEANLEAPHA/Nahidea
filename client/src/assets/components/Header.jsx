@@ -50,7 +50,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
       <div className="header-right header-children">
         <FontAwesomeIcon icon={currentTheme ? faMoon : faSun} onClick={onToggleTheme} className="not-mobile-tool bar-icon"/>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="mobile-tool bar-icon"/>
-        <FontAwesomeIcon icon={faBell} className='bar-icon'/>
+        <FontAwesomeIcon icon={faBell} className='bar-icon' onClick={()=>navigate('/create/confession')}/>
         <button onClick={()=>navigate('/create/content')
         }><FontAwesomeIcon icon={faSquarePlus} className='bar-icon'/> Create</button>
         <FontAwesomeIcon icon={faMessage} className='bar-icon'/>
