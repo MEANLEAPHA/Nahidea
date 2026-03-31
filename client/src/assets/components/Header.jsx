@@ -53,7 +53,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
         <FontAwesomeIcon icon={faBell} className='bar-icon' onClick={()=>navigate('/create/confession')}/>
         <button onClick={()=>navigate('/create/content')
         }><FontAwesomeIcon icon={faSquarePlus} className='bar-icon'/> Create</button>
-        <FontAwesomeIcon icon={faMessage} className='bar-icon'/>
+        <FontAwesomeIcon icon={faMessage} className='bar-icon' onClick={()=>navigate('/create/question')}/>
         <div className="not-mobile-tool"><big style={{opacity:0.5}} className='not-mobile-tool'>|</big></div> 
         <div className="profile-div not-mobile-tool" ref={wrapperRef}>
           <img src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg" className="profile-div-img" onClick={handleDropDown}/>

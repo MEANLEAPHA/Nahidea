@@ -14,7 +14,7 @@
 .tags-hint { font-size:12px; color:#666; margin-top:6px; }
 
 
- /* .toggle-switch {
+ .toggle-switch {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -48,4 +48,20 @@
         }
         .toggle-switch input:checked + label::before {
             left: 25px;
-        } */
+        }
+
+        .radio {
+  display: none; /* hide the actual radio buttons */
+}
+
+label img {
+  width: 80px; /* adjust size */
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  transition: border 0.2s ease;
+}
+
+label img.selected {
+  border: 2px solid #007bff; /* highlight when selected */
+}
