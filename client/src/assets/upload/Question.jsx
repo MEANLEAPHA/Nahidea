@@ -127,19 +127,24 @@ const Section = () =>{
     const [max, setMax] = useState(100);
     const [step, setStep] = useState(1);
     const [rangeValue, setRangeValue] = useState(0);
+    const [rangeFile, setRangeFile] = useState(null);
 
     // single choice
     const [singleChoices, setSingleChoices] = useState(["", "", ""]);
+    const [singleChoiceFile, setSingleChoiceFile] = useState(null);
 
     // multiple choice
     const [multipleChoices, setMultipleChoices] = useState(["", "", ""]);
-    const [includeAllAbove, setIncludeAllAbove] = useState(false);
+    const [includeAllAbove, setIncludeAllAbove] = useState(0);
+    const [multipleChoiceFile, setMultipleChoiceFile] = useState(null);
 
     // ranking order
     const [rankingChoices, setRankingChoices] = useState(["", "", ""]);
+    const [rankingOrderFile, setRankingOrderFile] = useState(null);
 
     // rating 
-    const [ratingIconId, setRatingIconId] = useState(1)
+    const [ratingIconId, setRatingIconId] = useState(1);
+    const [ratingFile, setRatingFile] = useState(null);
 
     const handlePostType = () => {
       if(questionType === "openend"){
@@ -154,19 +159,24 @@ const Section = () =>{
         setMax(null);
         setStep(1);
         setRangeValue(null);
+        setRangeFile(null);
 
         // single choice
         setSingleChoices(["", "", ""]);
+        setSingleChoiceFile(null);
 
         // multiple choice
         setMultipleChoices(["","",""]);
         setIncludeAllAbove(false);
+        setMultipleChoiceFile(null);
 
         // ranking order
         setRankingChoices(["","",""]);
+        setRankingOrderFile(null);
 
         //rating
         setRatingIconId(1);
+        setRatingFile(null);
       }
       if(questionType === "closedend"){
         // range 
@@ -174,22 +184,28 @@ const Section = () =>{
         setMax(null);
         setStep(1);
         setRangeValue(null);
+        setRangeFile(null);
 
         // open end
         setOpenEndFile(null);
 
+
         // single choice
         setSingleChoices(["", "", ""]);
+        setSingleChoiceFile(null);
 
         // multiple choice
         setMultipleChoices(["","",""]);
         setIncludeAllAbove(false);
+        setMultipleChoiceFile(null);
 
          // ranking order
         setRankingChoices(["","",""]);
+        setRankingOrderFile(null);
 
         //rating
         setRatingIconId(1);
+        setRatingFile(null);
       }
       if(questionType === "range"){
         // close end
@@ -203,16 +219,20 @@ const Section = () =>{
 
         // single choice
         setSingleChoices(["", "", ""]);
+        setSingleChoiceFile(null);
 
         // multiple choice
         setMultipleChoices(["","",""]);
         setIncludeAllAbove(false);
+        setMultipleChoiceFile(null);
 
          // ranking order
         setRankingChoices(["","",""]);
+        setRankingOrderFile(null);
 
         //rating
         setRatingIconId(1);
+        setRatingFile(null);
       }
       if(questionType === "singlechoice"){
         // close end
@@ -229,16 +249,20 @@ const Section = () =>{
         setMax(null);
         setStep(1);
         setRangeValue(null);
+        setRangeFile(null);
 
         // multiple choice
         setMultipleChoices(["","",""]);
         setIncludeAllAbove(false);
+        setMultipleChoiceFile(null);
 
         // ranking order
         setRankingChoices(["","",""]);
+        setRankingOrderFile(null);
 
         //rating
         setRatingIconId(1);
+        setRatingFile(null);
       }
       if(questionType === "multiplechoice"){
         // close end
@@ -255,15 +279,19 @@ const Section = () =>{
         setMax(null);
         setStep(1);
         setRangeValue(null);
+        setRangeFile(null);
 
         // single choice
         setSingleChoices(["", "", ""]);
+        setSingleChoiceFile(null);
 
         // ranking order
         setRankingChoices(["","",""]);
+        setRankingOrderFile(null);
 
         //rating
         setRatingIconId(1);
+        setRatingFile(null);
       }
       if(questionType === "rankingorder"){
         // close end
@@ -280,16 +308,20 @@ const Section = () =>{
         setMax(null);
         setStep(1);
         setRangeValue(null);
+        setRangeFile(null);
 
         // single choice
         setSingleChoices(["", "", ""]);
+        setSingleChoiceFile(null);
 
         // multiple choice
         setMultipleChoices(["","",""]);
         setIncludeAllAbove(false);
+        setMultipleChoiceFile(null);
 
         //rating
         setRatingIconId(1);
+        setRatingFile(null);
       }
       if(questionType === "rating"){
         // close end
@@ -306,16 +338,20 @@ const Section = () =>{
         setMax(null);
         setStep(1);
         setRangeValue(null);
+        setRangeFile(null);
 
         // single choice
         setSingleChoices(["", "", ""]);
+        setSingleChoiceFile(null);
 
         // multiple choice
         setMultipleChoices(["","",""]);
         setIncludeAllAbove(false);
+        setMultipleChoiceFile(null);
 
         // ranking order
         setRankingChoices(["","",""]);
+        setRankingOrderFile(null);
       }
     }
       
@@ -368,11 +404,10 @@ const handleSubmit = async (e) => {
   const formData = new FormData();
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "question");
-  formData.append("confession_title", "My Post");
-  formData.append("confession_type", selectType?.value ?? "general");
+  formData.append("question_related_to", selectType?.value ?? "general");
   formData.append("isAnonymous", isAnnoymous);
   
-  formData.append("title", title);
+  formData.append("question_title", title);
 
   if(questionType === "openend"){
     formData.append("question_type", "openend")
@@ -396,11 +431,13 @@ const handleSubmit = async (e) => {
     formData.append("rangeMin", min);
     formData.append("rangeMax", max);
     formData.append("rangeStep", step);
-    formData.append("defaultRangeValue", rangeValue)
+    formData.append("defaultRangeValue", rangeValue);
+    formData.append("media", rangeFile);
   };
 
   if(questionType === "singlechoice"){
     formData.append("question_type", "singlechoice");
+    formData.append("media", singleChoiceFile);
     singleChoices.forEach((c) => formData.append("choices[]", c));
   };
 
@@ -408,18 +445,21 @@ const handleSubmit = async (e) => {
     formData.append("question_type", "multiplechoice");
     multipleChoices.forEach((c) => formData.append("choices[]", c));
     formData.append("include_all_above", includeAllAbove); // bool
+    formData.append("media", multipleChoiceFile);
   }
 
   if(questionType === "rankingorder"){
     formData.append("question_type", "rankingorder");
     rankingChoices.forEach((c, i) =>
-    formData.append(`ranking[${i+1}]`, c)
-  );
+      formData.append(`ranking[${i+1}]`, c)
+    );
+    formData.append("media", rankingOrderFile);
   }
 
   if(questionType === "rating"){
     formData.append("question_type", "rating");
     formData.append("rating_icon_id", ratingIconId); 
+    formData.append("media", ratingFile);
   }
 
   try {
@@ -661,11 +701,13 @@ const options = [
           SetMax = {setMax}
           value={rangeValue}
           onChange={(e) => setRangeValue(e.target.value)}
+          RangeFileValue={rangeFile} 
+          SetRangeFile={setRangeFile}
         />
 )}
 
 {questionType === "singlechoice" && (
-  <SingleChoice value={singleChoices} onChange={setSingleChoices} />
+  <SingleChoice value={singleChoices} onChange={setSingleChoices}  SingleChoiceFileValue={singleChoiceFile} SetSingleChoiceFile={setSingleChoiceFile}/>
 )}
 
 {questionType === "multiplechoice" && (
@@ -674,14 +716,16 @@ const options = [
     onChange={setMultipleChoices}
     includeAllAbove={includeAllAbove}
     setIncludeAllAbove={setIncludeAllAbove}
+    MultipleChoiceFileValue={multipleChoiceFile}
+    SetMultipleChoiceFile={setMultipleChoiceFile}
   />
 )}
 {questionType === "rankingorder" && (
-  <RankingOrder value={rankingChoices} onChange={setRankingChoices} />
+  <RankingOrder value={rankingChoices} onChange={setRankingChoices} RankingOrderFileValue={rankingOrderFile} SetRankingOrderFile={setRankingOrderFile} />
 )}
 
 {questionType === "rating" && (
-  <Rating value={ratingIconId} onChange={setRatingIconId} />
+  <Rating value={ratingIconId} onChange={setRatingIconId} RatingFileValue={ratingFile} SetRatingFile={setRatingFile}/>
 )}
 
       <br />
@@ -711,21 +755,29 @@ const options = [
       <button type="submit">Upload</button>
     </form>
   );
-}
+};
+
+const iconOptions = [
+  { id: 1, name: "star", icon: faStar },
+  { id: 2, name: "heart", icon: faHeart },
+  { id: 3, name: "happy", icon: faSmile },
+  { id: 4, name: "crying", icon: faSadTear },
+];
+
 const OpenEnd = ({OpenEndFileValue,SetOpenEndFile}) => {
   return(
      <div>
         <input type="file" onChange={(e) => SetOpenEndFile(e.target.files[0])} />
         {OpenEndFileValue && (
           <div>
-            {openEndFileValue.type.startsWith("image/") && (
+            {OpenEndFileValue.type.startsWith("image/") && (
               <img
                 src={URL.createObjectURL(OpenEndFileValue)}
                 alt="image preview"
                 style={{ maxWidth: "200px", marginTop: "10px" }}
               />
             )}
-            <button onClick={(e) => setYesFile(null)}>Delete</button>
+            <button onClick={(e) => SetOpenEndFile(null)}>Delete</button>
           </div>
         )}
      </div>
@@ -795,9 +847,22 @@ const ClosedEnd = ({
     </div>
   );
 };
-const RangeInput = ({ min, max, step, value, onChange, SetMax, SetMin, SetStep }) => {
+const RangeInput = ({ min, max, step, value, onChange, SetMax, SetMin, SetStep, RangeFileValue, SetRangeFile }) => {
   return (
     <div>
+       <input type="file" onChange={(e) => SetRangeFile(e.target.files[0])} />
+        {RangeFileValue && (
+          <div>
+            {RangeFileValue.type.startsWith("image/") && (
+              <img
+                src={URL.createObjectURL(RangeFileValue)}
+                alt="image preview"
+                style={{ maxWidth: "200px", marginTop: "10px" }}
+              />
+            )}
+            <button onClick={(e) => SetRangeFile(null)}>Delete</button>
+          </div>
+        )}
       <input
         type="number"
         min="0"
@@ -835,7 +900,7 @@ const RangeInput = ({ min, max, step, value, onChange, SetMax, SetMin, SetStep }
     </div>
   );
 };
-const SingleChoice = ({ value, onChange }) => {
+const SingleChoice = ({ value, onChange, SingleChoiceFileValue, SetSingleChoiceFile }) => {
   const maxChoices = 10;
 
   // update a choice value
@@ -869,6 +934,19 @@ const SingleChoice = ({ value, onChange }) => {
 
   return (
     <div>
+      <input type="file" onChange={(e) => SetSingleChoiceFile(e.target.files[0])} />
+        {SingleChoiceFileValue && (
+          <div>
+            {SingleChoiceFileValue.type.startsWith("image/") && (
+              <img
+                src={URL.createObjectURL(SingleChoiceFileValue)}
+                alt="image preview"
+                style={{ maxWidth: "200px", marginTop: "10px" }}
+              />
+            )}
+            <button onClick={(e) => SetSingleChoiceFile(null)}>Delete</button>
+          </div>
+        )}
       <div className="single-choice-parent">
         {value.map((choice, index) => (
           <div key={index} style={{ display: "flex", marginBottom: "6px" }}>
@@ -901,7 +979,7 @@ const SingleChoice = ({ value, onChange }) => {
     </div>
   );
 };
-const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove }) => {
+const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove, MultipleChoiceFileValue, SetMultipleChoiceFile }) => {
   const maxChoices = 10;
 
   // update a choice value
@@ -935,6 +1013,19 @@ const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove }
 
   return (
     <div>
+      <input type="file" onChange={(e) => SetMultipleChoiceFile(e.target.files[0])} />
+        {MultipleChoiceFileValue && (
+          <div>
+            {MultipleChoiceFileValue.type.startsWith("image/") && (
+              <img
+                src={URL.createObjectURL(MultipleChoiceFileValue)}
+                alt="image preview"
+                style={{ maxWidth: "200px", marginTop: "10px" }}
+              />
+            )}
+            <button onClick={(e) => SetMultipleChoiceFile(null)}>Delete</button>
+          </div>
+      )}
       <div className="multiple-choice-parent">
         {value.map((choice, index) => (
           <div key={index} style={{ display: "flex", marginBottom: "6px" }}>
@@ -956,7 +1047,7 @@ const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove }
         ))}
 
         {/* Special "All Above" option */}
-        {includeAllAbove && (
+        {includeAllAbove === 1 && (
           <div style={{ display: "flex", marginBottom: "6px" }}>
             <input
               type="text"
@@ -978,12 +1069,12 @@ const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove }
           <button onClick={removeAll}>Remove all</button>
         )}
         {!includeAllAbove && (
-          <button onClick={() => setIncludeAllAbove(true)}>
+          <button onClick={() => setIncludeAllAbove(1)}>
             Add "All Above"
           </button>
         )}
         {includeAllAbove && (
-          <button onClick={() => setIncludeAllAbove(false)}>
+          <button onClick={() => setIncludeAllAbove(0)}>
             Remove "All Above"
           </button>
         )}
@@ -991,7 +1082,7 @@ const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove }
     </div>
   );
 };
-const RankingOrder = ({ value, onChange }) => {
+const RankingOrder = ({ value, onChange, RankingOrderFileValue, SetRankingOrderFile }) => {
   const [items, setItems] = useState(value.length ? value : ["", "", ""]);
   const maxItems = 10;
 
@@ -1037,6 +1128,19 @@ const RankingOrder = ({ value, onChange }) => {
 
   return (
     <div>
+      <input type="file" onChange={(e) => SetRankingOrderFile(e.target.files[0])} />
+        {RankingOrderFileValue && (
+          <div>
+            {RankingOrderFileValue.type.startsWith("image/") && (
+              <img
+                src={URL.createObjectURL(RankingOrderFileValue)}
+                alt="image preview"
+                style={{ maxWidth: "200px", marginTop: "10px" }}
+              />
+            )}
+            <button onClick={(e) => SetRankingOrderFile(null)}>Delete</button>
+          </div>
+        )}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="ranking-list">
           {(provided) => (
@@ -1101,19 +1205,22 @@ const RankingOrder = ({ value, onChange }) => {
     </div>
   );
 };
-
-
-
-
-const iconOptions = [
-  { id: 1, name: "star", icon: faStar },
-  { id: 2, name: "heart", icon: faHeart },
-  { id: 3, name: "happy", icon: faSmile },
-  { id: 4, name: "crying", icon: faSadTear },
-];
-const Rating = ({ value, onChange }) => {
+const Rating = ({ value, onChange, RatingFileValue, SetRatingFile }) => {
   return (
     <div>
+      <input type="file" onChange={(e) => SetRatingFile(e.target.files[0])} />
+        {RatingFileValue && (
+          <div>
+            {RatingFileValue.type.startsWith("image/") && (
+              <img
+                src={URL.createObjectURL(RatingFileValue)}
+                alt="image preview"
+                style={{ maxWidth: "200px", marginTop: "10px" }}
+              />
+            )}
+            <button onClick={(e) => SetRatingFile(null)}>Delete</button>
+          </div>
+        )}
       <p>{Array.from({length:5}).map((_,i)=>(
         <FontAwesomeIcon 
           key={i}
@@ -1157,10 +1264,6 @@ const Rating = ({ value, onChange }) => {
     </div>
   );
 };
-
-
-
-
 
 const TagInput = ({value = [], onChange, maxTags = 5}) =>{
     const [input, setInput] = useState("");
