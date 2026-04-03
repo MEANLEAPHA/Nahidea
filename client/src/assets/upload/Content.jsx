@@ -20,6 +20,9 @@ import "../style/Main.css";
 import "../style/App.css";
 import "../style/upload/tag.css";
 
+const token = localStorage.getItem("token");
+
+
 export default function Content(){
 
     // Declare state
@@ -108,10 +111,17 @@ const handleSubmit = async (e) => {
     mediaFiles.forEach((f) => formData.append("contentFile", f));
 
     try {
-      await axios.post(
+     await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
+
 
       if (isAnonymous) consume();
 
