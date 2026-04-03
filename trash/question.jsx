@@ -1,139 +1,4 @@
-
-import { useState, useEffect, useRef } from 'react';
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-
-import Select from "react-select";
-import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faStar,
-  faHeart,
-  faSmile,
-  faSadTear,
-} from "@fortawesome/free-regular-svg-icons";
-import { useNavigate } from "react-router-dom";
-
-import TagInput from "../util/tagInput";
-import {useAnonymousTokens, AnonymousToggle }from "../util/anonymousTokens";
-import { question_options,iconOptions } from "../data/post_type_data";
-
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Aside from "../components/Aside";
-
-
-import "../style/Main.css";
-import "../style/App.css";
-import "../style/upload/tag.css";
-
-export default function Questiion(){
-
-    // Declare state
-    const [showMaxAside, setMaxAside] = useState(() => {
-        return localStorage.getItem("maxAside") === "true";
-    })
-
-    useEffect(()=>{
-        localStorage.setItem("maxAside", showMaxAside)
-    },
-    [showMaxAside]
-    );
-
-    const toggleAside = () =>{
-            setMaxAside(prev => !prev)
-    }
-
-     const [darkMode, setDarkMode] = useState( () => {
-            return localStorage.getItem("darkMode") === "true"; 
-        });
-        useEffect(
-            () => {
-                if(darkMode){
-                    document.body.classList.add("dark-theme")
-                }
-                else{
-                    document.body.classList.remove("dark-theme")
-                }
-                localStorage.setItem("darkMode", darkMode);
-            },
-            [darkMode]
-        );
-        const toggleTheme = () =>{
-            setDarkMode(prev => !prev)
-        }
-        
-    return(
-        <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
-             <Main appendValue={showMaxAside}/>
-            <Footer />
-        </>
-    )
-}
-
-const Main = ({appendValue}) =>{
-    return(
-        <main>
-            <Aside append={appendValue}/>
-            <Section />
-        </main>
-    )
-}
-
-
-
-const Section = () =>{
- 
-
-  // question setence
-  const [title, setTitle] = useState('');
-
-  // question topic related
-  const [selectType, setSelectType] = useState(null);
-
-  // tag state
-  const [tags, setTags] = useState([]);
-
-  // question type state
-  const [questionType, setQuestionType] = useState(null);
-
-    // open end state
-    const [openEndFileValue, setOpenEndFile] = useState(null);
-
-    // closed end state
-    const [yestitle, setYestitle] = useState('');
-    const [yesFile, setYesFile] = useState(null);
-    const [noTitle, setNoTitle] = useState('');
-    const [noFile, setNoFile] = useState(null);
-
-    // Range state
-    const [min, setMin] = useState(0);
-    const [max, setMax] = useState(100);
-    const [step, setStep] = useState(1);
-    const [rangeValue, setRangeValue] = useState(0);
-    const [rangeFile, setRangeFile] = useState(null);
-
-    // single choice
-    const [singleChoices, setSingleChoices] = useState(["", "", ""]);
-    const [singleChoiceFile, setSingleChoiceFile] = useState(null);
-
-    // multiple choice
-    const [multipleChoices, setMultipleChoices] = useState(["", "", ""]);
-    const [includeAllAbove, setIncludeAllAbove] = useState(0);
-    const [multipleChoiceFile, setMultipleChoiceFile] = useState(null);
-
-    // ranking order
-    const [rankingChoices, setRankingChoices] = useState(["", "", ""]);
-    const [rankingOrderFile, setRankingOrderFile] = useState(null);
-
-    // rating 
-    const [ratingIconId, setRatingIconId] = useState(1);
-    const [ratingFile, setRatingFile] = useState(null);
-
-    const [isAnonymous, setIsAnonymous] = useState(false);
-    const { tokens, countdown, consume } = useAnonymousTokens();
-
-    const handlePostType = () => {
+   const handlePostType = () => {
       if(questionType === "openend"){
         // close end
         setYestitle("");
@@ -341,293 +206,269 @@ const Section = () =>{
         setRankingOrderFile(null);
       }
     }
-          
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const formData = new FormData();
-  tags.forEach((t) => formData.append("tags[]", t));
-  formData.append("post_type", "question");
-  formData.append("question_related_to", selectType?.value ?? "general");
-  formData.append("isAnonymous", isAnnoymous);
-  
-  formData.append("question_title", title);
-
-  if(questionType === "openend"){
-    formData.append("question_type", "openend")
-    if(openEndFileValue){
-      formData.append("openendFile", openEndFileValue);
-    }
-  };
-
-  if (questionType === "closedend"){
-    formData.append("question_type", "closedend");
-    formData.append("yesTitle", yestitle);
-    formData.append("noTitle", noTitle);
-    if (yesFile) {
-      formData.append("yesFile", yesFile);
-    }
-    if (noFile) {
-      formData.append("noFile", noFile);
-    }
-  };
-  
-  if(questionType === "range"){
-    formData.append("question_type", "range");
-    formData.append("rangeMin", min);
-    formData.append("rangeMax", max);
-    formData.append("rangeStep", step);
-    formData.append("defaultRangeValue", rangeValue);
-    formData.append("rangeFile", rangeFile);
-  };
-
-  if(questionType === "singlechoice"){
-    formData.append("question_type", "singlechoice");
-    formData.append("singleChoiceFile", singleChoiceFile);
-    singleChoices.forEach((c) => formData.append("choices[]", c));
-  };
-
-  if(questionType === "multiplechoice"){
-    formData.append("question_type", "multiplechoice");
-    multipleChoices.forEach((c) => formData.append("choices[]", c));
-    formData.append("include_all_above", includeAllAbove); // bool
-    formData.append("multipleChoiceFile", multipleChoiceFile);
-  }
-
-  if(questionType === "rankingorder"){
-    formData.append("question_type", "rankingorder");
-    rankingChoices.forEach((c, i) =>
-      formData.append(`ranking[${i+1}]`, c)
-    );
-    formData.append("rankingOrderFile", rankingOrderFile);
-  }
-
-  if(questionType === "rating"){
-    formData.append("question_type", "rating");
-    formData.append("rating_icon_id", ratingIconId); 
-    formData.append("ratingFile", ratingFile);
-  }
-
-  try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-      formData,
-      { headers: { "Content-Type": "multipart/form-data" } }
-    );
-    console.log("Upload success:", res.data);
-  } catch (err) {
-    if (err.response) {
-      console.error("Upload failed:", err.response.data);
-    } else {
-      console.error("Upload failed:", err.message);
-    }
-  }
-
-if (isAnonymous) consume();
-
-  
-};
-
-    return (
-    <form onSubmit={handleSubmit}>
-
-      <label htmlFor="title">Caption</label>
-      <input type="text" 
-              name='title'
-              className='input-title'
-              onChange={(e)=> setTitle(e.target.value)} 
-              value={title}
-              placeholder="Type your text content here..."
-      />
-
-      <label htmlFor="type">Question related to:</label>
-       <Select
-        options={question_options} 
-        value={selectType}
-        onChange={setSelectType}
-      />
-      <br />
-       <label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="openend" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "openend"} 
-    className="radio" 
-  />
-  <img 
-    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS90nUCMSa8ongTJCpTWgR_cy5mMtuXev1NCg&s" 
-    alt="Open Ended" 
-    className={questionType === "openend" ? "selected" : ""} 
-  />
-</label>
-
-<label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="closedend" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "closedend"} 
-    className="radio" 
-  />
-  <img 
-    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5OOdmroWDpWEbbytAew7LAkKvzUYhmZZx8Q&s" 
-    alt="Closed Ended" 
-    className={questionType === "closedend" ? "selected" : ""} 
-  />
-</label>
-<label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="range" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "range"} 
-    className="radio" 
-  />
-  <img 
-    src="https://img.freepik.com/premium-vector/blue-car-flat-style-illustration-isolated-white-background_108231-795.jpg?semt=ais_incoming&w=740&q=80" 
-    alt="Range" 
-    className={questionType === "range" ? "selected" : ""} 
-  />
-</label>
-
-<label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="singlechoice" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "singlechoice"} 
-    className="radio" 
-  />
-  <img 
-    src="https://img.freepik.com/free-vector/electric-car-white-background_1308-21368.jpg?semt=ais_user_personalization&w=740&q=80" 
-    alt="Single Choice" 
-    className={questionType === "singlechoice" ? "selected" : ""} 
-  />
-</label>
-<label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="multiplechoice" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "multiplechoice"} 
-    className="radio" 
-  />
-  <img 
-    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThYff67knNe_Yfxy_91qsv35FgUhFWgvsAkA&s" 
-    alt="Multiple Choice" 
-    className={questionType === "multiplechoice" ? "selected" : ""} 
-  />
-</label>
-<label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="rankingorder" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "rankingorder"} 
-    className="radio" 
-  />
-  <img 
-    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh7yenXHLnm2mRNd4ENksCtku0XUiaezTkSg&s" 
-    alt="Ranking Order" 
-    className={questionType === "rankingorder" ? "selected" : ""} 
-  />
-</label>
-<label>
-  <input 
-    type="radio" 
-    name="question-type" 
-    value="rating" 
-    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-    checked={questionType === "rating"} 
-    className="radio" 
-  />
-  <img 
-    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOKVybqeCw4hx6GtIiLMrnEKczyHi9PxmIIw&s" 
-    alt="Rating" 
-    className={questionType === "rating" ? "selected" : ""} 
-  />
-</label>
-
-{questionType === "openend" && (
-  <OpenEnd
-          OpenEndFileValue={openEndFileValue}
-          SetOpenEndFile={setOpenEndFile}
-        />
-)}
-
-{questionType === "closedend" && (
-  <ClosedEnd
-          YestitleValue={yestitle}
-          NoTitleValue={noTitle}
-          YesFileValue={yesFile}
-          NoFileValue={noFile}
-          setYestitle={setYestitle}
-          setYesFile={setYesFile}
-          setNoTitle={setNoTitle}
-          setNoFile={setNoFile}
-        />
-)}
-
-{questionType === "range" && (
-  <RangeInput
-          min={min}
-          max={max}
-          step={step}
-          SetStep={setStep}
-          SetMin = {setMin}
-          SetMax = {setMax}
-          value={rangeValue}
-          onChange={(e) => setRangeValue(e.target.value)}
-          RangeFileValue={rangeFile} 
-          SetRangeFile={setRangeFile}
-        />
-)}
-
-{questionType === "singlechoice" && (
-  <SingleChoice value={singleChoices} onChange={setSingleChoices}  SingleChoiceFileValue={singleChoiceFile} SetSingleChoiceFile={setSingleChoiceFile}/>
-)}
-
-{questionType === "multiplechoice" && (
-  <MultipleChoice
-    value={multipleChoices}
-    onChange={setMultipleChoices}
-    includeAllAbove={includeAllAbove}
-    setIncludeAllAbove={setIncludeAllAbove}
-    MultipleChoiceFileValue={multipleChoiceFile}
-    SetMultipleChoiceFile={setMultipleChoiceFile}
-  />
-)}
-{questionType === "rankingorder" && (
-  <RankingOrder value={rankingChoices} onChange={setRankingChoices} RankingOrderFileValue={rankingOrderFile} SetRankingOrderFile={setRankingOrderFile} />
-)}
-
-{questionType === "rating" && (
-  <Rating value={ratingIconId} onChange={setRatingIconId} RatingFileValue={ratingFile} SetRatingFile={setRatingFile}/>
-)}
-
-      <br />
       
-  <TagInput value={tags} onChange={setTags} maxTags={5} />
+     {
+      // question setence
+      const [title, setTitle] = useState('');
+    
+      // question topic related
+      const [selectType, setSelectType] = useState(null);
+    
+      // tag state
+      const [tags, setTags] = useState([]);
+    
+      // annoymous state
+      
+       const [isAnonymous, setIsAnonymous] = useState(false);
+      const [annoymousUsed, setAnnoymousUsed] = useState(3);
+      const [countDown, setCountDown] = useState(0);
+      const intervalRef = useRef(null);
+    
+      // question type state
+      const [questionType, setQuestionType] = useState(null);
+    
+        // open end state
+        const [openEndFileValue, setOpenEndFile] = useState(null);
+    
+        // closed end state
+        const [yestitle, setYestitle] = useState('');
+        const [yesFile, setYesFile] = useState(null);
+        const [noTitle, setNoTitle] = useState('');
+        const [noFile, setNoFile] = useState(null);
+    
+        // Range state
+        const [min, setMin] = useState(0);
+        const [max, setMax] = useState(100);
+        const [step, setStep] = useState(1);
+        const [rangeValue, setRangeValue] = useState(0);
+        const [rangeFile, setRangeFile] = useState(null);
+    
+        // single choice
+        const [singleChoices, setSingleChoices] = useState(["", "", ""]);
+        const [singleChoiceFile, setSingleChoiceFile] = useState(null);
+    
+        // multiple choice
+        const [multipleChoices, setMultipleChoices] = useState(["", "", ""]);
+        const [includeAllAbove, setIncludeAllAbove] = useState(0);
+        const [multipleChoiceFile, setMultipleChoiceFile] = useState(null);
+    
+        // ranking order
+        const [rankingChoices, setRankingChoices] = useState(["", "", ""]);
+        const [rankingOrderFile, setRankingOrderFile] = useState(null);
+    
+        // rating 
+        const [ratingIconId, setRatingIconId] = useState(1);
+        const [ratingFile, setRatingFile] = useState(null);
+}
+          <form onSubmit={handleSubmit}>
+        
+              <label htmlFor="title">Caption</label>
+              <input type="text" 
+                      name='title'
+                      className='input-title'
+                      onChange={(e)=> setTitle(e.target.value)} 
+                      value={title}
+                      placeholder="Type your text content here..."
+              />
+        
+              <label htmlFor="type">Question related to:</label>
+              <Select
+                options={question_options}
+                value={selectType}
+                onChange={setSelectType}
+              />
+        
+              <br />
+               <label>
+                  <input 
+                    type="radio" 
+                    name="question-type" 
+                    value="openend" 
+                    onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                    checked={questionType === "openend"} 
+                    className="radio" 
+                  />
+                  <img 
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS90nUCMSa8ongTJCpTWgR_cy5mMtuXev1NCg&s" 
+                    alt="Open Ended" 
+                    className={questionType === "openend" ? "selected" : ""} 
+                  />
+                </label>
+        
+              <label>
+                <input 
+                  type="radio" 
+                  name="question-type" 
+                  value="closedend" 
+                  onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                  checked={questionType === "closedend"} 
+                  className="radio" 
+                />
+                <img 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5OOdmroWDpWEbbytAew7LAkKvzUYhmZZx8Q&s" 
+                  alt="Closed Ended" 
+                  className={questionType === "closedend" ? "selected" : ""} 
+                />
+              </label>
+        
+              <label>
+                <input 
+                  type="radio" 
+                  name="question-type" 
+                  value="range" 
+                  onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                  checked={questionType === "range"} 
+                  className="radio" 
+                />
+                <img 
+                  src="https://img.freepik.com/premium-vector/blue-car-flat-style-illustration-isolated-white-background_108231-795.jpg?semt=ais_incoming&w=740&q=80" 
+                  alt="Range" 
+                  className={questionType === "range" ? "selected" : ""} 
+                />
+              </label>
+        
+              <label>
+                <input 
+                  type="radio" 
+                  name="question-type" 
+                  value="singlechoice" 
+                  onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                  checked={questionType === "singlechoice"} 
+                  className="radio" 
+                />
+                <img 
+                  src="https://img.freepik.com/free-vector/electric-car-white-background_1308-21368.jpg?semt=ais_user_personalization&w=740&q=80" 
+                  alt="Single Choice" 
+                  className={questionType === "singlechoice" ? "selected" : ""} 
+                />
+              </label>
+        
+              <label>
+                <input 
+                  type="radio" 
+                  name="question-type" 
+                  value="multiplechoice" 
+                  onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                  checked={questionType === "multiplechoice"} 
+                  className="radio" 
+                />
+                <img 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThYff67knNe_Yfxy_91qsv35FgUhFWgvsAkA&s" 
+                  alt="Multiple Choice" 
+                  className={questionType === "multiplechoice" ? "selected" : ""} 
+                />
+              </label>
+        
+              <label>
+                <input 
+                  type="radio" 
+                  name="question-type" 
+                  value="rankingorder" 
+                  onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                  checked={questionType === "rankingorder"} 
+                  className="radio" 
+                />
+                <img 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh7yenXHLnm2mRNd4ENksCtku0XUiaezTkSg&s" 
+                  alt="Ranking Order" 
+                  className={questionType === "rankingorder" ? "selected" : ""} 
+                />
+              </label>
+        
+              <label>
+                <input 
+                  type="radio" 
+                  name="question-type" 
+                  value="rating" 
+                  onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
+                  checked={questionType === "rating"} 
+                  className="radio" 
+                />
+                <img 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOKVybqeCw4hx6GtIiLMrnEKczyHi9PxmIIw&s" 
+                  alt="Rating" 
+                  className={questionType === "rating" ? "selected" : ""} 
+                />
+                </label>
+        
+        {questionType === "openend" && (
+          <OpenEnd
+                  OpenEndFileValue={openEndFileValue}
+                  SetOpenEndFile={setOpenEndFile}
+                />
+        )}
+        
+        {questionType === "closedend" && (
+          <ClosedEnd
+                  YestitleValue={yestitle}
+                  NoTitleValue={noTitle}
+                  YesFileValue={yesFile}
+                  NoFileValue={noFile}
+                  setYestitle={setYestitle}
+                  setYesFile={setYesFile}
+                  setNoTitle={setNoTitle}
+                  setNoFile={setNoFile}
+                />
+        )}
+        
+        {questionType === "range" && (
+          <RangeInput
+                  min={min}
+                  max={max}
+                  step={step}
+                  SetStep={setStep}
+                  SetMin = {setMin}
+                  SetMax = {setMax}
+                  value={rangeValue}
+                  onChange={(e) => setRangeValue(e.target.value)}
+                  RangeFileValue={rangeFile} 
+                  SetRangeFile={setRangeFile}
+                />
+        )}
+        
+        {questionType === "singlechoice" && (
+          <SingleChoice value={singleChoices} onChange={setSingleChoices}  SingleChoiceFileValue={singleChoiceFile} SetSingleChoiceFile={setSingleChoiceFile}/>
+        )}
+        
+        {questionType === "multiplechoice" && (
+          <MultipleChoice
+            value={multipleChoices}
+            onChange={setMultipleChoices}
+            includeAllAbove={includeAllAbove}
+            setIncludeAllAbove={setIncludeAllAbove}
+            MultipleChoiceFileValue={multipleChoiceFile}
+            SetMultipleChoiceFile={setMultipleChoiceFile}
+          />
+        )}
+        {questionType === "rankingorder" && (
+          <RankingOrder value={rankingChoices} onChange={setRankingChoices} RankingOrderFileValue={rankingOrderFile} SetRankingOrderFile={setRankingOrderFile} />
+        )}
+        
+        {questionType === "rating" && (
+          <Rating value={ratingIconId} onChange={setRatingIconId} RatingFileValue={ratingFile} SetRatingFile={setRatingFile}/>
+        )}
+        
+              <br />
+              
+              <TagInput value={tags} onChange={setTags} maxTags={5} />
+        
+              <AnonymousToggle
+                enabled={isAnonymous}
+                setEnabled={setIsAnonymous}
+                tokens={tokens}
+                countdown={countdown}
+              />
+        
+              <button type="submit">Upload</button>
+        
+            </form>
 
-  <AnonymousToggle
-          enabled={isAnonymous}
-          setEnabled={setIsAnonymous}
-          tokens={tokens}
-          countdown={countdown}
-        />
-        <button type="submit">Upload</button>
-      </form>
-    );
-  };
-
-
+            const iconOptions = [
+  { id: 1, name: "star", icon: faStar },
+  { id: 2, name: "heart", icon: faHeart },
+  { id: 3, name: "happy", icon: faSmile },
+  { id: 4, name: "crying", icon: faSadTear },
+];
 
 const OpenEnd = ({OpenEndFileValue,SetOpenEndFile}) => {
   return(
@@ -1129,4 +970,58 @@ const Rating = ({ value, onChange, RatingFileValue, SetRatingFile }) => {
     </div>
   );
 };
+  if(questionType === "openend"){
+    formData.append("question_type", "openend")
+    if(openEndFileValue){
+      formData.append("openendFile", openEndFileValue);
+    }
+  };
 
+  if (questionType === "closedend"){
+    formData.append("question_type", "closedend");
+    formData.append("yesTitle", yestitle);
+    formData.append("noTitle", noTitle);
+    if (yesFile) {
+      formData.append("yesFile", yesFile);
+    }
+    if (noFile) {
+      formData.append("noFile", noFile);
+    }
+  };
+  
+  if(questionType === "range"){
+    formData.append("question_type", "range");
+    formData.append("rangeMin", min);
+    formData.append("rangeMax", max);
+    formData.append("rangeStep", step);
+    formData.append("defaultRangeValue", rangeValue);
+    formData.append("rangeFile", rangeFile);
+  };
+
+  if(questionType === "singlechoice"){
+    formData.append("question_type", "singlechoice");
+    formData.append("singleChoiceFile", singleChoiceFile);
+    singleChoices.forEach((c) => formData.append("choices[]", c));
+  };
+
+  if(questionType === "multiplechoice"){
+    formData.append("question_type", "multiplechoice");
+    multipleChoices.forEach((c) => formData.append("choices[]", c));
+    formData.append("include_all_above", includeAllAbove); // bool
+    formData.append("multipleChoiceFile", multipleChoiceFile);
+  }
+
+  if(questionType === "rankingorder"){
+    formData.append("question_type", "rankingorder");
+    rankingChoices.forEach((c, i) =>
+      formData.append(`ranking[${i+1}]`, c)
+    );
+    formData.append("rankingOrderFile", rankingOrderFile);
+  }
+
+  if(questionType === "rating"){
+    formData.append("question_type", "rating");
+    formData.append("rating_icon_id", ratingIconId); 
+    formData.append("ratingFile", ratingFile);
+  }
+  
