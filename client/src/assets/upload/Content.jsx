@@ -151,7 +151,8 @@ const handleSubmit = async (e) => {
       />
 
       <TagInput value={tags} onChange={setTags} />
-      <MediaUploader maxFiles={5} onChange={setMediaFiles} />
+      <MediaUploader maxFiles={5} value={mediaFiles} onChange={setMediaFiles} />
+
 
       <AnonymousToggle
         enabled={isAnonymous}
