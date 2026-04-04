@@ -18,7 +18,7 @@ import "../style/Main.css";
 import "../style/App.css";
 import "../style/upload/tag.css";
 
-
+const token = localStorage.getItem("token");
 
 export default function Confession(){
 
@@ -103,11 +103,16 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-      formData,
-      { headers: { "Content-Type": "multipart/form-data" } }
-    );
+    await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
   } 
   catch (err) {
     if (err.response) {
