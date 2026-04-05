@@ -151,7 +151,7 @@ const handleSubmit = async (e) => {
 
       <input
         type="file"
-        accept="image/*,video/*"
+        accept="image/*"
         onChange={(e) => setFile(e.target.files[0])}
       />
 

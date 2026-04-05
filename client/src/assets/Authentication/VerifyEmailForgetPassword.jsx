@@ -7,15 +7,16 @@ const API_URL = import.meta.env.VITE_SERVER_URL;
 
 export const VerifyEmailForgetPassword = () => {
   const navigate = useNavigate();
+
   const email = localStorage.getItem("resetEmail");
-  
+
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
   const handleSubmit = async () => {
     if (pin.length !== 6) {
-      toast.warning("Enter 6-digit PIN");
+      toast.warning("Please enter the 6-digit PIN");
       return;
     }
 
@@ -40,31 +41,44 @@ export const VerifyEmailForgetPassword = () => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("PIN verified");
+        toast.success("PIN verified successfully");
 
         setTimeout(() => {
-      
           navigate("/newpassword");
         }, 2000);
-      } else {
-         if(res.status === 429){
-          toast.warning(data.message);
-          
-        }
-        // toast.error(data.message);
-      }
 
+      } else {
+        switch (res.status) {
+          case 400:
+            toast.warning(data.message);
+            break;
+          case 404:
+            toast.warning(data.message);
+            break;
+          case 421:
+            toast.warning(data.message);
+            break;
+          case 422:
+            toast.warning(data.message);
+            break;
+          case 429:
+            toast.warning(data.message);
+            break;
+          default:
+            toast.warning("Something went wrong");
+        }
+      }
     } catch (err) {
       console.error(err);
-      toast.error("Server error");
-    }
-
+      toast.error("Server error. Please try again later.");
+    };
     setLoading(false);
   };
 
   const handleResendPin = async () => {
     if (cooldown > 0) return;
-
+    if(loading) return;
+    setLoading(true);
     try {
       const res = await fetch(
         `${API_URL}/api/resend-forget-password-pin`,
@@ -82,7 +96,8 @@ export const VerifyEmailForgetPassword = () => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("PIN sent");
+
+        res.status === 200 && toast.success(data.message);
 
         setCooldown(300);
         const interval = setInterval(() => {
@@ -96,20 +111,30 @@ export const VerifyEmailForgetPassword = () => {
         }, 1000);
 
       } else {
-        if(res.status === 429){
-          toast.warning(data.message);
+        switch (res.status) {
+          case 400:
+            toast.warning(data.message);
+            break;
+          case 404:
+            toast.warning(data.message);
+            break;
+          case 429:
+            toast.warning(data.message);
+            break;
+          default:
+            toast.warning("Something went wrong");
         }
-        // toast.error(data.message);
-      }
-
+      };
     } catch (err) {
       console.error(err);
-      toast.error("Server error");
-    }
+      toast.error("Server error. Please try again later.");
+    };
+    setLoading(false);
   };
 
   return (
     <div>
+
       <ToastContainer />
 
       <h2>Verify your PIN</h2>
