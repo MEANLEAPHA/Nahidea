@@ -11,7 +11,7 @@
     --primary-font:monospace;
 }
 .dark-theme{
-    --background-color:rgb(32, 32, 32);
+    --background-color:rgb(233, 233, 233);
     --primary-color:#fd7648;
     --secondary-color: rgba(220, 220, 220, 0.318);
     --font-color:rgb(255, 255, 255);

@@ -2,85 +2,19 @@ import React from "react";
 import { useState, useEffect, useRef } from 'react';
 import Select from "react-select";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Aside from "../components/Aside";
 
 import {useAnonymousTokens, AnonymousToggle }from "../util/anonymousTokens";
 import { confession_options } from "../data/post_type_data";
 import  TagInput  from "../util/tagInput";
 
-import "../style/Main.css";
-import "../style/App.css";
 import "../style/upload/tag.css";
 
 const token = localStorage.getItem("token");
 
 export default function Confession(){
 
-    // Declare state
-    const [showMaxAside, setMaxAside] = useState(() => {
-        return localStorage.getItem("maxAside") === "true";
-    })
-
-
-    useEffect(()=>{
-        localStorage.setItem("maxAside", showMaxAside)
-    },
-    [showMaxAside]
-    );
-
-    const toggleAside = () =>{
-            setMaxAside(prev => !prev)
-    }
-
-
-     const [darkMode, setDarkMode] = useState( () => {
-            return localStorage.getItem("darkMode") === "true"; 
-        });
-    
-        useEffect(
-            () => {
-                if(darkMode){
-                    document.body.classList.add("dark-theme")
-                }
-                else{
-                    document.body.classList.remove("dark-theme")
-                }
-                localStorage.setItem("darkMode", darkMode);
-            },
-            [darkMode]
-        );
-     
-        const toggleTheme = () =>{
-            setDarkMode(prev => !prev)
-        }
-        
-    return(
-        <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
-             <Main appendValue={showMaxAside}/>
-            <Footer />
-        </>
-    )
-}
-
-const Main = ({appendValue}) =>{
-    return(
-        <main>
-            <Aside append={appendValue}/>
-            <Section />
-        </main>
-    )
-}
-
-
-
-const Section = () =>{
+      const [loading, setLoading] = useState(false);
 
       const [title, setTitle] = useState('');
       const [selectType, setSelectType] = useState(null);
@@ -92,6 +26,9 @@ const Section = () =>{
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  if(loading) return;
+  setLoading(true);
   const formData = new FormData();
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "confession");
@@ -129,6 +66,8 @@ const handleSubmit = async (e) => {
       setFile(null);
       setIsAnonymous(false);
       setSelectType(null);
+
+      setLoading(false);
   
 };
 
@@ -166,5 +105,8 @@ const handleSubmit = async (e) => {
     </form>
   );
 }
+
+
+
 
 

@@ -9,73 +9,11 @@ import TagInput from "../util/tagInput";
 import {useAnonymousTokens, AnonymousToggle }from "../util/anonymousTokens";
 import { question_options,iconOptions } from "../data/post_type_data";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Aside from "../components/Aside";
-
-import "../style/Main.css";
-import "../style/App.css";
 import "../style/upload/tag.css";
 
 const token = localStorage.getItem("token");
 export default function Questiion(){
-
-    // Declare state
-    const [showMaxAside, setMaxAside] = useState(() => {
-        return localStorage.getItem("maxAside") === "true";
-    })
-
-    useEffect(()=>{
-        localStorage.setItem("maxAside", showMaxAside)
-    },
-    [showMaxAside]
-    );
-
-    const toggleAside = () =>{
-            setMaxAside(prev => !prev)
-    }
-
-     const [darkMode, setDarkMode] = useState( () => {
-            return localStorage.getItem("darkMode") === "true"; 
-        });
-        useEffect(
-            () => {
-                if(darkMode){
-                    document.body.classList.add("dark-theme")
-                }
-                else{
-                    document.body.classList.remove("dark-theme")
-                }
-                localStorage.setItem("darkMode", darkMode);
-            },
-            [darkMode]
-        );
-        const toggleTheme = () =>{
-            setDarkMode(prev => !prev)
-        }
-        
-    return(
-        <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
-             <Main appendValue={showMaxAside}/>
-            <Footer />
-        </>
-    )
-}
-
-const Main = ({appendValue}) =>{
-    return(
-        <main>
-            <Aside append={appendValue}/>
-            <Section />
-        </main>
-    )
-}
-
-
-
-const Section = () =>{
- 
+const [loading, setLoading] = useState(false);
   // question setence
   const [title, setTitle] = useState('');
 
@@ -226,6 +164,9 @@ const Section = () =>{
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  if(loading) return;
+  setLoading(true);
   const formData = new FormData();
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "question");
@@ -294,7 +235,9 @@ const handleSubmit = async (e) => {
 if (isAnonymous) consume();
 
  (resetMap[questionType] || []).forEach(fn => fn());
-  
+
+  setLoading(false);
+
 };
 
 
@@ -332,8 +275,7 @@ if (isAnonymous) consume();
         <button type="submit">Upload</button>
       </form>
     );
-  };
-
+}
 
 
 const OpenEnd = () => {

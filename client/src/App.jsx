@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 
 // Import Page
 
     // Main
     import Header from '../src/assets/components/Header';
-    import Main from '../src/assets/components/Main';
-    import Footer from '../src/assets/components/Footer';
+   
+    import Aside from './assets/components/Aside';
+
 
     // Authentication
     import Login  from './assets/Authentication/Login';
@@ -23,6 +24,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
 // Style
 import './assets/style/App.css';
+import './assets/style/Main.css';
+import './assets/style/Section.css'
 
 
 
@@ -32,10 +35,14 @@ const App = () =>{
     return(
         <BrowserRouter>
             <Routes>
-
-                {/* Home Page */}
-                <Route path='/' element={<Home/>}></Route>
                 <Route path='/home' element={<Home/>}></Route>
+                {/* Home Page */}
+                <Route path='/' element={<Home/>}>
+                    {/* Action Upload page */}
+                    <Route path='/create/question' element={<Question/>}></Route>
+                    <Route path='/create/confession' element={<Confession/>}></Route>
+                    <Route path='/create/content' element={<Content/>}></Route>
+                </Route>
 
                 {/* Authentication */}
                 <Route path='/login' element={<Login/>}></Route>
@@ -44,11 +51,6 @@ const App = () =>{
                 <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
                 <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
                 <Route path='/newpassword' element={<NewPassword/>}></Route>
-
-                {/* Action Upload page */}
-                <Route path='/create/question' element={<Question/>}></Route>
-                <Route path='/create/confession' element={<Confession/>}></Route>
-                <Route path='/create/content' element={<Content/>}></Route>
 
                 {/* Not Found page */}
                 <Route path='*' element={<NotFound/>}></Route>
@@ -59,49 +61,69 @@ const App = () =>{
  
 const Home = () =>{
 
+    // Aside mode tool
     const [showMaxAside, setMaxAside] = useState(() => {
             return localStorage.getItem("maxAside") === "true";
-        })
+        });
     
-        useEffect(()=>{
-            localStorage.setItem("maxAside", showMaxAside)
-        },
-        [showMaxAside]
-        );
+    useEffect(()=>{
+        localStorage.setItem("maxAside", showMaxAside)
+    },
+    [showMaxAside]
+    );
+
+    const toggleAside = () =>{
+            setMaxAside(prev => !prev)
+    };
     
-        const toggleAside = () =>{
-                setMaxAside(prev => !prev)
-        }
-    
-    
-         const [darkMode, setDarkMode] = useState( () => {
-                return localStorage.getItem("darkMode") === "true"; 
-            });
-        
-            useEffect(
-                () => {
-                    if(darkMode){
-                        document.body.classList.add("dark-theme")
-                    }
-                    else{
-                        document.body.classList.remove("dark-theme")
-                    }
-                    localStorage.setItem("darkMode", darkMode);
-                },
-                [darkMode]
-            );
-         
-            const toggleTheme = () =>{
-                setDarkMode(prev => !prev)
+    // Theme mode tool
+    const [darkMode, setDarkMode] = useState( () => {
+        return localStorage.getItem("darkMode") === "true"; 
+    });
+
+    useEffect(
+        () => {
+            if(darkMode){
+                document.body.classList.add("dark-theme")
             }
+            else{
+                document.body.classList.remove("dark-theme")
+            }
+            localStorage.setItem("darkMode", darkMode);
+        },
+        [darkMode]
+    );
+         
+    const toggleTheme = () =>{
+        setDarkMode(prev => !prev)
+    };
+
     return(
         <>
             <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
-            <Main appendValue={showMaxAside}/>
-            <Footer />
+            <main>
+                <Aside append={showMaxAside}/>
+                <section>
+                    <Outlet />
+                </section>
+            </main>
+         
         </>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const NotFound = () =>{
     return(
