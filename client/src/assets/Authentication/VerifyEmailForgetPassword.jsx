@@ -66,6 +66,7 @@ export const VerifyEmailForgetPassword = () => {
             break;
           default:
             toast.warning("Something went wrong");
+            break;
         }
       }
     } catch (err) {
@@ -127,6 +128,9 @@ export const VerifyEmailForgetPassword = () => {
       };
     } catch (err) {
       console.error(err);
+      if(res.status === 506){
+              toast.error(data.message);
+            }
       toast.error("Server error. Please try again later.");
     };
     setLoading(false);

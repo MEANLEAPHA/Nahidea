@@ -34,12 +34,11 @@ const Login = () => {
   const SubmitLogin = async () => {
     if (!isValid) return;
 
-    if (loading) return; // ✅ prevent spam
-
+    if (loading) return; 
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/login`, {
+      const res = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,25 +49,39 @@ const Login = () => {
         }),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok) {
-        // ✅ store token
+      if (res.ok) {
+
+        res.status === 200 && toast.success(data.message);
         localStorage.setItem("token", data.token);
-
-        toast.success("Login successful! Redirecting...");
-
+        
         setTimeout(() => {
           navigate("/home");
         }, 1500);
 
       } else {
-        toast.error(data.message || "Invalid credentials");
+        switch (res.status) {
+                  case 400:
+                    toast.warning(data.message);
+                    break;
+                  case 401:
+                    toast.warning(data.message);
+                    break;
+                  case 403:
+                    toast.warning(data.message);
+                    break;
+                  case 404:
+                    toast.warning(data.message);
+                    break;
+                  default:
+                    toast.warning("Something went wrong");
+          }
       }
 
     } catch (error) {
       console.error(error);
-      toast.error("Server error");
+      toast.error("Server error, please try again later.");
     }
 
     setLoading(false);

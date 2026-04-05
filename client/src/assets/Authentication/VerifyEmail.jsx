@@ -44,7 +44,28 @@ export const VerifyEmail = () => {
           navigate("/login");
         }, 2500);
       } else {
-        toast.error(data.message);
+        switch (res.status) {
+          case 400:
+            toast.warning(data.message);
+            break;
+          case 401:
+            toast.warning(data.message);
+            break;
+          case 402:
+            toast.warning(data.message);
+            break;
+          case 403:
+            toast.warning(data.message);
+            break;
+          case 405:
+            toast.warning(data.message);
+            break;
+          case 429:
+            toast.warning(data.message);
+            break;
+          default:
+            toast.warning("Something went wrong");
+        }
       }
 
     } catch (err) {
@@ -62,6 +83,8 @@ export const VerifyEmail = () => {
     };
     if (cooldown > 0) return;
 
+    if (loading) return;
+    setLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/resend-verify-email-pin`, {
         method: "POST",
@@ -74,8 +97,8 @@ export const VerifyEmail = () => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("New PIN sent");
-
+       
+        res.status === 200 && toast.success(data.message);
         // ⏱ cooldown 5min
         setCooldown(300);
         const interval = setInterval(() => {
@@ -94,13 +117,29 @@ export const VerifyEmail = () => {
         }, 1000);
 
       } else {
-        toast.error(data.message);
+        switch (res.status) {
+          case 401:
+            toast.warning(data.message);
+            break;
+          case 404:
+            toast.warning(data.message);
+            break;
+          case 429:
+            toast.warning(data.message);
+            break;
+          default:
+            toast.warning("Something went wrong");
+        }
       }
 
     } catch (err) {
       console.error(err);
+      if(res.status === 506){
+        toast.error(data.message);
+      }
       toast.error("Server error");
     }
+    setLoading(false);
   };
 
   return (

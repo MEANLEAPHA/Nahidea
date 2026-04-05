@@ -34,11 +34,11 @@ export const NewPassword = () => {
   const [viewPassword, setViewPassword] = useState("password");
   const [eye, setEye] = useState(faEyeLowVision);
 
-    const [isUpperCase, setIsUpperCase] = useState("white");
-   const [isLowerCase, setIsLowerCase] = useState("white");
-   const [isNumber, setIsNumber] = useState("white");
-   const [isSymbol, setIsSymbol] = useState("white");
-   const [isLength, setIsLength] = useState("white");
+  const [isUpperCase, setIsUpperCase] = useState("white");
+  const [isLowerCase, setIsLowerCase] = useState("white");
+  const [isNumber, setIsNumber] = useState("white");
+  const [isSymbol, setIsSymbol] = useState("white");
+  const [isLength, setIsLength] = useState("white");
 
   const email = localStorage.getItem("resetEmail");
 
@@ -115,18 +115,31 @@ export const NewPassword = () => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Password reset successful");
+        res.status === 200 && toast.success(data.message);
         localStorage.removeItem("resetEmail");
         setTimeout(() => {
           navigate("/login");
         }, 2000);
       } else {
-        toast.error(data.message);
+        switch (res.status) {
+                  case 400:
+                    toast.warning(data.message);
+                    break;
+                  case 401:
+                    toast.warning(data.message);
+                    break;
+                  case 403:
+                    toast.warning(data.message);
+                    break;
+                  default:
+                    toast.warning("Something went wrong");
+                    break;
+          }
       }
 
     } catch (err) {
       console.error(err);
-      toast.error("Server error");
+     toast.error("Server error. Please try again later.");
     }
 
     setLoading(false);

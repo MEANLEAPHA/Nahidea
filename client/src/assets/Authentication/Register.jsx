@@ -129,7 +129,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/register`, {
+      const res = await fetch(`${API_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,19 +141,31 @@ const Register = () => {
         }),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok) {
-        toast.success("Account created! Redirecting...");
+      if (res.ok) {
+        res.status === 200 && toast.success(data.message);
         localStorage.setItem("verifyEmail", data.email);
         setTimeout(() => {
           navigate("/verifyemail");
         }, 3000);
       } else {
-        toast.error(data.message || "Registration failed");
+        switch (res.status) {
+                          case 400:
+                            toast.warning(data.message);
+                            break;
+                          case 409:
+                            toast.warning(data.message);
+                            break;
+                          default:
+                            toast.warning("Something went wrong");
+          }
       }
     } catch (error) {
       console.error(error);
+      if (res.status === 506){
+        toast.error(data.message);
+      }
       toast.error("Server error");
     }
 

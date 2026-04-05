@@ -31,13 +31,25 @@ export const ForgetPassword = () => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("If email exists, PIN sent");
+       res.status === 200 && toast.success(data.message);
        localStorage.setItem("resetEmail", email);
         setTimeout(() => {
           navigate("/verifyemailforgetpassword");
         }, 2500);
       } else {
-        toast.error(data.message || "Something went wrong");
+        switch (res.status) {
+                  case 401:
+                    toast.warning(data.message);
+                    break;
+                  case 404:
+                    toast.warning(data.message);
+                    break;
+                  case 429:
+                    toast.warning(data.message);
+                    break;
+                  default:
+                    toast.warning("Something went wrong");
+          }
       }
 
     } catch (err) {
