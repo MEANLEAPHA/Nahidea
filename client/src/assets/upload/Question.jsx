@@ -219,9 +219,12 @@ const handleSubmit = async (e) => {
     const res = await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
       formData,
-      { headers: { "Content-Type": "multipart/form-data",
-       Authorization: `Bearer ${token}`
-       } }
+      {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
+          }
+        }
     );
     console.log("Upload success:", res.data);
   } catch (err) {
@@ -333,6 +336,7 @@ const RangeInput = ({ min, max, step, value, onChange, SetMax, SetMin, SetStep})
         type="number"
         min="0.1"
         max="10"
+        placeholder='0'
         value={step}
         onChange={(e) => SetStep(Number(e.target.value))}
       />
@@ -399,6 +403,7 @@ const SingleChoice = ({ value, onChange}) => {
             />
             {value.length > 3 && (
               <button
+                type='button'
                 className="btn-delete-single-choice"
                 onClick={() => deleteChoice(index)}
               >
@@ -410,11 +415,11 @@ const SingleChoice = ({ value, onChange}) => {
       </div>
       <hr />
       <div>
-        <button onClick={addChoice} disabled={value.length >= maxChoices}>
+        <button onClick={addChoice} disabled={value.length >= maxChoices} type='button'>
           Add more choice
         </button>
         {value.length > 3 && (
-          <button onClick={removeAll}>Remove all</button>
+          <button onClick={removeAll} type='button'>Remove all</button>
         )}
       </div>
     </div>
@@ -467,6 +472,7 @@ const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove})
               <button
                 className="btn-delete-multiple-choice"
                 onClick={() => deleteChoice(index)}
+                type='button'
               >
                 delete
               </button>
@@ -490,19 +496,19 @@ const MultipleChoice = ({ value, onChange, includeAllAbove, setIncludeAllAbove})
 
       <hr />
       <div>
-        <button onClick={addChoice} disabled={value.length >= maxChoices}>
+        <button onClick={addChoice} disabled={value.length >= maxChoices} type='button'>
           Add more choice
         </button>
         {value.length > 3 && (
-          <button onClick={removeAll}>Remove all</button>
+          <button onClick={removeAll} type='button'>Remove all</button>
         )}
         {!includeAllAbove && (
-          <button onClick={() => setIncludeAllAbove(1)}>
+          <button onClick={() => setIncludeAllAbove(1)} type='button'>
             Add "All Above"
           </button>
         )}
         {includeAllAbove && (
-          <button onClick={() => setIncludeAllAbove(0)}>
+          <button onClick={() => setIncludeAllAbove(0)} type='button'>
             Remove "All Above"
           </button>
         )}
@@ -594,6 +600,7 @@ const RankingOrder = ({ value, onChange }) => {
                           className="btn-delete-ranking"
                           onClick={() => deleteItem(index)}
                           style={{ marginLeft: "8px" }}
+                          type='button'
                         >
                           delete
                         </button>
@@ -610,11 +617,11 @@ const RankingOrder = ({ value, onChange }) => {
 
       <hr />
       <div>
-        <button onClick={addItem} disabled={items.length >= maxItems}>
+        <button onClick={addItem} disabled={items.length >= maxItems} type='button'>
           Add more choice
         </button>
         {items.length > 3 && (
-          <button onClick={removeAll}>Remove all</button>
+          <button onClick={removeAll} type='button'>Remove all</button>
         )}
       </div>
     </div>

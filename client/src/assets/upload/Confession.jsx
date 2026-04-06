@@ -32,7 +32,7 @@ const handleSubmit = async (e) => {
   const formData = new FormData();
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "confession");
-  formData.append("confession_title", "My Post");
+  formData.append("confession_title", title);
   formData.append("confession_type", selectType?.value ?? "general");
   formData.append("isAnonymous", isAnonymous);
   if (confessionFile) {
