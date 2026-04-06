@@ -4,6 +4,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
+import "../style/Authentication/SignPage.css";
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import nahideaTren from "../img/nahidea-tran.png"
 
 export const VerifyEmailForgetPassword = () => {
   const navigate = useNavigate();
@@ -137,11 +140,18 @@ export const VerifyEmailForgetPassword = () => {
   };
 
   return (
-    <div>
+    <div className="container-form">
 
-      <ToastContainer />
+        <div className='toast-feedback'>
+              <ToastContainer position="top-right" autoClose={2000} />
+            </div>
+      
+            <div className='logo-container'>
+              <img src={nahideaTren}/>
+              <p>Nahidea</p>
+            </div>
 
-      <h2>Verify your PIN</h2>
+   
 
       <form
         onSubmit={(e) => {
@@ -150,33 +160,48 @@ export const VerifyEmailForgetPassword = () => {
         }}
       >
         
-
-        <input
-          type="text"
-          value={pin}
-          maxLength={6}
-          onChange={(e) => {
-            const value = e.target.value.replace(/\D/g, "");
-            setPin(value);
-          }}
-        />
-
-        <button disabled={pin.length !== 6 || loading}>
-          {loading ? "Verifying..." : "Verify"}
-        </button>
-
-        <hr />
-
-        <button
-          type="button"
-          onClick={handleResendPin}
-          disabled={cooldown > 0}
-        >
-          {cooldown > 0
-            ? `Resend in ${cooldown}s`
-            : "Resend PIN"}
-        </button>
+        <div className="form-center">
+           <p className="p-page" style={{fontSize:"x-large", fontWeight:"bold"}}>
+               Verify your email
+              </p>
+              <div className='container-input'>
+                <div className="div-input">
+                     <input
+                      type="text"
+                      value={pin}
+                      maxLength={6}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setPin(value);
+                      }}
+                    />
+                </div>
+                <div className="div-input div-submit">
+                       <button disabled={pin.length !== 6 || loading}>
+                    {loading ? "Verifying..." : "Verify"}
+                  </button>
+                  <p
+                    onClick={handleResendPin}
+                    disabled={cooldown > 0}
+                     style={{background:"none", color:"black", cursor:"pointer", fontSize:"small"}}
+                  >
+                    {cooldown > 0
+                      ? `Resend in ${cooldown}s`
+                      : "Resend PIN"}
+                  </p>
+                </div>
+              </div>
+         
+        </div>
       </form>
+       <div className='container-image'>
+                    <div className='container-image-center'>
+                      <h1 className="not-mobile greeting">Design later</h1>
+                      <img src={nahIdeaAuth} className="auth-img" />
+                      <p className='logo-font'>Nahidea</p>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
+                    </div>
+                  </div>
     </div>
   );
 };

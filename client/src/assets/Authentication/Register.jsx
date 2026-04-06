@@ -4,11 +4,15 @@ import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import "../style/Authentication/SignPage.css";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
+
+import "../style/Authentication/SignPage.css";
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import nahideaTren from "../img/nahidea-tran.png"
 
 const checks = {
   lower: /[a-z]/,
@@ -34,11 +38,11 @@ const Register = () => {
 
    const [showInstruction, setShowInstruction] = useState("none");
 
-   const [isUpperCase, setIsUpperCase] = useState("white");
-   const [isLowerCase, setIsLowerCase] = useState("white");
-   const [isNumber, setIsNumber] = useState("white");
-   const [isSymbol, setIsSymbol] = useState("white");
-   const [isLength, setIsLength] = useState("white");
+   const [isUpperCase, setIsUpperCase] = useState("grey");
+   const [isLowerCase, setIsLowerCase] = useState("grey");
+   const [isNumber, setIsNumber] = useState("grey");
+   const [isSymbol, setIsSymbol] = useState("grey");
+   const [isLength, setIsLength] = useState("grey");
   
    const handleFocus = ()=>{
       setShowInstruction("block");
@@ -54,35 +58,35 @@ const Register = () => {
       setIsLowerCase("green");
     };
     if(!checks.lower.test(value)){
-      setIsLowerCase("white");
+      setIsLowerCase("grey");
     }
     if (checks.upper.test(value)){
       score++;
       setIsUpperCase("green");
     };
     if(!checks.upper.test(value)){
-      setIsUpperCase("white");
+      setIsUpperCase("grey");
     }
     if (checks.number.test(value)){
       score++;
       setIsNumber("green");
     };
     if(!checks.number.test(value)){
-      setIsNumber("white");
+      setIsNumber("grey");
     }
     if (checks.symbol.test(value)){
       score++;
       setIsSymbol("green");
     };
     if(!checks.symbol.test(value)){
-      setIsSymbol("white");
+      setIsSymbol("grey");
     }
     if (checks.length.test(value)){
       score++;
       setIsLength("green");
     };
     if(!checks.length.test(value)){
-      setIsLength("white");
+      setIsLength("grey");
     }
     return score;
   };
@@ -173,35 +177,46 @@ const Register = () => {
   };
 
   return (
- 
-   
     <div className="container-form">
+
       <div className='toast-feedback'>
           <ToastContainer position="top-right" autoClose={2000}/>
       </div>
+
+      <div className='logo-container'>
+                      <img src={nahideaTren}/>
+                      <p>Nahidea</p>
+      </div>
+      
       <form onSubmit={(e) => { e.preventDefault(); submitRegister(); }}>
         <div className="form-center">
+
           <p className="p-page">
             <span>Signup</span> |{" "}
             <span onClick={() => navigate("/login")}>Login</span>
           </p>
-          <p className="warm-welcome-p">Create your account</p>
+          <br />
+         <div className='container-input'>
           <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={inputUsername}
-            onChange={handleValue}
-            required
-          />
+          <div className="div-input">
+            <input
+              type="text"
+              name="username"
+              value={inputUsername}
+              onChange={handleValue}
+              required
+            />
+          </div>
           <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={inputEmail}
-            onChange={handleValue}
-            required
-          />
+          <div className="div-input">
+            <input
+              type="email"
+              name="email"
+              value={inputEmail}
+              onChange={handleValue}
+              required
+            />
+            </div>
           <label>Password</label>
           <div className="div-input">
             <input
@@ -220,6 +235,7 @@ const Register = () => {
               className="show-password-icon"
             />
           </div>
+          
 
           {/* ✅ Strength bars */}
           <div style={{ display: "flex", gap: "5px", marginTop: "8px", width:"200px"}}>
@@ -246,30 +262,45 @@ const Register = () => {
             <p style={{color:isSymbol}}>Symbol</p>
             <p style={{color:isLength}}>Min 6 and Max 8</p>
           </div>
-
-
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={inputConfirmPassword}
-            onChange={handleValue}
-            required
-          />
-
-          <button
-            type="submit"
-            disabled={!isValid || loading}
-            style={{
-              opacity: !isValid || loading ? 0.5 : 1,
-              cursor: !isValid || loading ? "not-allowed" : "pointer"
-            }}
-          >
-            {loading ? "Creating..." : "Register"}
-          </button>
-
+            <br />
+            <label>Confirm Password</label>
+            <div className="div-input">
+              <input
+              type="password"
+              name="confirmPassword"
+              value={inputConfirmPassword}
+              onChange={handleValue}
+              required
+              />
+            </div>
+            <div className="div-input div-submit">
+            <span style={{display:"flex", alignItems:"center"}}> <input type="checkbox" required style={{width:"20px"}}/><u onClick={() => navigate('/forgetpassword')} style={{color:"black"}}>Agree to Term & Condition</u></span>
+            <button
+                type="submit"
+                disabled={!isValid || loading}
+                style={{
+                  opacity: !isValid || loading ? 0.5 : 1,
+                  cursor: !isValid || loading ? "not-allowed" : "pointer"
+                }}
+              >
+              {loading ? "Creating..." : "Register"}
+            </button>
+          </div>
+          </div>
+          <p className="warm-welcome-p">
+                Aleady have an account?{" "}
+                <u onClick={() => navigate("/login")} style={{color:"green", cursor:"pointer"}}>Login</u>
+              </p>
         </div>
       </form>
+      <div className='container-image'>
+        <div className='container-image-center'>
+          <h1 className="not-mobile greeting">Design later</h1>
+          <img src={nahIdeaAuth} className="auth-img" />
+          <p className='logo-font'>Nahidea</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
+        </div>
+      </div>
     </div>
 
   );

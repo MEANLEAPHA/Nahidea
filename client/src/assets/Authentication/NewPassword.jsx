@@ -6,6 +6,10 @@ import { toast, ToastContainer } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
 
+import "../style/Authentication/SignPage.css";
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import nahideaTren from "../img/nahidea-tran.png"
+
 const checks = {
   lower: /[a-z]/,
   upper: /[A-Z]/,
@@ -34,54 +38,53 @@ export const NewPassword = () => {
   const [viewPassword, setViewPassword] = useState("password");
   const [eye, setEye] = useState(faEyeLowVision);
 
-  const [isUpperCase, setIsUpperCase] = useState("white");
-  const [isLowerCase, setIsLowerCase] = useState("white");
-  const [isNumber, setIsNumber] = useState("white");
-  const [isSymbol, setIsSymbol] = useState("white");
-  const [isLength, setIsLength] = useState("white");
+    const [isUpperCase, setIsUpperCase] = useState("grey");
+    const [isLowerCase, setIsLowerCase] = useState("grey");
+    const [isNumber, setIsNumber] = useState("grey");
+    const [isSymbol, setIsSymbol] = useState("grey");
+    const [isLength, setIsLength] = useState("grey");
 
   const email = localStorage.getItem("resetEmail");
 
-   const calculateStrength = (value) => {
+    const calculateStrength = (value) => {
     let score = 0;
     if (checks.lower.test(value)){
       score++;
       setIsLowerCase("green");
     };
     if(!checks.lower.test(value)){
-      setIsLowerCase("white");
+      setIsLowerCase("grey");
     }
     if (checks.upper.test(value)){
       score++;
       setIsUpperCase("green");
     };
     if(!checks.upper.test(value)){
-      setIsUpperCase("white");
+      setIsUpperCase("grey");
     }
     if (checks.number.test(value)){
       score++;
       setIsNumber("green");
     };
     if(!checks.number.test(value)){
-      setIsNumber("white");
+      setIsNumber("grey");
     }
     if (checks.symbol.test(value)){
       score++;
       setIsSymbol("green");
     };
     if(!checks.symbol.test(value)){
-      setIsSymbol("white");
+      setIsSymbol("grey");
     }
     if (checks.length.test(value)){
       score++;
       setIsLength("green");
     };
     if(!checks.length.test(value)){
-      setIsLength("white");
+      setIsLength("grey");
     }
     return score;
   };
-
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
@@ -146,8 +149,17 @@ export const NewPassword = () => {
   };
 
   return (
-    <div>
-      <ToastContainer />
+    <div className="container-form">
+      
+            <div className='toast-feedback'>
+              <ToastContainer position="top-right" autoClose={2000} />
+            </div>
+      
+            <div className='logo-container'>
+              <img src={nahideaTren}/>
+              <p>Nahidea</p>
+            </div>
+      
 
       <form
         onSubmit={(e) => {
@@ -155,9 +167,12 @@ export const NewPassword = () => {
           handleSubmit();
         }}
       >
-        <h2>Set New Password</h2>
-
-        <div>
+        <div className="form-center">
+          <p className="p-page" style={{fontSize:"x-large", fontWeight:"bold"}}>
+               Set New Password
+              </p>
+             <div className='container-input'>
+               <div className="div-input">
           <input
             type={viewPassword}
             placeholder="New Password"
@@ -169,6 +184,7 @@ export const NewPassword = () => {
 
           <FontAwesomeIcon
             icon={eye}
+            className="show-password-icon"
             onClick={() => {
               setViewPassword(
                 viewPassword === "password" ? "text" : "password"
@@ -190,6 +206,7 @@ export const NewPassword = () => {
               style={{
                 height: "6px",
                 flex: 1,
+                 borderRadius: "4px",
                 backgroundColor: strength >= i ? "green" : "#ddd",
               }}
             />
@@ -205,17 +222,35 @@ export const NewPassword = () => {
             <p style={{color:isSymbol}}>Symbol</p>
             <p style={{color:isLength}}>Min 6 and Max 8</p>
           </div>
-        <input
+          <br />
+         <div className="div-input">
+          <input
           type="password"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-
-        <button disabled={!isValid || loading}>
+         </div>
+     
+        <div className="div-input div-submit">
+             <button disabled={!isValid || loading}>
           {loading ? "Saving..." : "Reset Password"}
         </button>
+        </div>
+
+       
+              </div>  
+       
+        </div>
       </form>
+      <div className='container-image'>
+        <div className='container-image-center'>
+          <h1 className="not-mobile greeting">Design later</h1>
+          <img src={nahIdeaAuth} className="auth-img" />
+          <p className='logo-font'>Nahidea</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
+        </div>
+    </div>
     </div>
   );
 };

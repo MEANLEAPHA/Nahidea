@@ -336,7 +336,7 @@ const RangeInput = ({ min, max, step, value, onChange, SetMax, SetMin, SetStep})
         type="number"
         min="0.1"
         max="10"
-        placeholder='0'
+        placeholder='0' 
         value={step}
         onChange={(e) => SetStep(Number(e.target.value))}
       />
