@@ -129,7 +129,7 @@ export const NewPassword = () => {
         localStorage.removeItem("resetEmail");
         setTimeout(() => {
           navigate("/login");
-        }, 2000);
+        }, 1000);
       } else {
         switch (res.status) {
                   case 400:
@@ -193,12 +193,14 @@ export const NewPassword = () => {
                   e.preventDefault(); 
                 }
             }}
+            className="input-auth"
           />
 
           <FontAwesomeIcon
             icon={eye}
             className="show-password-icon"
-            onClick={() => {
+            onMouseDown={(e) => {
+               e.preventDefault(); 
               setViewPassword(
                 viewPassword === "password" ? "text" : "password"
               );
@@ -248,6 +250,7 @@ export const NewPassword = () => {
                   e.preventDefault(); 
                 }
           }}
+          className="input-auth"
         />
          </div>
      

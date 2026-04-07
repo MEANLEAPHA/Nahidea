@@ -28,7 +28,7 @@ import './assets/style/Main.css';
 import './assets/style/Section.css'
 
 
-
+const token = localStorage.getItem("token");
 
 
 const App = () =>{
@@ -60,6 +60,9 @@ const App = () =>{
 }
  
 const Home = () =>{
+    // if(!token){
+    //     return <Login/>
+    // }
 
     // Aside mode tool
     const [showMaxAside, setMaxAside] = useState(() => {

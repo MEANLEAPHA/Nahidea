@@ -205,6 +205,7 @@ const Register = () => {
               value={inputUsername}
               onChange={handleValue}
               required
+              className="input-auth"
             />
           </div>
           <label>Email</label>
@@ -215,6 +216,7 @@ const Register = () => {
               value={inputEmail}
               onChange={handleValue}
               required
+              className="input-auth"
             />
             </div>
           <label>Password</label>
@@ -234,6 +236,7 @@ const Register = () => {
                   e.preventDefault(); 
                 }
               }}
+              className="input-auth"
             />
             <FontAwesomeIcon
               icon={eye}
@@ -286,6 +289,7 @@ const Register = () => {
                   e.preventDefault(); 
                 }
               }}
+              className="input-auth"
               />
             </div>
             <div className="div-input div-submit">

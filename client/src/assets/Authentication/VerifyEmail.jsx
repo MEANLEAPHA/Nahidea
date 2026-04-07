@@ -181,6 +181,7 @@ export const VerifyEmail = () => {
                   const value = e.target.value.replace(/\D/g, ""); // only digits
                   setPin(value);
                 }}
+                className="input-auth"
               />
            </div>
          

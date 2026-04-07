@@ -145,15 +145,14 @@ label{
 .div-checkBox label{
     font-size:14px;
 }
-input{
+.input-auth{
     width: 100%;
     background: none;
-
 padding: 10px;
 border: none;
 color: rgb(0, 0, 0);
 }
-input:focus{
+.input-auth:focus{
     outline: none;
     border: none;
 }

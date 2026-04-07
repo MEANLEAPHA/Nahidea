@@ -35,7 +35,7 @@ header{
     align-items: center;
     border-bottom: 1px solid var(--secondary-color);
 }
-.logo-font{
+.logo-font-main{
     font-family:"Yeseva One", serif;
     color: var(--primary-color);
     font-size:35px;

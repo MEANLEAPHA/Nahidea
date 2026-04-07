@@ -120,6 +120,7 @@ const Login = () => {
                     value={inputEmail}
                     onChange={handleValue}
                     required
+                    className="input-auth"
                   />
                 </div>
                 <label>Password</label>
@@ -137,6 +138,7 @@ const Login = () => {
                       }
                     }}
                     required
+                    className="input-auth"
                   />
                   <FontAwesomeIcon
                     icon={eye}

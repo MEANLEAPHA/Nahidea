@@ -195,11 +195,11 @@ const handleSubmit = async (e) => {
       break;
     case "singlechoice":
       formData.append("question_type", "singlechoice");
-      singleChoices.forEach((c) => formData.append("choices[]", c));
+      singleChoices.forEach((c) => formData.append("choices", c));
       break;
     case "multiplechoice": 
       formData.append("question_type", "multiplechoice");
-      multipleChoices.forEach((c) => formData.append("choices[]", c));
+      multipleChoices.forEach((c) => formData.append("choices", c));
       formData.append("include_all_above", includeAllAbove);
       break;
     case "rankingorder":
@@ -334,9 +334,6 @@ const RangeInput = ({ min, max, step, value, onChange, SetMax, SetMin, SetStep})
       />
       <input
         type="number"
-        min="0.1"
-        max="10"
-        placeholder='0' 
         value={step}
         onChange={(e) => SetStep(Number(e.target.value))}
       />

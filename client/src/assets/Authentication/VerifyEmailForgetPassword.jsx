@@ -173,6 +173,7 @@ export const VerifyEmailForgetPassword = () => {
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "");
                         setPin(value);
+                        className="input-auth"
                       }}
                     />
                 </div>

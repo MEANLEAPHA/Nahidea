@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 
 // style
 import "../style/Header.css";
+
   // icon
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faBars, faMagnifyingGlass, faChevronDown, faInbox, faArrowRightFromBracket, faFireFlameCurved, faMagnifyingGlassChart, faTimesCircle,faChartSimple, faGauge,faSliders,faMoon, faFlag, faCommentDots, faBug, faUser, faBook, faNewspaper, faUsers, faComments, faComment, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faBan, faFeather, faBullhorn, faServer, faClockRotateLeft, faTrashCan, faChevronUp, faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -38,13 +39,13 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
       
       <div className="header-left header-children">
         <FontAwesomeIcon icon={faBars} className="bar-icon aside-action-bar" onClick={onToggleAside}/>
-        <p className='logo-font not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
+        <p className='logo-font-main not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
          <FontAwesomeIcon icon={faPlus} className="bar-icon mobile-tool fa-plus add-btn" onClick={onToggleAside} />
       </div>
       <div className="header-middle header-children">
         <Search />
       
-           <p className='logo-font mobile-tool'>Nah<span style={{color:'gold'}}>!</span>idea</p>
+           <p className='logo-font-main mobile-tool'>Nah<span style={{color:'gold'}}>!</span>idea</p>
       </div>
       <div className="overlay-results"></div>
       <div className="header-right header-children">

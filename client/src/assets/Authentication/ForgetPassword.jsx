@@ -90,6 +90,7 @@ export const ForgetPassword = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
+              className="input-auth"
             />
             </div>
             <div className="div-input div-submit">
