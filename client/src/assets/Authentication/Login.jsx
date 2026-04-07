@@ -61,7 +61,7 @@ const Login = () => {
         
         setTimeout(() => {
           navigate("/home");
-        }, 1500);
+        }, 1000);
 
       } else {
         switch (res.status) {
@@ -127,9 +127,15 @@ const Login = () => {
                   <input
                     type={viewPassword}
                     name="password"
+                    maxLength="8"
                     placeholder="Enter Password"
                     value={inputPassword}
                     onChange={handleValue}
+                    onKeyDown={(e) => {
+                      if (e.key === " ") {
+                        e.preventDefault(); 
+                      }
+                    }}
                     required
                   />
                   <FontAwesomeIcon

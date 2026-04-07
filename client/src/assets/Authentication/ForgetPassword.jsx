@@ -39,7 +39,7 @@ export const ForgetPassword = () => {
        localStorage.setItem("resetEmail", email);
         setTimeout(() => {
           navigate("/verifyemailforgetpassword");
-        }, 2500);
+        }, 1000);
       } else {
         switch (res.status) {
                   case 401:

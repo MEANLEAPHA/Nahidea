@@ -47,7 +47,7 @@ export const VerifyEmail = () => {
         setTimeout(() => {
           localStorage.removeItem("verifyEmail");
           navigate("/login");
-        }, 2500);
+        }, 1000);
       } else {
         switch (res.status) {
           case 400:
@@ -104,8 +104,8 @@ export const VerifyEmail = () => {
       if (res.ok) {
        
         res.status === 200 && toast.success(data.message);
-        // ⏱ cooldown 5min
-        setCooldown(300);
+        // ⏱ cooldown 1min
+        setCooldown(60);
         const interval = setInterval(() => {
 
           setCooldown((prev) => {

@@ -18,7 +18,7 @@ const checks = {
   lower: /[a-z]/,
   upper: /[A-Z]/,
   number: /\d/,
-  symbol: /[^A-Za-z\d]/,
+  symbol: /[!@#$%^&*()_\-+=\[\]{};:'",.<>?/|\\]/,
   length: /^.{6,8}$/
 };
 
@@ -152,7 +152,7 @@ const Register = () => {
         localStorage.setItem("verifyEmail", data.email);
         setTimeout(() => {
           navigate("/verifyemail");
-        }, 3000);
+        }, 1000);
       } else {
         switch (res.status) {
                           case 400:
@@ -228,10 +228,19 @@ const Register = () => {
               // ref={passwordRef}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              maxLength="8"
+              onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault(); 
+                }
+              }}
             />
             <FontAwesomeIcon
               icon={eye}
-              onClick={handleViewPassword}
+              onMouseDown={(e) => {
+                e.preventDefault(); // prevents input blur
+                handleViewPassword();
+              }}
               className="show-password-icon"
             />
           </div>
@@ -268,9 +277,15 @@ const Register = () => {
               <input
               type="password"
               name="confirmPassword"
+              maxLength="8"
               value={inputConfirmPassword}
               onChange={handleValue}
               required
+              onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault(); 
+                }
+              }}
               />
             </div>
             <div className="div-input div-submit">

@@ -10,12 +10,19 @@ import "../style/Authentication/SignPage.css";
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import nahideaTren from "../img/nahidea-tran.png"
 
+// const checks = {
+//   lower: /[a-z]/,
+//   upper: /[A-Z]/,
+//   number: /\d/,
+//   symbol: /[^A-Za-z\d]/,
+//   length: /.{8,}/
+// };
 const checks = {
   lower: /[a-z]/,
   upper: /[A-Z]/,
   number: /\d/,
-  symbol: /[^A-Za-z\d]/,
-  length: /.{8,}/
+  symbol: /[!@#$%^&*()_\-+=\[\]{};:'",.<>?/|\\]/,
+  length: /^.{6,8}$/
 };
 
 export const NewPassword = () => {
@@ -176,10 +183,16 @@ export const NewPassword = () => {
           <input
             type={viewPassword}
             placeholder="New Password"
+            maxLength="8"
             value={password}
             onChange={handlePasswordChange}
-             onFocus={handleFocus}
-              onBlur={handleBlur}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault(); 
+                }
+            }}
           />
 
           <FontAwesomeIcon
@@ -227,8 +240,14 @@ export const NewPassword = () => {
           <input
           type="password"
           placeholder="Confirm Password"
+          maxLength="8"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault(); 
+                }
+          }}
         />
          </div>
      

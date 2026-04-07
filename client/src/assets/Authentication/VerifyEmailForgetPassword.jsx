@@ -48,7 +48,7 @@ export const VerifyEmailForgetPassword = () => {
 
         setTimeout(() => {
           navigate("/newpassword");
-        }, 2000);
+        }, 1000);
 
       } else {
         switch (res.status) {
@@ -103,7 +103,7 @@ export const VerifyEmailForgetPassword = () => {
 
         res.status === 200 && toast.success(data.message);
 
-        setCooldown(300);
+        setCooldown(60);
         const interval = setInterval(() => {
           setCooldown((prev) => {
             if (prev <= 1) {
