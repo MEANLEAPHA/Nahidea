@@ -6,7 +6,8 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import TagInput from "../util/tagInput";
-import {useAnonymousTokens, AnonymousToggle }from "../util/anonymousTokens";
+import {useAnonymousTokens, AnonymousToggle, AnonymousTokensCoolDown}from "../util/anonymousTokens";
+import { toast, ToastContainer } from "react-toastify";
 import { question_options,iconOptions } from "../data/post_type_data";
 
 import "../style/upload/tag.css";
@@ -226,27 +227,31 @@ const handleSubmit = async (e) => {
           }
         }
     );
-    console.log("Upload success:", res.data);
-  } catch (err) {
-    if (err.response) {
-      console.error("Upload failed:", err.response.data);
-    } else {
-      console.error("Upload failed:", err.message);
+  
+  if (res.status === 201 || res.status === 200) {
+        toast.success(res.data.message || "Question posted successfully");
+        if (isAnonymous) consume();
+        (resetMap[questionType] || []).forEach(fn => fn());
+        setLoading(false);
+      } else {
+        toast.error(res.data.message || "Failed to post question");
+        (resetMap[questionType] || []).forEach(fn => fn());
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error, please try again later");
+      (resetMap[questionType] || []).forEach(fn => fn());
+      setLoading(false);
     }
-  }
-
-if (isAnonymous) consume();
-
- (resetMap[questionType] || []).forEach(fn => fn());
-
-  setLoading(false);
-
 };
 
-
     return (
+      <>
     <form onSubmit={handleSubmit}>
-
+      <div className='toast-feedback'>
+        <ToastContainer position="top-right" autoClose={2000}/>
+      </div>
       <label htmlFor="title">Caption</label>
       <input type="text" 
               name='title'
@@ -254,6 +259,7 @@ if (isAnonymous) consume();
               onChange={(e)=> setTitle(e.target.value)} 
               value={title}
               placeholder="Type your text content here..."
+              required
       />
     <input type="file" accept="image/*" onChange={(e) => setQuestionFile(e.target.files[0])} />
       <label htmlFor="type">Question related to:</label>
@@ -273,10 +279,11 @@ if (isAnonymous) consume();
           enabled={isAnonymous}
           setEnabled={setIsAnonymous}
           tokens={tokens}
-          countdown={countdown}
         />
-        <button type="submit">Upload</button>
+        <button type="submit">{loading ? "Posting..." : "Post"}</button>
       </form>
+      <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
+      </>
     );
 }
 

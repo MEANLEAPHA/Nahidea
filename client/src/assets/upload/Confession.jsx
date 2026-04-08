@@ -1,112 +1,126 @@
-import React from "react";
-import { useState, useEffect, useRef } from 'react';
+import React, { useState } from "react";
 import Select from "react-select";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
-
-import {useAnonymousTokens, AnonymousToggle }from "../util/anonymousTokens";
+import { useAnonymousTokens, AnonymousToggle, AnonymousTokensCoolDown } from "../util/anonymousTokens";
 import { confession_options } from "../data/post_type_data";
-import  TagInput  from "../util/tagInput";
+import TagInput from "../util/tagInput";
 
 import "../style/upload/tag.css";
 
 const token = localStorage.getItem("token");
 
-export default function Confession(){
+export default function Confession() {
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
+  const [selectType, setSelectType] = useState(null);
+  const [confessionFile, setFile] = useState(null);
+  const [tags, setTags] = useState([]);
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
-      const [loading, setLoading] = useState(false);
+  const { tokens, countdown, consume } = useAnonymousTokens();
 
-      const [title, setTitle] = useState('');
-      const [selectType, setSelectType] = useState(null);
-      const [confessionFile, setFile] = useState(null); 
-      const [tags, setTags] = useState([]);
-      
-      const [isAnonymous, setIsAnonymous] = useState(false);
-      const { tokens, countdown, consume } = useAnonymousTokens();
+  const resetAll = () => {
+    setTitle("");
+    setTags([]);
+    setFile(null);
+    setIsAnonymous(false);
+    setSelectType(null);
+    setLoading(false);
+  };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    setLoading(true);
 
-  if(loading) return;
-  setLoading(true);
-  const formData = new FormData();
-  tags.forEach((t) => formData.append("tags[]", t));
-  formData.append("post_type", "confession");
-  formData.append("confession_title", title);
-  formData.append("confession_type", selectType?.value ?? "general");
-  formData.append("isAnonymous", isAnonymous);
-  if (confessionFile) {
-    formData.append("confessionFile", confessionFile);
-  }
+    if (!title.trim()) {
+      toast.error("Confession title is required");
+      setLoading(false);
+      return;
+    }
 
-  try {
-    await axios.post(
+    const formData = new FormData();
+    tags.forEach((t) => formData.append("tags[]", t));
+    formData.append("post_type", "confession");
+    formData.append("confession_title", title);
+    formData.append("confession_type", selectType?.value ?? "general");
+    formData.append("isAnonymous", isAnonymous);
+    if (confessionFile) {
+      formData.append("confessionFile", confessionFile);
+    }
+
+    try {
+      const res = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-  } 
-  catch (err) {
-    if (err.response) {
-      console.error("Upload failed:", err.response.data);
-    } else {
-      console.error("Upload failed:", err.message);
+
+      if (res.status === 201 || res.status === 200) {
+        toast.success(res.data.message || "Confession posted successfully");
+        if (isAnonymous) consume();
+        resetAll();
+      } else {
+        toast.error(res.data.message || "Failed to post confession");
+        resetAll();
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        "Server error, please try again later"
+      );
+      resetAll();
     }
-  }
+  };
 
-      if (isAnonymous) consume();
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <div className="toast-feedback">
+          <ToastContainer position="top-right" autoClose={2000} />
+        </div>
 
-      setTitle("");
-      setTags([]);
-      setFile(null);
-      setIsAnonymous(false);
-      setSelectType(null);
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Confess something..."
+          type="text"
+          required
+        />
 
-      setLoading(false);
-  
-};
+        <Select
+          options={confession_options}
+          value={selectType}
+          onChange={setSelectType}
+        />
 
-    return (
-    <form onSubmit={handleSubmit}>
+        <TagInput value={tags} onChange={setTags} />
 
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Confess something..."
-      />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
 
-      <Select
-        options={confession_options}
-        value={selectType}
-        onChange={setSelectType}
-      />
+        <AnonymousToggle
+          enabled={isAnonymous}
+          setEnabled={setIsAnonymous}
+          tokens={tokens}
+        />
 
-      <TagInput value={tags} onChange={setTags} />
+        <button type="submit" disabled={loading}>
+          {loading ? "Posting..." : "Post"}
+        </button>
+      </form>
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-
-      <AnonymousToggle
-        enabled={isAnonymous}
-        setEnabled={setIsAnonymous}
-        tokens={tokens}
-        countdown={countdown}
-      />
-
-      <button type="submit">Confess</button>
-    </form>
+      <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
+    </>
   );
 }
-
-
-
-
-

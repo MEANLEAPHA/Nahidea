@@ -109,21 +109,11 @@ export  function useAnonymousTokens() {
 export function AnonymousToggle({
   enabled,
   setEnabled,
-  tokens,
-  countdown,
+  tokens
 }) {
-  if (tokens === 0) {
-    return (
-      <div>
-        <span>Tokens exhausted. Reset at midnight.</span>
-        <div>Remaining: {tokens}</div>
-        <div>Time left: {formatSeconds(countdown)}</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="toggle-switch">
+    <>
+      {tokens !== 0 ? (<div className="toggle-switch">
       <span>Post anonymous</span>
       <input
         type="checkbox"
@@ -133,6 +123,19 @@ export function AnonymousToggle({
       />
       <label htmlFor="deadlineStatus"></label>
       <div>Remaining tokens: {tokens}</div>
-    </div>
+    </div>): null}
+    </>
+  );
+};
+
+export function AnonymousTokensCoolDown({tokens, countdown}){
+  return(
+    <>
+       {tokens === 0 && (<div>
+        <span>Tokens exhausted. Reset at midnight.</span>
+        <div>Remaining: {tokens}</div>
+        <div>Time left: {formatSeconds(countdown)}</div>
+      </div>)}
+    </>
   );
 }
