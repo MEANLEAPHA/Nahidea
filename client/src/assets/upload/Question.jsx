@@ -25,6 +25,7 @@ const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
 
   const [questionFile, setQuestionFile] = useState(null);
+  const refFile = useRef(null);
 
   // question type state
   const [questionType, setQuestionType] = useState(null);
@@ -55,22 +56,23 @@ const [loading, setLoading] = useState(false);
     const [isAnonymous, setIsAnonymous] = useState(false);
     const { tokens, countdown, consume } = useAnonymousTokens();
 
-    
+    const resetMain = () => {setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
     const resetCloseEnd = () => { setYestitle(""); setNoTitle(""); };
     const resetRange = () => { setMin(null); setMax(null); setStep(1); setRangeValue(null); };
     const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
     const resetMultipleChoice = () => { setMultipleChoices(["","",""]); setIncludeAllAbove(false); };
     const resetRanking = () => { setRankingChoices(["","",""]); };
     const resetRating = () => { setRatingIconId(1); };
+  
 
     const resetMap = {
-      openend:        [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      closedend:      [resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      range:          [resetCloseEnd, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      singlechoice:   [resetCloseEnd, resetRange, resetMultipleChoice, resetRanking, resetRating],
-      multiplechoice: [resetCloseEnd, resetRange, resetSingleChoice, resetRanking, resetRating],
-      rankingorder:   [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
-      rating:         [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
+      openend:        [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      closedend:      [resetMain, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      range:          [resetMain, resetCloseEnd, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      singlechoice:   [resetMain, resetCloseEnd, resetRange, resetMultipleChoice, resetRanking, resetRating],
+      multiplechoice: [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetRanking, resetRating],
+      rankingorder:   [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
+      rating:         [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
     };
     const handlePostType = () => {
       (resetMap[questionType] || []).forEach(fn => fn());
@@ -262,7 +264,7 @@ const handleSubmit = async (e) => {
               placeholder="Type your text content here..."
               required
       />
-    <input type="file" accept="image/*" onChange={(e) => setQuestionFile(e.target.files[0])} />
+    <input type="file" accept="image/*" onChange={(e) => setQuestionFile(e.target.files[0])} ref={refFile}/>
       <label htmlFor="type">Question related to:</label>
        <Select
         options={question_options} 

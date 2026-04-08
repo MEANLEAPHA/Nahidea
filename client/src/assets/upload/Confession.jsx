@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Select from "react-select";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -16,6 +16,7 @@ export default function Confession() {
   const [title, setTitle] = useState("");
   const [selectType, setSelectType] = useState(null);
   const [confessionFile, setFile] = useState(null);
+  const refFile = useRef(null);
   const [tags, setTags] = useState([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
 
@@ -28,6 +29,9 @@ export default function Confession() {
     setIsAnonymous(false);
     setSelectType(null);
     setLoading(false);
+    if(refFile.current){
+      refFile.current.value = "";
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -107,6 +111,7 @@ export default function Confession() {
         <input
           type="file"
           accept="image/*"
+          ref={refFile}
           onChange={(e) => setFile(e.target.files[0])}
         />
 
