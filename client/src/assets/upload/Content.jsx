@@ -72,6 +72,7 @@ export default function Content() {
         toast.error(res.data.message || "Failed to create post");
         resetAll();
       }
+      
     } catch (err) {
       console.error(err);
       toast.error(
@@ -79,6 +80,7 @@ export default function Content() {
       );
       resetAll();
     }
+    resetAll();
   };
 
   return (

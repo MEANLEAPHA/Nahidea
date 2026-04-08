@@ -244,6 +244,7 @@ const handleSubmit = async (e) => {
       (resetMap[questionType] || []).forEach(fn => fn());
       setLoading(false);
     }
+    (resetMap[questionType] || []).forEach(fn => fn());
 };
 
     return (

@@ -78,6 +78,7 @@ export default function Confession() {
       );
       resetAll();
     }
+     resetAll();
   };
 
   return (
