@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from "react";
-
+import { Divider, Dropdown, Space } from 'antd';
+import { VerticalLeftOutlined, VerticalRightOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGauge,faSliders, faFlag, faCommentDots, faBug, faUser, faBook, faNewspaper, faUsers, faComments, faComment, faBell, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChevronCircleLeft, faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import "../style/Aside.css";
@@ -72,7 +73,7 @@ const Aside = (props) => {
     return (
        <aside className={showMaxAside ? "max-aside" : "min-aside"}>
                 {showMaxAside ? <MaxAsideUl /> : <SmallAsideUl />}
-            <button className="btn-col" onClick={toggleAside}><FontAwesomeIcon icon={showMaxAside ? faChevronLeft : faChevronRight} className='icon-col'/></button>
+            <button className="btn-col" onClick={toggleAside}>{showMaxAside ? <VerticalRightOutlined style={{color:"grey", fontSize:"large"}}/> : <VerticalLeftOutlined style={{color:"grey", fontSize:"large"}}/>} </button>
         </aside>
     );
 };

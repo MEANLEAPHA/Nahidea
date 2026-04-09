@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import {Link, useNavigate} from "react-router-dom";
 
+import { DownOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, FlagOutlined, QuestionCircleOutlined, SettingOutlined, PlusSquareOutlined} from '@ant-design/icons';
+import { Divider, Dropdown, Space } from 'antd';
 // style
 import "../style/Header.css";
 
@@ -49,23 +51,11 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
       </div>
       <div className="overlay-results"></div>
       <div className="header-right header-children">
-        <FontAwesomeIcon icon={currentTheme ? faMoon : faSun} onClick={onToggleTheme} className="not-mobile-tool bar-icon"/>
+        <CreateDropDown />
+        <button className='button-bar-icon'>{currentTheme ? <MoonFilled className="not-mobile-tool bar-icon" onClick={onToggleTheme}/> : <SunFilled className="not-mobile-tool bar-icon" onClick={onToggleTheme}/>}</button>
         <FontAwesomeIcon icon={faMagnifyingGlass} className="mobile-tool bar-icon"/>
-        <FontAwesomeIcon icon={faBell} className='bar-icon' onClick={()=>navigate('/create/confession')}/>
-        <button onClick={()=>navigate('/create/content')
-        }><FontAwesomeIcon icon={faSquarePlus} className='bar-icon'/> Create</button>
-        <FontAwesomeIcon icon={faMessage} className='bar-icon' onClick={()=>navigate('/create/question')}/>
-        <div className="not-mobile-tool"><big style={{opacity:0.5}} className='not-mobile-tool'>|</big></div> 
-        <div className="profile-div not-mobile-tool" ref={wrapperRef}>
-          <img src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg" className="profile-div-img" onClick={handleDropDown}/>
-          <ul className='admin-info-result' style={{display: dropDown}} >
-                  <li onClick={() => navigate('/Login')}><FontAwesomeIcon icon={faUserAlt} /> View Account</li>
-                  <li onClick={onToggleTheme}><FontAwesomeIcon icon={currentTheme ? faMoon : faSun} /> <span>{currentTheme ? "Dark Mode" : "Light Mode"}</span></li>
-                  <li onClick={() => navigate('/Login')}><FontAwesomeIcon icon={faCircleQuestion} /> Help</li>
-                  <hr className='admin-info-result-hr'/>
-                  <li onClick={() => navigate('/Login')}><FontAwesomeIcon icon={faArrowRightFromBracket} /> Log out</li>  
-              </ul>
-        </div>
+        <button className='button-bar-icon'><BellOutlined className='bar-icon'/></button>
+        <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme}/>
       </div>
     </header>
  
@@ -151,7 +141,7 @@ const Search = () => {
             type="text"
             id="search-input"
             value={searchTerm}  
-            placeholder="Search Otthor"
+            placeholder="Search Nah!dea"
             onChange={searchQuery}
             onFocus={() => setShowResults(true)}
             onKeyDown={(e) => {
@@ -416,6 +406,125 @@ const QueryCard = ({id, icon, link, description, title}) => {
 
 
 
+const CreateDropDown = () =>{
+  const navigate = useNavigate();
+  const upload_items = [
+    {
+      label: (
+        <li onClick={()=>navigate('/create/content')}>
+          <FormOutlined /> Content
+        </li>
+      ),
+      key: '0',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/create/confession')}>
+          <SoundOutlined /> Confession
+        </li>
+      ),
+      key: '1',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/create/question')}>
+            <QuestionOutlined /> Question
+        </li>
+      ),
+      key: '3',
+    },
+    ];
+  return(
+    <Dropdown menu={{ items: upload_items }} trigger={['click']}>
+      <button className='button-bar-icon'>
+        <Space>
+          <PlusSquareOutlined className="bar-icon"/><span style={{fontWeight:"bold"}}>Create</span>
+        </Space>
+      </button>
+  </Dropdown>
+  )
+}
+const ProfileDropDown = ({theme, toggleTheme}) =>{
+  const navigate = useNavigate();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  
+ useEffect(() => {
+  function handleOnline() { setIsOnline(true); }
+  function handleOffline() { setIsOnline(false); }
 
+  window.addEventListener("online", handleOnline);
+  window.addEventListener("offline", handleOffline);
+
+  return () => {
+    window.removeEventListener("online", handleOnline);
+    window.removeEventListener("offline", handleOffline);
+  };
+}, []);
+
+  const upload_items = [
+    {
+      label: (
+        <li onClick={()=>navigate('/user')}>
+          <FontAwesomeIcon icon={faUserAlt} /> View Account
+        </li>
+      ),
+      key: '0',
+    },
+    {
+      label: (
+        <li onClick={(e) => {toggleTheme(); e.stopPropagation();}}>
+          {theme ? <MoonFilled /> : <SunFilled />}{" "}{theme ? "Dark Mode" : "Light Mode"}
+        </li>
+      ),
+      key: '1',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/help')}>
+          <SettingOutlined /> Setting
+        </li>
+      ),
+      key: '2',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/help')}>
+          <QuestionCircleOutlined /> Help
+        </li>
+      ),
+      key: '2',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/feedback')}>
+          <FlagOutlined /> Feedback
+        </li>
+      ),
+      key: '3',
+    },
+    {
+    type: 'divider',
+    },
+    {
+      
+      label: (
+        <li onClick={()=>navigate('/create/question')}>
+            <LogoutOutlined /> Logout
+        </li>
+      ),
+      key: '5',
+    },
+    ];
+  return(
+    <Dropdown menu={{ items: upload_items }} trigger={['click']}>
+      <button className='button-bar-icon button-bar-icon-pf'>
+          <Space>
+          <img src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg" className="profile-div-img" />
+          <div id="user-status">{isOnline === true ? <div id="user-status-dot" style={{backgroundColor: "green"}}></div> : <div id="user-status-dot" style={{backgroundColor: "grey"}}></div>}</div>
+        </Space>
+      </button>  
+  </Dropdown>
+  )
+}
 
 export default Header;

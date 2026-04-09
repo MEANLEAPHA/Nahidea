@@ -1,32 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
 :root{
     /* --background-color:white; */
-     --background-color:rgb(32, 32, 32);
+     --background-color: rgb(255, 255, 255);
     --primary-color:#fd7648;
     /* --secondary-color: gainsboro; */
-     --secondary-color: rgba(220, 220, 220, 0.318);
+     --secondary-color: rgba(107, 107, 107, 0.318);
     /* --font-color:rgb(65, 65, 65); */
-    --font-color:rgb(255, 255, 255);
+    --font-color:rgb(0, 0, 0);
 
     --back-con:rgb(245, 245, 245);
     --primary-font:monospace;
-    --shadow:rgba(20, 20, 20, 0.399);
 }
 .dark-theme{
-    --background-color:rgb(212, 212, 212);
+    --background-color:rgb(32, 32, 32);
     --primary-color:#fd7648;
     --secondary-color: rgba(220, 220, 220, 0.318);
     --font-color:rgb(255, 255, 255);
      --back-con:rgb(40, 40, 40);
-      --shadow:rgba(67, 67, 67, 0.399);
 }
+
 body{
     margin: 0;
     background-color: var(--background-color);
 }
 header{
     width: 100%;
-    padding: 10px 0px 10px 0px;
+    padding: 5px 0px 5px 0px;
     margin:auto;
     height: 50px;
     display: flex;
@@ -48,13 +47,10 @@ header{
     gap:18px;
     justify-content:start;
     align-items: center;
-   padding-left: 20px;
+   padding-left: 10px;
    
 }
-.bar-icon{
-    color: var(--font-color);
-    font-size: larger;
-}
+
 .aside-action-bar{
     display: none;
 }
@@ -195,81 +191,63 @@ border-radius: 20px;
     align-items: center;
     display: flex;
     justify-content: end;
-    padding-right: 20px;
+    padding-right: 10px;
     height: auto;
    color: var(--font-color);
-     gap: 15px;
+     gap: 0px;
      position: relative;
      
 }
-.profile-div{
-    width: auto;
-    display: flex;
-    gap: 5px;
-    justify-content: end;
-    align-items: center;
-    position: relative;
-    padding: 0;
-}
+
 .profile-div-img{
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
+    width: 35px;
+    height: 35px;
+     position: relative;
+    border-radius: 50%;
 }
-.admin-info-div{
-    background: none;
-    border: none;
-    font-family: var(--primary-font);
-    font-size: 14px;
+.button-bar-icon{
+ border: none;
+ background: none;
+ color: var(--font-color);
+ padding: 7px 10px 7px 10px;
+ font-family: sans-serif;
+ border-radius: 20px;
+  position: relative;
+}
+.button-bar-icon-pf{
+     padding: 0px;
+     margin-left: 10px;
+     position: relative;
+}
+
+.button-bar-icon:hover{
+    background: var(--secondary-color);
+}
+.button-bar-icon-pf:hover{
+ background:none;
+}
+.bar-icon{
     color: var(--font-color);
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    position: relative;
-    padding: 0;
+    font-size: 20px;
+    
 }
-.admin-info-result{
-    width: 100%;
-    height: auto;
-    background-color: var(--back-con);
+#user-status{
+    width: 11px;
+    height: 11px;
     position: absolute;
-    bottom: -215px;
-    z-index: 100;
-    left: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-family: sans-serif;
-    border-radius: 10px;
-}
-.admin-info-result li{
-    width: 100%;
-    cursor: pointer;
+    bottom: 2px;
+    right: 10px;
+    background-color: var(--background-color);
+    border-radius: 100%;
     display: flex;
     align-items: center;
-    height: auto;
-    margin: 20px;
-    gap: 10px;
-    transition: all 0.5s ease;
+    justify-content: center;
 }
-.admin-info-result li:hover{
-    color: var(--primary-color);
-    transform: scale(0.9);
+#user-status-dot{
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
 }
-.admin-info-result-hr{
-    margin: 7px 0px 7px 0px ;
-}
-
-.admin-info-div span{
-    opacity: 0.5;
-}
-.chevronDown-icon{
-    font-size: small;
-}
-
-
-
 .popular-ul{
     width: 100%;
     height: auto;
