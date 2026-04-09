@@ -56,9 +56,9 @@ const [loading, setLoading] = useState(false);
     const [isAnonymous, setIsAnonymous] = useState(false);
     const { tokens, countdown, consume } = useAnonymousTokens();
 
-    const resetMain = () => {setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
+    const resetMain = () => {setSelectType(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
     const resetCloseEnd = () => { setYestitle(""); setNoTitle(""); };
-    const resetRange = () => { setMin(null); setMax(null); setStep(1); setRangeValue(null); };
+    const resetRange = () => { setMin(0); setMax(100); setStep(1); setRangeValue(0); };
     const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
     const resetMultipleChoice = () => { setMultipleChoices(["","",""]); setIncludeAllAbove(false); };
     const resetRanking = () => { setRankingChoices(["","",""]); };
