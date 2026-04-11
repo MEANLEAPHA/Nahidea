@@ -1,9 +1,12 @@
 
 import React, { useEffect, useState } from "react";
-import { Divider, Dropdown, Space } from 'antd';
-import { VerticalLeftOutlined, VerticalRightOutlined  } from '@ant-design/icons';
+
+import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,SignatureOutlined, FireOutlined, TeamOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGauge,faSliders, faFlag, faCommentDots, faBug, faUser, faBook, faNewspaper, faUsers, faComments, faComment, faBell, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChevronCircleLeft, faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast} from "@fortawesome/free-solid-svg-icons";
+import {faBookmark, faComments, faNewspaper} from "@fortawesome/free-regular-svg-icons"
+
+
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
 
@@ -41,9 +44,10 @@ const Aside = (props) => {
         return(
             <ul className="max-ul">
                 <AppendMain />
-                <AppendReportAndFeedback />
-                <AppendUserInsight />
-                <AppendBroadcast />
+                <AppendUserTool />
+                <AppendExplore />
+                <AppendMore />
+                <AppendRule />
             </ul>
         )
     }
@@ -138,13 +142,13 @@ const MinAside = ({a, icon, classNameIcon})=> {
     )
 };
 
-const Card = ({a, icon, label, classNameIcon}) =>{
+const Card = ({a, icon, label, classNameBtn}) =>{
     const navigate = useNavigate();
     return(
         <li className="max-li">
-            <button onClick={() => navigate(a)} >
+            <button onClick={() => navigate(a)} className={classNameBtn}>
                 <div>
-                    <FontAwesomeIcon icon={icon} className={classNameIcon}/> 
+                    {icon} 
                 </div>
                 <div>
                     {label}
@@ -157,79 +161,104 @@ const Card = ({a, icon, label, classNameIcon}) =>{
 
 
 const Mains= [
-    { id:1, a: '/Dashboard', icon: faChartPie, label: 'Dashboard', classNameIcon: 'icon-aside' },
-    { id:2, a: '/Maintenance', icon: faSliders, label: 'Maintenance', classNameIcon: 'icon-aside' },
-    { id:3, a: '/Error', icon: faBug, label: 'Error', classNameIcon: 'icon-aside' }
+    { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
+    { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
+    { id:3, a: '/gossip',  icon: <FontAwesomeIcon icon={faComments} className='icon-aside icon-awesome'/>, label: <label>Gossip</label> }
 ];
+
 
 const AppendMain = () =>{
     return Mains.map(item => <Main key={item.id} {...item} />)
 };
 
-const Main = ({a, icon, label, classNameIcon})=> {
-    return <Card a={a} icon={icon} label={label} classNameIcon={classNameIcon}/>
+const Main = ({a, icon, label, classNameBtn})=> {
+    return <Card a={a} icon={icon} label={label} classNameBtn={classNameBtn}/>
 };
 
-const ReportAndFeedbacks= [
-    { id:1, a: '/Feedback', icon: faCommentDots, label: 'Feedback', classNameIcon: 'icon-aside' },
-    { id:2, a: '/Report', icon: faFlag, label: 'Report', classNameIcon: 'icon-aside' }
+const UserTools= [
+    { id:1, a: '/socialactivity',  icon: <BarChartOutlined  />, label: <label>Social Activity</label> },
+    { id:2, a: '/history',  icon: <ClockCircleOutlined className='icon-aside'/>, label: <label>History</label> },
+    { id:3, a: '/favorite',  icon: <FontAwesomeIcon icon={faBookmark} className='icon-aside icon-awesome'/>, label: <label>Favorite</label> },
+    { id:4, a: '/likepost',  icon: <HeartOutlined className='icon-aside'/>, label: <label>Like Post</label> },
+    { id:5, a: '/yourpost',  icon: <FontAwesomeIcon icon={faNewspaper} className='icon-aside icon-awesome'/>, label: <label>Your Post</label> },
 ];
 
-const AppendReportAndFeedback = () =>{
+const AppendUserTool = () =>{
     return(
         <>
-        <label className='label-li'>Reports & Feedback </label>
-        {ReportAndFeedbacks.map(item => (
-            <ReportAndFeedback key={item.id} {...item} />
+        <label className='label-li'>You </label>
+        {UserTools.map(item => (
+            <UserTool key={item.id} {...item} />
         ))}
         </>
     )
 };
 
-const ReportAndFeedback = ({a, icon, label, classNameIcon})=> {
+const UserTool = ({a, icon, label, classNameIcon})=> {
     return <Card a={a} icon={icon} label={label} classNameIcon={classNameIcon} />
 };
 
-const UserInsights= [
-    { id:1, a: '/User', icon: faUser, label: 'User', classNameIcon: 'icon-aside' },
-    { id:2, a: '/Community', icon: faUsers, label: 'Community', classNameIcon: 'icon-aside' },
-    { id:3, a: '/Book', icon: faBook, label: 'Book', classNameIcon: 'icon-aside' },
-    { id:4, a: '/Comment', icon: faComment, label: 'Comment', classNameIcon: 'icon-aside' },
-    { id:5, a: '/Reply', icon: faComments, label: 'Reply', classNameIcon: 'icon-aside' }
+const Explores= [
+    { id:1, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen"}}>NOW</span></label> },
+    { id:2, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
 ];
 
-const AppendUserInsight = () =>{
+
+const AppendExplore = () =>{
     return(
         <>
-        <label className='label-li'>User Insight</label>
-        {UserInsights.map(item => (
-            <UserInsight key={item.id} {...item} />
+        <label className='label-li'>Explore</label>
+        {Explores.map(item => (
+            <Explore key={item.id} {...item} />
         ))}
         </>
     )
 };
 
-const UserInsight = ({a, icon, label, classNameIcon})=> {
+const Explore = ({a, icon, label, classNameBtn})=> {
+    return <Card a={a} icon={icon} label={label} classNameBtn={classNameBtn}/>
+};
+
+const Mores= [
+    { id:1, a: '/help', icon: <QuestionCircleOutlined className='icon-aside'/>, label: <label>Help</label> },
+    { id:2, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
+    { id:2, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
+];
+
+const AppendMore = () =>{
+    return(
+        <>
+        <hr className="aside-hr"/>
+        {Mores.map(item => (
+            <More key={item.id} {...item} />
+        ))}
+        </>
+    )
+};
+
+const More = ({a, icon, label, classNameIcon})=> {
     return <Card a={a} icon={icon} label={label} classNameIcon={classNameIcon} />
 };
 
-const Broadcasts= [
-    { id:1, a: '/Notification', icon: faBell, label: 'Notification', classNameIcon: 'icon-aside' },
-    { id:2, a: '/Article', icon: faNewspaper, label: 'Article', classNameIcon: 'icon-aside' }
+const Rules= [
+    { id:1, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
+    { id:2, a: '/privatepolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
+    { id:3, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
+    { id:4, a: '/accessibility',  icon: <TeamOutlined className='icon-aside'/>, label: <label>Accessibility</label> },
 ];
 
-const AppendBroadcast = () =>{
+const AppendRule = () =>{
     return(
         <>
-        <label className='label-li'>Broadcast</label>
-        {Broadcasts.map(item => (
-            <Broadcast key={item.id} {...item} />
+        <hr className="aside-hr"/>
+        {Rules.map(item => (
+            <Rule key={item.id} {...item} />
         ))}
         </>
     )
 };
 
-const Broadcast = ({a, icon, label, classNameIcon})=> {
+const Rule = ({a, icon, label, classNameIcon})=> {
     return <Card a={a} icon={icon} label={label} classNameIcon={classNameIcon} />
 };
 

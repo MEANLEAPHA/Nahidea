@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-import { DownOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, FlagOutlined, QuestionCircleOutlined, SettingOutlined, PlusSquareOutlined} from '@ant-design/icons';
+import { DownOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, SettingOutlined, PlusSquareOutlined} from '@ant-design/icons';
 import { Divider, Dropdown, Space } from 'antd';
 // style
 import "../style/Header.css";
@@ -141,7 +141,7 @@ const Search = () => {
             type="text"
             id="search-input"
             value={searchTerm}  
-            placeholder="Search Nah!dea"
+            placeholder="Search Nah!dea..."
             onChange={searchQuery}
             onFocus={() => setShowResults(true)}
             onKeyDown={(e) => {
@@ -444,87 +444,100 @@ const CreateDropDown = () =>{
   </Dropdown>
   )
 }
-const ProfileDropDown = ({theme, toggleTheme}) =>{
+const ProfileDropDown = ({ theme, toggleTheme }) => {
   const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  
- useEffect(() => {
-  function handleOnline() { setIsOnline(true); }
-  function handleOffline() { setIsOnline(false); }
 
-  window.addEventListener("online", handleOnline);
-  window.addEventListener("offline", handleOffline);
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-  return () => {
-    window.removeEventListener("online", handleOnline);
-    window.removeEventListener("offline", handleOffline);
-  };
-}, []);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
-  const upload_items = [
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const menuItems = [
     {
       label: (
-        <li onClick={()=>navigate('/user')}>
+        <li onClick={() => navigate("/user")}>
           <FontAwesomeIcon icon={faUserAlt} /> View Account
         </li>
       ),
-      key: '0',
+      key: "0",
     },
     {
       label: (
-        <li onClick={(e) => {toggleTheme(); e.stopPropagation();}}>
-          {theme ? <MoonFilled /> : <SunFilled />}{" "}{theme ? "Dark Mode" : "Light Mode"}
+        <li
+          onClick={(e) => {
+            toggleTheme();
+            e.stopPropagation();
+          }}
+        >
+          {theme ? <MoonFilled /> : <SunFilled />}{" "}
+          {theme ? "Dark Mode" : "Light Mode"}
         </li>
       ),
-      key: '1',
+      key: "1",
     },
     {
       label: (
-        <li onClick={()=>navigate('/help')}>
+        <li onClick={() => navigate("/help")}>
           <SettingOutlined /> Setting
         </li>
       ),
-      key: '2',
+      key: "2",
     },
     {
       label: (
-        <li onClick={()=>navigate('/help')}>
+        <li onClick={() => navigate("/help")}>
           <QuestionCircleOutlined /> Help
         </li>
       ),
-      key: '2',
+      key: "3",
     },
     {
       label: (
-        <li onClick={()=>navigate('/feedback')}>
-          <FlagOutlined /> Feedback
+        <li onClick={() => navigate("/feedback")}>
+          <ExceptionOutlined /> Feedback
         </li>
       ),
-      key: '3',
+      key: "4",
     },
+    { type: "divider" },
     {
-    type: 'divider',
-    },
-    {
-      
       label: (
-        <li onClick={()=>navigate('/create/question')}>
-            <LogoutOutlined /> Logout
+        <li onClick={() => navigate("/logout")}>
+          <LogoutOutlined /> Logout
         </li>
       ),
-      key: '5',
+      key: "5",
     },
-    ];
-  return(
-    <Dropdown menu={{ items: upload_items }} trigger={['click']}>
-      <button className='button-bar-icon button-bar-icon-pf'>
-          <Space>
-          <img src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg" className="profile-div-img" />
-          <div id="user-status">{isOnline === true ? <div id="user-status-dot" style={{backgroundColor: "green"}}></div> : <div id="user-status-dot" style={{backgroundColor: "grey"}}></div>}</div>
+  ];
+
+  return (
+    <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+      <button className="button-bar-icon button-bar-icon-pf">
+        <Space>
+          <img
+            src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg"
+            className="profile-div-img"
+            alt="profile"
+          />
+          <div id="user-status">
+            <div
+              id="user-status-dot"
+              style={{ backgroundColor: isOnline ? "yellowgreen" : "grey" }}
+            ></div>
+          </div>
         </Space>
-      </button>  
-  </Dropdown>
-  )
-}
+      </button>
+    </Dropdown>
+  );
+};
 
 export default Header;
