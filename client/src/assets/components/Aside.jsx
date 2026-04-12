@@ -1,10 +1,12 @@
 
 import React, { useEffect, useState } from "react";
 
-import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,SignatureOutlined, FireOutlined, TeamOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined  } from '@ant-design/icons';
+import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,SignatureOutlined, FireOutlined, TeamOutlined,UserAddOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined, UserOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast} from "@fortawesome/free-solid-svg-icons";
-import {faBookmark, faComments, faNewspaper} from "@fortawesome/free-regular-svg-icons"
+import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChildReaching} from "@fortawesome/free-solid-svg-icons";
+import {faBookmark, faNewspaper} from "@fortawesome/free-regular-svg-icons";
+import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
+
 
 
 import "../style/Aside.css";
@@ -86,35 +88,26 @@ const Aside = (props) => {
 
 const MinInfo = [
     {
-        id:1, a: '/DashBoard', icon: faChartPie
+        id:1, a: '/', icon: <HomeOutlined className='sub-icon'/>
     },
     {
-        id:2, a: '/Error', icon: faBug
+        id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },
     {
-        id:3, a: '/UserInsight', icon: faDatabase
+        id:3, a: '/gossip', icon: <FontAwesomeIcon icon={faGlobaleaks} className='sub-icon'/>
     },
     {
-        id:4, a: '/FeedbackAndReport', icon: faFlagCheckered
+        id:4, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
     },
     {
-        id:5, a: '/Broadcast', icon: faTowerBroadcast
+        id:5, a: '/you', icon: <UserOutlined className='sub-icon'/>
     },
     {
-        id:6, a: '/DashBoard', icon: faChartPie
+        id:6, a: '/trending', icon:  <RiseOutlined  className='sub-icon'/>
     },
     {
-        id:7, a: '/Error', icon: faBug
+        id:7, a: '/haloffame', icon: <FireOutlined className='sub-icon'/>
     },
-    {
-        id:8, a: '/UserInsight', icon: faDatabase
-    },
-    {
-        id:9, a: '/FeedbackAndReport', icon: faFlagCheckered
-    },
-    {
-        id:10, a: '/Broadcast', icon: faTowerBroadcast
-    }
 ]
 
 const MinCard = ({a, icon}) => {
@@ -122,7 +115,7 @@ const MinCard = ({a, icon}) => {
     return(
         <li className="nav-item">
             <button onClick={() => navigate(a)}>
-                <FontAwesomeIcon icon={icon} className='sub-icon'/> 
+                {icon}
             </button>
         </li>
     )
@@ -163,7 +156,7 @@ const Card = ({a, icon, label, classNameBtn}) =>{
 const Mains= [
     { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
     { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
-    { id:3, a: '/gossip',  icon: <FontAwesomeIcon icon={faComments} className='icon-aside icon-awesome'/>, label: <label>Gossip</label> }
+    { id:3, a: '/gossip',  icon: <FontAwesomeIcon icon={faGlobaleaks} className='icon-aside icon-awesome'/>, label: <label>Gossip <span style={{color:"orange",fontSize:"12px"}}>BETA</span></label> }
 ];
 
 
@@ -199,7 +192,7 @@ const UserTool = ({a, icon, label, classNameIcon})=> {
 };
 
 const Explores= [
-    { id:1, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen"}}>NOW</span></label> },
+    { id:1, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
     { id:2, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
 ];
 
@@ -244,7 +237,7 @@ const Rules= [
     { id:1, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
     { id:2, a: '/privatepolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
     { id:3, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
-    { id:4, a: '/accessibility',  icon: <TeamOutlined className='icon-aside'/>, label: <label>Accessibility</label> },
+    { id:4, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
 ];
 
 const AppendRule = () =>{

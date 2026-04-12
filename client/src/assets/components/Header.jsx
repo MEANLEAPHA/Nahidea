@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-import { DownOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, SettingOutlined, PlusSquareOutlined} from '@ant-design/icons';
+import {PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined} from '@ant-design/icons';
 import { Divider, Dropdown, Space } from 'antd';
 // style
 import "../style/Header.css";
 
-  // icon
+  // iconcd client
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faBars, faMagnifyingGlass, faChevronDown, faInbox, faArrowRightFromBracket, faFireFlameCurved, faMagnifyingGlassChart, faTimesCircle,faChartSimple, faGauge,faSliders,faMoon, faFlag, faCommentDots, faBug, faUser, faBook, faNewspaper, faUsers, faComments, faComment, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faBan, faFeather, faBullhorn, faServer, faClockRotateLeft, faTrashCan, faChevronUp, faPlus} from "@fortawesome/free-solid-svg-icons";
   import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus} from "@fortawesome/free-regular-svg-icons";
@@ -16,47 +16,33 @@ import "../style/Header.css";
 const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
   const navigate = useNavigate();
 
-  // Search DropDown Open and Closed
-  const [dropDown, setDropDown] = useState("none");
-  const wrapperRef = useRef(null);
-  const [name, setName] = useState("Meanleap Ha")
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        setDropDown("none");
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const isMaxAside = localStorage.getItem("maxAside");
 
-  
-  // User Profile DropDown
-  const handleDropDown = () => dropDown === "none" ? setDropDown("block") : setDropDown("none"); 
-
+ 
   return (
      <header>
-      
+
       <div className="header-left header-children">
-        <FontAwesomeIcon icon={faBars} className="bar-icon aside-action-bar" onClick={onToggleAside}/>
+        {isMaxAside === "true" ? <MenuUnfoldOutlined className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} /> : <MenuFoldOutlined  className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} />}
         <p className='logo-font-main not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
-         <FontAwesomeIcon icon={faPlus} className="bar-icon mobile-tool fa-plus add-btn" onClick={onToggleAside} />
+         <CreateDropDownMin />
       </div>
+
       <div className="header-middle header-children">
+        
         <Search />
-      
-           <p className='logo-font-main mobile-tool'>Nah<span style={{color:'gold'}}>!</span>idea</p>
+        <p className='logo-font-main mobile-tool' >Nah<span style={{color:'gold'}}>!</span>idea</p>
       </div>
-      <div className="overlay-results"></div>
+   
+
       <div className="header-right header-children">
         <CreateDropDown />
-        <button className='button-bar-icon'>{currentTheme ? <MoonFilled className="not-mobile-tool bar-icon" onClick={onToggleTheme}/> : <SunFilled className="not-mobile-tool bar-icon" onClick={onToggleTheme}/>}</button>
-        <FontAwesomeIcon icon={faMagnifyingGlass} className="mobile-tool bar-icon"/>
-        <button className='button-bar-icon'><BellOutlined className='bar-icon'/></button>
-        <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme}/>
+        <button className='button-bar-icon' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
+        <SearchOutlined className="mobile-tool bar-icon" />
+        <button className='button-bar-icon button-bar-icon-bell' ><BellOutlined className='bar-icon'/></button>
+        <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} />
       </div>
+
     </header>
  
   );
@@ -161,7 +147,7 @@ const Search = () => {
           </button>
         )}
           {showResults && (
-            <div className="results">
+            <div className="results-search">
               <TopResults results={filteredResults} />
               <HistorySearch />
               <RecentSearch />
@@ -295,9 +281,11 @@ const HistoryCard = ({title, onDelete}) => {
     return (
       <li className = 'history-card' onClick={handleClick}>
         <div className='history-card-info'>
-            <FontAwesomeIcon icon={faClockRotateLeft}  className='search-icon-query'/> 
+            <FontAwesomeIcon icon={faClockRotateLeft} className='search-icon-query' style={{opacity:"0.7"}}/> 
            
-              <p className='query-title'>{title}</p>
+               <p className='query-title'>{title}</p>
+           
+             
            
         </div>
            <FontAwesomeIcon icon={faTrashCan}  className='history-icon-trash' onClick={(e)=>{onDelete(title); e.stopPropagation()}}/> 
@@ -412,7 +400,7 @@ const CreateDropDown = () =>{
     {
       label: (
         <li onClick={()=>navigate('/create/content')}>
-          <FormOutlined /> Content
+          <FormOutlined /> <span>Content</span>
         </li>
       ),
       key: '0',
@@ -420,7 +408,7 @@ const CreateDropDown = () =>{
     {
       label: (
         <li onClick={()=>navigate('/create/confession')}>
-          <SoundOutlined /> Confession
+          <SoundOutlined /> <span>Confession</span>
         </li>
       ),
       key: '1',
@@ -428,23 +416,61 @@ const CreateDropDown = () =>{
     {
       label: (
         <li onClick={()=>navigate('/create/question')}>
-            <QuestionOutlined /> Question
+            <QuestionOutlined /> <span>Question</span>
         </li>
       ),
       key: '3',
     },
     ];
   return(
-    <Dropdown menu={{ items: upload_items }} trigger={['click']}>
-      <button className='button-bar-icon'>
+    <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
+      <button className='button-bar-icon not-mobile-tool'>
         <Space>
-          <PlusSquareOutlined className="bar-icon"/><span style={{fontWeight:"bold"}}>Create</span>
+          <PlusSquareOutlined className="bar-icon"/><span style={{fontWeight:"bold", opacity:"0.9"}}>Create</span>
         </Space>
       </button>
   </Dropdown>
   )
 }
-const ProfileDropDown = ({ theme, toggleTheme }) => {
+
+const CreateDropDownMin = () =>{
+  const navigate = useNavigate();
+  const upload_items = [
+    {
+      label: (
+        <li onClick={()=>navigate('/create/content')}>
+          <FormOutlined /> <span>Content</span>
+        </li>
+      ),
+      key: '0',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/create/confession')}>
+          <SoundOutlined /> <span>Confession</span>
+        </li>
+      ),
+      key: '1',
+    },
+    {
+      label: (
+        <li onClick={()=>navigate('/create/question')}>
+            <QuestionOutlined /> <span>Question</span>
+        </li>
+      ),
+      key: '3',
+    },
+    ];
+  return(
+    <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
+        <Space>
+          <PlusOutlined className='bar-icon mobile-tool' />
+        </Space>
+      
+  </Dropdown>
+  )
+}
+const ProfileDropDown = ({ theme, toggleTheme  }) => {
   const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -465,7 +491,7 @@ const ProfileDropDown = ({ theme, toggleTheme }) => {
     {
       label: (
         <li onClick={() => navigate("/user")}>
-          <FontAwesomeIcon icon={faUserAlt} /> View Account
+          <UserOutlined /> View Account
         </li>
       ),
       key: "0",
@@ -478,8 +504,8 @@ const ProfileDropDown = ({ theme, toggleTheme }) => {
             e.stopPropagation();
           }}
         >
-          {theme ? <MoonFilled /> : <SunFilled />}{" "}
-          {theme ? "Dark Mode" : "Light Mode"}
+          {theme ? <MoonOutlined /> : <SunOutlined />}{" "}
+          {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
         </li>
       ),
       key: "1",
@@ -487,7 +513,7 @@ const ProfileDropDown = ({ theme, toggleTheme }) => {
     {
       label: (
         <li onClick={() => navigate("/help")}>
-          <SettingOutlined /> Setting
+          <SettingOutlined /> <span>Setting</span>
         </li>
       ),
       key: "2",
@@ -495,7 +521,7 @@ const ProfileDropDown = ({ theme, toggleTheme }) => {
     {
       label: (
         <li onClick={() => navigate("/help")}>
-          <QuestionCircleOutlined /> Help
+          <QuestionCircleOutlined /> <span>Help</span>
         </li>
       ),
       key: "3",
@@ -503,29 +529,34 @@ const ProfileDropDown = ({ theme, toggleTheme }) => {
     {
       label: (
         <li onClick={() => navigate("/feedback")}>
-          <ExceptionOutlined /> Feedback
+          <ExceptionOutlined /> <span>Feedback</span>
         </li>
       ),
       key: "4",
     },
-    { type: "divider" },
+    {  label: (
+     
+         <hr />
+     
+      ),
+      key: "5" },
     {
       label: (
         <li onClick={() => navigate("/logout")}>
           <LogoutOutlined /> Logout
         </li>
       ),
-      key: "5",
+      key: "6",
     },
   ];
 
   return (
-    <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
-      <button className="button-bar-icon button-bar-icon-pf">
+    <Dropdown menu={{ items: menuItems }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+      <div style={{position: "relative"}} > 
         <Space>
           <img
             src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg"
-            className="profile-div-img"
+            className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
           />
           <div id="user-status">
@@ -535,7 +566,7 @@ const ProfileDropDown = ({ theme, toggleTheme }) => {
             ></div>
           </div>
         </Space>
-      </button>
+   </div>
     </Dropdown>
   );
 };

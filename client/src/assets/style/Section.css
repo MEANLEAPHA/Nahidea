@@ -129,7 +129,7 @@ margin: 0;
 
 @media screen and (max-width:768px){
  section{
-	height: 85vh;
-    background-color: antiquewhite;
+	height:calc(100vh - 51px);
+  
  }
 }
