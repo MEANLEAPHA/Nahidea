@@ -3,11 +3,12 @@ import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 
 // Import Page
 
-    // Main
-    import Header from '../src/assets/components/Header';
-   
+    // Component
+    import Header from '../src/assets/components/Header';   
     import Aside from './assets/components/Aside';
 
+    // Home
+    import Home from './assets/page/Home';
 
     // Authentication
     import Login  from './assets/Authentication/Login';
@@ -35,10 +36,12 @@ const App = () =>{
     return(
         <BrowserRouter>
             <Routes>
-                <Route path='/home' element={<Home/>}></Route>
+                
                 {/* Home Page */}
-                <Route path='/' element={<Home/>}>
+                <Route path='/' element={<Layout/>}>
                     {/* Action Upload page */}
+                    <Route index element={<Home/>} />
+                    <Route path='/home' element={<Home/>}></Route>
                     <Route path='/create/question' element={<Question/>}></Route>
                     <Route path='/create/confession' element={<Confession/>}></Route>
                     <Route path='/create/content' element={<Content/>}></Route>
@@ -59,8 +62,15 @@ const App = () =>{
     )
 }
  
-const Home = () =>{
-    // if(!token){
+
+
+
+
+
+
+
+const Layout = () => {
+     // if(!token){
     //     return <Login/>
     // }
 
@@ -100,8 +110,7 @@ const Home = () =>{
     const toggleTheme = () =>{
         setDarkMode(prev => !prev)
     };
-
-    return(
+     return(
         <>
             <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
             <main>
@@ -114,14 +123,6 @@ const Home = () =>{
         </>
     )
 }
-
-
-
-
-
-
-
-
 
 
 

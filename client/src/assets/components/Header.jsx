@@ -36,8 +36,9 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
    
 
       <div className="header-right header-children">
-        <CreateDropDown />
+  
         <button className='button-bar-icon' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
+        <CreateDropDown />
         <SearchOutlined className="mobile-tool bar-icon" />
         <button className='button-bar-icon button-bar-icon-bell' ><BellOutlined className='bar-icon'/></button>
         <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} />

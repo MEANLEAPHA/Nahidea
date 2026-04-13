@@ -26,20 +26,5 @@ main{
     margin: 0;
     padding: 0;
  position: relative;
-}
-.article-header{
-    width: 100%;
-    color: var(--font-color);
-  
-    padding: 20px;
-}
-.icon{
-  opacity: 0.5;
-}
-.link-page{
-    cursor: pointer;
-}
-.link-page:hover{
-    color: var(--primary-color);
-    opacity: 1;
+ height: auto;
 }

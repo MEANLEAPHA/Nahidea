@@ -33,6 +33,10 @@ header{
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--secondary-color);
+    position: sticky;
+    background-color: var(--background-color);
+    top: 0;
+    z-index: 100;
 }
 .logo-font-main{
     font-family: "Poppins", sans-serif;
@@ -513,7 +517,7 @@ display: flex;
         display: none;
     }
     header{
-        height: 45px;
+        /* height: 45px; */
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -582,9 +586,9 @@ display: flex;
     .not-mobile-tool{
         display: none;
     }
-    header{
+    /* header{
         height: 40px;
-    }
+    } */
     .header-children{
         width: calc(100%/3);
     }

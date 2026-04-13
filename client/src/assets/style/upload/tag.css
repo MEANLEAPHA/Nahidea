@@ -1,23 +1,219 @@
-.tags-input-wrapper { margin: 12px 0; font-family: Arial, sans-serif; }
-.tags-label { display:block; margin-bottom:6px; font-weight:600; }
-.tags-input { display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:6px; border:1px solid #ccc; border-radius:6px; min-height:44px; }
-.tags-input.has-error { border-color:#e74c3c; }
-.tag { display:inline-flex; align-items:center; background:#eef6ff; color:#034; padding:4px 8px; border-radius:16px; font-size:14px; }
-.tag-text { margin-right:6px; }
-.tag-remove { background:transparent; border:0; cursor:pointer; font-size:16px; line-height:1; color:#333; }
-.tag-input { border:0; outline:none; min-width:120px; font-size:14px; padding:6px 4px; }
-.tags-controls { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
-.btn-clear { background:#007bff; color:white; border:0; padding:6px 10px; border-radius:6px; cursor:pointer; }
-.btn-clear:disabled { opacity:0.5; cursor:not-allowed; }
-.tags-count { font-size:14px; color:#333; }
-.tags-error { color:#e74c3c; margin-top:6px; }
-.tags-hint { font-size:12px; color:#666; margin-top:6px; }
+:root{
+    /* --background-color:white; */
+     --background-color: rgb(255, 255, 255);
+    --primary-color:#fd7648;
+    /* --secondary-color: gainsboro; */
+     --secondary-color: rgba(107, 107, 107, 0.318);
+    /* --font-color:rgb(65, 65, 65); */
+    --font-color:rgb(0, 0, 0);
+
+    --back-con:rgb(245, 245, 245);
+    --primary-font:monospace;
+}
+.dark-theme{
+    --background-color:rgb(32, 32, 32);
+    --primary-color:#fd7648;
+    --secondary-color: rgba(220, 220, 220, 0.318);
+    --font-color:rgb(255, 255, 255);
+     --back-con:rgb(40, 40, 40);
+}
+/* Wrapper */
+.tags-input-wrapper {
+  font-family:  sans-serif;
+  width: 100%;
+  height: auto;
+ margin-top: 20px;
+}
+
+/* Label */
+.tags-label {
+  font-family: sans-serif;
+    font-size: 15px;
+    color: var(--font-color);
+    opacity: 0.7;
+    margin: 0;
+    margin-bottom: 3px;
+}
+
+/* Input container */
+.tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 10px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--secondary-color);
+  background:transparent;
+  color: var(--font-color);
+  transition: all 0.2s ease;
+}
+
+.tags-input:focus-within {
+  border: 3px solid var(--secondary-color);
+  color: var(--font-color);
+}
+
+/* Error state */
+.tags-input.has-error {
+  border-color: #e74c3c;
+  background: #fff5f5;
+}
+
+/* Tag style */
+.tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background:var(--secondary-color);
+  color: var(--font-color);
+  font-size: 13px;
+  padding: 6px 12px 6px 16px;
+  margin-right: 6px;
+  line-height: 1;
+ box-shadow: 0 1px 2px var(--back-con);
+}
+
+/* LEFT TRIANGLE */
+.tag::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 14px solid transparent;
+  border-bottom: 13px solid transparent;
+  border-right: 8px solid var(--secondary-color);
+}
+
+/* small circle hole effect (optional but matches image better) */
+.tag::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  background:var(--background-color);
+  border-radius: 50%;
+}
+
+/* hover / active (orange one) */
+.tag:hover {
+  background: #fd7747;
+  color: #fff;
+}
+
+.tag:hover::before {
+  border-right-color: #fd7747;
+}
+
+/* Active/highlight tag (like orange one in image) */
+.tag:hover {
+  background: #fd7747;
+  color: #fff;
+}
+
+/* Tag text */
+.tag-text {
+  margin-right: 6px;
+}
+
+/* Remove button */
+.tag-remove {
+  border: none;
+ 
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  margin-left: 6px;
+  height: 100%;
+  opacity: 0.7;
+}
+
+.tag-remove:hover {
+  opacity: 1;
+}
+
+/* Input field */
+.tag-input {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+  padding: 6px;
+  color: var(--font-color);
+}
+
+.tag-input::placeholder {
+  color: #aaa;
+}
+
+/* Controls section */
+.tags-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Clear button */
+.btn-clear {
+  background: none;
+  border: none;
+  color: var(--font-color);
+  opacity: 0.7;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-clear:hover {
+  color: #333;
+}
+
+/* Count */
+.tags-count {
+  font-size: 13px;
+  color: var(--font-color);
+  opacity: 0.7;
+}
+
+/* Error message */
+.tags-error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #e74c3c;
+}
+
+/* Hint */
+.tags-hint {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #aaa;
+}
+
 
 
  .toggle-switch {
             display: flex;
+            margin: 0;
+            padding: 0;
             align-items: center;
             gap: 10px;
+        }
+        #token-reminder-p{
+          font-size: small;
+          font-family: sans-serif;
+          color: var(--font-color);
+          opacity: 0.7;
+          margin: 0;
         }
         .toggle-switch input {
             display: none;
@@ -32,7 +228,7 @@
             transition: 0.3s;
         }
         .toggle-switch input:checked + label {
-            background:rgb(10, 89, 145);
+            background:yellowgreen;
         }
         .toggle-switch label::before {
             content: "";
@@ -51,11 +247,11 @@
         }
 
         .radio {
-  display: none; /* hide the actual radio buttons */
+  display: none; 
 }
 
 label img {
-  width: 80px; /* adjust size */
+  width: 80px; 
   cursor: pointer;
   border: 2px solid transparent;
   border-radius: 6px;
@@ -63,5 +259,9 @@ label img {
 }
 
 label img.selected {
-  border: 2px solid #007bff; /* highlight when selected */
+  border: 2px solid #007bff; 
 }
+
+
+
+/* 

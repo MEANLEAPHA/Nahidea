@@ -107,7 +107,7 @@
 // }
 
 import React, { useState } from "react";
-
+import { CloseOutlined,TagsOutlined,CloudUploadOutlined   } from '@ant-design/icons';
 export default function TagInput({ value = [], onChange, maxTags = 5 }) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
@@ -122,7 +122,7 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
     for (const t of newTag) {
       const n = normalize(t);
       if (!n) continue;
-      if (next.map(normalize).includes(n)) continue; // skip duplicates
+      if (next.map(normalize).includes(n)) continue; 
       if (next.length >= maxTags) {
         setError(`Maximum ${maxTags} tags allowed`);
         break;
@@ -163,19 +163,14 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
 
   return (
     <div className="tags-input-wrapper">
-      <label className="tags-label">Add Tags to your Content</label>
+      <p className="tags-label"><TagsOutlined /> Add Tags</p>
       <div className={`tags-input ${error ? "has-error" : ""}`}>
         {value.map((t, i) => (
           <span className="tag" key={t + i}>
-            #<span className="tag-text">{t}</span>
-            <button
-              type="button"
-              className="tag-remove"
+            <span className="tag-text">{t}</span>
+            <CloseOutlined className="tag-remove"
               onClick={() => removeTag(i)}
-              aria-label={`Remove ${t}`}
-            >
-              ×
-            </button>
+              aria-label={`Remove ${t}`}/>
           </span>
         ))}
 
@@ -188,7 +183,7 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
           }}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          placeholder={value.length >= maxTags ? "" : "Type tag and press Enter or comma"}
+          placeholder={value.length >= maxTags ? "" : "Type tag and press Enter or comma..."}
           disabled={value.length >= maxTags}
           aria-describedby="tags-help"
         />
@@ -199,12 +194,12 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
           Remove all
         </button>
         <div id="tags-help" className="tags-count">
-          <strong>{value.length} / {maxTags}</strong> tags
+          <strong>{value.length} / {maxTags}</strong>
         </div>
       </div>
 
       {error && <div className="tags-error">{error}</div>}
-      <div className="tags-hint">Use comma or Enter to separate tags. Max {maxTags}.</div>
+     
     </div>
   );
 }

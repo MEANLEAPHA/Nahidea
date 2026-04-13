@@ -22,7 +22,8 @@ aside{
      height: calc(100vh - 66px);
      margin: 0;
      padding: 0;
-     position: relative;
+     position: sticky;
+     top: 61px;
     border-right: 1px solid var(--secondary-color);
    padding-top: 5px;
  
@@ -91,7 +92,9 @@ aside{
     background: var(--primary-color);
     border-radius: 4px;
 }
-
+.max-li{
+    list-style: none;
+}
 .max-li button{
     background:none;
     color: var(--font-color);
@@ -189,6 +192,7 @@ aside{
     display:flex;
     align-items: center;
     justify-content:center;
+    list-style: none;
  }
  .nav-item button{
     background:none;
@@ -247,7 +251,7 @@ aside{
 }
 @media screen and (max-width:768px) {
     aside{
-     height: calc(100vh - 56px);
+     /* height: calc(100vh - 56px); */
      margin: 0;
      padding: 0;
      padding-top: 5px;

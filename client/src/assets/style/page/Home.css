@@ -1,0 +1,90 @@
+:root{
+    /* --background-color:white; */
+     --background-color: rgb(255, 255, 255);
+    --primary-color:#fd7648;
+    /* --secondary-color: gainsboro; */
+     --secondary-color: rgba(107, 107, 107, 0.318);
+    /* --font-color:rgb(65, 65, 65); */
+    --font-color:rgb(0, 0, 0);
+
+    --back-con:rgb(245, 245, 245);
+    --primary-font:monospace;
+}
+.dark-theme{
+    --background-color:rgb(32, 32, 32);
+    --primary-color:#fd7648;
+    --secondary-color: rgba(220, 220, 220, 0.318);
+    --font-color:rgb(255, 255, 255);
+     --back-con:rgb(40, 40, 40);
+}
+
+#home-container{
+    color: var(--font-color);
+    width: 100%;
+   height: auto;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+#feed-article{
+    width: 65%;
+   height: calc(800vh - 0px);
+    
+}
+#sub-article{
+    width: 35%;
+    height: calc(100vh - 60.8px);
+    display: flex;
+    justify-content: center;
+   position: sticky;
+   top: 60.8px;
+  
+}
+.rule-absolute{
+    width: 95%;
+    height: auto;
+    position: absolute;
+  
+    bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    color: white;
+    font-size: 12px;
+    gap: 10px;
+    padding: 0px;
+     padding-bottom: 10px;
+    font-family: sans-serif;
+}
+.rule-absolute p{
+    margin: 0;
+     cursor: pointer;
+       opacity: 0.5;
+    color:var(--font-color)
+}
+.rule-absolute p:hover{
+    text-decoration: underline;
+    opacity: 1;
+   
+}
+@media screen and (max-width:1200px){
+    #feed-article{
+     height:calc(100vh - 60.8px);
+     /* height: 50vh; */
+      overflow: scroll;
+      scrollbar-width: none;
+
+}
+.rule-absolute{
+    font-size: 10px;
+}
+
+}
+@media screen and (max-width:768px){
+    #feed-article{
+    width: 100%;
+}
+    #sub-article{
+    display: none;
+}
+
+}
