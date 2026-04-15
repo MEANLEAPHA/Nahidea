@@ -27,6 +27,7 @@ import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 import './assets/style/App.css';
 import './assets/style/Main.css';
 import './assets/style/Section.css'
+import PrivacyPolicy from './assets/page/Privatepolicy';
 
 
 const token = localStorage.getItem("token");
@@ -45,6 +46,9 @@ const App = () =>{
                     <Route path='/create/question' element={<Question/>}></Route>
                     <Route path='/create/confession' element={<Confession/>}></Route>
                     <Route path='/create/content' element={<Content/>}></Route>
+
+                     {/* Rule */}
+                    <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
                 </Route>
 
                 {/* Authentication */}
@@ -54,6 +58,10 @@ const App = () =>{
                 <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
                 <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
                 <Route path='/newpassword' element={<NewPassword/>}></Route>
+
+
+               
+                
 
                 {/* Not Found page */}
                 <Route path='*' element={<NotFound/>}></Route>

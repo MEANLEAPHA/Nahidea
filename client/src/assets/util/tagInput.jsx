@@ -107,7 +107,7 @@
 // }
 
 import React, { useState } from "react";
-import { CloseOutlined,TagsOutlined,CloudUploadOutlined   } from '@ant-design/icons';
+import { CloseOutlined,ClearOutlined,TagOutlined  } from '@ant-design/icons';
 export default function TagInput({ value = [], onChange, maxTags = 5 }) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
@@ -163,7 +163,9 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
 
   return (
     <div className="tags-input-wrapper">
-      <p className="tags-label"><TagsOutlined /> Add Tags</p>
+      <div className="tags-label">
+       <div id="tags-label-header"><TagOutlined /> Tags </div> <div>Press Enter or comma to add tags</div>
+      </div>
       <div className={`tags-input ${error ? "has-error" : ""}`}>
         {value.map((t, i) => (
           <span className="tag" key={t + i}>
@@ -174,7 +176,8 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
           </span>
         ))}
 
-        <input
+      </div>
+      <input
           className="tag-input"
           value={input}
           onChange={(e) => {
@@ -185,16 +188,16 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
           onBlur={handleBlur}
           placeholder={value.length >= maxTags ? "" : "Type tag and press Enter or comma..."}
           disabled={value.length >= maxTags}
+          style={value.length >= maxTags ? {display:"none"} : {display:"block"}}
           aria-describedby="tags-help"
         />
-      </div>
 
       <div className="tags-controls">
         <button type="button" className="btn-clear" onClick={clearAll} disabled={!value.length}>
-          Remove all
+          <ClearOutlined /> Remove all
         </button>
         <div id="tags-help" className="tags-count">
-          <strong>{value.length} / {maxTags}</strong>
+          {value.length} / {maxTags}
         </div>
       </div>
 

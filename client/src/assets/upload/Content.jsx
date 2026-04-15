@@ -1,57 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Select from "react-select";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
-import { EditOutlined ,TagsOutlined,CloudUploadOutlined   } from '@ant-design/icons';
-import MediaUploader from "../util/mediaUploader";
-import { useAnonymousTokens, AnonymousToggle, AnonymousTokensCoolDown } from "../util/anonymousTokens";
-import TagInput from "../util/tagInput";
+
+import TextBodyEditor from "../util/textBody";
+import MoreFields from "../util/moreFlieds";
+
+import { useAnonymousTokens, AnonymousTokensCoolDown } from "../util/anonymousTokens";
 import { content_options } from "../data/post_type_data";
 
-  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-  import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
-  import { faImages} from "@fortawesome/free-regular-svg-icons";
-import "../style/upload/tag.css";
-import "../style/upload/Content.css";
-import { icon } from "@fortawesome/fontawesome-svg-core";
 const token = localStorage.getItem("token");
-import { Carousel } from 'antd';
+
+ import "../style/upload/tag.css";
+ import "../style/upload/Content.css";
+
 export default function Content() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
+  const [textBody, setTextBody] = useState("");
+
   const [selectType, setSelectType] = useState(null);
   const [tags, setTags] = useState([]);
   const [mediaFiles, setMediaFiles] = useState([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const { tokens, countdown, consume } = useAnonymousTokens();
- 
-  const resetAll = () => {
-    setLoading(false);
-    setTitle("");
-    setTags([]);
-    setMediaFiles([]);
-    setIsAnonymous(false);
-    setSelectType(null);
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-    setLoading(true);
+
+    
 
     if (!title.trim()) {
       toast.error("Title is required");
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("post_type", "content");
     formData.append("content_title", title);
+    formData.append("text_body", textBody);
     formData.append("content_type", selectType?.value || "general");
-    formData.append("isAnonymous", isAnonymous); 
+    formData.append("isAnonymous", isAnonymous);
 
     tags.forEach((t) => formData.append("tags[]", t));
     mediaFiles.forEach((f) => formData.append("contentFile", f));
@@ -68,126 +63,94 @@ export default function Content() {
         }
       );
 
-      // axios automatically parses JSON
-      if (res.status === 201 || res.status === 200) {
-        toast.success(res.data.message || "Post created successfully");
+      if (res.status === 200 || res.status === 201) {
+        toast.success("Post created");
         if (isAnonymous) consume();
-        resetAll();
-      } else {
-        toast.error(res.data.message || "Failed to create post");
-        resetAll();
+
+        // reset
+        setTitle("");
+        setTags([]);
+        setMediaFiles([]);
+        setIsAnonymous(false);
+        setSelectType(null);
+       
       }
-      
     } catch (err) {
-      console.error(err);
-      toast.error(
-        "Server error, please try again later"
-      );
-      resetAll();
+      toast.error("Server error");
     }
-    resetAll();
+
+    setLoading(false);
   };
 
   return (
-   
-    <div id='content-container'>
-        <article id='tool-article'>
-              <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
-           <form onSubmit={handleSubmit} id="content-form">
-             <p id="content-label">Create Content</p>
-              <div className="toast-feedback">
-                <ToastContainer position="top-right" autoClose={2000} />
-              </div>
+    <div id="content-container">
+       <article id='tool-article'>
+           <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
+             <form onSubmit={handleSubmit} id="content-form">
+                <div className="toast-feedback">
+                    <ToastContainer position="top-right" autoClose={2000} />
+                 </div>
+                 <p id="content-label">Create Content</p>
 
-              <Select
-                options={content_options}
-                value={selectType}
-                onChange={setSelectType}
-                classNamePrefix="custom"
+        <Select
+          options={content_options}
+          value={selectType}
+          onChange={setSelectType}
+           classNamePrefix="custom"
                 placeholder="Select Content Type"
-              />
-              <div className="title-wrapper">
-                <p className="title-label" >Title</p>
-            
-                <textarea
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Title*"
-                  type="text"
-                  required
-                  id="title-input"
-                 
-                  maxLength={300} // enforce limit
-                />
-                <div className="char-counter">
-                  {title.length}/300
-                </div>
-              </div>
-              <MoreFlieds />
-              <MediaUploader maxFiles={5} value={mediaFiles} onChange={setMediaFiles} />
-              <TagInput value={tags} onChange={setTags} />
+        />
 
+        <div className="title-wrapper">
+            <p className="title-label" >Title</p>
+        
+            <textarea
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title*"
+              type="text"
+              required
+              id="title-input"
               
+              maxLength={300} // enforce limit
+            />
+            <div className="char-counter">
+              {title.length}/300
+            </div>
+          </div>
 
-              <AnonymousToggle
-                enabled={isAnonymous}
-                setEnabled={setIsAnonymous}
-                tokens={tokens}
-              />
+        <MoreFields
+          tags={tags}
+          setTags={setTags}
+          mediaFiles={mediaFiles}
+          setMediaFiles={setMediaFiles}
+          isAnonymous={isAnonymous}
+          setIsAnonymous={setIsAnonymous}
+          tokens={tokens}
+          textBodyValue={textBody}
+          setTextBodyValue = {setTextBody}
+         
 
-              <button type="submit" disabled={loading} id="content-post-button">
+        />
+
+     
+
+      <div id="form-footer">
+          <button type="submit" disabled={loading} id="content-post-button">
                 {loading ? "Posting..." : "Post"}
-              </button>
-            </form>
-        </article>
+        </button>
+      </div>
+        
+      </form>
+       </article>
         <article id='preview-article'> 
           <div id="preview-container">
             <PreviewRadio />
           </div>
             
         </article>
-      </div>
- 
+    </div>
   );
 }
-
-const MoreFlieds = () => {
-  const [selected, setSelected] = useState(1);
-
-  return (
-    <>
-      {/* Radio-style buttons */}
-      <div id="select-radio">
-        <div  className='radio-button-div'>
-             {[{label: 'Text', icon: <EditOutlined />, id: 1},
-              {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 2},
-              {label: 'Tags', icon: <TagsOutlined />, id: 3},
-              {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 4},
-            ].map((opt) => (
-          <button
-            key={opt.label}
-            type="button"
-            onClick={() => setSelected(opt.id)}
-            style={{
-              border: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
-              color: selected === opt.id ? "#fd7648" : "grey",
-            }}
-            className='radio-button'
-          >
-            {opt.icon}{" "}{opt.label}
-          </button>
-        ))}
-        </div>
-      </div>
-
-      {/* Word underneath */}
-      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px" }}>
-         {selected === 1 ? "A" : "D"}
-      </div>
-    </>
-  );
-};
-
 const PreviewRadio = () => {
   const [selected, setSelected] = useState("Preivew");
 
@@ -219,5 +182,3 @@ const PreviewRadio = () => {
     </>
   );
 };
-
-

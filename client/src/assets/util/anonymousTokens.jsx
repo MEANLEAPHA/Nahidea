@@ -114,7 +114,7 @@ export function AnonymousToggle({
   return (
   
     <div id="anonymous-wrapper">
-      <p className='anonymous-label'>Post anonymous</p>
+      <p id="token-reminder-p">You have remaining <span style={{color: "#fd7648"}}>{tokens}</span> anonymous token{tokens === 1 ? "" : "s"}</p>
       {tokens !== 0 ? (<div className="toggle-switch">
       <input
         type="checkbox"
@@ -123,7 +123,7 @@ export function AnonymousToggle({
         id="deadlineStatus"
       />
       <label htmlFor="deadlineStatus"></label>
-      <p id="token-reminder-p">Remaining tokens: {tokens}</p>
+      <p id="toggle-text-preview">{enabled ? "On" : "Off"}</p>
     </div>): null}
     </div>
   

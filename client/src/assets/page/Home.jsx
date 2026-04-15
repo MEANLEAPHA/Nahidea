@@ -3,8 +3,9 @@ import '../style/page/Home.css'
 export default function Home(){
     return(
       <div id='home-container'>
-        <article id='feed-article'></article>
+        <article id='feed-article'>dcs</article>
         <article id='sub-article'>
+          acdsa
             <div className='rule-absolute'>
                 <p>Nahidea Rule</p>
                 <p>Private Policy</p>

@@ -20,19 +20,24 @@
 
 #content-container{
     color: var(--font-color);
- 
-   height: auto;
-    display: flex;
-    margin: 0;
 
+
+    display: flex;
+    
+    margin: 0;
+    width: 100%;
     padding: 0;
 }
 #tool-article{
     width: 65%;
-   height: calc(100vh - 60.8px);
+   height: auto;
    display: flex;
-   align-items: start;
+   
+
    justify-content: center;
+   padding: 0;
+  
+
 }
 #content-form{
     width: 90%;
@@ -162,6 +167,39 @@ border-radius: 20px !important;
     justify-content: end;
 }
 
+#select-radio-type{
+    display: flex;
+    width: 100%;
+    align-items: "center";
+    justify-content: start;
+    gap: 0;
+    margin-top: 10px;
+}
+.radio-button-div-type{
+    
+    border: none;
+    border-radius: 1px;
+    margin: 0;
+    padding: 0;
+}
+.radio-button-type{
+    padding: 10px 20px 10px 20px;
+    border-radius: 1px;
+    background: none;
+    border: none;
+    color:grey;
+    opacity: 0.9;
+    font-weight: bold;
+    cursor: pointer;
+
+}
+.radio-button-type:hover{
+    background-color: var(--back-con);
+}
+
+
+
+
 
 #anonymous-wrapper{
     width: 100%;
@@ -179,25 +217,67 @@ border-radius: 20px !important;
     margin: 0;
     margin-bottom: 3px;
 }
-#content-post-button{
-    background-color:skyblue;
-    border: none;
-    padding: 8px 20px 8px 20px;
-    border-radius: 10px;
+#form-footer{
+  width: 100%;
+  height: auto;
+  display: flex;
+    margin-top: 10px;
+    justify-content: end;
+}
+#content-post-button {
+    position: relative;
+    border: 2px solid transparent;
+    padding: 8px 20px;
     cursor: pointer;
     font-family: sans-serif;
     font-size: 15px;
     color: var(--font-color);
-    opacity: 0.9;
-    margin-top: 10px;
+    opacity: 0.8;
+  
+    background: none;
+    border-radius: 20px;
+    z-index: 1;
 }
+
+/* Animated gradient border */
+#content-post-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 3px; /* border thickness */
+    background: linear-gradient(270deg, var(--primary-color), yellow, var(--primary-color), yellow);
+    background-size: 400% 400%;
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    animation: borderGradient 7s linear infinite;
+    z-index: -1;
+}
+
+@keyframes borderGradient {
+    0%   { background-position: 0% 50%; }
+    25%  { background-position: 50% 0%; }
+    50%  { background-position: 100% 50%; }
+    75%  { background-position: 50% 100%; }
+    100% { background-position: 0% 50%; }
+}
+
+
 #content-post-button:hover{
     opacity: 1;
+    
+    animation: none;
+    color: #fd7648;
 }
+
 
 
 
 #preview-article{
+
     width: 35%;
     border-left: 1px solid var(--secondary-color);
     height: calc(100vh - 60.8px);
@@ -205,6 +285,8 @@ border-radius: 20px !important;
     justify-content: center;
    position: sticky;
    top: 60.8px;
+   padding: 0;
+
 }
 #preview-container{
     width: 90%;
@@ -235,6 +317,71 @@ border-radius: 20px !important;
     cursor: pointer;
 
 }
+
+/* lock track to container */
+.slick-track {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* make each slide flex to container width */
+.slick-slide {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  width: auto !important;   /* override inline width */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+
+/* text-body */
+.ProseMirror p {
+  margin: 0;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  margin: 0;
+}
+.active-btn {
+  background: #fd7648;
+  color: white;
+  border-radius: 6px;
+}
+
+.ProseMirror {
+  outline: none;
+  color: #e5e5e5;
+  caret-color: #fd7648; /* 🔥 cursor color */
+}
+
+.ProseMirror p.is-empty::before {
+  content: "";
+  color: #777;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+.ProseMirror:focus {
+  background: rgba(255,255,255,0.02);
+}
+
+
+
+
+
+
+
+
+
+
+
 @media screen and (max-width:1200px){
     #tool-article{
      height:calc(100vh - 60.8px);

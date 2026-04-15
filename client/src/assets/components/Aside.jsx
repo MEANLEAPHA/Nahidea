@@ -169,11 +169,11 @@ const Main = ({a, icon, label, classNameBtn})=> {
 };
 
 const UserTools= [
-    { id:1, a: '/socialactivity',  icon: <BarChartOutlined  />, label: <label>Social Activity</label> },
-    { id:2, a: '/history',  icon: <ClockCircleOutlined className='icon-aside'/>, label: <label>History</label> },
-    { id:3, a: '/favorite',  icon: <FontAwesomeIcon icon={faBookmark} className='icon-aside icon-awesome'/>, label: <label>Favorite</label> },
-    { id:4, a: '/likepost',  icon: <HeartOutlined className='icon-aside'/>, label: <label>Like Post</label> },
-    { id:5, a: '/yourpost',  icon: <FontAwesomeIcon icon={faNewspaper} className='icon-aside icon-awesome'/>, label: <label>Your Post</label> },
+    { id:4, a: '/socialactivity',  icon: <BarChartOutlined  />, label: <label>Social Activity</label> },
+    { id:5, a: '/history',  icon: <ClockCircleOutlined className='icon-aside'/>, label: <label>History</label> },
+    { id:6, a: '/favorite',  icon: <FontAwesomeIcon icon={faBookmark} className='icon-aside icon-awesome'/>, label: <label>Favorite</label> },
+    { id:7, a: '/likepost',  icon: <HeartOutlined className='icon-aside'/>, label: <label>Like Post</label> },
+    { id:8, a: '/yourpost',  icon: <FontAwesomeIcon icon={faNewspaper} className='icon-aside icon-awesome'/>, label: <label>Your Post</label> },
 ];
 
 const AppendUserTool = () =>{
@@ -192,8 +192,8 @@ const UserTool = ({a, icon, label, classNameIcon})=> {
 };
 
 const Explores= [
-    { id:1, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
-    { id:2, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
+    { id:9, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
+    { id:10, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
 ];
 
 
@@ -213,9 +213,9 @@ const Explore = ({a, icon, label, classNameBtn})=> {
 };
 
 const Mores= [
-    { id:1, a: '/help', icon: <QuestionCircleOutlined className='icon-aside'/>, label: <label>Help</label> },
-    { id:2, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
-    { id:2, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
+    { id:11, a: '/help', icon: <QuestionCircleOutlined className='icon-aside'/>, label: <label>Help</label> },
+    { id:12, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
+    { id:13, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
 ];
 
 const AppendMore = () =>{
@@ -234,10 +234,10 @@ const More = ({a, icon, label, classNameIcon})=> {
 };
 
 const Rules= [
-    { id:1, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
-    { id:2, a: '/privatepolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
-    { id:3, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
-    { id:4, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
+    { id:14, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
+    { id:15, a: '/privacypolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
+    { id:16, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
+    { id:17, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
 ];
 
 const AppendRule = () =>{
