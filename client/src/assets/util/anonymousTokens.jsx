@@ -1,5 +1,7 @@
 // src/utils/anonymousTokens.js
-
+ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
+  
 const STORAGE_TOKENS = "AnnoymousUsed";
 const STORAGE_RESET = "AnnoymousResetDate";
 
@@ -111,21 +113,59 @@ export function AnonymousToggle({
   setEnabled,
   tokens
 }) {
+   const [visible, setVisible] = useState(enabled);
+
+  useEffect(() => {
+    if (enabled) {
+      setVisible(true); // show immediately
+    } else {
+      // fade out first, then remove from layout
+      const timer = setTimeout(() => setVisible(false), 1000); // match transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [enabled]);
   return (
   
-    <div id="anonymous-wrapper">
-      <p id="token-reminder-p">You have remaining <span style={{color: "#fd7648"}}>{tokens}</span> anonymous token{tokens === 1 ? "" : "s"}</p>
-      {tokens !== 0 ? (<div className="toggle-switch">
-      <input
-        type="checkbox"
-        checked={enabled}
-        onChange={(e) => setEnabled(e.target.checked)}
-        id="deadlineStatus"
+ 
+    <div className="anonymous-card">
+    
+      <FontAwesomeIcon
+        icon={faUserSecret}
+        id="anonymous-icon"
+        className={enabled ? "show" : "hide"}
       />
-      <label htmlFor="deadlineStatus"></label>
-      <p id="toggle-text-preview">{enabled ? "On" : "Off"}</p>
-    </div>): null}
+ 
+  <div className="anonymous-header">
+    <div className="anonymous-title">
+       Anonymous Mode
     </div>
+
+    <div className={`status-badge ${enabled ? "on" : "off"}`}>
+      {enabled ? "ON" : "OFF"}
+    </div>
+  </div>
+
+  <p className="token-text">
+    {tokens > 0 ? (
+      <>
+        You have <span>{tokens}</span> token{tokens !== 1 && "s"} remaining
+      </>
+    ) : (
+      <span className="no-token">No tokens left</span>
+    )}
+  </p>
+
+  {tokens > 0 && (
+    <div
+      className={`toggle-container ${enabled ? "active" : ""}`}
+      onClick={() => setEnabled(!enabled)}
+    >
+      <div className="toggle-track">
+        <div className="toggle-thumb" />
+      </div>
+    </div>
+  )}
+</div>
   
   );
 };
@@ -141,3 +181,18 @@ export function AnonymousTokensCoolDown({tokens, countdown}){
     </>
   );
 }
+
+
+   // <div id="anonymous-wrapper">
+    //   <p id="token-reminder-p">You have remaining <span style={{color: "#fd7648"}}>{tokens}</span> anonymous token{tokens === 1 ? "" : "s"}</p>
+    //   {tokens !== 0 ? (<div className="toggle-switch">
+    //   <input
+    //     type="checkbox"
+    //     checked={enabled}
+    //     onChange={(e) => setEnabled(e.target.checked)}
+    //     id="deadlineStatus"
+    //   />
+    //   <label htmlFor="deadlineStatus"></label>
+    //   <p id="toggle-text-preview">{enabled ? "On" : "Off"}</p>
+    // </div>): null}
+    // </div>

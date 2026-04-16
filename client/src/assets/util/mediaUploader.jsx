@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useState} from "react";
-import { CloseOutlined,TagsOutlined,CloudUploadOutlined,DeleteOutlined, PlusOutlined, ClearOutlined} from '@ant-design/icons';
+import {RightOutlined , CloseOutlined,TagsOutlined,CloudUploadOutlined,DeleteOutlined, PlusOutlined, ClearOutlined, LeftOutlined} from '@ant-design/icons';
 import { Carousel } from 'antd';
 export default function MediaUploader({ maxFiles = 5, value = [], onChange }) {
   const multiInputRef = useRef(null);
@@ -62,7 +62,9 @@ return (
       </label>
     ) : (
   
-        <Carousel arrows infinite={true} className="media-carousel" swipe={true} draggable={true} autoplay={{ pauseOnHover: true }} autoplaySpeed={10000} >
+        <Carousel arrows infinite={true} className="media-carousel" swipe={true} draggable={true} autoplay={{ pauseOnHover: true }} autoplaySpeed={10000}
+         prevArrow={<button className="slick-arrow slick-prev"><LeftOutlined /></button>}
+  nextArrow={<button className="slick-arrow slick-next"><RightOutlined /></button>} >
           {value.map((file, idx) => (
             <div className="carousel-slide" key={idx}>
               {file ? (
@@ -116,6 +118,9 @@ return (
               />
             </label>
           </div>
+        )}
+        {remaining === 0 && (
+           <button type="button" disabled='true' style={{visibility: 'hidden'}}>Empty</button>
         )}
          <div className="uploader-footer-right">
           <button

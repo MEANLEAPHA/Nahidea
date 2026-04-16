@@ -164,7 +164,7 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
   return (
     <div className="tags-input-wrapper">
       <div className="tags-label">
-       <div id="tags-label-header"><TagOutlined /> Tags </div> <div>Press Enter or comma to add tags</div>
+       <div id="tags-label-header"><TagOutlined /> Tags </div> <div style={{opacity: '0.8'}}>Press Enter or comma to add tags</div>
       </div>
       <div className={`tags-input ${error ? "has-error" : ""}`}>
         {value.map((t, i) => (
