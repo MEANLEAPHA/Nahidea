@@ -38,7 +38,9 @@
     "react-router-dom": "^7.13.1",
     "react-select": "^5.10.2",
     "react-toastify": "^11.0.5",
+    "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+    "remark-underline": "^1.0.5",
     "shiki": "^3.23.0",
     "tiptap-extension-code-block-shiki": "^1.1.0"
   },

@@ -1,12 +1,13 @@
 
 /* text-body */
 .text-body-container{
-    width: 100%;
+    width: 98%;
     height: auto;
     background: var(--back-con);
     border: 1px solid var(--secondary-color);
     border-radius: 10px;
     padding: 5px;
+    overflow: hidden;
 }
 .toolbar-text-body{
     width: 100%;
@@ -14,9 +15,12 @@
     padding: 10px 0px 15px 0px;
     border-bottom: 1px solid var(--background-color);
     display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
     gap: 5px;
     
 }
+
 .toolbar-text-body button{
     border: none;
     background: none;
@@ -47,6 +51,24 @@
 
    box-shadow: 0 0 0 2px var(--primary-color);
 }
+.ProseMirror {
+  outline: none;
+  color:var(--font-color);
+  caret-color: var(--font-color); 
+  background-color: var(--back-con);
+ width: 98%;
+ margin: auto;
+ height: 350px; 
+ max-width: auto;
+padding: 0;
+ padding-top: 10px;
+ overflow-x: hidden;
+ scrollbar-width: none;
+  line-height: 1.6;
+  font-size: 15px;
+  /* 🔥 cursor color */
+}
+
 
 /* .active-btn {
   background: #fd7648;
@@ -55,6 +77,9 @@
 } */
 .ProseMirror p {
   margin: 0;
+    word-break: break-word;
+  overflow-wrap: anywhere;
+
 }
 
 .ProseMirror h1,
@@ -68,20 +93,7 @@
   padding: 0;
 }
 
-.ProseMirror {
-  outline: none;
-  color:var(--font-color);
-  caret-color: var(--font-color); 
-  background-color: var(--back-con);
- width: auto;
- padding: 5px;
- height: 300px;
- overflow: scroll;
- scrollbar-width: none;
-  line-height: 1.6;
-  font-size: 15px;
-  /* 🔥 cursor color */
-}
+
 
 
 /* Headings */
@@ -104,8 +116,8 @@
 }
 
 /* Paragraph */
-.ProseMirror p {
-  margin: 8px 0;
+.ProseMirror p + p {
+  margin-top: 8px;
 }
 
 /* Lists */

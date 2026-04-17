@@ -8,6 +8,8 @@ import { EditOutlined ,TagsOutlined,CloudUploadOutlined   } from '@ant-design/ic
   import { faImages} from "@fortawesome/free-regular-svg-icons";
 
 
+
+
 import { useEditorState } from "@tiptap/react";
 import { Extension } from "@tiptap/core";
 
@@ -21,10 +23,12 @@ const CustomLink = Link.extend({
   inclusive: false, 
 });
 
-import Subscript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
+
 import Placeholder from "@tiptap/extension-placeholder";
 
+
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import "../style/upload/Anonymous.css";
 import "../style/upload/MultipleMedia.css";
@@ -45,12 +49,29 @@ function TiptapEditor({ onChange, value }) {
       }),
       Markdown,
 
+      // CustomLink.configure({
+      //   openOnClick: false,
+      // }),
       CustomLink.configure({
-        openOnClick: false,
-      }),
+  openOnClick: false,
+  autolink: false,
+  linkOnPaste: true,
 
-      Subscript,
-      Superscript,
+  validate: href => {
+    try {
+      const url = new URL(href);
+      return ["http:", "https:"].includes(url.protocol);
+    } catch {
+      return false;
+    }
+  },
+
+  HTMLAttributes: {
+    class: "editor-link",
+    rel: "noopener noreferrer",
+    target: "_blank",
+  },
+}),
 
       Placeholder.configure({
         placeholder: "Write Something Amazing...",
@@ -81,10 +102,7 @@ function TiptapEditor({ onChange, value }) {
       return {
         bold: editor.isActive("bold"),
         italic: editor.isActive("italic"),
-        underline: editor.isActive("underline"),
         strike: editor.isActive("strike"),
-        subscript: editor.isActive("subscript"),
-        superscript: editor.isActive("superscript"),
         link: editor.isActive("link"),
         bulletList: editor.isActive("bulletList"),
         orderedList: editor.isActive("orderedList"),
@@ -108,6 +126,26 @@ function TiptapEditor({ onChange, value }) {
     }
   }, [value, editor]);
 
+  const isValidUrl = (url) => {
+  try {
+    const parsed = new URL(url);
+
+    // only allow real web protocols
+    return ["http:", "https:"].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+};
+const normalizeUrl = (url) => {
+  if (!url) return "";
+
+  // auto add https
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    return "https://" + url;
+  }
+
+  return url;
+};
   // 🔗 LINK MODAL
   const openLinkModal = () => {
     if (!editor) return;
@@ -122,33 +160,37 @@ function TiptapEditor({ onChange, value }) {
     });
   };
 
-  const applyLink = () => {
-    if (!editor || !linkModal.url) return;
+ const applyLink = () => {
+  if (!editor || !linkModal.url) return;
 
-    const { from, to } = editor.state.selection;
+  const url = normalizeUrl(linkModal.url);
+  if (!isValidUrl(url)) {
+    alert("Invalid URL");
+    return;
+  }
 
-    if (from !== to) {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: linkModal.url })
-        .run();
-    } else {
-      editor
-        .chain()
-        .focus()
-        .insertContent(linkModal.text || linkModal.url)
-        .extendMarkRange("link")
-        .setLink({ href: linkModal.url })
-        .run();
-    }
+  const text = linkModal.text || url;
 
-    // 🔥 critical: remove link focus state
-    editor.commands.blur();
+  // 🔥 always insert properly as link node
+  editor
+    .chain()
+    .focus()
+    .insertContent({
+      type: "text",
+      text: text,
+      marks: [
+        {
+          type: "link",
+          attrs: { href: url },
+        },
+      ],
+    })
+    .run();
 
-    setLinkModal({ open: false, url: "", text: "" });
-  };
+  editor.commands.blur();
+
+  setLinkModal({ open: false, url: "", text: "" });
+};
 
   if (!editor) return null;
 
@@ -170,12 +212,7 @@ function TiptapEditor({ onChange, value }) {
           <FontAwesomeIcon icon={faItalic} />
         </button>
 
-        <button onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editorState.underline ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faUnderline} />
-        </button>
+
 
         <button onClick={() => editor.chain().focus().toggleStrike().run()}
           className={editorState.strike ? "active-btn" : ""}
@@ -184,19 +221,6 @@ function TiptapEditor({ onChange, value }) {
           <FontAwesomeIcon icon={faStrikethrough} />
         </button>
 
-        <button onClick={() => editor.chain().focus().toggleSubscript().run()}
-          className={editorState.subscript ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faSubscript} />
-        </button>
-
-        <button onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          className={editorState.superscript ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faSuperscript} />
-        </button>
 
          <span style={{fontSize:'large'}}> | </span>
 
@@ -241,7 +265,8 @@ function TiptapEditor({ onChange, value }) {
         </button>
 
         <button onClick={openLinkModal}
-          className={editorState.link ? "active-btn" : ""}>
+          className={editorState.link ? "active-btn" : ""}
+          type="button">
           <FontAwesomeIcon icon={faLink} />
         </button>
 
@@ -285,7 +310,7 @@ function TiptapEditor({ onChange, value }) {
 }
 
 const MemoEditor = memo(TiptapEditor);
-const MoreFields = memo(({
+ export const MoreFields = memo(({
   tags, setTags,
   mediaFiles, setMediaFiles,
   isAnonymous, setIsAnonymous, tokens,
@@ -312,7 +337,7 @@ const MoreFields = memo(({
         ))}
       </div>
     </div>
-      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px" }}>
+      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
      <div style={{ display: selected === 1 ? "block" : "none" }}>
         <MemoEditor onChange={setTextBodyValue} value={textBodyValue}/>
       </div>
@@ -324,4 +349,16 @@ const MoreFields = memo(({
   );
 });
 
-export default MoreFields;
+
+
+
+export const MarkdownPreview = ({ content }) => {
+  return (
+    <div className="markdown-preview">
+      <ReactMarkdown remarkPlugins={[remarkGfm]} >
+        {content || ""}
+      </ReactMarkdown>
+    </div>
+  );
+};
+

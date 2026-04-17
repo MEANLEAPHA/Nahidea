@@ -4,8 +4,8 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 
-import TextBodyEditor from "../util/textBody";
-import MoreFields from "../util/moreFlieds";
+import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
+
 
 import { useAnonymousTokens, AnonymousTokensCoolDown } from "../util/anonymousTokens";
 import { content_options } from "../data/post_type_data";
@@ -27,6 +27,16 @@ export default function Content() {
 
   const { tokens, countdown, consume } = useAnonymousTokens();
 
+
+  const resetAll = () => {
+    setLoading(false);
+    setTitle("");
+    setTextBody("");
+    setTags([]);
+    setMediaFiles([]);
+    setIsAnonymous(false);
+    setSelectType(null);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,18 +78,13 @@ export default function Content() {
         if (isAnonymous) consume();
 
         // reset
-        setTitle("");
-        setTags([]);
-        setMediaFiles([]);
-        setIsAnonymous(false);
-        setSelectType(null);
+       resetAll();
        
       }
     } catch (err) {
       toast.error("Server error");
+      resetAll();
     }
-
-    setLoading(false);
   };
 
   return (
@@ -128,8 +133,6 @@ export default function Content() {
           tokens={tokens}
           textBodyValue={textBody}
           setTextBodyValue = {setTextBody}
-         
-
         />
 
      
@@ -139,12 +142,21 @@ export default function Content() {
                 {loading ? "Posting..." : "Post"}
         </button>
       </div>
+      <div id="form-footer-2">
+        <p>Nahidea Rule</p>
+        <p>Private Policy</p>
+        <p>User Agreement</p>
+        <p>Accessibility</p>
+        <p>Nahidea. © 2026. All rights reserved </p>
+      </div>
         
       </form>
+      
        </article>
         <article id='preview-article'> 
           <div id="preview-container">
-            <PreviewRadio />
+            < MarkdownPreview content={textBody}/>
+            {/* <PreviewRadio /> */}
           </div>
             
         </article>
@@ -178,6 +190,9 @@ const PreviewRadio = () => {
       {/* Word underneath */}
       <div style={{ marginTop: "10px", color: "#555", fontSize: "14px" }}>
          {selected === "Preivew" ? "A" : "D"}
+         <div style={{ marginTop: "10px" }}>
+
+</div>
       </div>
     </>
   );
