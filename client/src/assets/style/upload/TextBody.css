@@ -129,6 +129,7 @@
   border-radius: 4px;
   font-family: monospace;
   color: var(--font-color);
+  
 }
 
 
@@ -143,19 +144,28 @@
 
 
 /* Link */
-.ProseMirror a {
+.ProseMirror a{
   color: #4da6ff;
   text-decoration: underline;
 }
 
 .ProseMirror p.is-empty::before {
-  content: "Type...";
+  content: '';
   color: var(--font-color);
   opacity: 0.5;
   width: 100%;
   pointer-events: none;
   float: left;
   height: 0;
+}
+.ProseMirror p.is-editor-empty::before{
+    content: attr(data-placeholder);
+    color: var(--font-color);
+    opacity: 0.5;
+    width: 100%;
+    pointer-events: none;
+    float: left;
+    height: 0;
 }
 
 .link-modal{

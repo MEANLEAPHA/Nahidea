@@ -8,7 +8,7 @@ import { EditOutlined ,TagsOutlined,CloudUploadOutlined   } from '@ant-design/ic
   import { faImages} from "@fortawesome/free-regular-svg-icons";
 
 
-
+import { useEditorState } from "@tiptap/react";
 import { Extension } from "@tiptap/core";
 
 
@@ -29,280 +29,262 @@ import Placeholder from "@tiptap/extension-placeholder";
 import "../style/upload/Anonymous.css";
 import "../style/upload/MultipleMedia.css";
 import "../style/upload/TextBody.css";
-// this is the prev
 
 function TiptapEditor({ onChange, value }) {
-  const [, forceUpdate] = useState();
   const [linkModal, setLinkModal] = useState({
     open: false,
     url: "",
     text: "",
   });
-  // const editor = useEditor({
-  //   extensions: [
-  //     StarterKit, // includes bold, italic, lists, code, etc :contentReference[oaicite:0]{index=0}
-  //     Markdown,
-  //     Placeholder.configure({
-  //       placeholder: "Write something amazing...",
-  //     }),
-  //   ],
-  //   content: value || "# Start writing...",
-  //   contentType: "markdown",
-  //   onUpdate: ({ editor }) => {
-  //     const md = editor.getMarkdown(); // 🔥 IMPORTANT :contentReference[oaicite:1]{index=1}
-  //     onChange(md);
-  //   },
-  // });
 
+  // ✅ 1. CREATE EDITOR FIRST
   const editor = useEditor({
-  extensions: [
-    
-    StarterKit,
-    Markdown,
+    extensions: [
+     StarterKit.configure({
+        link: false, // 🚨 FIX duplicate
+      }),
+      Markdown,
 
-    CustomLink.configure({
-      openOnClick: false,
-    }),
+      CustomLink.configure({
+        openOnClick: false,
+      }),
 
-    Subscript,
-    Superscript,
+      Subscript,
+      Superscript,
 
-    Placeholder.configure({
-      placeholder: "Write something amazing...",
-    }),
-  ],
+      Placeholder.configure({
+        placeholder: "Write Something Amazing...",
+        showOnlyWhenEditable: true,
+        showOnlyCurrent: false,
+      })
 
-  content: value || "Body text (optional)",
-  contentType: "markdown",
+    ],
 
-  onUpdate: ({ editor }) => {
-    onChange(editor.getMarkdown());
-  },
-});
+    content: value || null,
+    contentType: "markdown",
 
-useEffect(() => {
-  if (!editor) return;
+   onUpdate: ({ editor }) => {
+  onChange(editor.getMarkdown());
+},
 
-  const current = editor.getMarkdown();
 
-  if (value !== current) {
-    editor.commands.setContent(value || "", { contentType: "markdown" });
-  }
+    // 🔥 performance control
+    shouldRerenderOnTransaction: false,
+  });
 
-   const update = () => forceUpdate({});
+  // ✅ 2. STATE SELECTOR (AFTER editor exists)
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor }) => {
+      if (!editor) return {};
 
-  editor.on("selectionUpdate", update);
-  editor.on("transaction", update);
+      return {
+        bold: editor.isActive("bold"),
+        italic: editor.isActive("italic"),
+        underline: editor.isActive("underline"),
+        strike: editor.isActive("strike"),
+        subscript: editor.isActive("subscript"),
+        superscript: editor.isActive("superscript"),
+        link: editor.isActive("link"),
+        bulletList: editor.isActive("bulletList"),
+        orderedList: editor.isActive("orderedList"),
+        codeBlock: editor.isActive("codeBlock"),
+        blockquote: editor.isActive("blockquote"),
+        h1: editor.isActive("heading", { level: 1 }),
+        h2: editor.isActive("heading", { level: 2 }),
+        h3: editor.isActive("heading", { level: 3 }),
+      };
+    },
+  });
 
-  return () => {
-    editor.off("selectionUpdate", update);
-    editor.off("transaction", update);
+  // ✅ sync external value
+  useEffect(() => {
+    if (!editor) return;
+
+    const current = editor.getMarkdown();
+
+    if (value !== current) {
+      editor.commands.setContent(value, { contentType: "markdown" });
+    }
+  }, [value, editor]);
+
+  // 🔗 LINK MODAL
+  const openLinkModal = () => {
+    if (!editor) return;
+
+    const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to);
+
+    setLinkModal({
+      open: true,
+      url: "",
+      text: selectedText || "",
+    });
   };
 
-}, [value, editor]);
+  const applyLink = () => {
+    if (!editor || !linkModal.url) return;
 
-const openLinkModal = () => {
-  const { from, to } = editor.state.selection;
-  const selectedText = editor.state.doc.textBetween(from, to);
+    const { from, to } = editor.state.selection;
 
-  setLinkModal({
-    open: true,
-    url: "",
-    text: selectedText || "",
-  });
-};
+    if (from !== to) {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: linkModal.url })
+        .run();
+    } else {
+      editor
+        .chain()
+        .focus()
+        .insertContent(linkModal.text || linkModal.url)
+        .extendMarkRange("link")
+        .setLink({ href: linkModal.url })
+        .run();
+    }
 
+    // 🔥 critical: remove link focus state
+    editor.commands.blur();
 
-const applyLink = () => {
-  if (!linkModal.url) return;
+    setLinkModal({ open: false, url: "", text: "" });
+  };
 
-  const { from, to } = editor.state.selection;
-
-  if (from !== to) {
-    // user selected text → apply link
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange("link")
-      .setLink({ href: linkModal.url })
-      .run();
-  } else {
-    // no selection → insert new link text
-    editor
-      .chain()
-      .focus()
-      .insertContent(
-        `<a href="${linkModal.url}">${linkModal.text || linkModal.url}</a>`
-      )
-      .run();
-  }
-
-  setLinkModal({ open: false, url: "", text: "" });
-};
   if (!editor) return null;
 
   return (
     <div className="text-body-container">
-
-      {/* TOOLBAR */}
       <div className="toolbar-text-body">
 
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "active-btn" : ""}
+        <button onClick={() => editor.chain().focus().toggleBold().run()}
+          className={editorState.bold ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faBold} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={editorState.italic ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faItalic} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={editorState.underline ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faUnderline} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleStrike().run()}
+          className={editorState.strike ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faStrikethrough} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleSubscript().run()}
+          className={editorState.subscript ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faSubscript} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleSuperscript().run()}
+          className={editorState.superscript ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faSuperscript} />
+        </button>
+
+         <span style={{fontSize:'large'}}> | </span>
+
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          className={editorState.h1 ? "active-btn" : ""}
+          type="button"
+          ><FontAwesomeIcon icon={faHeading} />1</button>
+
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          className={editorState.h2 ? "active-btn" : ""}
+          type="button"
+          ><FontAwesomeIcon icon={faHeading} />2</button>
+
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          className={editorState.h3 ? "active-btn" : ""}
+          type="button"
+          ><FontAwesomeIcon icon={faHeading} />3</button>
+
+         <span style={{fontSize:'large'}}> | </span>
+
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editorState.bulletList ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faList} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editorState.orderedList ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faList12} />
+        </button>
+
+         <span style={{fontSize:'large'}}> | </span>
+
+        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className={editorState.codeBlock ? "active-btn" : ""}
+          type="button"
+          >
+          <FontAwesomeIcon icon={faCode} />
+        </button>
+
+        <button onClick={openLinkModal}
+          className={editorState.link ? "active-btn" : ""}>
+          <FontAwesomeIcon icon={faLink} />
+        </button>
+
+        <button onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={editorState.blockquote ? "active-btn" : ""}
           type="button"
         >
-          <FontAwesomeIcon icon={faBold} className='icon-format'/>
+          <FontAwesomeIcon icon={faQuoteLeft} />
         </button>
 
-        <button 
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faItalic} className='icon-format'/>
-        </button>
-
-        <button 
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editor.isActive("underline") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faUnderline} className='icon-format'/>
-        </button>
-
-        <button 
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={editor.isActive("strike") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faStrikethrough} className='icon-format'/>
-        </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleSubscript().run()}
-            className={editor.isActive("subscript") ? "active-btn" : ""}
-          >
-            <FontAwesomeIcon icon={faSubscript} className='icon-format'/>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleSuperscript().run()}
-            className={editor.isActive("superscript") ? "active-btn" : ""}
-          >
-           <FontAwesomeIcon icon={faSuperscript} className='icon-format'/>
-          </button>
-          <span style={{fontSize:'large'}}> | </span>
-        <button 
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={editor.isActive("heading", { level: 1 }) ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faHeading} className='icon-format'/><sub className='icon-format'>1</sub>
-        </button>
-        <button 
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={editor.isActive("heading", { level: 2 }) ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faHeading} className='icon-format'/><sub className='icon-format'>2</sub>
-        </button>
-        <button 
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={editor.isActive("heading", { level: 3 }) ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faHeading} className='icon-format'/><sub className='icon-format'>3</sub>
-        </button>
-
-        <span style={{fontSize:'large'}}> | </span>
-        <button 
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faList} className='icon-format'/>
-        </button>
-
-        <button 
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faList12} className='icon-format'/>
-        </button>
-        <span style={{fontSize:'large'}}> | </span>
-        <button 
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive("codeBlock") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faCode} className='icon-format'/>
-        </button>
-        {/* <button
-            type="button"
-            onClick={() => {
-              const url = prompt("Enter URL");
-              if (url) editor.chain().focus().setLink({ href: url }).run();
-            }}
-            className={editor.isActive("link") ? "active-btn" : ""}
-          >
-          <FontAwesomeIcon icon={faLink} />
-          </button> */}
-          <button
-            type="button"
-            onClick={openLinkModal}
-            className={editor.isActive("link") ? "active-btn" : ""}
-          >
-            <FontAwesomeIcon icon={faLink} className='icon-format'/>
-          </button>
-        <button 
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive("blockquote") ? "active-btn" : ""}
-          type="button"
-          >
-          <FontAwesomeIcon icon={faQuoteLeft} className='icon-format'/>
-        </button>
       </div>
 
-      {/* EDITOR */}
-      <EditorContent
-        editor={editor}
-        className="p-4 min-h-[200px] prose max-w-none focus:outline-none"
-      />
+      <EditorContent editor={editor} className="editor-body" />
+
       {linkModal.open && (
-  <div className="link-modal">
-    <input
-      placeholder="Text"
-      value={linkModal.text}
-      onChange={(e) =>
-        setLinkModal({ ...linkModal, text: e.target.value })
-      }
-    />
-
-    <input
-      placeholder="https://..."
-      value={linkModal.url}
-      onChange={(e) =>
-        setLinkModal({ ...linkModal, url: e.target.value })
-      }
-    />
-
-    <div className="link-actions">
-      <button onClick={applyLink}>Apply</button>
-      <button onClick={() => setLinkModal({ open: false })}>
-        Cancel
-      </button>
+        <div className="link-modal">
+          <input
+            placeholder="Text"
+            value={linkModal.text}
+            onChange={(e) =>
+              setLinkModal({ ...linkModal, text: e.target.value })
+            }
+          />
+          <input
+            placeholder="https://..."
+            value={linkModal.url}
+            onChange={(e) =>
+              setLinkModal({ ...linkModal, url: e.target.value })
+            }
+          />
+          <div>
+            <button onClick={applyLink} type="button">Apply</button>
+            <button onClick={() => setLinkModal({ open: false })} type="button">
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
-  </div>
-)}
-    </div>
-    
   );
 }
 
-
+const MemoEditor = memo(TiptapEditor);
 const MoreFields = memo(({
   tags, setTags,
   mediaFiles, setMediaFiles,
@@ -332,7 +314,7 @@ const MoreFields = memo(({
     </div>
       <div style={{ marginTop: "10px", color: "#555", fontSize: "14px" }}>
      <div style={{ display: selected === 1 ? "block" : "none" }}>
-        <TiptapEditor onChange={setTextBodyValue} value={textBodyValue}/>
+        <MemoEditor onChange={setTextBodyValue} value={textBodyValue}/>
       </div>
       {selected === 2 && <MediaUploader maxFiles={5} value={mediaFiles} onChange={setMediaFiles}/>}
       {selected === 3 && <TagInput value={tags} onChange={setTags} />}
