@@ -9,7 +9,7 @@ import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 import {MediaPreview} from "../util/mediaUploader";
 
 import { Skeleton } from 'antd';
-
+import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
@@ -35,6 +35,9 @@ export default function Content() {
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const { tokens, countdown, consume } = useAnonymousTokens();
+
+
+  const [openPreview, setOpenPreview] = useState(false);
 
 
   const resetAll = () => {
@@ -104,7 +107,10 @@ export default function Content() {
                 <div className="toast-feedback">
                     <ToastContainer position="top-right" autoClose={2000} />
                  </div>
-                 <p id="content-label">Create Content</p>
+                 <div id='form-header-label'>
+                  <p id="content-label">Create Content</p> 
+                  <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
+                  </div>
 
         <Select
           options={content_options}
@@ -162,7 +168,11 @@ export default function Content() {
       </form>
       
        </article>
-        <article id='preview-article'> 
+
+        <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
+          <br />
+          <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
+          
           <div id="preview-container">
                  <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {mediaFiles} postTagsValue={tags} selectTypeValue={selectType?.value} isAnonymousValue={isAnonymous}/>
             {/* <PreviewRadio /> */}
@@ -293,17 +303,14 @@ const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selec
                       </div>
                       <div className='post-footer'>
                           <div className='post-footer-left'>
-                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>12</span><span className='count-label'> Likes</span></p></button>
-                              <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>12</span><span className='count-label'> Comments</span></p></button>
-                              <button className='button-action-footer'><FontAwesomeIcon icon={faRetweet} /><p><span>12</span><span className='count-label'> Reposts</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>0</span><span className='count-label'> Like</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>0</span><span className='count-label'> Comment</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faRetweet} /><p><span>0</span><span className='count-label'> Repost</span></p></button>
                           </div>
                           <div className='post-footer-right'>
                               <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
                           </div>  
                       </div>
                 </div>
-       
-
-
     )
 }

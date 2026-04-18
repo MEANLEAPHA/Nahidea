@@ -2,7 +2,7 @@ import React, { useState, memo, useEffect, useRef} from "react";
 import{TagInput} from "../util/tagInput";
 import {MediaUploader} from "../util/mediaUploader";
 import { AnonymousToggle } from "../util/anonymousTokens";
-import { EditOutlined ,TagsOutlined,CloudUploadOutlined   } from '@ant-design/icons';
+import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined   } from '@ant-design/icons';
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faUserSecret, faMask, faBold, faItalic, faUnderline, faStrikethrough, faHeading, faSubscript, faSuperscript, faQuoteLeft, faLink, faCode, faList, faList12} from "@fortawesome/free-solid-svg-icons";
   import { faImages} from "@fortawesome/free-regular-svg-icons";
@@ -310,6 +310,7 @@ const normalizeUrl = (url) => {
 }
 
 const MemoEditor = memo(TiptapEditor);
+
  export const MoreFields = memo(({
   tags, setTags,
   mediaFiles, setMediaFiles,
@@ -362,3 +363,71 @@ export const MarkdownPreview = ({ content }) => {
   );
 };
 
+
+
+ export const MoreFieldsConfession = memo(({
+  tags, setTags,
+  mediaFiles, setMediaFiles,
+  isAnonymous, setIsAnonymous, tokens,
+  confessionFileValue, setConfessionFileValue
+}) => {
+  const [selected, setSelected] = useState(1);
+
+  return (
+    <>
+    <div id="select-radio-type">
+  
+      <div className='radio-button-div-type'>
+        {[
+                      {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 1},
+                      {label: 'Tags', icon: <TagsOutlined />, id: 2},
+                      {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 3},
+                    ].map((opt) => (
+          <button key={opt.id} onClick={() => setSelected(opt.id)} type="button" className='radio-button-type' style={{
+              borderBottom: selected === opt.id ? "3px solid #fd7648" : "3px solid transparent",
+              color: selected === opt.id ? "#fd7648" : "grey",
+            }}>
+            {opt.icon}{" "}{opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
+     
+      {selected === 1 && (<div>
+          {
+            confessionFileValue === null ? (
+              <div className="confession-file-upload">
+                <label >
+                  <FontAwesomeIcon icon={faImages} />
+                  <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setConfessionFileValue(e.target.files[0])}
+                  style={{ display: "none" }}
+                />
+                  <p>Upload an image</p>
+                </label>
+              </div>
+            ) : (
+              <div className="confession-file-preview">
+                <img
+                  src={URL.createObjectURL(confessionFileValue)}
+                  alt="Confession"
+                />
+                <button
+                  type="button"
+                  onClick={() => setConfessionFileValue(null)}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          }
+      </div>)}
+      {selected === 2 && <TagInput value={tags} onChange={setTags} />}
+      {selected === 3 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
+      </div>
+      </>
+  );
+});

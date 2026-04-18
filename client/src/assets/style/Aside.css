@@ -26,7 +26,7 @@ aside{
      top: 61px;
     border-right: 1px solid var(--secondary-color);
    padding-top: 5px;
- 
+   z-index: 20;
 }
 .max-aside{
     width: 22%;  
@@ -66,7 +66,8 @@ aside{
     width: 40px;
     height: 40px;
     cursor: pointer;
-    z-index: 10px;
+    z-index: 10;
+    
 }
 /* Show in Firefox on hover */
 .max-ul:hover{
