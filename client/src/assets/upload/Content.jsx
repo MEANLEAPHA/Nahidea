@@ -1,20 +1,29 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect, memo} from "react";
 import Select from "react-select";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 
+import {MediaPreview} from "../util/mediaUploader";
 
-import { useAnonymousTokens, AnonymousTokensCoolDown } from "../util/anonymousTokens";
+import { Skeleton } from 'antd';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import { useAnonymousTokens, AnonymousTokensCoolDown, AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
+const AnonymousPf = memo(AnonymousProfile);
+const AnonymousNm = memo(AnonymousName);
 import { content_options } from "../data/post_type_data";
+import{TagsPreview} from "../util/tagInput";
 
 const token = localStorage.getItem("token");
 
  import "../style/upload/tag.css";
  import "../style/upload/Content.css";
-
+ import "../style/upload/Postpreview.css";
 export default function Content() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -155,7 +164,7 @@ export default function Content() {
        </article>
         <article id='preview-article'> 
           <div id="preview-container">
-            < MarkdownPreview content={textBody}/>
+                 <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {mediaFiles} postTagsValue={tags} selectTypeValue={selectType?.value} isAnonymousValue={isAnonymous}/>
             {/* <PreviewRadio /> */}
           </div>
             
@@ -197,3 +206,104 @@ const PreviewRadio = () => {
     </>
   );
 };
+
+const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue}) =>{
+     const navigate = useNavigate();
+    const [displayPostOpt, setDisplayPostOpt] = useState("none");
+    const [displayBgMoreIcon, setBgMoreIcon] = useState("none");
+    const wrapperRef = useRef(null);
+    const handlePostOpt = () => {
+        const Mode = localStorage.getItem("darkMode");
+       if(displayPostOpt === "none"){
+            setDisplayPostOpt("block");
+            Mode === "true" ? setBgMoreIcon("rgb(40, 40, 40)") : setBgMoreIcon("rgb(245, 245, 245)");
+       } 
+       else{
+            setDisplayPostOpt("none");
+            setBgMoreIcon("none") 
+       } 
+    }
+    useEffect(() => {
+        function handleClickOutside(event) {
+          if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+            setDisplayPostOpt("none");
+            setBgMoreIcon("none") 
+          }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
+    return(
+
+
+                <div className="posts">
+                      <div className='post-header'>
+                              <div className='post-user-profile'>
+                                <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>
+                                  {/* <img src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" className='user-profile'/> */}
+                                  <div className='user-post-info'>
+                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName='Ha Meanleap'/> <span className='post-feeling'>{selectTypeValue}</span></p>
+                                      <p className='post-at'>Just now</p>
+                                  </div>
+                              </div>
+                          <button className='post-header-right btn-header-right' onClick={handlePostOpt} style={{background: displayBgMoreIcon, borderRadius: "10px"}} ref={wrapperRef}>
+                             <ul className='post-more-option' style={{display: displayPostOpt}} onClick={(e) => e.stopPropagation()}>
+                                    <li className='li-more-option' onClick={() => navigate("/login")}>
+                                        <FontAwesomeIcon icon={faPenToSquare} className='icon-option'/> Edit Post
+                                    </li>
+                                    <li className='li-more-option'>
+                                        <FontAwesomeIcon icon={faTrashCan} className='icon-option'/> Delete Post
+                                    </li>
+                                    <li className='li-more-option'>
+                                        <FontAwesomeIcon icon={faFlag} className='icon-option'/> Report Post
+                                    </li>
+                                    <li className='li-more-option'>
+                                        <FontAwesomeIcon icon={faCopy} className='icon-option'/> Copy Link
+                                    </li>
+                                </ul>
+                                <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+                          </button>
+                      </div>
+                      <div className='post-body'>
+                         
+
+                        {
+                          titleValue === "" && textBodyValue === "" && postTagsValue.length === 0? <Skeleton active/> : (
+                            <div>
+                               <div className='post-caption'>
+                                 <p>{titleValue}</p>
+                              </div>
+                              <div className='post-body-text'>
+                                  <MarkdownPreview content={textBodyValue}/>
+                              </div>
+                              <div className='post-tags'>
+                                  <TagsPreview tagsValue={postTagsValue}/>
+                              </div>
+                            </div>
+                          )
+                        }
+
+
+                        <div  className='post-thumbnail'>
+                           
+                           <MediaPreview files={filesMediaValues}/>
+                        </div>
+                      </div>
+                      <div className='post-footer'>
+                          <div className='post-footer-left'>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>12</span><span className='count-label'> Likes</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>12</span><span className='count-label'> Comments</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faRetweet} /><p><span>12</span><span className='count-label'> Reposts</span></p></button>
+                          </div>
+                          <div className='post-footer-right'>
+                              <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                          </div>  
+                      </div>
+                </div>
+       
+
+
+    )
+}

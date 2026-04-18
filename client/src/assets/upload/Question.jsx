@@ -5,7 +5,7 @@ import Select from "react-select";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import TagInput from "../util/tagInput";
+import {TagInput }from "../util/tagInput";
 import {useAnonymousTokens, AnonymousToggle, AnonymousTokensCoolDown}from "../util/anonymousTokens";
 import { toast, ToastContainer } from "react-toastify";
 import { question_options,iconOptions } from "../data/post_type_data";

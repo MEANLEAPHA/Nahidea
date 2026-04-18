@@ -1,7 +1,8 @@
 import React, { useRef, useMemo, useState} from "react";
 import {RightOutlined , CloseOutlined,TagsOutlined,CloudUploadOutlined,DeleteOutlined, PlusOutlined, ClearOutlined, LeftOutlined} from '@ant-design/icons';
 import { Carousel } from 'antd';
-export default function MediaUploader({ maxFiles = 5, value = [], onChange }) {
+import { Skeleton } from 'antd';
+export  function MediaUploader({ maxFiles = 5, value = [], onChange }) {
   const multiInputRef = useRef(null);
 
   const handleMultiSelect = (e) => {
@@ -143,6 +144,58 @@ return (
 );
 }
 
+export  function MediaPreview({ files = [] }) {
+  if (!files.length) {
+    return (
+      <div className="media-preview-empty">
+          <Skeleton.Image active />
+      </div>
+    );
+  }
+
+  const mediaFileUrl = (file) => URL.createObjectURL(file);
+
+  return (
+    <Carousel
+      arrows
+      infinite={true}
+      className="media-preview-carousel"
+      swipe={true}
+      draggable={true}
+      autoplay={{ pauseOnHover: true }}
+      autoplaySpeed={8000}
+      prevArrow={
+        <button className="slick-arrow slick-prev">
+          <LeftOutlined />
+        </button>
+      }
+      nextArrow={
+        <button className="slick-arrow slick-next">
+          <RightOutlined />
+        </button>
+      }
+    >
+      {files.map((file, idx) => (
+        <div className="carousel-slide" key={idx}>
+          {(file.type || "").startsWith("image/") ? (
+            <div
+              className="preview-wrapper"
+              style={{ "--preview-url": `url(${mediaFileUrl(file)})` }}
+            >
+              <img
+                src={mediaFileUrl(file)}
+                alt={file.name || `preview-${idx}`}
+                className="preview-image"
+              />
+            </div>
+          ) : (
+            <div className="video-placeholder">Video file selected</div>
+          )}
+        </div>
+      ))}
+    </Carousel>
+  );
+}
 
 
             {/* {value.map((file, idx) => (

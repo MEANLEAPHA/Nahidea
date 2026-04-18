@@ -1,12 +1,14 @@
 // src/utils/anonymousTokens.js
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
+
+  import nahideaWhite from "../img/nahideaAuth.png";
   
 const STORAGE_TOKENS = "AnnoymousUsed";
 const STORAGE_RESET = "AnnoymousResetDate";
 
 import React from "react";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 // Compute next local midnight
  function getNextLocalMidnight() {
   const now = new Date();
@@ -106,6 +108,52 @@ export  function useAnonymousTokens() {
   };
 
   return { tokens, countdown, consume };
+}
+
+export function AnonymousName({
+  enabled,
+  realName
+}){
+  const generateNum = Array.from({length: 6}, ()=> Math.floor(Math.random() *10)).join("");
+  const nameGenerate = `An${generateNum}nymous`;
+ const name = enabled ? nameGenerate :  realName;
+  return (
+    <span className="anonymous-name">
+      {name}
+    </span>
+  );
+
+};
+
+export function AnonymousProfile({ enabled, realPf }) {
+  const colors = [
+    "yellowgreen", "skyblue", "tomato", "yellow",
+    "purple", "orange", "grey", "black", "brown",
+    "pink", "cyan"
+  ];
+
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  const colorName = colors[randomIndex];
+
+  const pf = enabled
+    ? (
+      <div
+        style={{
+          backgroundColor: colorName,
+          borderRadius: "50%",
+          width: "40px",
+          height: "40px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <img src={nahideaWhite} alt="anon icon" style={{width: "35px"}}/>
+      </div>
+    )
+    : <img src={realPf} className="user-profile" alt="profile" />;
+
+  return pf;
 }
 
 export function AnonymousToggle({

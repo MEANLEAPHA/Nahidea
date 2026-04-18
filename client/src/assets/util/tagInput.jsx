@@ -108,7 +108,7 @@
 
 import React, { useState } from "react";
 import { CloseOutlined,ClearOutlined,TagOutlined  } from '@ant-design/icons';
-export default function TagInput({ value = [], onChange, maxTags = 5 }) {
+export  function TagInput({ value = [], onChange, maxTags = 5 }) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
 
@@ -203,6 +203,18 @@ export default function TagInput({ value = [], onChange, maxTags = 5 }) {
 
       {error && <div className="tags-error">{error}</div>}
      
+    </div>
+  );
+}
+
+
+export const TagsPreview = ({ tagsValue}) => {
+  return (
+    <div className="tags-preview">
+      <TagOutlined /> 
+      {tagsValue.map((t, i) => (
+          <span className="tag-text"> {t}</span>
+      ))}
     </div>
   );
 }

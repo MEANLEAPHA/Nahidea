@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 import { useAnonymousTokens, AnonymousToggle, AnonymousTokensCoolDown } from "../util/anonymousTokens";
 import { confession_options } from "../data/post_type_data";
-import TagInput from "../util/tagInput";
+import {TagInput }from "../util/tagInput";
 
 import "../style/upload/tag.css";
 

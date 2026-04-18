@@ -1,6 +1,6 @@
 import React, { useState, memo, useEffect, useRef} from "react";
-import TagInput from "../util/tagInput";
-import MediaUploader from "../util/mediaUploader";
+import{TagInput} from "../util/tagInput";
+import {MediaUploader} from "../util/mediaUploader";
 import { AnonymousToggle } from "../util/anonymousTokens";
 import { EditOutlined ,TagsOutlined,CloudUploadOutlined   } from '@ant-design/icons';
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -323,7 +323,7 @@ const MemoEditor = memo(TiptapEditor);
     <div id="select-radio-type">
   
       <div className='radio-button-div-type'>
-        {[{label: 'Text', icon: <EditOutlined />, id: 1},
+        {[{label: 'Body Text', icon: <EditOutlined />, id: 1},
                       {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 2},
                       {label: 'Tags', icon: <TagsOutlined />, id: 3},
                       {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 4},
