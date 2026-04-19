@@ -210,11 +210,11 @@ export  function TagInput({ value = [], onChange, maxTags = 5 }) {
 
 export const TagsPreview = ({ tagsValue}) => {
   return (
-    <div className="tags-preview">
-      <TagOutlined /> 
+    <>
+      {/* {tagsValue.length !== 0 && <TagOutlined id='tag-icon'/>} */}
       {tagsValue.map((t, i) => (
-          <span className="tag-text"> {t}</span>
+          <span className="tag-text">#{t}</span> // will use as link later
       ))}
-    </div>
+    </>
   );
 }

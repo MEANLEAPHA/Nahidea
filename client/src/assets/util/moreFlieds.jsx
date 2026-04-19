@@ -354,9 +354,16 @@ const MemoEditor = memo(TiptapEditor);
 
 
 export const MarkdownPreview = ({ content }) => {
+// const normalized = (content || "")
+//   .replace(/^\s*\n+/, "")
+//   .replace(/\n+\s*$/, "")
+//   .replace(/\n{3,}/g, "\n\n"); 
+
+
   return (
     <div className="markdown-preview">
       <ReactMarkdown remarkPlugins={[remarkGfm]} >
+        {/* {normalized} */}
         {content || ""}
       </ReactMarkdown>
     </div>

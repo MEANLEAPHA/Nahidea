@@ -2,7 +2,7 @@
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
 
-  import nahideaWhite from "../img/nahideaAuth.png";
+  import nahideaAuth from "../img/nahideaAuth.png";
   
 const STORAGE_TOKENS = "AnnoymousUsed";
 const STORAGE_RESET = "AnnoymousResetDate";
@@ -137,19 +137,9 @@ export function AnonymousProfile({ enabled, realPf }) {
 
   const pf = enabled
     ? (
-      <div
-        style={{
+        <img src={nahideaAuth} alt="anon icon" style={{width: "35px"}}  className="user-profile" style={{
           backgroundColor: colorName,
-          borderRadius: "50%",
-          width: "40px",
-          height: "40px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <img src={nahideaWhite} alt="anon icon" style={{width: "35px"}}/>
-      </div>
+        }}/>
     )
     : <img src={realPf} className="user-profile" alt="profile" />;
 

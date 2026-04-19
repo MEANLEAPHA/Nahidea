@@ -8,8 +8,10 @@ import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 
 import {MediaPreview} from "../util/mediaUploader";
 
-import { Skeleton } from 'antd';
-import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined  } from '@ant-design/icons';
+
+
+import { Skeleton, Menu, Switch  } from 'antd';
+import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
@@ -166,15 +168,21 @@ export default function Content() {
       </div>
         
       </form>
+      <div id="article-rule">
+        <DropDownRule/>
+      </div>
       
        </article>
 
         <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
           <br />
-          <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
+          <div id="pre-header">
+            <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
+            <PreviewRadio textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous}/>
+          </div>
           
           <div id="preview-container">
-                 <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {mediaFiles} postTagsValue={tags} selectTypeValue={selectType?.value} isAnonymousValue={isAnonymous}/>
+               
             {/* <PreviewRadio /> */}
           </div>
             
@@ -182,7 +190,7 @@ export default function Content() {
     </div>
   );
 }
-const PreviewRadio = () => {
+const PreviewRadio = ({textBody, title, filesMedia, postTag, selectType, isAnonymous}) => {
   const [selected, setSelected] = useState("Preivew");
 
   return (
@@ -190,7 +198,7 @@ const PreviewRadio = () => {
       {/* Radio-style buttons */}
       <div id="select-radio">
         <div  className='radio-button-div'>
-             {["Preivew", "Document"].map((opt) => (
+             {["Preivew", "Document", "Content Rule"].map((opt) => (
           <button
             key={opt}
             onClick={() => setSelected(opt)}
@@ -208,16 +216,17 @@ const PreviewRadio = () => {
 
       {/* Word underneath */}
       <div style={{ marginTop: "10px", color: "#555", fontSize: "14px" }}>
-         {selected === "Preivew" ? "A" : "D"}
-         <div style={{ marginTop: "10px" }}>
+         {  <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === "Preivew" ? "block" : "none"}/>}
+         {selected === "Document" ? "D" : "0"}
+         {selected === "Content Rule" ? "C" : "0"}
 
-</div>
-      </div>
+    </div>
+     
     </>
   );
 };
 
-const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue}) =>{
+const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue, displaySelected}) =>{
      const navigate = useNavigate();
     const [displayPostOpt, setDisplayPostOpt] = useState("none");
     const [displayBgMoreIcon, setBgMoreIcon] = useState("none");
@@ -248,13 +257,13 @@ const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selec
     return(
 
 
-                <div className="posts">
+                <div className="posts" style={{display:displaySelected}}>
                       <div className='post-header'>
                               <div className='post-user-profile'>
                                 <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>
                                   {/* <img src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" className='user-profile'/> */}
                                   <div className='user-post-info'>
-                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName='Ha Meanleap'/> <span className='post-feeling'>{selectTypeValue}</span></p>
+                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName='Ha Meanleap'/></p>
                                       <p className='post-at'>Just now</p>
                                   </div>
                               </div>
@@ -280,10 +289,13 @@ const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selec
                          
 
                         {
-                          titleValue === "" && textBodyValue === "" && postTagsValue.length === 0? <Skeleton active/> : (
+                          titleValue === "" && textBodyValue === "" && postTagsValue.length === 0? <div className='post-skeleton-holder'><Skeleton active/></div> : (
                             <div>
                                <div className='post-caption'>
                                  <p>{titleValue}</p>
+                              </div>
+                              <div className='post-content-type'>
+                                  <span className='content-type'>{selectTypeValue}</span>
                               </div>
                               <div className='post-body-text'>
                                   <MarkdownPreview content={textBodyValue}/>
@@ -314,3 +326,68 @@ const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selec
                 </div>
     )
 }
+
+const items = [
+  {
+    key: 'sub1',
+    label: 'Rule 1',
+    icon: <MailOutlined />,
+    children: [
+      { key: '1', label: 'hi' },
+      { key: '2', label: 'Option 2' },
+      { key: '3', label: 'Option 3' },
+      { key: '4', label: 'Option 4' },
+    ],
+  },
+  {
+    key: 'sub2',
+    label: 'Rule blah blah',
+    icon: <AppstoreOutlined />,
+    children: [
+      { key: '5', label: 'Option 5' },
+      { key: '6', label: 'Option 6' },
+      {
+        key: 'sub3',
+        label: 'Submenu',
+        children: [
+          { key: '7', label: 'Option 7' },
+          { key: '8', label: 'Option 8' },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'sub4',
+    label: 'Rule of Survival',
+    icon: <SettingOutlined />,
+    children: [
+      { key: '9', label: 'Option 9' },
+      { key: '10', label: 'Option 10' },
+      { key: '11', label: 'Option 11' },
+      { key: '12', label: 'Option 12' },
+    ],
+  },
+];
+const DropDownRule = () => {
+  
+  const [current, setCurrent] = useState('1');
+ 
+  const onClick = e => {
+    console.log('click ', e);
+    setCurrent(e.key);
+  };
+  return (
+    <>
+      
+      <Menu
+       
+        onClick={onClick}
+        style={{ width: 256 }}
+        defaultOpenKeys={['sub1']}
+        selectedKeys={[current]}
+        mode="inline"
+        items={items}
+      />
+    </>
+  );
+};
