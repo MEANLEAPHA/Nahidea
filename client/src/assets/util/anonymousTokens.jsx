@@ -2,8 +2,8 @@
  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
 
-  import nahideaAuth from "../img/nahideaAuth.png";
-  
+  import nahIdeaAuth from "../img/nahIdeaAuth.png";
+
 const STORAGE_TOKENS = "AnnoymousUsed";
 const STORAGE_RESET = "AnnoymousResetDate";
 
