@@ -133,3 +133,14 @@ export const iconOptions = [
   { id: 3, name: "happy", icon: faSmile },
   { id: 4, name: "crying", icon: faSadTear },
 ];
+
+
+export const question_type = [
+  {id:1, label:"Open End", value:"openend"},
+  {id:2, label:"Closed End", value:"closedend"},
+  {id:3, label:"Single Choice", value:"singlechoice"},
+  {id:4, label:"Multiple Choice", value:"multiplechoice"},
+  {id:5, label:"Range", value:"range"},
+  {id:6, label:"Rating", value:"rating"},
+  {id:7, label:"Ranking Order", value:"rankingorder"}
+];

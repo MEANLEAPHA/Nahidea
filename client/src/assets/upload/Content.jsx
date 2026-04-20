@@ -26,6 +26,7 @@ const token = localStorage.getItem("token");
  import "../style/upload/tag.css";
  import "../style/upload/Content.css";
  import "../style/upload/Postpreview.css";
+ 
 export default function Content() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -175,54 +176,47 @@ export default function Content() {
        </article>
 
         <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
-          <br />
-          <div id="pre-header">
-            <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
-            <PreviewRadio textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous}/>
-          </div>
-          
-          <div id="preview-container">
-               
-            {/* <PreviewRadio /> */}
-          </div>
-            
+            <PreviewRadio textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}/>
         </article>
     </div>
   );
 }
-const PreviewRadio = ({textBody, title, filesMedia, postTag, selectType, isAnonymous}) => {
-  const [selected, setSelected] = useState("Preivew");
+const PreviewRadio = ({textBody, title, filesMedia, postTag, selectType, isAnonymous, setOpenPreview}) => {
+  const [selected, setSelected] = useState(1);
 
   return (
-    <>
-      {/* Radio-style buttons */}
-      <div id="select-radio">
+  
+    <div id="select-action-dev">
+         <div id="select-radio">
+          <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
         <div  className='radio-button-div'>
-             {["Preivew", "Document", "Content Rule"].map((opt) => (
+             {[{id: 1, label: "Preview"}, {id: 2, label: "Document"}, {id: 3, label: "Content Rule"}].map((opt) => (
           <button
-            key={opt}
-            onClick={() => setSelected(opt)}
+            key={opt.id}
+            onClick={() => setSelected(opt.id)}
             style={{
-              border: selected === opt ? "2px solid #fd7648" : "2px solid transparent",
-              color: selected === opt ? "#fd7648" : "grey",
+              border: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+              color: selected === opt.id ? "#fd7648" : "grey",
             }}
             className='radio-button'
           >
-            {opt}
+            {opt.label}
           </button>
         ))}
         </div>
       </div>
 
       {/* Word underneath */}
-      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px" }}>
-         {  <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === "Preivew" ? "block" : "none"}/>}
-         {selected === "Document" ? "D" : "0"}
-         {selected === "Content Rule" ? "C" : "0"}
+      <div id="result-selected">
+         {  <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none"}/>}
+         {selected === "Document" && "D" }
+         {selected === "Content Rule" &&"C" }
 
     </div>
      
-    </>
+    </div>
+    
+
   );
 };
 

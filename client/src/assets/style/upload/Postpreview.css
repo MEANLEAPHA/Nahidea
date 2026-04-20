@@ -19,6 +19,61 @@
      --back-con:rgb(40, 40, 40);
      --link-color:#1a73e8;
 }
+
+#pre-view-body{
+width: 80%;
+margin: auto;
+height: 100%;
+display: flex;
+
+margin-top: 10px;
+
+}
+#select-action-dev{
+    width: 95%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: end;
+    margin-top: 15px;
+    
+}
+#select-radio{
+    display: flex;
+    width: 70%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    margin: auto;
+}
+#result-selected{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+#preview-closed-arrow{
+     border: none;
+    height: auto;
+    opacity: 0.8;
+    background: var(--back-con);
+    color: var(--font-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 10px ;
+    border-radius: 25px;
+}
+#preview-closed-arrow:hover{
+    opacity: 1;
+}
+
+
+
+
+
+
+
 /* POST UI DESIGN */
 .posts{
     width: 70%;

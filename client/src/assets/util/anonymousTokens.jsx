@@ -137,7 +137,7 @@ export function AnonymousProfile({ enabled, realPf }) {
 
   const pf = enabled
     ? (
-        <img src={nahideaAuth} alt="anon icon" style={{width: "35px"}}  className="user-profile" style={{
+        <img src={nahIdeaAuth} alt="anon icon" style={{width: "35px"}}  className="user-profile" style={{
           backgroundColor: colorName,
         }}/>
     )

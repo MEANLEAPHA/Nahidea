@@ -404,8 +404,9 @@ export const MarkdownPreview = ({ content }) => {
       {selected === 1 && (<div>
           {
             confessionFileValue === null ? (
-              <div className="confession-file-upload">
+             
                 <label >
+                   <div className="confession-file-upload" style={{padding: '50px', backgroundColor: '#dd2626'}}>
                   <FontAwesomeIcon icon={faImages} />
                   <input
                   type="file"
@@ -414,8 +415,9 @@ export const MarkdownPreview = ({ content }) => {
                   style={{ display: "none" }}
                 />
                   <p>Upload an image</p>
+                   </div>
                 </label>
-              </div>
+             
             ) : (
               <div className="confession-file-preview">
                 <img
@@ -425,6 +427,75 @@ export const MarkdownPreview = ({ content }) => {
                 <button
                   type="button"
                   onClick={() => setConfessionFileValue(null)}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          }
+      </div>)}
+      {selected === 2 && <TagInput value={tags} onChange={setTags} />}
+      {selected === 3 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
+      </div>
+      </>
+  );
+});
+
+ export const MoreFieldsQuestion = memo(({
+  tags, setTags,
+  mediaFiles, setMediaFiles,
+  isAnonymous, setIsAnonymous, tokens,
+  questionFileValue, setQuestionFileValue
+}) => {
+  const [selected, setSelected] = useState(1);
+
+  return (
+    <>
+    <div id="select-radio-type">
+  
+      <div className='radio-button-div-type'>
+        {[            
+                      {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 1},
+                      {label: 'Tags', icon: <TagsOutlined />, id: 2},
+                      {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 3},
+                    ].map((opt) => (
+          <button key={opt.id} onClick={() => setSelected(opt.id)} type="button" className='radio-button-type' style={{
+              borderBottom: selected === opt.id ? "3px solid #fd7648" : "3px solid transparent",
+              color: selected === opt.id ? "#fd7648" : "grey",
+            }}>
+            {opt.icon}{" "}{opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
+     
+      {selected === 1 && (<div>
+          {
+            questionFileValue === null ? (
+             
+                <label >
+                   <div className="Question-file-upload" style={{padding: '50px', backgroundColor: '#dd2626'}}>
+                  <FontAwesomeIcon icon={faImages} />
+                  <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setQuestionFileValue(e.target.files[0])}
+                  style={{ display: "none" }}
+                />
+                  <p>Upload an image</p>
+                   </div>
+                </label>
+             
+            ) : (
+              <div className="Question-file-preview">
+                <img
+                  src={URL.createObjectURL(questionFileValue)}
+                  alt="Question"
+                />
+                <button
+                  type="button"
+                  onClick={() => setQuestionFileValue(null)}
                 >
                   Remove
                 </button>

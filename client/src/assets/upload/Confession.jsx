@@ -24,8 +24,8 @@ import {MoreFieldsConfession, MarkdownPreview} from "../util/moreFlieds";
 
 import {MediaPreview} from "../util/mediaUploader";
 
-import { Skeleton } from 'antd';
-import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined  } from '@ant-design/icons';
+import { Skeleton, Menu, Switch  } from 'antd';
+import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined   } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
@@ -125,7 +125,7 @@ export default function Confession() {
          <div id='form-header-label'>
                   <p id="content-label">Create Confession</p> 
                   <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
-                  </div>
+          </div>
 
        
 
@@ -134,7 +134,7 @@ export default function Confession() {
           value={selectType}
           onChange={setSelectType}
           classNamePrefix="custom"
-                placeholder="Select Content Type"
+          placeholder="Select Content Type"
         />
          <div className="title-wrapper">
             <p className="title-label" >Confession Text</p>
@@ -154,44 +154,17 @@ export default function Confession() {
             </div>
           </div>
 
-         {/* <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Confess something..."
-          type="text"
-          required
-        /> */}
-{/* 
-        <TagInput value={tags} onChange={setTags} /> */}
 
         <MoreFieldsConfession
           tags={tags}
           setTags={setTags}
-          // mediaFiles={mediaFiles}
-          // setMediaFiles={setMediaFiles}
           isAnonymous={isAnonymous}
           setIsAnonymous={setIsAnonymous}
           tokens={tokens}
-
           confessionFileValue={confessionFile}
           setConfessionFileValue={setFile}
-          // textBodyValue={textBody}
-          // setTextBodyValue = {setTextBody}
         />
-        {/* <input
-          type="file"
-          accept="image/*"
-          ref={refFile}
-          onChange={(e) => setFile(e.target.files[0])}
-        /> */}
-{/* 
-        <AnonymousToggle
-          enabled={isAnonymous}
-          setEnabled={setIsAnonymous}
-          tokens={tokens}
-        /> */}
-
-        
+       
       <div id="form-footer">
           <button type="submit" disabled={loading} id="content-post-button">
                 {loading ? "Confessing..." : "Confess"}
@@ -205,19 +178,245 @@ export default function Confession() {
         <p>Nahidea. © 2026. All rights reserved </p>
       </div>
       </form>
+        <div id="article-rule">
+        <DropDownRule/>
+      </div>
       </article>
-        <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
-          <br />
-          <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
-          
-          {/* <div id="preview-container">
-                 <Post textBodyValue={textBody} titleValue={title} filesMediaValues= {mediaFiles} postTagsValue={tags} selectTypeValue={selectType?.value} isAnonymousValue={isAnonymous}/>
-    
-          </div> */}
-            
+       <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
+            <PreviewRadio  title={title} filesMedia= {confessionFile} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}/>
         </article>
 
       
     </div>
   );
 }
+const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, setOpenPreview}) => {
+  const [selected, setSelected] = useState(1);
+
+  return (
+  
+    <div id="select-action-dev">
+         <div id="select-radio">
+          <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
+        <div  className='radio-button-div'>
+             {[{id: 1, label: "Preview"}, {id: 2, label: "Document"}, {id: 3, label: "Content Rule"}].map((opt) => (
+          <button
+            key={opt.id}
+            onClick={() => setSelected(opt.id)}
+            style={{
+              border: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+              color: selected === opt.id ? "#fd7648" : "grey",
+            }}
+            className='radio-button'
+          >
+            {opt.label}
+          </button>
+        ))}
+        </div>
+      </div>
+
+      {/* Word underneath */}
+      <div id="result-selected">
+         {  <Post  titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none"}/>}
+         {selected === "Document" && "D" }
+         {selected === "Content Rule" &&"C" }
+
+    </div>
+     
+    </div>
+    
+
+  );
+};
+
+const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue, displaySelected}) =>{
+     const navigate = useNavigate();
+    const [displayPostOpt, setDisplayPostOpt] = useState("none");
+    const [displayBgMoreIcon, setBgMoreIcon] = useState("none");
+    const wrapperRef = useRef(null);
+    const handlePostOpt = () => {
+        const Mode = localStorage.getItem("darkMode");
+       if(displayPostOpt === "none"){
+            setDisplayPostOpt("block");
+            Mode === "true" ? setBgMoreIcon("rgb(40, 40, 40)") : setBgMoreIcon("rgb(245, 245, 245)");
+       } 
+       else{
+            setDisplayPostOpt("none");
+            setBgMoreIcon("none") 
+       } 
+    }
+    useEffect(() => {
+        function handleClickOutside(event) {
+          if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+            setDisplayPostOpt("none");
+            setBgMoreIcon("none") 
+          }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
+      
+    return(
+
+
+                <div className="posts" style={{display:displaySelected}}>
+                      <div className='post-header'>
+                              <div className='post-user-profile'>
+                                <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>
+                                  {/* <img src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" className='user-profile'/> */}
+                                  <div className='user-post-info'>
+                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName='Ha Meanleap'/></p>
+                                      <p className='post-at'>Just now</p>
+                                  </div>
+                              </div>
+                              
+                          <button className='post-header-right btn-header-right' onClick={handlePostOpt} style={{background: displayBgMoreIcon, borderRadius: "10px"}} ref={wrapperRef}>
+                             <ul className='post-more-option' style={{display: displayPostOpt}} onClick={(e) => e.stopPropagation()}>
+                                    <li className='li-more-option' onClick={() => navigate("/login")}>
+                                        <FontAwesomeIcon icon={faPenToSquare} className='icon-option'/> Edit Post
+                                    </li>
+                                    <li className='li-more-option'>
+                                        <FontAwesomeIcon icon={faTrashCan} className='icon-option'/> Delete Post
+                                    </li>
+                                    <li className='li-more-option'>
+                                        <FontAwesomeIcon icon={faFlag} className='icon-option'/> Report Post
+                                    </li>
+                                    <li className='li-more-option'>
+                                        <FontAwesomeIcon icon={faCopy} className='icon-option'/> Copy Link
+                                    </li>
+                                </ul>
+                                <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+                          </button>
+                      </div>
+                      <div className='post-body'>
+                         
+
+                        {
+                          titleValue === ""  && postTagsValue.length === 0? <div className='post-skeleton-holder'><Skeleton active/></div> : (
+                            <div>
+                               <div className='post-caption'>
+                                 <p>{titleValue}</p>
+                              </div>
+                              <div className='post-content-type'>
+                                  <span className='content-type'>{selectTypeValue}</span>
+                              </div>
+                              <div className='post-tags'>
+                                  <TagsPreview tagsValue={postTagsValue}/>
+                              </div>
+                            </div>
+                          )
+                        }
+
+
+                    <div className="post-thumbnail">
+  {filesMediaValues ? (
+    <img
+      src={URL.createObjectURL(filesMediaValues)}
+      alt="Confession"
+    />
+  ) : null}
+</div>
+
+                      </div>
+                      <div className='post-footer'>
+                          <div className='post-footer-left'>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>0</span><span className='count-label'> Like</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>0</span><span className='count-label'> Comment</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faRetweet} /><p><span>0</span><span className='count-label'> Repost</span></p></button>
+                          </div>
+                          <div className='post-footer-right'>
+                              <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                          </div>  
+                      </div>
+                </div>
+    )
+}
+const items = [
+  {
+    key: 'sub1',
+    label: 'Rule 1',
+    icon: <MailOutlined />,
+    children: [
+      { key: '1', label: 'hi' },
+      { key: '2', label: 'Option 2' },
+      { key: '3', label: 'Option 3' },
+      { key: '4', label: 'Option 4' },
+    ],
+  },
+  {
+    key: 'sub2',
+    label: 'Rule blah blah',
+    icon: <AppstoreOutlined />,
+    children: [
+      { key: '5', label: 'Option 5' },
+      { key: '6', label: 'Option 6' },
+      {
+        key: 'sub3',
+        label: 'Submenu',
+        children: [
+          { key: '7', label: 'Option 7' },
+          { key: '8', label: 'Option 8' },
+        ],
+      },
+    ],
+  },
+  {
+    key: 'sub4',
+    label: 'Rule of Survival',
+    icon: <SettingOutlined />,
+    children: [
+      { key: '9', label: 'Option 9' },
+      { key: '10', label: 'Option 10' },
+      { key: '11', label: 'Option 11' },
+      { key: '12', label: 'Option 12' },
+    ],
+  },
+];
+const DropDownRule = () => {
+  
+  const [current, setCurrent] = useState('1');
+ 
+  const onClick = e => {
+    console.log('click ', e);
+    setCurrent(e.key);
+  };
+  return (
+    <>
+      
+      <Menu
+       
+        onClick={onClick}
+        style={{ width: 256 }}
+        defaultOpenKeys={['sub1']}
+        selectedKeys={[current]}
+        mode="inline"
+        items={items}
+      />
+    </>
+  );
+};
+
+ {/* <input
+          type="file"
+          accept="image/*"
+          ref={refFile}
+          onChange={(e) => setFile(e.target.files[0])}
+        /> */}
+{/* 
+        <AnonymousToggle
+          enabled={isAnonymous}
+          setEnabled={setIsAnonymous}
+          tokens={tokens}
+        /> */}
+
+         {/* <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Confess something..."
+          type="text"
+          required
+        /> */}
+{/* 
+        <TagInput value={tags} onChange={setTags} /> */}
