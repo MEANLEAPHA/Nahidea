@@ -32,7 +32,7 @@ export default function Home() {
       );
 
       const playLoad = res.data;
-      if(!playload || !Array.isArray(playload.data)){
+      if(!playLoad || !Array.isArray(playLoad.data)){
         throw new Error("Something wrong with our Server Sorry!");
       }
       setPosts(playLoad.data || []);
