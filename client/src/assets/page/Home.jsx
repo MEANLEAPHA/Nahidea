@@ -226,6 +226,13 @@ import {
 import { ReloadOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
+const parseJSON = (val) => {
+  try {
+    return typeof val === "string" ? JSON.parse(val) : val;
+  } catch {
+    return [];
+  }
+};
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
