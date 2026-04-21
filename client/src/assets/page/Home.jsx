@@ -17,36 +17,78 @@ const parseJSON = (val) => {
 };
 
 export default function Home() {
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [source, setSource] = useState("");
   const [error, setError] = useState(null);
 
-  const fetchPosts = async () => {
-    try {
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(()=>{
+    const handleScroll =()=>{
+      if(window.innerHeight + window.screenY >= document.body.offsetHeight - 200 && !loading && hasMore){
+        fetchPosts(page + 1)
+      }
+
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, hasMore, page])
+
+  const fetchPosts = async(nextPage = 1) =>{
+    try{
       setLoading(true);
-      setError(null);
 
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/all-posts`
+        `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`
       );
 
       const playLoad = res.data;
-      if(!playLoad || !Array.isArray(playLoad.data)){
+       const newPosts = playLoad.data;
+      if(!playLoad || !Array.isArray(newPosts)){
         throw new Error("Something wrong with our Server Sorry!");
       }
-      setPosts(playLoad.data || []);
+     
+      setPosts(prev => [...prev, ...newPosts]);
       setSource(playLoad.source);
-    } catch (err) {
-      setError("Failed to load posts");
-    } finally {
+      setPage(nextPage)
+
+    }
+    catch{
+      setError('Failed to load post')
+    }
+    finally{
       setLoading(false);
     }
-  };
+  }
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  // const fetchPosts = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_SERVER_URL}/api/all-posts`
+  //     );
+
+  //     const playLoad = res.data;
+  //     if(!playLoad || !Array.isArray(playLoad.data)){
+  //       throw new Error("Something wrong with our Server Sorry!");
+  //     }
+  //     setPosts(playLoad.data || []);
+  //     setSource(playLoad.source);
+  //   } catch (err) {
+  //     setError("Failed to load posts");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchPosts();
+  // }, []);
 
   const renderPostContent = (post) => {
     const data = post.data;
