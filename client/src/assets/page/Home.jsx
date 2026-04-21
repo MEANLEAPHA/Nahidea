@@ -20,7 +20,7 @@ export default function Home() {
       setError(null);
 
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/all-posts`
+        `${import.meta.env.VITE_SERVER_URL}/api/all-posts`
       );
 
       setPosts(res.data.data || []);
