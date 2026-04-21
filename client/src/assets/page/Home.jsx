@@ -8,6 +8,14 @@ const { Text, Title } = Typography;
 
 import '../style/page/Home.css';
 
+const parseJSON = (val) => {
+  try {
+    return typeof val === "string" ? JSON.parse(val) : val;
+  } catch {
+    return [];
+  }
+};
+
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,8 +31,12 @@ export default function Home() {
         `${import.meta.env.VITE_SERVER_URL}/api/all-posts`
       );
 
-      setPosts(res.data.data || []);
-      setSource(res.data.source);
+      const playLoad = res.data;
+      if(!playload || !Array.isArray(playload.data)){
+        throw new Error("Something wrong with our Server Sorry!");
+      }
+      setPosts(playLoad.data || []);
+      setSource(playLoad.source);
     } catch (err) {
       setError("Failed to load posts");
     } finally {
@@ -47,6 +59,7 @@ export default function Home() {
           <>
             <Title level={5}>{data.title}</Title>
             <Text>{data.text_body}</Text>
+            <div>{parseJSON(data.media_url)}</div>
           </>
         );
 
