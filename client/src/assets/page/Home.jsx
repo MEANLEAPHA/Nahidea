@@ -1,5 +1,5 @@
 import React from 'react';
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { List, Card, Spin, Tag, Avatar, Typography, Space, Empty, Button } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
