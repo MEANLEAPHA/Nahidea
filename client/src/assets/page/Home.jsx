@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import nahideaTran from "../img/nahidea-tran.png";
-
+import { useNavigate } from "react-router-dom";
 import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
@@ -128,7 +128,7 @@ export default function Home() {
   // Content style
   const renderPostContent = (post) => {
     const data = post.data;
-
+     const navigate = useNavigate();
     if (!data) return <Text type="secondary">No content</Text>;
 
     switch (post.post_type) {
@@ -320,7 +320,7 @@ const Loader = () => {
 }
 
 const DotDropDown = ({ theme, toggleTheme  }) => {
-  const navigate = useNavigate();
+
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
