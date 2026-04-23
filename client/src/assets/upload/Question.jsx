@@ -162,7 +162,7 @@ const handleSubmit = async (e) => {
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "question");
   formData.append("question_related_to", selectType?.value ?? "general");
-  formData.append("isAnonymous", isAnonymous);
+  formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
   if(anonymousName) formData.append("anonymousName", anonymousName);
   if(questionFile){
      formData.append("questionFile", questionFile);

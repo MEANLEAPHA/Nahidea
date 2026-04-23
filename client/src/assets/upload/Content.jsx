@@ -76,7 +76,7 @@ export default function Content() {
     formData.append("content_title", title);
     formData.append("text_body", textBody);
     formData.append("content_type", selectType?.value || "general");
-    formData.append("isAnonymous", isAnonymous);
+    formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
 
     tags.forEach((t) => formData.append("tags[]", t));
     mediaFiles.forEach((f) => formData.append("contentFile", f));
