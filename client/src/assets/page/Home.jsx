@@ -319,28 +319,13 @@ const Loader = () => {
   
 }
 
-const DotDropDown = ({ theme, toggleTheme  }) => {
-
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
+const DotDropDown = () => {
 
   const menuItems = [
     {
       label: (
         <li onClick={() => navigate("/user")}>
-          <UserOutlined /> View Account
+       View Account
         </li>
       ),
       key: "0",
@@ -348,13 +333,8 @@ const DotDropDown = ({ theme, toggleTheme  }) => {
     {
       label: (
         <li
-          onClick={(e) => {
-            toggleTheme();
-            e.stopPropagation();
-          }}
         >
-          {theme ? <MoonOutlined /> : <SunOutlined />}{" "}
-          {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
+          hi
         </li>
       ),
       key: "1",
@@ -362,7 +342,7 @@ const DotDropDown = ({ theme, toggleTheme  }) => {
     {
       label: (
         <li onClick={() => navigate("/help")}>
-          <SettingOutlined /> <span>Setting</span>
+         <span>Setting</span>
         </li>
       ),
       key: "2",
@@ -370,7 +350,7 @@ const DotDropDown = ({ theme, toggleTheme  }) => {
     {
       label: (
         <li onClick={() => navigate("/help")}>
-          <QuestionCircleOutlined /> <span>Help</span>
+       <span>Help</span>
         </li>
       ),
       key: "3",
@@ -378,7 +358,7 @@ const DotDropDown = ({ theme, toggleTheme  }) => {
     {
       label: (
         <li onClick={() => navigate("/feedback")}>
-          <ExceptionOutlined /> <span>Feedback</span>
+      <span>Feedback</span>
         </li>
       ),
       key: "4",
@@ -392,7 +372,7 @@ const DotDropDown = ({ theme, toggleTheme  }) => {
     {
       label: (
         <li onClick={() => navigate("/logout")}>
-          <LogoutOutlined /> Logout
+     Logout
         </li>
       ),
       key: "6",
