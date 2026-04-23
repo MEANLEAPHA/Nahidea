@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import nahideaTran from "../img/nahidea-tran.png"
+import nahideaTran from "../img/nahidea-tran.png";
 
+import {MediaPreview} from "../util/mediaUploader";
+import{TagsPreview} from "../util/tagInput";
+import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
+ import "../style/upload/Postpreview.css";
 import {
   List,
   Card,
@@ -15,8 +19,13 @@ import {
 } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 
+import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined  } from '@ant-design/icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
-
+import {PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined} from '@ant-design/icons';
+import { Dropdown, Space } from 'antd';
 const { Title, Text } = Typography;
 const parseJSON = (val) => {
   try {
@@ -125,12 +134,51 @@ export default function Home() {
     switch (post.post_type) {
       case "content":
         return (
-          <>
-          
-            <Title level={5}>{data.title}</Title>
-            <Text>{data.text_body}</Text>
-            <div>{parseJSON(data.media_url)}</div>
-          </>
+      
+          <div className="posts">
+            <div className='post-header'>
+              <div className='post-user-profile'>
+                      <img src='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif' className="user-profile" alt="profile" />
+                      <div className='user-post-info'>
+                          <p className='post-username'>{post.username}</p>
+                          <p className='post-at'>{post.created_at}</p>
+                      </div>
+                  </div>
+              <DotDropDown/>
+            </div>
+            <div className='post-body'>
+
+              <div>
+                <div className='post-caption'>
+                    <p>{data.title}</p>
+                </div>
+                <div className='post-content-type'>
+                    <span className='content-type'>{data.type}</span>
+                </div>
+                <div className='post-body-text'>
+                    <MarkdownPreview content={data.text_body}/>
+                </div>
+                {/* <div className='post-tags'>
+                    <TagsPreview tagsValue={postTagsValue}/>
+                </div> */}
+              </div>
+
+              <div  className='post-thumbnail'>         
+                <MediaPreview files={parseJSON(data.media_url)}/>
+              </div>
+            </div>
+            <div className='post-footer'>
+                <div className='post-footer-left'>
+                  <button className='button-action-footer'><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
+                  <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
+                </div>
+                <div className='post-footer-right'>
+                  <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                </div> 
+            </div>
+          </div>
+            
+       
         );
 
       case "confession":
@@ -271,6 +319,94 @@ const Loader = () => {
   
 }
 
+const DotDropDown = ({ theme, toggleTheme  }) => {
+  const navigate = useNavigate();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const menuItems = [
+    {
+      label: (
+        <li onClick={() => navigate("/user")}>
+          <UserOutlined /> View Account
+        </li>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <li
+          onClick={(e) => {
+            toggleTheme();
+            e.stopPropagation();
+          }}
+        >
+          {theme ? <MoonOutlined /> : <SunOutlined />}{" "}
+          {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
+        </li>
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/help")}>
+          <SettingOutlined /> <span>Setting</span>
+        </li>
+      ),
+      key: "2",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/help")}>
+          <QuestionCircleOutlined /> <span>Help</span>
+        </li>
+      ),
+      key: "3",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/feedback")}>
+          <ExceptionOutlined /> <span>Feedback</span>
+        </li>
+      ),
+      key: "4",
+    },
+    {  label: (
+     
+         <hr />
+     
+      ),
+      key: "5" },
+    {
+      label: (
+        <li onClick={() => navigate("/logout")}>
+          <LogoutOutlined /> Logout
+        </li>
+      ),
+      key: "6",
+    },
+  ];
+
+  return (
+    <Dropdown menu={{ items: menuItems }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+      <div className='post-header-right'>
+      <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+      </div>
+    </Dropdown>
+  );
+};
 
 // // Content style
 //   const renderPostContent = (post) => {

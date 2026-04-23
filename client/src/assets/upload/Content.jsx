@@ -267,10 +267,6 @@ const Post = ({textBodyValue, titleValue, filesMediaValues, postTagsValue, selec
                                       <p className='post-at'>Just now</p>
                                   </div>
                               </div>
-                          {/* <button className='post-header-right btn-header-right' onClick={handlePostOpt} style={{background: displayBgMoreIcon, borderRadius: "10px"}} ref={wrapperRef}>
-                            
-                                <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
-                          </button> */}
                           <DotDropDown/>
                       </div>
                       <div className='post-body'>
