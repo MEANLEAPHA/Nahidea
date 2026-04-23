@@ -142,7 +142,7 @@ const Layout = () => {
       if (!res.ok) throw new Error("Failed to fetch username");
 
       const data = await res.json();
-      const username = data.userInfo?.username || data.username;
+      const username = data.userData?.username || data.username;
       sessionStorage.setItem("username", username);
       setUsername(username);
     } catch (err) {
