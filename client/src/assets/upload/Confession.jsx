@@ -24,6 +24,10 @@ import {MoreFieldsConfession, MarkdownPreview} from "../util/moreFlieds";
 
 import {MediaPreview} from "../util/mediaUploader";
 
+import { useOutletContext } from "react-router-dom";
+
+import {PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined} from '@ant-design/icons';
+import { Dropdown, Space } from 'antd';
 import { Skeleton, Menu, Switch  } from 'antd';
 import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined   } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -230,6 +234,7 @@ const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, set
 };
 
 const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue, displaySelected}) =>{
+     const {username} = useOutletContext();
      const navigate = useNavigate();
     const [displayPostOpt, setDisplayPostOpt] = useState("none");
     const [displayBgMoreIcon, setBgMoreIcon] = useState("none");
@@ -267,28 +272,12 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
                                 <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>
                                   {/* <img src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" className='user-profile'/> */}
                                   <div className='user-post-info'>
-                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName='Ha Meanleap'/></p>
+                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName={username}/></p>
                                       <p className='post-at'>Just now</p>
                                   </div>
                               </div>
                               
-                          <button className='post-header-right btn-header-right' onClick={handlePostOpt} style={{background: displayBgMoreIcon, borderRadius: "10px"}} ref={wrapperRef}>
-                             <ul className='post-more-option' style={{display: displayPostOpt}} onClick={(e) => e.stopPropagation()}>
-                                    <li className='li-more-option' onClick={() => navigate("/login")}>
-                                        <FontAwesomeIcon icon={faPenToSquare} className='icon-option'/> Edit Post
-                                    </li>
-                                    <li className='li-more-option'>
-                                        <FontAwesomeIcon icon={faTrashCan} className='icon-option'/> Delete Post
-                                    </li>
-                                    <li className='li-more-option'>
-                                        <FontAwesomeIcon icon={faFlag} className='icon-option'/> Report Post
-                                    </li>
-                                    <li className='li-more-option'>
-                                        <FontAwesomeIcon icon={faCopy} className='icon-option'/> Copy Link
-                                    </li>
-                                </ul>
-                                <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
-                          </button>
+                            <DotDropDown/>
                       </div>
                       <div className='post-body'>
                          
@@ -310,21 +299,22 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
                         }
 
 
-                    <div className="post-thumbnail">
-  {filesMediaValues ? (
-    <img
-      src={URL.createObjectURL(filesMediaValues)}
-      alt="Confession"
-    />
-  ) : null}
-</div>
+                      <div className="post-thumbnail">
+        {filesMediaValues ? (
+          <img
+            src={URL.createObjectURL(filesMediaValues)}
+            alt="Confession"
+          />
+        ) : <div className="media-preview-empty">
+                                  <Skeleton.Image active />
+                              </div>}
+      </div>
 
                       </div>
                       <div className='post-footer'>
                           <div className='post-footer-left'>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>0</span><span className='count-label'> Like</span></p></button>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>0</span><span className='count-label'> Comment</span></p></button>
-                              <button className='button-action-footer'><FontAwesomeIcon icon={faRetweet} /><p><span>0</span><span className='count-label'> Repost</span></p></button>
                           </div>
                           <div className='post-footer-right'>
                               <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
@@ -397,7 +387,94 @@ const DropDownRule = () => {
     </>
   );
 };
+const DotDropDown = ({ theme, toggleTheme  }) => {
+  const navigate = useNavigate();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const menuItems = [
+    {
+      label: (
+        <li onClick={() => navigate("/user")}>
+          <UserOutlined /> View Account
+        </li>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <li
+          onClick={(e) => {
+            toggleTheme();
+            e.stopPropagation();
+          }}
+        >
+          {theme ? <MoonOutlined /> : <SunOutlined />}{" "}
+          {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
+        </li>
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/help")}>
+          <SettingOutlined /> <span>Setting</span>
+        </li>
+      ),
+      key: "2",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/help")}>
+          <QuestionCircleOutlined /> <span>Help</span>
+        </li>
+      ),
+      key: "3",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/feedback")}>
+          <ExceptionOutlined /> <span>Feedback</span>
+        </li>
+      ),
+      key: "4",
+    },
+    {  label: (
+     
+         <hr />
+     
+      ),
+      key: "5" },
+    {
+      label: (
+        <li onClick={() => navigate("/logout")}>
+          <LogoutOutlined /> Logout
+        </li>
+      ),
+      key: "6",
+    },
+  ];
+
+  return (
+    <Dropdown menu={{ items: menuItems }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+      <div className='post-header-right'>
+      <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+      </div>
+    </Dropdown>
+  );
+};
  {/* <input
           type="file"
           accept="image/*"

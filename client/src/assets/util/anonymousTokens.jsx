@@ -110,11 +110,12 @@ export  function useAnonymousTokens() {
   return { tokens, countdown, consume };
 }
 
+  
 export function AnonymousName({
   enabled,
   realName
 }){
-  const generateNum = Array.from({length: 6}, ()=> Math.floor(Math.random() *10)).join("");
+const generateNum = Array.from({length: 6}, ()=> Math.floor(Math.random() *10)).join("");
   const nameGenerate = `An${generateNum}nymous`;
  const name = enabled ? nameGenerate :  realName;
   return (

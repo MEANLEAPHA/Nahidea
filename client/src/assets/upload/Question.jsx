@@ -9,14 +9,19 @@ import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashC
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 
 import {TagInput }from "../util/tagInput";
-import { useAnonymousTokens, AnonymousTokensCoolDown, AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
+import { useAnonymousTokens, AnonymousTokensCoolDown, AnonymousName, AnonymousProfile} from "../util/anonymousTokens";
 import { toast, ToastContainer } from "react-toastify";
 import { question_options,iconOptions, question_type } from "../data/post_type_data";
 import {MoreFieldsQuestion} from "../util/moreFlieds";
 
+import{TagsPreview} from "../util/tagInput";
+import {PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined} from '@ant-design/icons';
+import { Dropdown, Space } from 'antd';
 
 import { Skeleton, Menu, Switch  } from 'antd';
 import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined  } from '@ant-design/icons';
+
+import { useOutletContext } from "react-router-dom";
 
 import "../style/upload/tag.css";
 import "../style/upload/Content.css";
@@ -44,7 +49,7 @@ const [loading, setLoading] = useState(false);
   // question type state
   const [questionType, setQuestionType] = useState('openend');
 
-  const [selectQuestionType, setSelectQuestionType] = useState("openend");
+  // const [questionType, setquestionType] = useState("openend");
 
 
     // closed end state
@@ -71,12 +76,13 @@ const [loading, setLoading] = useState(false);
     const [ratingIconId, setRatingIconId] = useState(1);
 
     const [isAnonymous, setIsAnonymous] = useState(false);
+    const [anonymousName, setAnonymousName] = useState(null);
     const { tokens, countdown, consume } = useAnonymousTokens();
 
     // preview toggle
      const [openPreview, setOpenPreview] = useState(false);
 
-    const resetMain = () => {setSelectType(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
+    const resetMain = () => {setAnonymousName(null),setSelectType(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
     const resetCloseEnd = () => { setYestitle(""); setNoTitle(""); };
     const resetRange = () => { setMin(0); setMax(100); setStep(1); setRangeValue(0); };
     const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
@@ -86,21 +92,23 @@ const [loading, setLoading] = useState(false);
   
 
     const resetMap = {
-      openend:        [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      closedend:      [resetMain, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      range:          [resetMain, resetCloseEnd, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      singlechoice:   [resetMain, resetCloseEnd, resetRange, resetMultipleChoice, resetRanking, resetRating],
-      multiplechoice: [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetRanking, resetRating],
-      rankingorder:   [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
-      rating:         [resetMain, resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
+      openend:        [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      closedend:      [resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      range:          [resetCloseEnd, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      singlechoice:   [resetCloseEnd, resetRange, resetMultipleChoice, resetRanking, resetRating],
+      multiplechoice: [resetCloseEnd, resetRange, resetSingleChoice, resetRanking, resetRating],
+      rankingorder:   [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
+      rating:         [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
     };
+
+
     const handlePostType = () => {
-      (resetMap[selectQuestionType?.value] || []).forEach(fn => fn());
+      (resetMap[questionType?.value] || []).forEach(fn => fn());
     };
 
     // Dusplay question type
     function QuestionTypeRenderer() {
-  switch (selectQuestionType?.value) {
+  switch (questionType?.value) {
     case "openend":
       return <OpenEnd />;
     case "closedend":
@@ -145,92 +153,6 @@ const [loading, setLoading] = useState(false);
   }
 }
 
-  //   let displayTypeQuestion;
-  //   switch(questionType){
-  //   case "openend" :
-  //     displayTypeQuestion = <OpenEnd />
-  //     break;
-  //   case "closedend" :
-  //     displayTypeQuestion = <ClosedEnd YestitleValue={yestitle} NoTitleValue={noTitle} setYestitle={setYestitle} setNoTitle={setNoTitle}/>
-  //     break;
-  //   case "range" :
-  //     displayTypeQuestion =  <RangeInput
-  //                               min={min}
-  //                               max={max}
-  //                               step={step}
-  //                               SetStep={setStep}
-  //                               SetMin = {setMin}
-  //                               SetMax = {setMax}
-  //                               value={rangeValue}
-  //                               onChange={(e) => setRangeValue(e.target.value)}
-  //                             />
-  //     break;
-  //   case "singlechoice" :
-  //     displayTypeQuestion = <SingleChoice value={singleChoices} onChange={setSingleChoices}/>
-  //     break;
-  //   case "multiplechoice" :
-  //     displayTypeQuestion = <MultipleChoice 
-  //                             value={multipleChoices}
-  //                             onChange={setMultipleChoices} 
-  //                             includeAllAbove={includeAllAbove} 
-  //                             setIncludeAllAbove={setIncludeAllAbove}
-  //                           />
-  //     break;
-  //   case "rankingorder" :
-  //     displayTypeQuestion = <RankingOrder value={rankingChoices} onChange={setRankingChoices} />
-  //     break;
-  //   case "rating" :
-  //     displayTypeQuestion = <Rating value={ratingIconId} onChange={setRatingIconId}/>
-  //     break;
-  //   default: 
-  //     displayTypeQuestion = <OpenEnd />
-  //     break;
-  // }
-
-  // const Card = ({value, img}) => {
-  //   return(
-  //     <label>
-  //       <input 
-  //         type="radio" 
-  //         name="question-type" 
-  //         value={value} 
-  //         onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-  //         checked={questionType === value} 
-     
-  //       />
-  //       <img 
-  //         src={img}
-  //         alt={value} 
-  //         className={questionType === value ? "selected" : ""} 
-  //       />
-  //     </label>
-  //   )
-  // }
- 
-  // const questionRadioType = [
-  //   {id:1, value:"openend", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS90nUCMSa8ongTJCpTWgR_cy5mMtuXev1NCg&s"},
-  //   {id:2, value:"closedend", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5OOdmroWDpWEbbytAew7LAkKvzUYhmZZx8Q&s"},
-  //   {id:3, value:"singlechoice", img:"https://img.freepik.com/free-vector/electric-car-white-background_1308-21368.jpg?semt=ais_user_personalization&w=740&q=80"},
-  //   {id:4, value:"multiplechoice", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThYff67knNe_Yfxy_91qsv35FgUhFWgvsAkA&s"},
-  //   {id:5, value:"range", img:"https://img.freepik.com/premium-vector/blue-car-flat-style-illustration-isolated-white-background_108231-795.jpg?semt=ais_incoming&w=740&q=80"},
-  //   {id:6, value:"rating", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOKVybqeCw4hx6GtIiLMrnEKczyHi9PxmIIw&s"},
-  //   {id:7, value:"rankingorder", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh7yenXHLnm2mRNd4ENksCtku0XUiaezTkSg&s"},
-  // ];
-
-  // const AppendRadioCard = () => {
-  //   return(
-  //     <>
-  //     {
-  //       questionRadioType.map(item => ( 
-  //         <Card key={item.id} {...item}/>
-  //       ))
-  //     }
-  //     </>
-  //   )
-  // }
-    
-  
-
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -241,6 +163,7 @@ const handleSubmit = async (e) => {
   formData.append("post_type", "question");
   formData.append("question_related_to", selectType?.value ?? "general");
   formData.append("isAnonymous", isAnonymous);
+  if(anonymousName) formData.append("anonymousName", anonymousName);
   if(questionFile){
      formData.append("questionFile", questionFile);
   }
@@ -364,13 +287,13 @@ const handleSubmit = async (e) => {
 
             <Select
                      options={question_type} 
-                  value={selectQuestionType}
+                  value={questionType}
                   onChange={(value) => {
-                    setSelectQuestionType(value);
+                    setQuestionType(value);
                     handlePostType();   // clear/reset old values
                   }}
                     classNamePrefix="custom"
-                    placeholder={selectQuestionType}
+                    placeholder={questionType}
                   />
                        {QuestionTypeRenderer()}
 {/*                 
@@ -405,12 +328,44 @@ const handleSubmit = async (e) => {
               </form>
           </article>
           <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
-              <PreviewRadio  title={title} filesMedia= {questionFile} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}/>
+              <PreviewRadio title={title} filesMedia= {questionFile} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}
+              questionType={questionType?.value}
+                singleChoices={singleChoices}
+
+                multipleChoices={multipleChoices}
+                includeAllAbove={includeAllAbove}
+
+                min={min}
+                max={max}
+                step={step}
+                rangeValue={rangeValue}
+
+                ratingIconId={ratingIconId}
+
+                rankingChoices={rankingChoices}
+              />
           </article>
       </div>
     );
 }
-const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, setOpenPreview}) => {
+const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, setOpenPreview,
+         questionType,
+
+          singleChoices, 
+
+          multipleChoices, 
+          includeAllAbove,
+
+          min,
+          max,
+          step,
+          rangeValue,
+
+          ratingIconId,
+
+          rankingChoices
+
+      }) => {
   const [selected, setSelected] = useState(1);
 
   return (
@@ -437,7 +392,25 @@ const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, set
 
       {/* Word underneath */}
       <div id="result-selected">
-         {  <Post  titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none"}/>}
+         {  <Post 
+          titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none"}
+          questionTypeValue={questionType}
+
+            singleChoices={singleChoices}
+
+            multipleChoices={multipleChoices}
+            includeAllAbove={includeAllAbove}
+
+            min={min}
+            max={max}
+            step={step}
+            rangeValue={rangeValue}
+
+            ratingIconId={ratingIconId}
+
+            rankingChoices={rankingChoices}
+
+          />}
          {selected === "Document" && "D" }
          {selected === "Content Rule" &&"C" }
 
@@ -449,7 +422,24 @@ const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, set
   );
 };
 
-const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue, displaySelected}) =>{
+const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue, displaySelected, 
+  questionTypeValue, 
+  
+    singleChoices,
+
+    multipleChoices,
+    includeAllAbove,
+
+    min,
+    max,
+    step,
+    rangeValue,
+
+    ratingIconId, 
+
+    rankingChoices
+}) =>{
+     const {username} = useOutletContext();
      const navigate = useNavigate();
     const [displayPostOpt, setDisplayPostOpt] = useState("none");
     const [displayBgMoreIcon, setBgMoreIcon] = useState("none");
@@ -477,6 +467,72 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
           document.removeEventListener("mousedown", handleClickOutside);
         };
       }, []);
+
+      function QuesitionType () {
+        
+        switch (questionTypeValue) {
+          case "openend":
+            return <div>Answer</div>;
+          case "closedend":
+            return <div id='closend-preview'>
+                      <div id='closend-preview-yes'>Yes</div>
+                      <div id='closend-preview-no'>No</div>
+                    </div>;
+          case "singlechoice":
+            return <div className='singlechoice-preview-div'>
+                      {singleChoices.map((singleChoice) => (
+                          <div className='singlechoice-preview-option'>
+                              <input type="radio" value={singleChoice} name="singlechoice"/>
+                               <label htmlFor={singleChoice}>{singleChoice}</label>
+                          </div> 
+                      ))}
+                    </div>;
+          case "multiplechoice":
+            return <div className='multiplechoice-preview-div'>
+                      {multipleChoices.map((multipleChoice) => (
+                          <div className='multiplechoice-preview-option'>
+                              <input type="checkbox" value={multipleChoice} name="multiplechoice"/>
+                               <label htmlFor={multipleChoice}>{multipleChoice}</label>
+                          </div> 
+                      ))}
+                      {includeAllAbove === 1 && <div className='multiplechoice-preview-option'>
+                          <input type="checkbox" value="All above" name="multiplechoice"/>
+                           <label htmlFor="All above">All above</label>
+                      </div>}
+                    </div>;
+          case "range":
+            return <div className='range-preview-div'>
+                      <div className='range-preview-option'>
+                        <label htmlFor={min}>{min}</label>
+                          <input type="range" value={rangeValue} name="range" step={step}/>
+                          <label htmlFor={max}>{max}</label>
+                          <label htmlFor={rangeValue}>{rangeValue}</label>
+                      </div>
+    
+                    </div>;
+          case "rating":
+            return <div className='rating-preview-div'>
+                  {Array.from({length:5}).map((_,i)=>(
+                    <FontAwesomeIcon 
+                      key={i}
+                      icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
+                      style={{ fontSize: "24px", color: "#ff3434" }}
+                    />
+                  ))}
+              </div>;
+          case "rankingorder":
+            return <div className='rankingorder-preview-div'>
+                      {rankingChoices.map((rankingChoice) => (
+                          <div className='rankingorder-preview-option'>
+                              <input value={rankingChoice} name="rankingorder" disabled/>
+                               <label htmlFor={rankingChoice}>{rankingChoice}</label>
+                          </div>
+                      ))};
+                    </div>;
+          default:
+            return "hi";
+        }
+      }
       
     return(
 
@@ -484,31 +540,16 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
                 <div className="posts" style={{display:displaySelected}}>
                       <div className='post-header'>
                               <div className='post-user-profile'>
+                                
                                 <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>
-                                  {/* <img src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" className='user-profile'/> */}
+
                                   <div className='user-post-info'>
-                                      <p className='post-username'><AnonymousNm enabled={isAnonymousValue} realName='Ha Meanleap'/></p>
-                                      <p className='post-at'>Just now</p>
+                                      <p className='post-username'><span className="anonymous-name"><AnonymousNm enabled={isAnonymousValue} realName={username}/></span></p>
+                                      <p className='post-at'>Just now </p>
                                   </div>
                               </div>
                               
-                          <button className='post-header-right btn-header-right' onClick={handlePostOpt} style={{background: displayBgMoreIcon, borderRadius: "10px"}} ref={wrapperRef}>
-                             <ul className='post-more-option' style={{display: displayPostOpt}} onClick={(e) => e.stopPropagation()}>
-                                    <li className='li-more-option' onClick={() => navigate("/login")}>
-                                        <FontAwesomeIcon icon={faPenToSquare} className='icon-option'/> Edit Post
-                                    </li>
-                                    <li className='li-more-option'>
-                                        <FontAwesomeIcon icon={faTrashCan} className='icon-option'/> Delete Post
-                                    </li>
-                                    <li className='li-more-option'>
-                                        <FontAwesomeIcon icon={faFlag} className='icon-option'/> Report Post
-                                    </li>
-                                    <li className='li-more-option'>
-                                        <FontAwesomeIcon icon={faCopy} className='icon-option'/> Copy Link
-                                    </li>
-                                </ul>
-                                <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
-                          </button>
+                            <DotDropDown/>
                       </div>
                       <div className='post-body'>
                          
@@ -522,6 +563,10 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
                               <div className='post-content-type'>
                                   <span className='content-type'>{selectTypeValue}</span>
                               </div>
+                              <div className="post-question-answer-preview">
+                                  {QuesitionType()}
+                                  
+                              </div>
                               <div className='post-tags'>
                                   <TagsPreview tagsValue={postTagsValue}/>
                               </div>
@@ -531,20 +576,21 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
 
 
                     <div className="post-thumbnail">
-  {filesMediaValues ? (
-    <img
-      src={URL.createObjectURL(filesMediaValues)}
-      alt="Confession"
-    />
-  ) : null}
-</div>
+                        {filesMediaValues ? (
+                          <img
+                            src={URL.createObjectURL(filesMediaValues)}
+                            alt="Confession"
+                          />
+                        ) :   <div className="media-preview-empty">
+                                  <Skeleton.Image active />
+                              </div>}
+                      </div>
 
                       </div>
                       <div className='post-footer'>
                           <div className='post-footer-left'>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>0</span><span className='count-label'> Like</span></p></button>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>0</span><span className='count-label'> Comment</span></p></button>
-                              <button className='button-action-footer'><FontAwesomeIcon icon={faRetweet} /><p><span>0</span><span className='count-label'> Repost</span></p></button>
                           </div>
                           <div className='post-footer-right'>
                               <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
@@ -553,6 +599,35 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
                 </div>
     )
 }
+
+const QuestionAnswerPreview = ({ questionType }) => {
+  switch (questionType) {
+    case "openend":
+      return null;
+
+    case "closedend":
+      return <div>yes/no</div>;
+
+    case "range":
+      return <div>range</div>;
+
+    case "singlechoice":
+      return <div>singlechoice</div>;
+
+    case "multiplechoice":
+      return <div>multiplechoice</div>;
+
+    case "rankingorder":
+      return <div>rankingorder</div>;
+
+    case "rating":
+      return <div>rating</div>;
+
+    default:
+      return null;
+  }
+};
+
 const items = [
   {
     key: 'sub1',
@@ -1018,3 +1093,91 @@ const questionOptions = [
   { value: "rankingorder", label: "Ranking Order" },
 ];
 
+const DotDropDown = ({ theme, toggleTheme  }) => {
+  const navigate = useNavigate();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  const menuItems = [
+    {
+      label: (
+        <li onClick={() => navigate("/user")}>
+          <UserOutlined /> View Account
+        </li>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <li
+          onClick={(e) => {
+            toggleTheme();
+            e.stopPropagation();
+          }}
+        >
+          {theme ? <MoonOutlined /> : <SunOutlined />}{" "}
+          {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
+        </li>
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/help")}>
+          <SettingOutlined /> <span>Setting</span>
+        </li>
+      ),
+      key: "2",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/help")}>
+          <QuestionCircleOutlined /> <span>Help</span>
+        </li>
+      ),
+      key: "3",
+    },
+    {
+      label: (
+        <li onClick={() => navigate("/feedback")}>
+          <ExceptionOutlined /> <span>Feedback</span>
+        </li>
+      ),
+      key: "4",
+    },
+    {  label: (
+     
+         <hr />
+     
+      ),
+      key: "5" },
+    {
+      label: (
+        <li onClick={() => navigate("/logout")}>
+          <LogoutOutlined /> Logout
+        </li>
+      ),
+      key: "6",
+    },
+  ];
+
+  return (
+    <Dropdown menu={{ items: menuItems }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+      <div className='post-header-right'>
+      <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+      </div>
+    </Dropdown>
+  );
+};

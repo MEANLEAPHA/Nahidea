@@ -24,6 +24,14 @@ export const revisions = [
   // add more here
 ];
 
+import './Home.css'
+import nahideaTran from "../img/nahidea-tran.png"
+
+const Loader = () => {
+  <div className="loader-container">
+    <img src={nahideaTran} alt="Loading..." className="loader-img"/>
+  </div>
+}
 export default function PrivacyPolicy() {
   const [active, setActive] = useState("introduction");
   const sectionRefs = useRef({});
@@ -36,6 +44,9 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="privacy-container">
+      <div className="loader-container">
+        <img src={nahideaTran} alt="Loading..." className="loader-img"/>
+      </div>
       {/* LEFT TIMELINE */}
       <div className="timeline-container">
         <Timeline

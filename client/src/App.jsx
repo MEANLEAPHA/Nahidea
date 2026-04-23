@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 
+import { jwtDecode } from "jwt-decode";
+
+
 // Import Page
 
     // Component
@@ -31,6 +34,8 @@ import PrivacyPolicy from './assets/page/Privatepolicy';
 
 
 const token = localStorage.getItem("token");
+
+
 
 
 const App = () =>{
@@ -83,6 +88,8 @@ const Layout = () => {
     // }
 
     // Aside mode tool
+    const [username, setUsername] = useState('Guest');
+
     const [showMaxAside, setMaxAside] = useState(() => {
             return localStorage.getItem("maxAside") === "true";
         });
@@ -115,6 +122,36 @@ const Layout = () => {
         [darkMode]
     );
          
+
+   useEffect(() => {
+  async function loadUsername() {
+    // 1. Check sessionStorage first
+    const cached = sessionStorage.getItem("username");
+    if (cached) {
+      setUsername(cached);
+      return;
+    }
+
+    // 2. Ask backend for username (backend decodes token itself)
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      if (!res.ok) throw new Error("Failed to fetch username");
+
+      const data = await res.json();
+      sessionStorage.setItem("username", data.username);
+      setUsername(data.username);
+    } catch (err) {
+      console.error("Error loading username", err);
+    }
+  }
+
+  loadUsername();
+}, []);
+
     const toggleTheme = () =>{
         setDarkMode(prev => !prev)
     };
@@ -124,7 +161,7 @@ const Layout = () => {
             <main>
                 <Aside append={showMaxAside}/>
                 <section>
-                    <Outlet />
+                    <Outlet context={{ username }} />
                 </section>
             </main>
          

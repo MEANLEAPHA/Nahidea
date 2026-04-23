@@ -445,7 +445,7 @@ export const MarkdownPreview = ({ content }) => {
   tags, setTags,
   mediaFiles, setMediaFiles,
   isAnonymous, setIsAnonymous, tokens,
-  questionFileValue, setQuestionFileValue
+  questionFileValue, setQuestionValue
 }) => {
   const [selected, setSelected] = useState(1);
 
@@ -480,7 +480,7 @@ export const MarkdownPreview = ({ content }) => {
                   <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setQuestionFileValue(e.target.files[0])}
+                  onChange={(e) => setQuestionValue(e.target.files[0])}
                   style={{ display: "none" }}
                 />
                   <p>Upload an image</p>
