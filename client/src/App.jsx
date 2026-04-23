@@ -122,71 +122,36 @@ const Layout = () => {
         [darkMode]
     );
        
-    useEffect(() => {
-  async function loadUsername() {
-    console.log("Loading username...");
 
+   useEffect(() => {
+  async function loadUsername() {
+    // 1. Check sessionStorage first
     const cached = sessionStorage.getItem("username");
     if (cached) {
-      console.log("Using cached username:", cached);
       setUsername(cached);
       return;
     }
 
+    // 2. Ask backend for username (backend decodes token itself)
     try {
       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
-        },
+        }
       });
-
-      if (!res.ok) {
-        console.error("Fetch failed with status:", res.status);
-        throw new Error("Failed to fetch username");
-      }
+      if (!res.ok) throw new Error("Failed to fetch username");
 
       const data = await res.json();
-      console.log("Fetched username:", data.username);
-
-      sessionStorage.setItem("username", data.username);
-      setUsername(data.username);
+      const username = data.userInfo?.username || data.username;
+      sessionStorage.setItem("username", username);
+      setUsername(username);
     } catch (err) {
-      console.error("Error loading username:", err);
+      console.error("Error loading username", err);
     }
   }
 
   loadUsername();
 }, []);
-
-
-//    useEffect(() => {
-//   async function loadUsername() {
-//     // 1. Check sessionStorage first
-//     const cached = sessionStorage.getItem("username");
-//     if (cached) {
-//       setUsername(cached);
-//       return;
-//     }
-
-//     // 2. Ask backend for username (backend decodes token itself)
-//     try {
-//       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/me`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       });
-//       if (!res.ok) throw new Error("Failed to fetch username");
-
-//       const data = await res.json();
-//       sessionStorage.setItem("username", data.username);
-//       setUsername(data.username);
-//     } catch (err) {
-//       console.error("Error loading username", err);
-//     }
-//   }
-
-//   loadUsername();
-// }, []);
 
     const toggleTheme = () =>{
         setDarkMode(prev => !prev)
