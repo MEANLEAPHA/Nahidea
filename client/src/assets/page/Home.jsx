@@ -36,6 +36,7 @@ const parseJSON = (val) => {
 };
 
 export default function Home() {
+       const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false); // UI loader
   const [fetching, setFetching] = useState(false); // request lock
@@ -128,7 +129,7 @@ export default function Home() {
   // Content style
   const renderPostContent = (post) => {
     const data = post.data;
-     const navigate = useNavigate();
+
     if (!data) return <Text type="secondary">No content</Text>;
 
     switch (post.post_type) {
@@ -324,7 +325,7 @@ const DotDropDown = () => {
   const menuItems = [
     {
       label: (
-        <li onClick={() => navigate("/user")}>
+        <li >
        View Account
         </li>
       ),
@@ -341,7 +342,7 @@ const DotDropDown = () => {
     },
     {
       label: (
-        <li onClick={() => navigate("/help")}>
+        <li >
          <span>Setting</span>
         </li>
       ),
@@ -349,7 +350,7 @@ const DotDropDown = () => {
     },
     {
       label: (
-        <li onClick={() => navigate("/help")}>
+        <li >
        <span>Help</span>
         </li>
       ),
@@ -357,7 +358,7 @@ const DotDropDown = () => {
     },
     {
       label: (
-        <li onClick={() => navigate("/feedback")}>
+        <li >
       <span>Feedback</span>
         </li>
       ),
@@ -371,7 +372,7 @@ const DotDropDown = () => {
       key: "5" },
     {
       label: (
-        <li onClick={() => navigate("/logout")}>
+        <li >
      Logout
         </li>
       ),
