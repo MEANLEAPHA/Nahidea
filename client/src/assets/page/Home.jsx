@@ -182,6 +182,7 @@ export default function Home() {
                 <img
                   src={data.media_url}
                   alt="Confession"
+                  className="post-image"
                 />
               </div>
 
@@ -254,6 +255,7 @@ export default function Home() {
                           <img
                             src={data.media_url}
                             alt="Confession"
+                            className="post-image"
                           />
                        
                       </div>
