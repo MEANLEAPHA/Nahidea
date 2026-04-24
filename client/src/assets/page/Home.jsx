@@ -270,17 +270,7 @@ export default function Home() {
                   dataSource={posts}
                   renderItem={(post) => (
                     <List.Item key={post.id}>
-                      <Card style={{ width: "100%" }}>
-                        <Space style={{ marginBottom: 10 }}>
-                          <Avatar>
-                            {post.username?.[0]?.toUpperCase()}
-                          </Avatar>
-                          <Text strong>{post.username}</Text>
-                          <Tag>{post.post_type}</Tag>
-                        </Space>
-
                         <div>{renderPostContent(post)}</div>
-                      </Card>
                     </List.Item>
                   )}
                 />
@@ -293,7 +283,6 @@ export default function Home() {
                 )}
               </>
             )}
-      
        </article>
        <article id='his-article'>
                         

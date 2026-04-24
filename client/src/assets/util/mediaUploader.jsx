@@ -153,8 +153,12 @@ export  function MediaPreview({ files = [] }) {
     );
   }
 
-  const mediaFileUrl = (file) => URL.createObjectURL(file);
-
+  const mediaFileUrl = (file) => {
+    if(file instanceof File) {
+      return URL.createObjectURL(file);
+    }
+    return file;
+  }
   return (
     <Carousel
       arrows
@@ -177,6 +181,21 @@ export  function MediaPreview({ files = [] }) {
     >
       {files.map((file, idx) => (
         <div className="carousel-slide" key={idx}>
+          {typeof file === "string" || (file.type || "").startsWith("image/") ? (
+            <div className="preview-wrapper">
+              <img
+                src={mediaFileUrl(file)}
+                alt={file.name || `preview-${idx}`}
+                className="preview-image"
+              />
+            </div>
+          ) : (
+            <div className="video-placeholder">Video file selected</div>
+          )}
+        </div>
+      ))}
+      {/* {files.map((file, idx) => (
+        <div className="carousel-slide" key={idx}>
           {(file.type || "").startsWith("image/") ? (
             <div
               className="preview-wrapper"
@@ -192,7 +211,7 @@ export  function MediaPreview({ files = [] }) {
             <div className="video-placeholder">Video file selected</div>
           )}
         </div>
-      ))}
+      ))} */}
     </Carousel>
   );
 }
