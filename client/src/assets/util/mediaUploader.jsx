@@ -147,9 +147,10 @@ return (
 export  function MediaPreview({ files = [] }) {
   if (!files.length) {
     return (
-      <div className="media-preview-empty">
-          <Skeleton.Image active />
-      </div>
+      // <div className="media-preview-empty">
+      //     <Skeleton.Image active />
+      // </div>
+      null
     );
   }
 
@@ -182,12 +183,11 @@ export  function MediaPreview({ files = [] }) {
       {files.map((file, idx) => (
         <div className="carousel-slide" key={idx}>
           {typeof file === "string" || (file.type || "").startsWith("image/") ? (
-            <div className="preview-wrapper">
+            <div className="preview-wrapper"  style={{ "--preview-url": `url(${mediaFileUrl(file)})` }}>
               <img
                 src={mediaFileUrl(file)}
                 alt={file.name || `preview-${idx}`}
                 className="preview-image"
-                style={{ "--preview-url": `url(${mediaFileUrl(file)})` }}
               />
             </div>
           ) : (

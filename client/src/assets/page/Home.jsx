@@ -136,20 +136,7 @@ export default function Home() {
     switch (post.post_type) {
       case "content":
         return (
-      
-          <div className="posts">
-            <div className='post-header'>
-              <div className='post-user-profile'>
-                      <img src='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif' className="user-profile" alt="profile" />
-                      <div className='user-post-info'>
-                          <p className='post-username'>{post.username}</p>
-                          <p className='post-at'>{post.created_at}</p>
-                      </div>
-                  </div>
-              <DotDropDown/>
-            </div>
-            <div className='post-body'>
-
+          <>
               <div>
                 <div className='post-caption' onClick={()=>{
                   navigate(`/login?id=${post.id}`)
@@ -170,75 +157,105 @@ export default function Home() {
               <div  className='post-thumbnail'>         
                 <MediaPreview files={parseJSON(data.media_url)}/>
               </div>
-            </div>
-            <div className='post-footer'>
-                <div className='post-footer-left'>
-                  <button className='button-action-footer'><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
-                  <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
-                </div>
-                <div className='post-footer-right'>
-                  <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
-                </div> 
-            </div>
-          </div>
-            
-       
+          </>
         );
 
       case "confession":
         return (
           <>
-            <Title level={5}>{data.title}</Title>
-            <Text type="secondary">Confession post</Text>
+              <div>
+                   <div className='post-caption' onClick={()=>{
+                      navigate(`/login?id=${post.id}`)
+                    }}>
+                    <p>{data.title}</p>
+                </div>
+                {/* <div className='post-content-type'>
+                    <span className='content-type'>{selectTypeValue}</span>
+                </div>
+                <div className='post-tags'>
+                    <TagsPreview tagsValue={postTagsValue}/>
+                </div> */}
+              </div>
+                  
+              <div className="post-thumbnail">
+                <img
+                  src={URL.createObjectURL(data.media_url)}
+                  alt="Confession"
+                />
+              </div>
+
           </>
         );
 
       case "question":
         return (
           <>
-            <Title level={5}>{data.title}</Title>
-            <Tag color="blue">{data.question_type}</Tag>
+                            <div>
+                               <div className='post-caption' onClick={()=>{
+                                  navigate(`/login?id=${post.id}`)
+                                }}>
+                                    <p>{data.title}</p>
+                                </div>
+                              {/* <div className='post-content-type'>
+                                  <span className='content-type'>{selectTypeValue}</span>
+                              </div> */}
+                              <div className="post-question-answer-preview">
+                                   {data.question_type === "closedend" && (
+                                        <Space direction="vertical">
+                                          <Text>Yes: {data.yes_title}</Text>
+                                          <Text>No: {data.no_title}</Text>
+                                        </Space>
+                                      )}
 
-            {data.question_type === "closedend" && (
-              <Space direction="vertical">
-                <Text>Yes: {data.yes_title}</Text>
-                <Text>No: {data.no_title}</Text>
-              </Space>
-            )}
+                                      {data.question_type === "range" && (
+                                        <Text>
+                                          Range: {data.range_min} - {data.range_max}
+                                        </Text>
+                                      )}
 
-            {data.question_type === "range" && (
-              <Text>
-                Range: {data.range_min} - {data.range_max}
-              </Text>
-            )}
+                                      {data.question_type === "singlechoice" && (
+                                        <ul>
+                                          {data.choices?.map((c, i) => (
+                                            <li key={i}>{c.choice_text}</li>
+                                          ))}
+                                        </ul>
+                                      )}
 
-            {data.question_type === "singlechoice" && (
-              <ul>
-                {data.choices?.map((c, i) => (
-                  <li key={i}>{c.choice_text}</li>
-                ))}
-              </ul>
-            )}
+                                      {data.question_type === "multiplechoice" && (
+                                        <ul>
+                                          {data.choices?.map((c, i) => (
+                                            <li key={i}>{c.choice_text}</li>
+                                          ))}
+                                        </ul>
+                                      )}
 
-            {data.question_type === "multiplechoice" && (
-              <ul>
-                {data.choices?.map((c, i) => (
-                  <li key={i}>{c.choice_text}</li>
-                ))}
-              </ul>
-            )}
+                                      {data.question_type === "rankingorder" && (
+                                        <ol>
+                                          {data.items?.map((i, idx) => (
+                                            <li key={idx}>{i.item_text}</li>
+                                          ))}
+                                        </ol>
+                                      )}
 
-            {data.question_type === "rankingorder" && (
-              <ol>
-                {data.items?.map((i, idx) => (
-                  <li key={idx}>{i.item_text}</li>
-                ))}
-              </ol>
-            )}
+                                      {data.question_type === "rating" && (
+                                        <Text>Rating icon: {data.rating_icon_id}</Text>
+                                      )}
+                                  
+                              </div>
+                              {/* <div className='post-tags'>
+                                  <TagsPreview tagsValue={postTagsValue}/>
+                              </div> */}
+                            </div>
+                       
 
-            {data.question_type === "rating" && (
-              <Text>Rating icon: {data.rating_icon_id}</Text>
-            )}
+                    <div className="post-thumbnail">
+         
+                          <img
+                            src={URL.createObjectURL(data.media_url)}
+                            alt="Confession"
+                          />
+                       
+                      </div>
           </>
         );
 
@@ -273,7 +290,34 @@ export default function Home() {
                   dataSource={posts}
                   renderItem={(post) => (
                     <List.Item key={post.id}>
-                        <div>{renderPostContent(post)}</div>
+                      <div className="posts">
+
+                        <div className='post-header'>
+                          <div className='post-user-profile'>
+                                  <img src='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif' className="user-profile" alt="profile" />
+                                  <div className='user-post-info'>
+                                      <p className='post-username'>{post.username} <span className='post-type-label'>post a {post.post_type}</span></p>
+                                      <p className='post-at'>{post.created_at}</p>
+                                  </div>
+                              </div>
+                          <DotDropDown/>
+                        </div>
+
+                        <div className='post-body'>
+                          {renderPostContent(post)}
+                        </div>
+
+                        <div className='post-footer'>
+                            <div className='post-footer-left'>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
+                            </div>
+                            <div className='post-footer-right'>
+                              <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                            </div> 
+                        </div>
+
+                      </div>
                     </List.Item>
                   )}
                 />

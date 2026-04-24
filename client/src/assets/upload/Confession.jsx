@@ -300,15 +300,15 @@ const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, is
 
 
                       <div className="post-thumbnail">
-        {filesMediaValues ? (
-          <img
-            src={URL.createObjectURL(filesMediaValues)}
-            alt="Confession"
-          />
-        ) : <div className="media-preview-empty">
-                                  <Skeleton.Image active />
-                              </div>}
-      </div>
+                        {filesMediaValues ? (
+                          <img
+                            src={URL.createObjectURL(filesMediaValues)}
+                            alt="Confession"
+                          />
+                        ) : <div className="media-preview-empty">
+                                                  <Skeleton.Image active />
+                                              </div>}
+                          </div>
 
                       </div>
                       <div className='post-footer'>
