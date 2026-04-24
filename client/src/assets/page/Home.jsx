@@ -6,6 +6,7 @@ import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
  import "../style/upload/Postpreview.css";
+ import "../style/upload/MultipleMedia.css";
 import {
   List,
   Card,
