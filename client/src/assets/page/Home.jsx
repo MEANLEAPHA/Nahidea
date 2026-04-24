@@ -179,7 +179,7 @@ export default function Home() {
                   
               <div className="post-thumbnail">
                 <img
-                  src={URL.createObjectURL(data.media_url)}
+                  src={data.media_url}
                   alt="Confession"
                 />
               </div>
@@ -251,7 +251,7 @@ export default function Home() {
                     <div className="post-thumbnail">
          
                           <img
-                            src={URL.createObjectURL(data.media_url)}
+                            src={data.media_url}
                             alt="Confession"
                           />
                        
