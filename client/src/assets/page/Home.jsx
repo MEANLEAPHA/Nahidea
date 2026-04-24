@@ -151,15 +151,17 @@ export default function Home() {
             <div className='post-body'>
 
               <div>
-                <div className='post-caption'>
+                <div className='post-caption' onClick={()=>{
+                  navigate(`/login?id=${post.id}`)
+                }}>
                     <p>{data.title}</p>
                 </div>
-                <div className='post-content-type'>
+                {/* <div className='post-content-type'>
                     <span className='content-type'>{data.type}</span>
                 </div>
                 <div className='post-body-text'>
                     <MarkdownPreview content={data.text_body}/>
-                </div>
+                </div> */}
                 {/* <div className='post-tags'>
                     <TagsPreview tagsValue={postTagsValue}/>
                 </div> */}
