@@ -76,7 +76,8 @@ export default function GifUpload() {
 
   const handleSubmit = async (values) => {
     const formData = new FormData();
-    formData.append("gif", values.gif.file.originFileObj);
+    // formData.append("gif", values.gif.file.originFileObj);
+    formData.append("gif", values.gif[0].originFileObj);
     formData.append("gif_name", values.gif_name);
 
     try {
