@@ -182,7 +182,7 @@ export default function Home() {
                 <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                   <img
                      src={data.media_url}
-                    alt={file.name || `preview-${idx}`}
+         
                     className="preview-image"
                   />
                 </div>
@@ -256,7 +256,6 @@ export default function Home() {
                 <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                   <img
                      src={data.media_url}
-                    alt={file.name || `preview-${idx}`}
                     className="preview-image"
                   />
                 </div>
