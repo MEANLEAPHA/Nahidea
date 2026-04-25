@@ -94,7 +94,7 @@ const MinInfo = [
         id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },
     {
-        id:3, a: '/gossip', icon: <FontAwesomeIcon icon={faGlobaleaks} className='sub-icon'/>
+        id:3, a: '/gif', icon: <FontAwesomeIcon icon={faGlobaleaks} className='sub-icon'/>
     },
     {
         id:4, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
@@ -156,7 +156,7 @@ const Card = ({a, icon, label, classNameBtn}) =>{
 const Mains= [
     { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
     { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
-    { id:3, a: '/gossip',  icon: <FontAwesomeIcon icon={faGlobaleaks} className='icon-aside icon-awesome'/>, label: <label>Gossip <span style={{color:"orange",fontSize:"12px"}}>BETA</span></label> }
+    { id:3, a: '/gif',  icon: <FontAwesomeIcon icon={faGlobaleaks} className='icon-aside icon-awesome'/>, label: <label>Gossip <span style={{color:"orange",fontSize:"12px"}}>BETA</span></label> }
 ];
 
 

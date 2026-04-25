@@ -31,6 +31,8 @@ import './assets/style/App.css';
 import './assets/style/Main.css';
 import './assets/style/Section.css'
 import PrivacyPolicy from './assets/page/Privatepolicy';
+import GifFeed from './assets/page/GifFeed';
+import GifUpload from './assets/upload/GifUpload';
 
 
 const token = localStorage.getItem("token");
@@ -52,7 +54,11 @@ const App = () =>{
                     <Route path='/create/confession' element={<Confession/>}></Route>
                     <Route path='/create/content' element={<Content/>}></Route>
 
-                     {/* Rule */}
+                    {/* Gif */}
+
+                    <Route path='/gif' element={<GifFeed/>}></Route>
+                    <Route path='/create/gif' element={<GifUpload/>}></Route>
+                    {/* Rule */}
                     <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
                 </Route>
 
