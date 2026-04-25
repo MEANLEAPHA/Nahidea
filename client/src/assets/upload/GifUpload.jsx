@@ -77,8 +77,10 @@ export default function GifUpload() {
   const handleSubmit = async (values) => {
     const formData = new FormData();
     // formData.append("gif", values.gif.file.originFileObj);
-    formData.append("gif", values.gif[0].originFileObj);
-    formData.append("gif_name", values.gif_name);
+
+formData.append("gif", values.gif[0].originFileObj);
+formData.append("gif_name", values.gif_name);
+
 
     try {
       setLoading(true);
@@ -123,35 +125,38 @@ export default function GifUpload() {
         </Form.Item>
 
         <Form.Item
-          name="gif"
-          label="Upload Image/Video"
-          rules={[{ required: true, message: "Please upload a file" }]}
-        >
-          <Upload
-            beforeUpload={(file) => {
-              const isAllowedType = [
-                "image/gif",
-                "image/png",
-                "image/jpeg",
-                "video/mp4",
-              ].includes(file.type);
-              if (!isAllowedType) {
-                message.error("Only GIF, PNG, JPG, or MP4 files are allowed.");
-                return Upload.LIST_IGNORE;
-              }
-              const isLt10M = file.size / 1024 / 1024 < 10;
-              if (!isLt10M) {
-                message.error("File must be smaller than 10MB!");
-                return Upload.LIST_IGNORE;
-              }
-              return false; // prevent auto upload, let Form handle it
-            }}
-            maxCount={1}
-            accept="image/gif,image/png,image/jpeg,video/mp4"
-          >
-            <Button icon={<UploadOutlined />}>Select File</Button>
-          </Upload>
-        </Form.Item>
+  name="gif"
+  label="Upload Image/Video"
+  rules={[{ required: true, message: "Please upload a file" }]}
+  valuePropName="fileList"
+  getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+>
+  <Upload
+    beforeUpload={(file) => {
+      const isAllowedType = [
+        "image/gif",
+        "image/png",
+        "image/jpeg",
+        "video/mp4",
+      ].includes(file.type);
+      if (!isAllowedType) {
+        message.error("Only GIF, PNG, JPG, or MP4 files are allowed.");
+        return Upload.LIST_IGNORE;
+      }
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isLt10M) {
+        message.error("File must be smaller than 10MB!");
+        return Upload.LIST_IGNORE;
+      }
+      return false; // prevent auto upload
+    }}
+    maxCount={1}
+    accept="image/gif,image/png,image/jpeg,video/mp4"
+  >
+    <Button icon={<UploadOutlined />}>Select File</Button>
+  </Upload>
+</Form.Item>
+
 
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
