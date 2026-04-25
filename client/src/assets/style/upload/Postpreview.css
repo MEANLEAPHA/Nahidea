@@ -401,10 +401,7 @@ margin-top: 10px;
   
     
 }
-.post-image{
-    position: relative;
-    height: auto;
-}
+
 .preview-wrapper {
   position: relative;
   width: 100%;
@@ -416,7 +413,10 @@ margin-top: 10px;
   justify-content: center;
   overflow: hidden;
 }
-
+.post-image{
+    position: relative;
+    max-width: 100%;
+}
 /* main image */
 .preview-image {
   height: auto;

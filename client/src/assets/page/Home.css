@@ -49,26 +49,30 @@ p{
     margin: 0;
     opacity: 0.7;
 }
-#feed-article .ant-list{
+/* #feed-article .ant-list{
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+overflow: hidden !important;
 }
 .ant-spin-container{
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden !important;
 }
 #feed-article .css-var-root{
       width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden !important;
 }
 .ant-list-item{
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-}
+    
+} */
 
 
 /* .ant-list-item-meta-content{
