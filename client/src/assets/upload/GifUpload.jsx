@@ -69,7 +69,7 @@ import { Form, Input, Button, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 
-const token = localStorage.getItem("token");
+
 
 export default function GifUpload() {
   const [loading, setLoading] = useState(false);
@@ -80,6 +80,7 @@ export default function GifUpload() {
 
 formData.append("gif", values.gif[0].originFileObj);
 formData.append("gif_name", values.gif_name);
+formData.append("userId", 1);
 
 
     try {
@@ -88,9 +89,8 @@ formData.append("gif_name", values.gif_name);
         `${import.meta.env.VITE_SERVER_URL}/api/gifs/upload`,
         formData,
         {
-          headers: {
+        headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
           },
         }
       );
