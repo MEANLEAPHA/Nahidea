@@ -9,7 +9,7 @@ export default function GifFeed() {
   const fetchGifs = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/gifs`);
+      const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/gifs/getGifs`);
 
       if (Array.isArray(res.data)) {
         setGifs(res.data);
