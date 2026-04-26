@@ -18,11 +18,33 @@
      --back-con:rgb(40, 40, 40);
 }
 .gif-feed-container {
-  padding: 30px;
+  padding: 25px 50px 30px 50px;
   background: var(--background-color);
   min-height: 100vh;
 }
 
+.gif-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:20px;
+  flex-wrap: wrap;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  gap: 10px;
+  background: var(--back-con);
+}
+.gif-header p{
+  margin: 0;
+}
+.gif-header .btn-upload-gif{
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 /* 🔍 Search */
 .gif-search {
   margin-bottom: 16px;
@@ -32,14 +54,21 @@
 .ant-input,
 .ant-input-affix-wrapper {
   border-radius: 0px !important;
-  padding: 6px 10px !important;
+  padding:0px 15px 0px 5px !important;
 }
 
-.ant-input:focus,
+.ant-input-affix-wrapper{
+  border-top-left-radius: 8px !important;
+  border-bottom-left-radius: 8px !important;
+}
 .ant-input-affix-wrapper:focus {
   box-shadow: none !important;
-  border-color: var(--primary-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  box-shadow: none !important;
+  outline: #fd7648 !important;
+
 }
+
 /* 🧱 Masonry layout */
 .masonry {
   column-count: 4;
@@ -53,6 +82,10 @@
   }
 }
 @media (max-width: 768px) {
+   .gif-feed-container {
+  padding: 15px;
+
+}
   .masonry {
     column-count: 2;
   }
@@ -61,6 +94,10 @@
   .masonry {
     column-count: 1;
   }
+  .gif-feed-container {
+  padding: 20px 15px 20px 15px;
+
+}
 }
 
 /* 🧩 Card */

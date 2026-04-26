@@ -57,7 +57,7 @@ const App = () =>{
                     {/* Gif */}
 
                     <Route path='/gif' element={<GifFeed/>}></Route>
-                    <Route path='/create/gif' element={<GifUpload/>}></Route>
+                    <Route path='/upload/gif' element={<GifUpload/>}></Route>
                     {/* Rule */}
                     <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
                 </Route>

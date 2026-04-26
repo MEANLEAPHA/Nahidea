@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Input, Spin, Empty } from "antd";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../style/page/GifFeed.css";
 
@@ -28,6 +29,7 @@ export default function GifFeed() {
   };
 
   const searchGif = async (value) => {
+    const navigate = useNavigate();
     setQuery(value);
 
     if (!value) return fetchGifs();
@@ -57,12 +59,16 @@ export default function GifFeed() {
 
   return (
     <div className="gif-feed-container">
+      <div className="gif-header"> 
+         <p>Help us upload your favourite GIFs and share them with Nahidea's community</p>
+         <button onClick={()=>{navigate("/upload/gif")}} type="button" className="btn-upload-gif">Upload GIF</button>
+      </div>
       {/* 🔍 Search */}
       <Input.Search
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onSearch={searchGif}
-        placeholder="Search GIFs..."
+        placeholder="Search GIFs on Nahidea..."
         allowClear
         onClear={handleClear}
         className="gif-search"
@@ -92,10 +98,10 @@ function GifCard({ gif }) {
 
   return (
     <div className="gif-card">
-      <img src={gif.gif_url} alt={gif.gif_name} />
+      <img src={gif.gif_url} alt={gif.gif_label} />
 
       <div className="gif-overlay">
-        <span className="gif-name">{gif.gif_name}</span>
+        <span className="gif-name">{gif.gif_label}</span>
 
         <span
           className="gif-fav"
