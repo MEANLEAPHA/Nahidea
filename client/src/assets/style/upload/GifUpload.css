@@ -1,0 +1,148 @@
+/* GifUpload.css
+
+.gif-upload-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.gif-upload-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.gif-upload-header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.gif-upload-header p {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.gif-upload-header a {
+  color: #1890ff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.gif-upload-header a:hover {
+  text-decoration: underline;
+}
+
+.ant-form-item {
+  margin-bottom: 1rem;
+}
+
+.ant-input, .ant-select-selector {
+  border-radius: 8px !important;
+}
+
+.ant-btn-primary {
+  width: 100%;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.75rem;
+}
+
+
+@media (max-width: 768px) {
+  .gif-upload-container {
+    padding: 1.5rem;
+  }
+  .gif-upload-header h2 {
+    font-size: 1.4rem;
+  }
+}
+@media (max-width: 480px) {
+  .gif-upload-container {
+    padding: 1rem;
+  }
+  .gif-upload-header h2 {
+    font-size: 1.2rem;
+  }
+} */
+:root {
+  --background-color: rgb(255, 255, 255);
+  --primary-color: #fd7648;
+  --secondary-color: rgba(107, 107, 107, 0.318);
+  --font-color: rgb(0, 0, 0);
+  --back-con: rgb(245, 245, 245);
+  --primary-font: monospace;
+}
+
+.dark-theme {
+  --background-color: rgb(32, 32, 32);
+  --primary-color: #fd7648;
+  --secondary-color: rgba(220, 220, 220, 0.318);
+  --font-color: rgb(255, 255, 255);
+  --back-con: rgb(40, 40, 40);
+}
+
+.gif-upload-container {
+  width: 80%;
+  min-height:auto;
+ 
+  padding: 2rem;
+  font-family: var(--primary-font);
+  margin: auto;
+  color: var(--font-color);
+}
+
+.gif-upload-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.gif-upload-header p{
+    margin: 0;
+}
+.gif-upload-header .p-head{
+  font-size: xx-large;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin:0;
+  border: none;
+  font-family: monospace;
+}
+
+.gif-provider-grid {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.gif-provider-grid img {
+
+  height: 60px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  
+  padding: 0;
+}
+
+.gif-provider-grid img:hover {
+  transform: scale(1.05);
+}
+
+.gif-preview {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.gif-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}

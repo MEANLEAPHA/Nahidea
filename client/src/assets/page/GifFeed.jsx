@@ -8,6 +8,7 @@ import axios from "axios";
 import "../style/page/GifFeed.css";
 
 export default function GifFeed() {
+    const navigate = useNavigate();
   const [gifs, setGifs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
@@ -29,7 +30,7 @@ export default function GifFeed() {
   };
 
   const searchGif = async (value) => {
-    const navigate = useNavigate();
+  
     setQuery(value);
 
     if (!value) return fetchGifs();
