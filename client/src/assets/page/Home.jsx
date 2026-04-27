@@ -40,7 +40,7 @@ const parseJSON = (val) => {
 export default function Home() {
 
   const navigate = useNavigate();
-  
+
   const [posts, setPosts] = useState([]);
 
   const [loading, setLoading] = useState(false); 
@@ -365,8 +365,7 @@ const Loader = () => {
           <img src={nahideaTran} alt="Loading..." className="loader-img"/>
     </div>
   )
-  
-}
+};
 
 const DotDropDown = () => {
 

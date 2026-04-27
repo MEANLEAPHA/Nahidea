@@ -144,3 +144,78 @@ export const question_type = [
   {id:6, label:"Rating", value:"rating"},
   {id:7, label:"Ranking Order", value:"rankingorder"}
 ];
+
+
+
+export const gif_category = [
+  // 🎭 Core Reactions
+  { value: "thank_you", label: "🙏 Thank You" },
+  { value: "love", label: "❤️ Love" },
+  { value: "funny", label: "🤣 Funny" },
+  { value: "yes", label: "✅ Yes" },
+  { value: "no", label: "❌ No" },
+  { value: "excited", label: "🤩 Excited" },
+  { value: "kiss", label: "😘 Kiss" },
+  { value: "hello", label: "👋 Hello" },
+  { value: "bye", label: "👋 Bye / Wave" },
+  { value: "welcome", label: "🙌 Welcome" },
+  { value: "ok", label: "👌 OK" },
+  { value: "thinking", label: "🤔 Thinking" },
+  { value: "eye_roll", label: "🙄 Eye Roll" },
+  { value: "side_eye", label: "👀 Side Eye" },
+  { value: "crazy", label: "🤪 Crazy" },
+  { value: "fire", label: "🔥 Fire" },
+  { value: "scared", label: "😨 Scared" },
+  { value: "huh", label: "😕 Huh / What" },
+
+  // 😀 Emotions
+  { value: "happy", label: "😊 Happy" },
+  { value: "sad", label: "😢 Sad" },
+  { value: "crying", label: "😭 Crying" },
+  { value: "angry", label: "😡 Angry / Rage" },
+  { value: "shocked", label: "😱 Shocked / OMG" },
+  { value: "tired", label: "🥱 Tired" },
+  { value: "sleepy", label: "😴 Sleepy" },
+  { value: "cute", label: "🥰 Cute" },
+  { value: "miss_you", label: "💔 Miss You" },
+  { value: "hug", label: "🤗 Hug" },
+  { value: "confused", label: "🤔 Confused" },
+
+  // 🎉 Celebrations & Activities
+  { value: "birthday", label: "🎂 Happy Birthday" },
+  { value: "congrats", label: "🎉 Congratulations / Cheers" },
+  { value: "celebrate", label: "🥳 Celebrate" },
+  { value: "party", label: "🕺 Party / Dancing" },
+  { value: "applause", label: "👏 Applause / Clapping" },
+  { value: "yay", label: "🙌 Yay" },
+  { value: "do_it", label: "💪 Do It" },
+
+  // 👍 Gestures
+  { value: "thumbs_up", label: "👍 Thumbs Up" },
+  { value: "nope", label: "🙅 Nope" },
+  { value: "wtf", label: "🤯 WTF" },
+  { value: "lol", label: "😂 LOL" },
+  { value: "facepalm", label: "🤦 Facepalm" },
+
+  // 🐱 Meme & Pop Culture
+  { value: "meme", label: "😂 Meme" },
+  { value: "funny", label: "😆 Funny Meme" },
+  { value: "cat_meme", label: "🐱 Cat Meme" },
+  { value: "dog_meme", label: "🐶 Dog Meme" },
+  { value: "gaming", label: "🎮 Gaming Meme" },
+  { value: "spongebob", label: "🟨 SpongeBob Meme" },
+  { value: "simpsons", label: "💛 Simpsons Meme" },
+  { value: "shrek", label: "👹 Shrek Meme" },
+  { value: "jackson", label: "🕺 Michael Jackson Meme" },
+  { value: "genz", label: "🌐 Gen Z Meme" },
+  { value: "dance_meme", label: "💃 Dance Meme" },
+
+  // 🧩 Utility / Misc
+  { value: "waiting", label: "⏳ Waiting" },
+  { value: "please", label: "🙇 Please / Sorry" },
+  { value: "wow", label: "😲 Wow" },
+  { value: "omg", label: "😱 OMG" },
+
+  //general
+  { value: "general", label: "General" },
+];
