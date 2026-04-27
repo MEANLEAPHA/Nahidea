@@ -10,11 +10,6 @@ import nahideaTran from "../img/nahidea-tran.png";
 import {gif_category} from "../data/post_type_data";
 
 
-const items = item_list.map((cat, idx) => ({
-  key: String(idx + 1),
-  label: cat.label,
-  onClick: () => searchCategory(cat.value, 1),
-}));
 
 export default function GifFeed() {
   const navigate = useNavigate();
