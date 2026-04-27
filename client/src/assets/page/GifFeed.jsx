@@ -13,6 +13,7 @@ import {gif_category} from "../data/post_type_data";
   import {faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
   import { faHeart} from "@fortawesome/free-regular-svg-icons";
 
+  const token = localStorage.getItem('token');
 
 export default function GifFeed() {
   const navigate = useNavigate();
@@ -217,18 +218,32 @@ function GifCard({ gif }) {
     if (fav) {
       // Unfavorite
       stored = stored.filter((f) => f.gif_id !== gif.id);
-      localStorage.setItem("favorites", JSON.stringify(stored));
+      localStorage.setItem("favorites_gif", JSON.stringify(stored));
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/remove`, {
         gif_id: gif.id,
-      });
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`,
+        }
+      }
+    
+    );
       setFav(false);
     } else {
       // Favorite
       const newFav = { gif_id: gif.id, gif_name: gif.gif_label, gif_url: gif.gif_url };
       stored.push(newFav);
-      localStorage.setItem("favorites", JSON.stringify(stored));
+      localStorage.setItem("favorites_gif", JSON.stringify(stored));
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/add`, {
         gif_id: gif.id,
+      },
+     {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`,
+        }
       });
       setFav(true);
     }

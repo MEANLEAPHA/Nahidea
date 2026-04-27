@@ -92,12 +92,7 @@ export default function Confession() {
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
         formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+         
       );
 
       if (res.status === 201 || res.status === 200) {

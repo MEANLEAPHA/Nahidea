@@ -4,6 +4,8 @@ import axios from "axios";
 import "../style/page/GifFeed.css";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 
+
+const token = localStorage.getItem('token');
 export default function FavoritesFeed() {
   const [gifs, setGifs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,19 +75,33 @@ export default function FavoritesFeed() {
     if (stored.some((f) => f.gif_id === gif.gif_id)) {
       // Unfavorite
       stored = stored.filter((f) => f.gif_id !== gif.gif_id);
-      localStorage.setItem("favorites", JSON.stringify(stored));
+      localStorage.setItem("favorites_gif", JSON.stringify(stored));
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/remove`, {
         gif_id: gif.gif_id,
-      });
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`,
+        }
+      }
+      );
       setGifs((prev) => prev.filter((f) => f.gif_id !== gif.gif_id));
     } else {
       // Add back
       const newFav = { gif_id: gif.gif_id, gif_name: gif.gif_name, gif_url: gif.gif_url };
       stored.push(newFav);
-      localStorage.setItem("favorites", JSON.stringify(stored));
+      localStorage.setItem("favorites_gif", JSON.stringify(stored));
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/add`, {
         gif_id: gif.gif_id,
-      });
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`,
+        }
+      }
+      );
       setGifs((prev) => [newFav, ...prev]);
     }
   };
