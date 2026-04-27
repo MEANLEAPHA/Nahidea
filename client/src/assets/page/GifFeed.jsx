@@ -217,7 +217,7 @@ const hydrateFavorites = async (pageNum = 1) => {
 
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/api/favorites/feed?page=${pageNum}`,
+      `${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/feed?page=${pageNum}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

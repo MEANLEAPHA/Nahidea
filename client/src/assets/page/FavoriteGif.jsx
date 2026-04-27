@@ -188,7 +188,7 @@ export default function FavoritesFeed() {
     // ✅ DB fallback with pagination
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/favorites/feed?page=${nextPage}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/feed?page=${nextPage}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
