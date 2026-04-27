@@ -37,7 +37,7 @@ export default function FavoritesFeed() {
     setLoading(true);
 
     // First check localStorage
-    let stored = JSON.parse(localStorage.getItem("favorites") || "[]");
+    let stored = JSON.parse(localStorage.getItem("favorites_gif") || "[]");
 
     if (stored.length > 0 && nextPage === 1) {
       setGifs(stored);
@@ -68,13 +68,13 @@ export default function FavoritesFeed() {
   };
 
   const toggleFavorite = async (gif) => {
-    let stored = JSON.parse(localStorage.getItem("favorites") || "[]");
+    let stored = JSON.parse(localStorage.getItem("favorites_gif") || "[]");
 
     if (stored.some((f) => f.gif_id === gif.gif_id)) {
       // Unfavorite
       stored = stored.filter((f) => f.gif_id !== gif.gif_id);
       localStorage.setItem("favorites", JSON.stringify(stored));
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/favorites/remove`, {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/remove`, {
         gif_id: gif.gif_id,
       });
       setGifs((prev) => prev.filter((f) => f.gif_id !== gif.gif_id));
@@ -83,7 +83,7 @@ export default function FavoritesFeed() {
       const newFav = { gif_id: gif.gif_id, gif_name: gif.gif_name, gif_url: gif.gif_url };
       stored.push(newFav);
       localStorage.setItem("favorites", JSON.stringify(stored));
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/favorites/add`, {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/add`, {
         gif_id: gif.gif_id,
       });
       setGifs((prev) => [newFav, ...prev]);

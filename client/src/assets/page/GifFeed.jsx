@@ -218,7 +218,7 @@ function GifCard({ gif }) {
       // Unfavorite
       stored = stored.filter((f) => f.gif_id !== gif.id);
       localStorage.setItem("favorites", JSON.stringify(stored));
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/favorites/remove`, {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/remove`, {
         gif_id: gif.id,
       });
       setFav(false);
@@ -227,7 +227,7 @@ function GifCard({ gif }) {
       const newFav = { gif_id: gif.id, gif_name: gif.gif_label, gif_url: gif.gif_url };
       stored.push(newFav);
       localStorage.setItem("favorites", JSON.stringify(stored));
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/favorites/add`, {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/add`, {
         gif_id: gif.id,
       });
       setFav(true);
