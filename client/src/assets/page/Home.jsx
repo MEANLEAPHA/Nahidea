@@ -38,10 +38,13 @@ const parseJSON = (val) => {
 };
 
 export default function Home() {
-       const navigate = useNavigate();
+
+  const navigate = useNavigate();
+  
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false); // UI loader
-  const [fetching, setFetching] = useState(false); // request lock
+
+  const [loading, setLoading] = useState(false); 
+  const [fetching, setFetching] = useState(false); 
   const [source, setSource] = useState("");
   const [error, setError] = useState(null);
 
@@ -51,6 +54,7 @@ export default function Home() {
   // =====================
   // INITIAL LOAD
   // =====================
+
   useEffect(() => {
     fetchPosts(1);
     setPage(1);
@@ -59,6 +63,7 @@ export default function Home() {
   // =====================
   // SCROLL LISTENER
   // =====================
+
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -103,6 +108,7 @@ export default function Home() {
 
       if (newPosts.length < 25) {
         setHasMore(false);
+        
       }
 
       setPosts((prev) => [...prev, ...newPosts]);
