@@ -9,6 +9,9 @@ import "../style/page/GifFeed.css";
 import nahideaTran from "../img/nahidea-tran.png";
 import {gif_category} from "../data/post_type_data";
 
+  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  import {faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
+  import { faHeart} from "@fortawesome/free-regular-svg-icons";
 
 
 export default function GifFeed() {
@@ -156,14 +159,17 @@ export default function GifFeed() {
     <div className="gif-feed-container">
       <div className="gif-header">
         <p>Help us upload your favourite GIFs and share them with Nahidea's community</p>
+      
         <Dropdown menu={{ items }} placement="bottom">
             <Button>Category</Button>
         </Dropdown>
+          <button><FontAwesomeIcon icon={faHeart} beatFade style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
         <button
           onClick={() => navigate("/upload/gif")}
           type="button"
           className="btn-upload-gif"
         >
+          <FontAwesomeIcon icon={faCloudArrowUp} fade style={{color: "rgb(38, 160, 255)",}} />
           Upload GIF
         </button>
       </div>
@@ -199,12 +205,42 @@ export default function GifFeed() {
 function GifCard({ gif }) {
   const [fav, setFav] = useState(false);
 
+  useEffect(() => {
+    // Load favorites from localStorage
+    const stored = JSON.parse(localStorage.getItem("favorites_gif") || "[]");
+    setFav(stored.some((f) => f.gif_id === gif.id));
+  }, [gif.id]);
+
+  const toggleFavorite = async () => {
+    let stored = JSON.parse(localStorage.getItem("favorites_gif") || "[]");
+
+    if (fav) {
+      // Unfavorite
+      stored = stored.filter((f) => f.gif_id !== gif.id);
+      localStorage.setItem("favorites", JSON.stringify(stored));
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/favorites/remove`, {
+        gif_id: gif.id,
+      });
+      setFav(false);
+    } else {
+      // Favorite
+      const newFav = { gif_id: gif.id, gif_name: gif.gif_label, gif_url: gif.gif_url };
+      stored.push(newFav);
+      localStorage.setItem("favorites", JSON.stringify(stored));
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/favorites/add`, {
+        gif_id: gif.id,
+      });
+      setFav(true);
+    }
+  };
+
+
   return (
     <div className="gif-card">
       <img src={gif.gif_url} alt={gif.gif_label} />
       <div className="gif-overlay">
         <span className="gif-name">{gif.gif_label}</span>
-        <span className="gif-fav" onClick={() => setFav(!fav)}>
+        <span className="gif-fav" onClick={toggleFavorite}>
           {fav ? <HeartFilled /> : <HeartOutlined />}
         </span>
       </div>
