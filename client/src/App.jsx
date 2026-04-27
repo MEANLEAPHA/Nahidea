@@ -33,6 +33,7 @@ import './assets/style/Section.css'
 import PrivacyPolicy from './assets/page/Privatepolicy';
 import GifFeed from './assets/page/GifFeed';
 import GifUpload from './assets/upload/GifUpload';
+import FavoritesGif from './assets/page/FavoriteGif';
 
 
 const token = localStorage.getItem("token");
@@ -58,6 +59,7 @@ const App = () =>{
 
                     <Route path='/gif' element={<GifFeed/>}></Route>
                     <Route path='/upload/gif' element={<GifUpload/>}></Route>
+                    <Route path='/favorite/gif' element={<FavoritesGif/>}></Route>
                     {/* Rule */}
                     <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
                 </Route>

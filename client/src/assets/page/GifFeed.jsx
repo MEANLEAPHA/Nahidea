@@ -30,6 +30,8 @@ export default function GifFeed() {
   useEffect(() => {
     fetchGifs(1);
     setPage(1);
+    // hydrate favorites on mount
+    hydrateFavorites(1);
   }, []);
 
   useEffect(() => {
@@ -49,6 +51,9 @@ export default function GifFeed() {
           } else {
             fetchGifs(next);
           }
+
+          // 🔥 also hydrate favorites page by page if localStorage was empty
+          hydrateFavorites(next);
           return next;
         });
       }
@@ -164,7 +169,7 @@ export default function GifFeed() {
         <Dropdown menu={{ items }} placement="bottom">
             <Button>Category</Button>
         </Dropdown>
-          <button><FontAwesomeIcon icon={faHeart} beatFade style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
+          <button onClick={()=>{navigate("/favorite/gif")}} type="button"><FontAwesomeIcon icon={faHeart} beatFade style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
         <button
           onClick={() => navigate("/upload/gif")}
           type="button"
@@ -201,6 +206,43 @@ export default function GifFeed() {
     </div>
   );
 }
+
+const hydrateFavorites = async (pageNum = 1) => {
+  let stored = JSON.parse(localStorage.getItem("favorites_gif") || "[]");
+
+  if (stored.length > 0 && pageNum === 1) {
+    // Already hydrated
+    return stored;
+  }
+
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}/api/favorites/feed?page=${pageNum}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const newPosts = res.data.data || [];
+
+    if (pageNum === 1) {
+      // First hydration: overwrite localStorage
+      localStorage.setItem("favorites_gif", JSON.stringify(newPosts));
+      return newPosts;
+    } else {
+      // Subsequent pages: append to localStorage
+      const current = JSON.parse(localStorage.getItem("favorites_gif") || "[]");
+      const updated = [...current, ...newPosts];
+      localStorage.setItem("favorites_gif", JSON.stringify(updated));
+      return updated;
+    }
+  } catch (err) {
+    console.error("Failed to hydrate favorites", err);
+    return [];
+  }
+};
+
 
 /* 🔥 Card component */
 function GifCard({ gif }) {
