@@ -1,62 +1,63 @@
 
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Timeline } from "antd";
-
 import "../style/page/Privacypolicy.css";
+
+import nahideaTran from "../img/nahidea-tran.png";
+import { data } from "react-router-dom";
+
 const sections = [
   { id: "introduction", title: "Introduction" },
-  { id: "platform", title: "Nahidea as a Public Platform" },
-  { id: "data-collection", title: "Information We Collect" },
-  { id: "data-usage", title: "How We Use Information" },
-  { id: "data-sharing", title: "How We Share Information" },
-  { id: "data-protection", title: "How We Protect Information" },
-  { id: "rights", title: "Your Rights and Choices" },
-  { id: "anonymous", title: "Anonymous Usage & Tokens" },
+  { id: "platform", title: "Public Platform" },
+  { id: "data-collection", title: "Data Collection" },
+  { id: "data-usage", title: "Data Usage" },
+  { id: "data-sharing", title: "Data Sharing" },
+  { id: "data-protection", title: "Data Protection" },
+  { id: "rights", title: "Your Rights" },
+  { id: "anonymous", title: "Anonymous Usage" },
   { id: "children", title: "Children" },
-  { id: "changes", title: "Changes to This Policy" },
-  { id: "contact", title: "Contact Us" }
+  { id: "changes", title: "Policy Changes" },
+  { id: "contact", title: "Contact" }
 ];
 
-// scalable revisions
 export const revisions = [
-  { date: "2026-01-06" },
-  // add more here
+   { date: "2025-12-30", },
+  { date: "2025-12-29", url_link: "https://example.com/privacy-policy/2025-12-29"},
+  { date: "2026-01-06", url_link: "https://example.com/privacy-policy/2026-01-06"},
+  { date: "2025-12-32", url_link: "https://example.com/privacy-policy/2025-12-31"},
 ];
 
-import './Home.css'
-import nahideaTran from "../img/nahidea-tran.png"
 
 const Loader = () => {
-  <div className="loader-container">
-    <img src={nahideaTran} alt="Loading..." className="loader-img"/>
-  </div>
-}
+  return (
+    <div className="loader-container">
+      <img src={nahideaTran} alt="Loading..." className="loader-img" />
+    </div>
+  );
+};
+
 export default function PrivacyPolicy() {
-  const [active, setActive] = useState("introduction");
   const sectionRefs = useRef({});
-
- 
-
+  const [activeId, setActiveId] = useState("introduction");
   const scrollTo = (id) => {
-    sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth" });
+    setActiveId(id);
+    sectionRefs.current[id]?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   };
 
   return (
     <div className="privacy-container">
-      <div className="loader-container">
-        <img src={nahideaTran} alt="Loading..." className="loader-img"/>
-      </div>
-      {/* LEFT TIMELINE */}
+
+      {/* LEFT NAV */}
       <div className="timeline-container">
         <Timeline
           items={sections.map((sec) => ({
-          
+            color: "var(--primary-color)",
             children: (
               <span
-                className={`timeline-item ${
-                  active === sec.id ? "active" : ""
-                }`}
+                className={`timeline-item ${activeId === sec.id ? "active" : ""}`}
                 onClick={() => scrollTo(sec.id)}
               >
                 {sec.title}
@@ -69,7 +70,8 @@ export default function PrivacyPolicy() {
           <h4>Revisions</h4>
           <ul>
             {revisions.map((rev, i) => (
-              <li key={i}>{rev.date}</li>
+              <li key={i}>
+                <a href={rev.url_link} target="_blank">{rev.date}</a></li>
             ))}
           </ul>
         </div>
@@ -82,110 +84,22 @@ export default function PrivacyPolicy() {
           Effective: Jan 06, 2026 | Last Updated: Jan 06, 2026
         </p>
 
-        {/* SECTIONS */}
+        {sections.map((sec) => (
+          <section
+            key={sec.id}
+            id={sec.id}
+            ref={(el) => (sectionRefs.current[sec.id] = el)}
+            className={activeId === sec.id ? "section active-section" : "section"}
+          >
+            <h2 className={activeId === sec.id ? "active-title" : ""}>{sec.title}</h2>
 
-        <section ref={(el) => (sectionRefs.current["introduction"] = el)} id="introduction">
-          <h2>Introduction</h2>
-          <p>
-            Nahidea is a social platform designed to enable users to share ideas,
-            ask questions, provide answers, and support others through knowledge,
-            experience, and community interaction.
-          </p>
-          <p>
-            This Privacy Policy explains how we collect, use, and protect your
-            information when you use our services.
-          </p>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["platform"] = el)} id="platform">
-          <h2>Nahidea as a Public Platform</h2>
-          <p>
-            Nahidea operates as a largely public platform. Content you post,
-            including questions, answers, and discussions, may be visible to
-            other users and the public.
-          </p>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["data-collection"] = el)} id="data-collection">
-          <h2>Information We Collect</h2>
-          <ul>
-            <li>Account information (username, email)</li>
-            <li>User-generated content</li>
-            <li>Usage data (interactions, activity logs)</li>
-            <li>Device and technical information</li>
-          </ul>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["data-usage"] = el)} id="data-usage">
-          <h2>How We Use Information</h2>
-          <p>We use collected data to:</p>
-          <ul>
-            <li>Operate and improve the platform</li>
-            <li>Personalize user experience</li>
-            <li>Moderate content and prevent abuse</li>
-            <li>Ensure system security</li>
-          </ul>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["data-sharing"] = el)} id="data-sharing">
-          <h2>How We Share Information</h2>
-          <p>
-            We do not sell personal data. Information may be shared:
-          </p>
-          <ul>
-            <li>With service providers</li>
-            <li>For legal compliance</li>
-            <li>To enforce platform policies</li>
-          </ul>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["data-protection"] = el)} id="data-protection">
-          <h2>How We Protect Information</h2>
-          <p>
-            We implement reasonable technical and organizational measures to
-            protect your data. However, no system is fully secure.
-          </p>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["rights"] = el)} id="rights">
-          <h2>Your Rights and Choices</h2>
-          <ul>
-            <li>Access your data</li>
-            <li>Request deletion</li>
-            <li>Control visibility of content</li>
-          </ul>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["anonymous"] = el)} id="anonymous">
-          <h2>Anonymous Usage & Tokens</h2>
-          <p>
-            Nahidea supports limited anonymous interactions through a token-based
-            system. Abuse of anonymity may result in restrictions or removal.
-          </p>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["children"] = el)} id="children">
-          <h2>Children</h2>
-          <p>
-            Nahidea is not intended for users under 13. We do not knowingly
-            collect data from children.
-          </p>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["changes"] = el)} id="changes">
-          <h2>Changes to This Policy</h2>
-          <p>
-            We may update this policy periodically. Continued use of Nahidea
-            indicates acceptance of the updated policy.
-          </p>
-        </section>
-
-        <section ref={(el) => (sectionRefs.current["contact"] = el)} id="contact">
-          <h2>Contact Us</h2>
-          <p>
-            For privacy-related inquiries, contact: support@nahidea.com
-          </p>
-        </section>
+            {/* content mock (you can expand later easily) */}
+            <p>
+              This section explains details about {sec.title.toLowerCase()}.
+              Replace this content with your actual policy text.
+            </p>
+          </section>
+        ))}
       </div>
     </div>
   );

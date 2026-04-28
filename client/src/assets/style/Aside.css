@@ -95,6 +95,7 @@ aside{
 }
 .max-li{
     list-style: none;
+    
 }
 .max-li button{
     background:none;
@@ -117,7 +118,7 @@ aside{
                 transform 0.5s ease 0.5s;
 } 
 .max-li .btn-home{
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .max-li button label{

@@ -28,7 +28,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 
 
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import remarkGfm from "remark-gfm"; 
 
 import "../style/upload/Anonymous.css";
 import "../style/upload/MultipleMedia.css";

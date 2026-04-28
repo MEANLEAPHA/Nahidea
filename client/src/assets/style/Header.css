@@ -51,9 +51,10 @@ header{
     display: flex;
     gap:18px;
     justify-content:start;
+    height: 100%;
     align-items: center;
    padding-left: 13px;
-   
+
 }
 
 .aside-action-bar{

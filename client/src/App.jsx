@@ -34,6 +34,12 @@ import PrivacyPolicy from './assets/page/Privatepolicy';
 import GifFeed from './assets/page/GifFeed';
 import GifUpload from './assets/upload/GifUpload';
 import FavoritesGif from './assets/page/FavoriteGif';
+import Help from './assets/page/Help';
+import UserAgreement from './assets/page/UserAgreement';
+import Rule from './assets/page/Rule';
+import Accessibility from './assets/page/Accessibility';
+import AboutPost from './assets/page/AboutPost';
+import AnswerPost from './assets/page/AnswerPost';
 
 
 const token = localStorage.getItem("token");
@@ -51,17 +57,32 @@ const App = () =>{
                     {/* Action Upload page */}
                     <Route index element={<Home/>} />
                     <Route path='/home' element={<Home/>}></Route>
+
+                    {/* Upload posts */}
                     <Route path='/create/question' element={<Question/>}></Route>
                     <Route path='/create/confession' element={<Confession/>}></Route>
                     <Route path='/create/content' element={<Content/>}></Route>
 
-                    {/* Gif */}
 
+                    {/* post */}
+                    <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>
+                    <Route path='answerpost' element={<AnswerPost/>}></Route>
+
+                    {/* Gif */}
                     <Route path='/gif' element={<GifFeed/>}></Route>
                     <Route path='/upload/gif' element={<GifUpload/>}></Route>
                     <Route path='/favorite/gif' element={<FavoritesGif/>}></Route>
-                    {/* Rule */}
+
+                    {/* User assistant */}
+                    <Route path='/help' element={<Help/>}></Route>
+                    <Route path='/useragreement' element = {<UserAgreement/>} />
+                    <Route path='/nahidearule' element={<Rule/>} />
                     <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
+                    <Route path='/accessibility' element={<Accessibility/>}></Route>
+
+                    {/* User Dashboard */}
+
+
                 </Route>
 
                 {/* Authentication */}
@@ -71,13 +92,10 @@ const App = () =>{
                 <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
                 <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
                 <Route path='/newpassword' element={<NewPassword/>}></Route>
-
-
-               
-                
-
+        
                 {/* Not Found page */}
                 <Route path='*' element={<NotFound/>}></Route>
+                
             </Routes>
         </BrowserRouter>
     )

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
-import "./Home.css";
+import "../style/page/Home.css";
  import "../style/upload/Postpreview.css";
  import "../style/upload/MultipleMedia.css";
 import {
@@ -146,19 +146,12 @@ export default function Home() {
           <>
               <div>
                 <div className='post-caption' onClick={()=>{
-                  navigate(`/login?id=${post.id}`)
+                  const newPost = { postId: post.id, author: post.username, title: data.title, textBody: data.text_body, mediaUrl: data.media_url, postTags: data.post_tags, type: data.type, isAnonymous: data.is_anonymous };
+                  sessionStorage.setItem("post", JSON.stringify(newPost));
+                  navigate(`/aboutpost/${post.id}`)
                 }}>
                     <p>{data.title}</p>
                 </div>
-                {/* <div className='post-content-type'>
-                    <span className='content-type'>{data.type}</span>
-                </div>
-                <div className='post-body-text'>
-                    <MarkdownPreview content={data.text_body}/>
-                </div> */}
-                {/* <div className='post-tags'>
-                    <TagsPreview tagsValue={postTagsValue}/>
-                </div> */}
               </div>
 
               <div  className='post-thumbnail'>         
@@ -172,16 +165,13 @@ export default function Home() {
           <>
               <div>
                    <div className='post-caption' onClick={()=>{
-                      navigate(`/login?id=${post.id}`)
+                      const newPost = { postId: post.id, media_url: data.media_url };
+                      sessionStorage.setItem("post", JSON.stringify(newPost));
+                      navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
                     }}>
                     <p>{data.title}</p>
                 </div>
-                {/* <div className='post-content-type'>
-                    <span className='content-type'>{selectTypeValue}</span>
-                </div>
-                <div className='post-tags'>
-                    <TagsPreview tagsValue={postTagsValue}/>
-                </div> */}
+
               </div>
                   
               <div className="post-thumbnail">
@@ -202,13 +192,12 @@ export default function Home() {
           <>
                             <div>
                                <div className='post-caption' onClick={()=>{
-                                  navigate(`/login?id=${post.id}`)
+                                  const newPost = { postId: post.id, media_url: data.media_url, type: data.question_type };
+                                  sessionStorage.setItem("post", JSON.stringify(newPost));
+                                  navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&mediaUrl=${data.media_url}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
                                 }}>
                                     <p>{data.title}</p>
                                 </div>
-                              {/* <div className='post-content-type'>
-                                  <span className='content-type'>{selectTypeValue}</span>
-                              </div> */}
                               <div className="post-question-answer-preview">
                                    {data.question_type === "closedend" && (
                                         <Space direction="vertical">

@@ -1,0 +1,156 @@
+/* THEME */
+:root{
+  --background-color:#fff;
+  --primary-color:#fd7648;
+  --secondary-color:rgba(107,107,107,0.2);
+  --font-color:#111;
+  --back-con:#f5f5f5;
+  --primary-font: monospace;
+}
+
+.dark-theme{
+  --background-color:#202020;
+  --font-color:#fff;
+  --back-con:#2a2a2a;
+}
+
+/* LAYOUT */
+.rules-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  flex-wrap: wrap;
+  background: var(--background-color);
+  color: var(--font-color);
+  font-family: var(--primary-font);
+}
+
+/* NAV */
+.rules-nav {
+  flex: 0 0 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 60px;
+}
+
+.nav-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.nav-item:hover {
+  background: var(--back-con);
+  color: var(--primary-color);
+}
+
+.nav-item.active {
+  background: rgba(253,118,72,0.1);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* CONTENT */
+.rules-content {
+  flex: 1;
+  max-width: 800px;
+}
+
+.rules-content h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  margin-bottom: 30px;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+/* CARD */
+.rule-card {
+  background: var(--back-con);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  transition: 0.25s;
+  border-left: 4px solid transparent;
+}
+
+.rule-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ACTIVE */
+.active-card {
+  border-left: 4px solid var(--primary-color);
+  background: rgba(253,118,72,0.08);
+}
+
+/* HEADER */
+.rule-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.rule-number {
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* TITLE */
+.rule-card h2 {
+  font-size: 18px;
+}
+
+.active-title {
+  color: var(--primary-color);
+}
+
+/* TEXT */
+.rule-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .rules-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .rules-nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .nav-item {
+    white-space: nowrap;
+    background: var(--back-con);
+  }
+}
+
+@media (max-width: 500px) {
+  .rules-content h1 {
+    font-size: 24px;
+  }
+
+  .rule-card h2 {
+    font-size: 16px;
+  }
+
+  .rule-card p {
+    font-size: 13px;
+  }
+}
