@@ -274,6 +274,15 @@ cursor: pointer;
 .create-dropdown{
      width: 180px;
 }
+.aside-dropdown{
+    width: 80%;
+    margin-top: 0px;
+    scrollbar-width: none;
+    height: calc(100vh - 55px);
+    overflow: scroll;
+    scroll-behavior: smooth;
+    
+}
 /* Target the dropdown menu container */
 .profile-dropdown .ant-dropdown-menu {
   padding: 10px;   /* removes internal padding */
@@ -322,12 +331,37 @@ cursor: pointer;
   border-radius: 10px;
   transform: scale(0.9);
 }
+.aside-dropdown .ant-dropdown-menu {
+ /* overflow: scroll;
+ scroll-behavior: smooth; */
+}
+.aside-dropdown .ant-dropdown-menu-item {
+    padding: 2px !important;
+    background: none;
+    
+}
+.aside-dropdown .ant-dropdown-menu-item li:hover{
+    padding-left: 0px;
+    transform: scale(1);
+}
 
+.aside-dropdown .ant-dropdown-menu {
+  padding: 0px;   /* removes internal padding */
+  margin: 0;    /* removes external margin */
+  border-radius: 8px;
+   background: none;
+   scrollbar-width: none;
+  box-shadow: none;
+}
 
-
-
-
-
+.aside-dropdown .ant-dropdown-menu-item-active{
+    background: none !important;
+    padding:0px;
+}
+.aside-hr{
+   
+ margin-left: 0;
+}
 
 
 
@@ -603,7 +637,7 @@ display: flex;
         height: 40px;
     }
     .logo-font-main{
-        font-size: 27px;
+        font-size: 32px;
     }
     .header-right{
       

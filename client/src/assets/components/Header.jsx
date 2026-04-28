@@ -1,15 +1,18 @@
 import React, { useState, useRef, useEffect, use } from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-import {PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined} from '@ant-design/icons';
+import {MenuOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
+        HomeOutlined,SignatureOutlined,BarChartOutlined,ClockCircleOutlined,HeartOutlined, RiseOutlined, FireOutlined, QuestionCircleOutlined, FlagOutlined, ReadOutlined, FileProtectOutlined,FileDoneOutlined, 
+} from '@ant-design/icons';
 import { Divider, Dropdown, Space } from 'antd';
+
 // style
 import "../style/Header.css";
 
   // iconcd client
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-  import { faBars, faMagnifyingGlass, faChevronDown, faInbox, faArrowRightFromBracket, faFireFlameCurved, faMagnifyingGlassChart, faTimesCircle,faChartSimple, faGauge,faSliders,faMoon, faFlag, faCommentDots, faBug, faUser, faBook, faNewspaper, faUsers, faComments, faComment, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faBan, faFeather, faBullhorn, faServer, faClockRotateLeft, faTrashCan, faChevronUp, faPlus} from "@fortawesome/free-solid-svg-icons";
-  import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus} from "@fortawesome/free-regular-svg-icons";
+  import { faBars, faMagnifyingGlass, faChevronDown, faInbox, faArrowRightFromBracket, faFireFlameCurved, faMagnifyingGlassChart, faTimesCircle,faChartSimple, faGauge,faSliders,faMoon, faFlag, faCommentDots, faBug, faUser, faBook, faUsers, faComments, faComment, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faBan, faFeather, faBullhorn, faServer, faClockRotateLeft, faTrashCan, faChevronUp, faPlus, faChildReaching} from "@fortawesome/free-solid-svg-icons";
+  import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus, faNewspaper} from "@fortawesome/free-regular-svg-icons";
 
 
 
@@ -23,7 +26,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
      <header>
 
       <div className="header-left header-children">
-        {isMaxAside === "true" ? <MenuUnfoldOutlined className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} /> : <MenuFoldOutlined  className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} />}
+        <MenuDropDown />
         <p className='logo-font-main not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
          <CreateDropDownMin />
       </div>
@@ -393,6 +396,222 @@ const QueryCard = ({id, icon, link, description, title}) => {
   {id:4, icon:faServer, link:'/Database', description: "Access and manage database records, pending updates, and edits.", title: "Cloud Storage" }
 ];
 
+const MenuDropDown = () =>{
+  const navigate = useNavigate();
+ const upload_items = [
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/')} className="btn-home">
+          <div>
+            <HomeOutlined className="icon-aside" />
+          </div>
+          <div>
+            <label>Home</label>
+          </div>
+        </button>
+      </li>
+    ),
+    key: '0',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/answerqa')}>
+          <div>
+            <SignatureOutlined className="icon-aside" />
+          </div>
+          <div>
+            <label>
+              Answer <span style={{ color: 'red' }}>QA</span>
+            </label>
+          </div>
+        </button>
+      </li>
+    ),
+    key: '1',
+  },
+  {
+    label: (
+      <>
+        <label className="label-li">You </label>
+        <li className="max-li">
+          <button onClick={() => navigate('/socialactivity')}>
+            <div>
+              <BarChartOutlined />
+            </div>
+            <div>
+              <label>Social Activity</label>
+            </div>
+          </button>
+        </li>
+      </>
+    ),
+    key: '3',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/history')}>
+          <ClockCircleOutlined className="icon-aside" />
+          <label>History</label>
+        </button>
+      </li>
+    ),
+    key: '5',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/favorite')}>
+          <FontAwesomeIcon icon={faBookmark} className="icon-aside icon-awesome" />
+          <label>Favorite</label>
+        </button>
+      </li>
+    ),
+    key: '6',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/likepost')}>
+          <HeartOutlined className="icon-aside" />
+          <label>Like Post</label>
+        </button>
+      </li>
+    ),
+    key: '7',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/yourpost')}>
+          <FontAwesomeIcon icon={faNewspaper} className="icon-aside icon-awesome" />
+          <label>Your Post</label>
+        </button>
+      </li>
+    ),
+    key: '8',
+  },
+  {
+    label: (
+      <>
+        <label className='label-li'>Explore</label>
+        <li className="max-li">
+          <button onClick={() => navigate('/trending')}>
+            <RiseOutlined className="icon-aside" />
+            <label>
+              Trending <span style={{ color: 'yellowgreen' }}>NOW</span>
+            </label>
+          </button>
+      </li>
+      </>
+    ),
+    key: '9',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/halloffame')} className="btn-hall-of-fame">
+          <FireOutlined className="icon-aside" />
+          <label>Hall of Fame</label>
+        </button>
+      </li>
+    ),
+    key: '10',
+  },
+  {
+    label: (
+      <>
+        <hr className="aside-hr"/>
+        <li className="max-li">
+        <button onClick={() => navigate('/help')}>
+          <QuestionCircleOutlined className="icon-aside" />
+          <label>Help</label>
+        </button>
+      </li>
+      </>
+    ),
+    key: '11',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/Feedback')}>
+          <ExceptionOutlined className="icon-aside" />
+          <label>Feedback</label>
+        </button>
+      </li>
+    ),
+    key: '12',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/Reporthistory')}>
+          <FlagOutlined className="icon-aside" />
+          <label>Report History</label>
+        </button>
+      </li>
+    ),
+    key: '13',
+  },
+  {
+    label: (
+      <>
+        <hr className="aside-hr"/>
+        <li className="max-li">
+        <button onClick={() => navigate('/nahidearule')}>
+          <ReadOutlined className="icon-aside" />
+          <label>Nahidea Rule</label>
+        </button>
+      </li>
+      </>
+      
+    ),
+    key: '14',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/privacypolicy')}>
+          <FileProtectOutlined className="icon-aside" />
+          <label>Private Policy</label>
+        </button>
+      </li>
+    ),
+    key: '15',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/useragreement')}>
+          <FileDoneOutlined className="icon-aside" />
+          <label>User Agreement</label>
+        </button>
+      </li>
+    ),
+    key: '16',
+  },
+  {
+    label: (
+      <li className="max-li">
+        <button onClick={() => navigate('/accessibility')}>
+          <FontAwesomeIcon icon={faChildReaching} className="icon-aside" />
+          <label>Accessibility</label>
+        </button>
+      </li>
+    ),
+    key: '17',
+  },
+];
+
+  return(
+    <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown aside-dropdown"}}>
+          <MenuOutlined className="bar-icon aside-action-bar mobile-tool"/>
+  </Dropdown>
+  )
+}
 
 
 const CreateDropDown = () =>{

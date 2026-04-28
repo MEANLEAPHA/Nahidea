@@ -240,6 +240,7 @@ const Rules= [
     { id:17, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
 ];
 
+
 const AppendRule = () =>{
     return(
         <>
