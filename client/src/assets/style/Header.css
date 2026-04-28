@@ -270,6 +270,7 @@ cursor: pointer;
   margin: 0;
   box-shadow: none;
   color: var(--font-color);
+
 }
 .create-dropdown{
      width: 180px;
@@ -279,8 +280,7 @@ cursor: pointer;
     margin-top: 0px;
     scrollbar-width: none;
     height: calc(100vh - 55px);
-    overflow: scroll;
-    scroll-behavior: smooth;
+
     
 }
 /* Target the dropdown menu container */
@@ -290,6 +290,7 @@ cursor: pointer;
   border-radius: 8px;
    background: var(--back-con);
   box-shadow: none;
+  
 }
 
 /* Optional: tighten spacing between items */
@@ -331,9 +332,14 @@ cursor: pointer;
   border-radius: 10px;
   transform: scale(0.9);
 }
+/* .ant-dropdown{
+     overflow: scroll !important;
+ scroll-behavior: smooth !important;
+} */
 .aside-dropdown .ant-dropdown-menu {
- /* overflow: scroll;
- scroll-behavior: smooth; */
+    height: 100% !important;
+ overflow: scroll !important;
+ scroll-behavior: smooth !important;
 }
 .aside-dropdown .ant-dropdown-menu-item {
     padding: 2px !important;
