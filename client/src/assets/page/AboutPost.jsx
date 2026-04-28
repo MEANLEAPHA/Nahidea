@@ -7,6 +7,14 @@ import "../style/page/Home.css";
  import "../style/upload/Postpreview.css";
  import "../style/upload/MultipleMedia.css";
 import {MediaPreview} from "../util/mediaUploader";
+const parseJSON = (val) => {
+  try {
+    return typeof val === "string" ? JSON.parse(val) : val;
+  } catch {
+    return [];
+  }
+};
+
 
 const AboutPost = () => {
   const { id } = useParams(); 
@@ -38,7 +46,7 @@ const AboutPost = () => {
       <p>Author: {post.isAnonymous ? "Anonymous" : post.author}</p>
       <p>Type: {post.type}</p>
       <p>Tags: {post.postTags}</p>
-     <MediaPreview files={parse.JSON(post.mediaUrl)} />
+     <MediaPreview files={parseJSON(post.mediaUrl)} />
       <div className="post-body">
         <ReactMarkdown remarkPlugin={[remarkGfm]}>{post.textBody}</ReactMarkdown>
       </div>
