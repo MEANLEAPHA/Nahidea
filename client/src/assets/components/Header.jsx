@@ -607,7 +607,7 @@ const MenuDropDown = () =>{
 ];
 
   return(
-    <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown aside-dropdown"}}>
+    <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "aside-dropdown"}}>
           <MenuOutlined className="bar-icon aside-action-bar mobile-tool"/>
   </Dropdown>
   )
