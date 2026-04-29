@@ -7,9 +7,9 @@ import { jwtDecode } from "jwt-decode";
 // Import Page
 
     // Component
-    import Header from '../src/assets/components/Header';   
+     
     import Aside from './assets/components/Aside';
-
+    import Header from '../src/assets/components/Header'; 
     // Home
     import Home from './assets/page/Home';
 
@@ -40,6 +40,8 @@ import Rule from './assets/page/Rule';
 import Accessibility from './assets/page/Accessibility';
 import AboutPost from './assets/page/AboutPost';
 import AnswerPost from './assets/page/AnswerPost';
+import Notification from './assets/page/Notification';
+import Search from './assets/page/Search';
 
 
 const token = localStorage.getItem("token");
@@ -81,7 +83,10 @@ const App = () =>{
                     <Route path='/accessibility' element={<Accessibility/>}></Route>
 
                     {/* User Dashboard */}
+                    <Route path='/notification' element={<Notification/>}></Route>
 
+                    {/* tool */}
+                    <Route path='/search' element={<Search />}></Route>
 
                 </Route>
 

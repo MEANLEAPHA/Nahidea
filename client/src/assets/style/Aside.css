@@ -195,6 +195,7 @@ aside{
     align-items: center;
     justify-content:center;
     list-style: none;
+    background: none;
  }
  .nav-item button{
     background:none;
@@ -226,6 +227,10 @@ aside{
     top: 0;
     left: 0;
 }
+ .nav-item{
+
+    background: none;
+ }
 .min-aside{
     width: 6%;
 }
@@ -246,6 +251,10 @@ aside{
 .min-aside{
     width: 7%;
 }
+ .nav-item{
+
+    background: none;
+ }
 .nav-item:hover button{
     margin-left: 0px;
  }
@@ -253,21 +262,6 @@ aside{
 }
 @media screen and (max-width:768px) {
     aside{
-     /* height: calc(100vh - 56px); */
-     margin: 0;
-     padding: 0;
-     padding-top: 5px;
-     position: relative;
-}
-.max-aside{
-    width: 65%; 
-    position: absolute; 
-    z-index: 1000;
-    background-color: var(--background-color);
-    top: 0;
-    left: 0;
-}
-.max-li button{
-    font-size: 16px;
-} 
+        display: none;
+    }
 }

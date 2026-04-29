@@ -1,10 +1,10 @@
 
 import React, { useEffect, useState } from "react";
 
-import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,SignatureOutlined, FireOutlined, TeamOutlined,UserAddOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined, UserOutlined  } from '@ant-design/icons';
+import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,GifOutlined,SignatureOutlined, FireOutlined, TeamOutlined,UserAddOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined, UserOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChildReaching} from "@fortawesome/free-solid-svg-icons";
-import {faBookmark, faNewspaper} from "@fortawesome/free-regular-svg-icons";
+import {faBookmark, faNewspaper,faFaceGrinWink} from "@fortawesome/free-regular-svg-icons";
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -15,16 +15,16 @@ import {useNavigate} from "react-router-dom";
 const Aside = (props) => {
 
     // Mobile responsive on Aside
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    // const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-        useEffect(() => {
-            const handleResize = () => {
-                setIsMobile(window.innerWidth <= 768);
-            };
+        // useEffect(() => {
+        //     const handleResize = () => {
+        //         setIsMobile(window.innerWidth <= 768);
+        //     };
 
-            window.addEventListener("resize", handleResize);
-            return () => window.removeEventListener("resize", handleResize);
-        }, []);
+        //     window.addEventListener("resize", handleResize);
+        //     return () => window.removeEventListener("resize", handleResize);
+        // }, []);
 
     // Aside Collapse
     const [showMaxAside, setMaxAside] = useState(() => {
@@ -64,15 +64,15 @@ const Aside = (props) => {
         )
     }
     // ✅ MOBILE: only MaxAside (display block/none)
-    if (isMobile) {
-        return (
-            <aside style={{ display: props.append ? "block" : "none" }} className='max-aside'>
+    // if (isMobile) {
+    //     return (
+    //         <aside style={{ display: props.append ? "block" : "none" }} className='max-aside'>
                
-                        <MaxAsideUl />
+    //                     <MaxAsideUl />
             
-            </aside>
-        );
-    }
+    //         </aside>
+    //     );
+    // }
 
 
     
@@ -94,7 +94,7 @@ const MinInfo = [
         id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },
     {
-        id:3, a: '/gif', icon: <FontAwesomeIcon icon={faGlobaleaks} className='sub-icon'/>
+        id:3, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(146, 108, 255)"}} className='sub-icon'/>
     },
     {
         id:4, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
@@ -155,8 +155,7 @@ const Card = ({a, icon, label, classNameBtn}) =>{
 
 const Mains= [
     { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
-    { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
-    { id:3, a: '/gif',  icon: <FontAwesomeIcon icon={faGlobaleaks} className='icon-aside icon-awesome'/>, label: <label>Gossip <span style={{color:"orange",fontSize:"12px"}}>BETA</span></label> }
+    { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> }
 ];
 
 
@@ -192,8 +191,9 @@ const UserTool = ({a, icon, label, classNameIcon})=> {
 };
 
 const Explores= [
-    { id:9, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
-    { id:10, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
+    { id:9, a:'/gif',  icon:<FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(146, 108, 255)"}} className='icon-aside'/>, label: <label>Gif</label> },
+    { id:10, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
+    { id:11, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
 ];
 
 
@@ -213,9 +213,9 @@ const Explore = ({a, icon, label, classNameBtn})=> {
 };
 
 const Mores= [
-    { id:11, a: '/help', icon: <QuestionCircleOutlined className='icon-aside'/>, label: <label>Help</label> },
-    { id:12, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
-    { id:13, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
+    { id:12, a: '/help', icon: <QuestionCircleOutlined className='icon-aside'/>, label: <label>Help</label> },
+    { id:13, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
+    { id:14, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
 ];
 
 const AppendMore = () =>{
@@ -234,10 +234,10 @@ const More = ({a, icon, label, classNameIcon})=> {
 };
 
 const Rules= [
-    { id:14, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
-    { id:15, a: '/privacypolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
-    { id:16, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
-    { id:17, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
+    { id:15, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
+    { id:16, a: '/privacypolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
+    { id:17, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
+    { id:18, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
 ];
 
 

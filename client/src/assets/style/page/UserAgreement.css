@@ -36,7 +36,7 @@
   top: 60px;
 }
 
-.nav-item {
+.nav-itemUa {
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 8px;
@@ -44,13 +44,13 @@
   font-size: 14px;
 }
 
-.nav-item:hover {
+.nav-itemUa:hover {
   background: var(--back-con);
   color: var(--primary-color);
 }
 
 /* ACTIVE NAV */
-.nav-item.active {
+.nav-itemUa.active {
   color: var(--primary-color);
   background: rgba(253, 118, 72, 0.1);
   font-weight: 600;
@@ -102,7 +102,7 @@
     gap: 8px;
   }
 
-  .nav-item {
+  .nav-itemUa {
     white-space: nowrap;
     background: var(--back-con);
   }

@@ -72,7 +72,7 @@ export default function UserAgreement() {
         {sections.map((sec) => (
           <span
             key={sec.id}
-            className={`nav-item ${
+            className={`nav-itemUa ${
               activeId === sec.id ? "active" : ""
             }`}
             onClick={() => scrollTo(sec.id)}

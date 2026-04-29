@@ -12,7 +12,7 @@ import "../style/Header.css";
   // iconcd client
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { faBars, faMagnifyingGlass, faChevronDown, faInbox, faArrowRightFromBracket, faFireFlameCurved, faMagnifyingGlassChart, faTimesCircle,faChartSimple, faGauge,faSliders,faMoon, faFlag, faCommentDots, faBug, faUser, faBook, faUsers, faComments, faComment, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faBan, faFeather, faBullhorn, faServer, faClockRotateLeft, faTrashCan, faChevronUp, faPlus, faChildReaching} from "@fortawesome/free-solid-svg-icons";
-  import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus, faNewspaper} from "@fortawesome/free-regular-svg-icons";
+  import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus, faNewspaper, faFaceGrinWink} from "@fortawesome/free-regular-svg-icons";
 
 
 
@@ -28,13 +28,14 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
       <div className="header-left header-children">
         <MenuDropDown />
         <p className='logo-font-main not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
-         <CreateDropDownMin />
+        
+         
+         <p className='logo-font-main mobile-tool' >Nah<span style={{color:'gold'}}>!</span>dea</p>
+
       </div>
 
       <div className="header-middle header-children">
-        
         <Search />
-        <p className='logo-font-main mobile-tool' >Nah<span style={{color:'gold'}}>!</span>idea</p>
       </div>
    
 
@@ -42,8 +43,10 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
   
         <button className='button-bar-icon' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
         <CreateDropDown />
-        <SearchOutlined className="mobile-tool bar-icon" />
-        <button className='button-bar-icon button-bar-icon-bell' ><BellOutlined className='bar-icon'/></button>
+        <SearchOutlined className="mobile-tool bar-icon" onClick={()=>{navigate('/search')}}/>
+        <CreateDropDownMin />
+        <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
+        
         <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} />
       </div>
 
@@ -203,7 +206,6 @@ const RecentSearch = () => {
       </div>
   )
 }
-
 const RecentCard = ({description,link,icon,title, onDelete}) => {
   const navigate = useNavigate();
    const handleClick = () => {
@@ -266,7 +268,6 @@ const HistorySearch = () => {
   )
   
 }
-
 const HistoryCard = ({title, onDelete}) => {
   const navigate = useNavigate();
    const handleClick = () => {
@@ -318,7 +319,6 @@ const HistoryCard = ({title, onDelete}) => {
     </div>
   );
 };
-
 const QueryCard = ({id, icon, link, description, title}) => {
     const navigate = useNavigate();
     const handleClick = () => {
@@ -344,7 +344,6 @@ const QueryCard = ({id, icon, link, description, title}) => {
       </li>
     )
  }
-
  const ResultsDisplay = [
   {id:1, icon:faChartPie, link:'/Dashboard', description: "Central hub with panels, widgets, charts, and key metrics.", title: "Dashboard" },
   {id:2, icon:faSliders, link:'/Maintenance', description: "System maintenance tools and configuration management.", title: "Maintenance" },
@@ -360,8 +359,6 @@ const QueryCard = ({id, icon, link, description, title}) => {
   {id:12, icon:faNewspaper, link:'/Article', description: "Article management with dashboards, widgets, and analytics.", title: "Article" },
   {id:14, icon:faBell, link:'/Notification', description: "Notification center with panels, widgets, and activity charts.", title: "Notification" }
 ];
-
-
  const PoplularSearch = () => {
     return(
         <div className='popular-search dev-res'>
@@ -387,8 +384,6 @@ const QueryCard = ({id, icon, link, description, title}) => {
       </li>
     )
  }
-
-
  const PopularResult = [
   {id:1, icon:faBan, link:'/Dashboard', description: "Central hub with panels, widgets, charts, and key metrics.", title: "Pending User" },
   {id:2, icon:faFeather, link:'/Maintenance', description: "System maintenance tools and configuration management.", title: "Upload Article" },
@@ -401,7 +396,7 @@ const MenuDropDown = () =>{
  const upload_items = [
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/')} className="btn-home">
           <div>
             <HomeOutlined className="icon-aside" />
@@ -416,7 +411,7 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/answerqa')}>
           <div>
             <SignatureOutlined className="icon-aside" />
@@ -435,7 +430,7 @@ const MenuDropDown = () =>{
     label: (
       <>
         <label className="label-li">You </label>
-        <li className="max-li">
+        <li className="max-li max-lis">
           <button onClick={() => navigate('/socialactivity')}>
             <div>
               <BarChartOutlined />
@@ -451,7 +446,7 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/history')}>
           <ClockCircleOutlined className="icon-aside" />
           <label>History</label>
@@ -462,7 +457,7 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/favorite')}>
           <FontAwesomeIcon icon={faBookmark} className="icon-aside icon-awesome" />
           <label>Favorite</label>
@@ -473,7 +468,7 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/likepost')}>
           <HeartOutlined className="icon-aside" />
           <label>Like Post</label>
@@ -484,7 +479,7 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/yourpost')}>
           <FontAwesomeIcon icon={faNewspaper} className="icon-aside icon-awesome" />
           <label>Your Post</label>
@@ -497,11 +492,11 @@ const MenuDropDown = () =>{
     label: (
       <>
         <label className='label-li'>Explore</label>
-        <li className="max-li">
-          <button onClick={() => navigate('/trending')}>
-            <RiseOutlined className="icon-aside" />
+        <li className="max-li max-lis">
+          <button onClick={() => navigate('/gif')}>
+            <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(146, 108, 255)"}} className='icon-aside'/>
             <label>
-              Trending <span style={{ color: 'yellowgreen' }}>NOW</span>
+              Gif
             </label>
           </button>
       </li>
@@ -511,20 +506,33 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
-        <button onClick={() => navigate('/halloffame')} className="btn-hall-of-fame">
-          <FireOutlined className="icon-aside" />
-          <label>Hall of Fame</label>
-        </button>
+        <li className="max-li max-lis">
+          <button onClick={() => navigate('/trending')}>
+            <RiseOutlined className="icon-aside" />
+            <label>
+              Trending <span style={{ color: 'yellowgreen' }}>NOW</span>
+            </label>
+          </button>
       </li>
     ),
     key: '10',
   },
   {
     label: (
+      <li className="max-li max-lis">
+        <button onClick={() => navigate('/halloffame')} className="btn-hall-of-fame">
+          <FireOutlined className="icon-aside" />
+          <label>Hall of Fame</label>
+        </button>
+      </li>
+    ),
+    key: '11',
+  },
+  {
+    label: (
       <>
         <hr className="aside-hr"/>
-        <li className="max-li">
+        <li className="max-li max-lis">
         <button onClick={() => navigate('/help')}>
           <QuestionCircleOutlined className="icon-aside" />
           <label>Help</label>
@@ -532,25 +540,14 @@ const MenuDropDown = () =>{
       </li>
       </>
     ),
-    key: '11',
-  },
-  {
-    label: (
-      <li className="max-li">
-        <button onClick={() => navigate('/Feedback')}>
-          <ExceptionOutlined className="icon-aside" />
-          <label>Feedback</label>
-        </button>
-      </li>
-    ),
     key: '12',
   },
   {
     label: (
-      <li className="max-li">
-        <button onClick={() => navigate('/Reporthistory')}>
-          <FlagOutlined className="icon-aside" />
-          <label>Report History</label>
+      <li className="max-li max-lis">
+        <button onClick={() => navigate('/Feedback')}>
+          <ExceptionOutlined className="icon-aside" />
+          <label>Feedback</label>
         </button>
       </li>
     ),
@@ -558,9 +555,20 @@ const MenuDropDown = () =>{
   },
   {
     label: (
+      <li className="max-li max-lis">
+        <button onClick={() => navigate('/Reporthistory')}>
+          <FlagOutlined className="icon-aside" />
+          <label>Report History</label>
+        </button>
+      </li>
+    ),
+    key: '14',
+  },
+  {
+    label: (
       <>
         <hr className="aside-hr"/>
-        <li className="max-li">
+        <li className="max-li max-lis">
         <button onClick={() => navigate('/nahidearule')}>
           <ReadOutlined className="icon-aside" />
           <label>Nahidea Rule</label>
@@ -569,25 +577,14 @@ const MenuDropDown = () =>{
       </>
       
     ),
-    key: '14',
-  },
-  {
-    label: (
-      <li className="max-li">
-        <button onClick={() => navigate('/privacypolicy')}>
-          <FileProtectOutlined className="icon-aside" />
-          <label>Private Policy</label>
-        </button>
-      </li>
-    ),
     key: '15',
   },
   {
     label: (
-      <li className="max-li">
-        <button onClick={() => navigate('/useragreement')}>
-          <FileDoneOutlined className="icon-aside" />
-          <label>User Agreement</label>
+      <li className="max-li max-lis">
+        <button onClick={() => navigate('/privacypolicy')}>
+          <FileProtectOutlined className="icon-aside" />
+          <label>Private Policy</label>
         </button>
       </li>
     ),
@@ -595,14 +592,25 @@ const MenuDropDown = () =>{
   },
   {
     label: (
-      <li className="max-li">
+      <li className="max-li max-lis">
+        <button onClick={() => navigate('/useragreement')}>
+          <FileDoneOutlined className="icon-aside" />
+          <label>User Agreement</label>
+        </button>
+      </li>
+    ),
+    key: '17',
+  },
+  {
+    label: (
+      <li className="max-li max-lis">
         <button onClick={() => navigate('/accessibility')}>
           <FontAwesomeIcon icon={faChildReaching} className="icon-aside" />
           <label>Accessibility</label>
         </button>
       </li>
     ),
-    key: '17',
+    key: '18',
   },
 ];
 
@@ -644,9 +652,9 @@ const CreateDropDown = () =>{
     ];
   return(
     <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
-      <button className='button-bar-icon not-mobile-tool'>
+      <button className='button-bar-icon not-mobile-tool button-create-icon'>
         <Space>
-          <PlusSquareOutlined className="bar-icon"/><span style={{fontWeight:"bold", opacity:"0.9"}}>Create</span>
+          <PlusOutlined className="bar-icon create-icon"/><span style={{fontWeight:"bold", opacity:"0.9"}}>Create</span>
         </Space>
       </button>
   </Dropdown>
@@ -683,10 +691,11 @@ const CreateDropDownMin = () =>{
     ];
   return(
     <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
+          <button className='button-create-icon-min mobile-tool'>
         <Space>
-          <PlusOutlined className='bar-icon mobile-tool' />
+          <PlusOutlined className='createbar-icon' /><span style={{fontWeight:"bold", opacity:"0.9"}}>Create</span>
         </Space>
-      
+        </button>
   </Dropdown>
   )
 }

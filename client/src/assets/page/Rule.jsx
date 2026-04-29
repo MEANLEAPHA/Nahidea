@@ -89,7 +89,7 @@ export default function Rule() {
         {rules.map((rule) => (
           <span
             key={rule.id}
-            className={`nav-item ${activeId === rule.id ? "active" : ""}`}
+            className={`nav-itemR ${activeId === rule.id ? "active" : ""}`}
             onClick={() => scrollTo(rule.id)}
           >
             {rule.title}
