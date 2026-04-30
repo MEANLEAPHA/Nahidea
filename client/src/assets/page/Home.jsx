@@ -20,6 +20,7 @@ import {
   Button,
 } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
 
 import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,6 +51,15 @@ export default function Home() {
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+
+
+  // ex
+  const [isAnonymous, setIsAnonymous] = useState(1);
+  const [anonymousName, setAnonymousName] = useState("Anony972mous");
+  const [anonymousBg, setAnonymousBg] = useState("yellowgreen");
+  const [username, setUsername] = useState("Meanleap");
+  const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
   // =====================
   // INITIAL LOAD
@@ -333,13 +343,202 @@ export default function Home() {
 
 
        <article id='his-article'>
+            <div className="history-container">
+                <div className='history-container-header'>
+                  <label>History</label>
+                  <span>See All</span>
+                </div>
+                <div className='history-list-ul'>          
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                              <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            {/* <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://nahidea.picocolor.site/img/content/1776411113675-Screenshot%202025-12-02%20140744.webp"/>
+                            </div> */}
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://study.com/cimages/multimages/16/line5062014251101771877.jpg"/>
+                            </div>
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others) uninteresting theme because it is a solved problem (Mostly Invincible, some others)  
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://cdn-icons-png.flaticon.com/512/8343/8343149.png"/>
+                            </div>
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                    "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others) uninteresting theme because it is a solved problem (Mostly Invincible, some others)  
+                                </p>
+                              </div>
+                              
+                            </div>
+                          
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://nahidea.picocolor.site/img/content/1776411113675-Screenshot%202025-12-02%20140744.webp"/>
+                            </div>
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://nahidea.picocolor.site/img/content/1776411113675-Screenshot%202025-12-02%20140744.webp"/>
+                            </div>
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://nahidea.picocolor.site/img/content/1776411113675-Screenshot%202025-12-02%20140744.webp"/>
+                            </div>
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                              <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://nahidea.picocolor.site/img/content/1776411113675-Screenshot%202025-12-02%20140744.webp"/>
+                            </div>
+                            
+                        </div>
+                        <div className="post-history-card">
+                          <div className='post-history-card-info'>
+                               <div id="author-info">
+                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                                </div>
+                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                              </div>
+                              <div id="title-div">
+                                <p id="title">
+                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                                </p>
+                              </div>
+                              
+                            </div>
+                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                              <img src="https://nahidea.picocolor.site/img/content/1776411113675-Screenshot%202025-12-02%20140744.webp"/>
+                            </div>
+                            
+                        </div>
+                </div>
+            </div>
                         
             <div className='rule-absolute'>   
-              <p>Nahidea Rule</p>     
-              <p>Private Policy</p>
-              <p>User Agreement</p>
+                <p>Nahidea Rule</p>     
+                <p>Private Policy</p>
+                <p>User Agreement</p>
                <p>Accessibility</p>
+               <div>
                 <p>Nahidea. © 2026. All rights reserved </p>
+               </div>
+                
             </div>
              
         </article>
