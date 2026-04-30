@@ -20,41 +20,44 @@
 
 #content-container{
     color: var(--font-color);
-
     position: relative;
-    display: flex;
+
     margin: 0;
     width: 100%;
     padding: 0;
+    padding-bottom: 20px;
+    
 }
+
 #tool-article{
     width: 100%;
    height: auto;
    display: flex;
-   justify-content: space-between;
-   
+   justify-content: center;
+   align-items: start;
+   gap: 20px;
    padding: 0;
 }
 #content-form{
     width: 60%;
-    margin: auto;
+    
     height: auto;
-    padding: 10px 0px 35px 0px;
+    padding: 10px 0px 20px 0px;
 }
 #article-rule{
-    width: 30%;
+    width: 32%;
     height: auto;
-   
+    
     padding-top: 15px;
 }
 .ant-menu{
-    width: 80% !important;
+    width: 100% !important;
     margin: auto !important;
     background-color: var(--back-con) !important;
     border-radius: 15px !important;
     padding: 0 !important;
     padding-left: 0 !important;
-    
+    margin: auto !important;
 }
 .ant-menu-title-content, .ant-menu-item-icon, .ant-menu-submenu-arrow{
     color: var(--font-color) !important;
@@ -126,6 +129,7 @@
   outline: none !important;
   border: 3px solid var(--secondary-color) !important;
   box-shadow: none !important; /* optional glow */
+    
 }
 
 /* Dropdown menu */
@@ -141,15 +145,18 @@
   font-family: sans-serif !important;
   color: var(--font-color) !important;
   border-radius: 20px !important;
-transition: color 0.5s ease ,
+   background: none !important;
+    transition: color 0.5s ease ,
                 background 0.5s ease, 
                 margin-left 0.5s ease 0.5s ,
                 transform 0.5s ease 0.5s !important;
+                  
 }
 .custom__option:hover{
     color: var(--primary-color) !important;
     transform: scale(0.9);
 border-radius: 20px !important;
+background: var(--background-color) !important;
 }
 .custom__option--is-selected {
 transform: scale(0.9);
@@ -176,7 +183,7 @@ border-radius: 20px !important;
     margin-bottom: 3px;
 }
 #title-input{
-    width: 97%;
+    width: 96.5%;
    height: auto;
     min-height: 45px;
     background: none;
@@ -186,6 +193,7 @@ border-radius: 20px !important;
     border: 1px solid var(--secondary-color);
     resize: none;       /* disables manual resizing */
     overflow: auto;     
+    font-family: sans-serif;
 }
 #title-input:focus{
     outline: none;
@@ -197,9 +205,8 @@ border-radius: 20px !important;
     display: flex;
     padding: 0px;
     margin: 0;
-   
     font-family: sans-serif;
-    opacity: 0.8;
+    opacity: 0.7;
     font-size: small;
     justify-content: end;
 }
@@ -213,7 +220,6 @@ border-radius: 20px !important;
     margin-top: 10px;
 }
 .radio-button-div-type{
-    
     border: none;
     border-radius: 1px;
     margin: 0;
@@ -228,7 +234,6 @@ border-radius: 20px !important;
     opacity: 0.9;
     font-weight: bold;
     cursor: pointer;
-
 }
 .radio-button-type:hover{
     background-color: var(--back-con);
@@ -423,16 +428,16 @@ border-radius: 20px !important;
 }
 
 @media screen and (max-width:1200px){
-    #tool-article{
+    /* #tool-article{
      height:calc(100vh - 60.8px);
-     /* height: 50vh; */
+   
       overflow: scroll;
       scrollbar-width: none;
 
-}
-.rule-absolute{
-    font-size: 10px;
-}
+    } */
+    .rule-absolute{
+        font-size: 10px;
+    }
 
 }
 @media screen and (max-width:1000px){
@@ -446,9 +451,9 @@ border-radius: 20px !important;
 } */
 #content-form{
     width: 80%;
-    margin: auto;
+    
     height: auto;
-    padding: 10px 0px 35px 0px;
+
 }
    #article-rule{
     display: none;
@@ -461,26 +466,17 @@ border-radius: 20px !important;
 }
 #content-form{
     width: 95%;
-    padding: 0;
+    padding-bottom: 30px;
 }
 .title-wrapper{
-    width: 98.5%;
+    width: 98%;
 }
 #form-footer-2{
        margin-top: 20px;
-   
-    
 }
-    /* #preview-article{
-    position: absolute;
-    top: 0;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    background-color: var(--background-color);
-    height: auto;
-    right: 0;
-    border-left: none;
-} */
-
+.radio-button-type{
+    padding: 10px 15px 10px 15px;
+    font-size: small
+}
+   
 }

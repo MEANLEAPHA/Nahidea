@@ -1,39 +1,37 @@
 
 /* text-body */
 .text-body-container{
-    width: 98%;
+    width: 99%;
     height: auto;
     background: var(--back-con);
     border: 1px solid var(--secondary-color);
     border-radius: 10px;
-    padding: 5px;
+    padding: 0px;
     overflow: hidden;
 }
 .toolbar-text-body{
-    width: 100%;
+    width: 95%;
     height: auto;
-    padding: 10px 0px 15px 0px;
-    border-bottom: 1px solid var(--background-color);
+    padding: 10px 0px 12px 0px;
     display: flex;
     flex-wrap: wrap;
+    margin: auto;
     overflow: hidden;
-    gap: 5px;
-    
+    gap: 5px; 
 }
-
 .toolbar-text-body button{
     border: none;
     background: none;
     color: var(--font-color);
     opacity: 1;
 }
-
 .toolbar-text-body button {
   background: transparent;
   border: none;
   padding: 6px 8px;
   border-radius: 6px;
-  color: #aaa;
+  color: var(--font-color);
+  opacity: 0.7;
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -43,6 +41,7 @@
 .toolbar-text-body button:hover {
   background: var(--primary-color);
   color: white;
+  opacity: 1;
 }
 .toolbar-text-body button:hover .icon-format{
     color: white;
@@ -56,7 +55,7 @@
   color:var(--font-color);
   caret-color: var(--font-color); 
   background-color: var(--back-con);
- width: 98%;
+ width: 95%;
  margin: auto;
  height: 350px; 
  max-width: auto;
@@ -66,18 +65,14 @@ padding: 0;
  scrollbar-width: none;
   line-height: 1.6;
   font-size: 15px;
-  /* 🔥 cursor color */
+  border-top: 1px solid var(--secondary-color);
+
 }
 
-
-/* .active-btn {
-  background: #fd7648;
-  color: white;
-  border-radius: 6px;
-} */
 .ProseMirror p {
   margin: 0;
     word-break: break-word;
+    color: var(--font-color);
   overflow-wrap: anywhere;
 
 }
@@ -93,27 +88,23 @@ padding: 0;
   padding: 0;
 }
 
-
-
-
 /* Headings */
 .ProseMirror h1 {
   font-size: 28px;
   font-weight: 700;
   margin-top: 16px;
 }
-
 .ProseMirror h2 {
   font-size: 22px;
   font-weight: 600;
   margin-top: 14px;
 }
-
 .ProseMirror h3 {
   font-size: 18px;
   font-weight: 600;
   margin-top: 12px;
 }
+
 
 /* Paragraph */
 .ProseMirror p + p {
@@ -191,4 +182,12 @@ padding: 0;
     padding: 100px;
     width: 400px;
     z-index: 10;
+}
+
+
+@media screen and (max-width:768px){
+    .toolbar-text-body{
+      gap: 6px; 
+    }
+  
 }

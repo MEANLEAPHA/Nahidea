@@ -165,13 +165,7 @@ export default function Content() {
                 {loading ? "Posting..." : "Post"}
         </button>
       </div>
-      <div id="form-footer-2">
-        <p>Nahidea Rule</p>
-        <p>Private Policy</p>
-        <p>User Agreement</p>
-        <p>Accessibility</p>
-        <p>Nahidea. © 2026. All rights reserved </p>
-      </div>
+     
         
       </form>
       <div id="article-rule">
@@ -183,6 +177,13 @@ export default function Content() {
         <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
             <PreviewRadio textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}/>
         </article>
+         <div id="form-footer-2">
+        <p>Nahidea Rule</p>
+        <p>Private Policy</p>
+        <p>User Agreement</p>
+        <p>Accessibility</p>
+        <p>Nahidea. © 2026. All rights reserved </p>
+      </div> 
     </div>
   );
 }

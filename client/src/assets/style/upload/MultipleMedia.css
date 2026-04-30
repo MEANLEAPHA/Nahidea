@@ -163,24 +163,19 @@ width: 100%;
   justify-content: space-between;
   margin: 10px 0 5px;
   height: auto;
+  padding: 5px;
  
 }
 .uploader-footer-right{
   display: flex;
   align-items: center;
   gap: 5px;
+  justify-content: space-between;
   height: auto;
 }
 .remove-all-btn{
-  /* background: #b31e1e66;
-  color:var(--font-color);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  opacity: 0.9; */
- 
+
+
   cursor: pointer;
   opacity: 0.9;
   background: var(--back-con);

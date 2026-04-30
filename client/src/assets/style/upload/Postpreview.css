@@ -81,10 +81,15 @@ margin-top: 10px;
     padding: 0;
     margin: auto;
     padding-top: 15px;
-    background-color: var(--background-color);
-    border-radius: 8px;
-    margin-top: 10px;
-    box-shadow: 0px 0px 3px 0px rgba(74, 74, 74, 0.5);
+    margin-top: 0px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--secondary-color);
+    margin-top: 5px;
+}
+.posts:hover{
+    background-color: var(--back-con);
+    border-bottom: none;
+    border-radius: 10px;
 }
     /* POST-HEADER */
 .post-header{
@@ -114,7 +119,7 @@ margin-top: 10px;
     width: 35px;
     height: 35px;
     border-radius: 50%;
-     cursor: pointer;
+    cursor: pointer;
 }
 .user-post-info{
     margin: 0;
@@ -126,6 +131,8 @@ margin-top: 10px;
     margin: 0;
     font-family: sans-serif;
     line-height: 1.1;
+    color: var(--font-color);
+   
 }
 .post-at{
     font-size: 12px;
@@ -138,12 +145,11 @@ margin-top: 10px;
     cursor: pointer;
 }
 .post-type-label{
-     font-size: 17px;
-
+    font-size: 17px;
     color: var(--font-color);
     margin: 0;
     padding: 0;
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 
@@ -153,28 +159,26 @@ margin-top: 10px;
     color: var(--font-color);
     margin: 0;
     padding: 0;
-  
+    cursor: pointer;
 }
 
 
-    /* POST-BODY */
+ /* POST-BODY */
 
     /* skeleton loader */
-    .post-skeleton-holder{
-        width: 95%;
-        height: auto;
-        margin: auto;
-        padding: 0;
-    }
+.post-skeleton-holder{
+    width: 95%;
+    height: auto;
+    margin: auto;
+    padding: 0;
+}
 .ant-skeleton{
     width: 100% !important;
     height: auto !important;
      margin: auto !important;
      overflow: hidden !important;
      padding: 0 !important;
-
 } 
-
 .ant-skeleton-section{
     width: 100% !important;
 }
@@ -195,12 +199,16 @@ margin-top: 10px;
     height: auto;
     margin: auto;
     padding: 0;
+     cursor: pointer;
 }
 
 /* title */
 .post-caption p{
     margin: 0;
     font-size:22px;
+    color: var(--font-color);
+    opacity: 0.8;
+    margin-top: 5px;
 }
 .post-content-type{
     width: 95%;
@@ -398,8 +406,7 @@ margin-top: 10px;
     overflow: hidden;
     max-height: 380px;
     margin: auto;
-  
-    
+    margin-top: 10px;
 }
 
 .preview-wrapper {
@@ -465,13 +472,11 @@ margin-top: 10px;
 .post-footer{
     width: 95%;
     margin: 0;
-    padding: 10px 0px 10px 0px;
+    padding: 0px;
     display: flex;
     justify-content: space-between;
      height: auto;
-
-    border-top: 1px solid var(--back-con);
-     margin: 15px auto;
+     margin: 10px auto;
 }
 .post-footer-left{
     height: auto;
@@ -479,10 +484,7 @@ margin-top: 10px;
     padding: 0;
     display: flex;
     justify-content: start;
-
     gap: 15px;
-   
-  
 }
 
 .post-footer-right{
@@ -491,8 +493,6 @@ margin-top: 10px;
     padding: 0;
     display: flex;
     justify-content: start;
-  
-   
 }
 
 .button-action-footer{
@@ -501,18 +501,19 @@ margin-top: 10px;
     padding: 0;
     align-items: center;
     gap: 5px;
-    background-color: var(--back-con);
+    background-color: var(--secondary-color);
      padding: 7px 15px 7px 15px;
     color: var(--font-color);
    border-radius: 20px;
     border: none;
     opacity: 0.8;
     font-size: small;
+    cursor: pointer;
 }
 .button-action-footer p{
-  
+    color: var(--font-color);
     margin: 0; 
-     font-size: smaller;
+    font-size: smaller;
 }
 
 .button-action-footer:hover{
@@ -592,25 +593,21 @@ closend-preview */
     aside{
         display: none;
     }
-    .main-article{
-        width: 95%;
-    margin: auto;
-    padding: 0;
+    #feed-article{
+        width: 100%;
+        margin-top: 0px;
    
     }
      .posts{
+        margin-top: 0px;
         width: 100%;
     }
     /* POST-HEADER */
-.post-header{
-    width: 100%;
-    height: auto;
-    padding: 15px 15px 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-     position: relative;
-}
+    .post-header{
+
+        padding: 0px;
+       margin: 0;
+    }
 
 .post-user-profile{
     height: auto;
@@ -623,8 +620,8 @@ closend-preview */
     max-width: 90%;
 }
 .user-profile{
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
 }
 .post-at{
     font-size: 12px;
@@ -675,7 +672,7 @@ font-size: 15px;
     display: flex;
     justify-content: start;
     padding-left: 15px;
-    gap: 0px;
+    gap: 10px;
   
 }
 
@@ -711,6 +708,7 @@ font-size: 15px;
     }
     .posts{
         border-radius: 0px;
+       
     }
     /* POST-HEADER */
 .post-header{
