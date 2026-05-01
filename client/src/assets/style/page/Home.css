@@ -128,13 +128,15 @@ p{
 }
 .history-container{
     width: 97%;
-    height: 85%;
+    height: auto;
+    max-height: 84%;
     border-radius: 8px;
     background-color: var(--back-con);
     color: var(--font-color);
     margin-top: 15px;
     padding-top: 15px;
       overflow: scroll;
+    padding-bottom: 5px;
     scrollbar-width: none;
 }
 .history-container-header{
@@ -318,6 +320,20 @@ p{
     width: 80%;
     height: auto;
  
+}
+#his-article{
+    display: none;
+     
+
+}
+}
+
+@media screen and (max-width:768px){
+    #feed-article{
+    width: 100%;
+    height: auto;
+    padding: 0px;
+    margin-top: 0px;
 }
 #his-article{
     display: none;

@@ -159,6 +159,7 @@ margin-top: 10px;
     color: var(--font-color);
     margin: 0;
     padding: 0;
+    opacity: 0.8;
     cursor: pointer;
 }
 
@@ -199,7 +200,7 @@ margin-top: 10px;
     height: auto;
     margin: auto;
     padding: 0;
-     cursor: pointer;
+    cursor: pointer;
 }
 
 /* title */
@@ -395,8 +396,6 @@ margin-top: 10px;
 
 .post-thumbnail{
     width: 95%;
-    height: auto;
-    /* object-fit: fill; */
     padding: 0;
     margin: auto;
     display: flex;
@@ -407,15 +406,17 @@ margin-top: 10px;
     max-height: 380px;
     margin: auto;
     margin-top: 10px;
+    height: auto;
 }
 
 .preview-wrapper {
   position: relative;
   width: 100%;
-  height: 380px;
+  height: auto;
+  max-height: 380px;
   padding: 0;
   display: flex;
-    border-radius: 25px;
+  border-radius: 25px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -588,200 +589,148 @@ closend-preview */
 .singlechoice-preview-option label{
     color: var(--font-color);
 }
+
 @media screen and (max-width: 768px) {
-   
     aside{
         display: none;
     }
     #feed-article{
         width: 100%;
         margin-top: 0px;
-   
     }
-     .posts{
+    .posts{
         margin-top: 0px;
         width: 100%;
     }
-    /* POST-HEADER */
-    .post-header{
-
-        padding: 0px;
-       margin: 0;
+    .posts:hover{
+        border-radius: 0px;
     }
 
-.post-user-profile{
-    height: auto;
-    display: flex;
-    margin: 0;
-    padding: 0;
-    gap: 12px;
-    align-items: center;
-    justify-content: start;
-    max-width: 90%;
-}
-.user-profile{
-    width: 35px;
-    height: 35px;
-}
-.post-at{
-    font-size: 12px;
-}
-.post-username{
-    font-size: 17px;
-}
-.dot-feeling{
-    font-size: 8px;
-}
-.btn-header-right{
-font-size: 15px;
-}
-.post-more-option{
-    bottom: -136px;
-    left: -185px;
-}
-.li-more-option{
-    padding: 5px 5px 5px 15px;
-    gap: 15px;
-    font-size: 17px;
-}
+    /* POST-HEADER */
+    .post-header{
+        padding: 0px;
+        margin: auto;
+        width: 95%;
+    }
 
+    .user-profile{
+        width: 30px;
+        height: 30px;
+    }
+    .post-at{
+        font-size: 12px;
+    }
+    .post-username{
+        font-size: 17px;
+    }
+
+    .btn-header-right{
+    font-size: 15px;
+    }
+    .post-more-option{
+        bottom: -136px;
+        left: -185px;
+    }
 
     /* POST-BODY */
-.post-body{
-    width: 100%;
-   
-    padding: 10px 15px 15px 15px;
-}
-.post-caption{
-    width: 100%;
-    height: auto;
-    margin: 0;
+    .post-body{
+        width: 100%;
+    }
+    .post-caption{
+        width: 95%;
+        margin: auto;
+    }
+    .post-caption p{
+    font-size: 19px;
+    }
 
-}
-.post-caption p{
-    margin: 0;
-}
+    .post-thumbnail{
+        max-height: 280px;
+    }
+    .preview-wrapper {
+    max-height: 280px;
+    }
+
+    /* main image */
+    .preview-image {
+    max-height: 280px;
+    }
+
     /* POST-FOOTER */
-.post-footer{
-    padding: 8px 0px 8px 0px;
-}
-.post-footer-left{
-    height: auto;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: start;
-    padding-left: 15px;
-    gap: 10px;
-  
-}
-
-.post-footer-right{
-    height: auto;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: end;
-    padding-right: 15px;
-}
-
-.button-action-footer{
-    padding: 10px 17px 10px 17px;
-    font-size: 15px;
-}
-
-
+    .post-footer-left{
+        padding-left: 0px;
+        gap: 10px;
+    }
+    .post-footer-right{
+        padding-right: 0px;
+    }
+    .button-action-footer{
+        padding: 10px 17px 10px 17px;
+        font-size: 14px;
+    }
     .secondary-article{
         display: none;
     }
+}
+@media screen and (max-width: 520px) {
+ 
 
-}
-@media screen and (max-width: 630px) {
-    .count-label{
-        display: none;
+    .user-profile{
+        width: 30px;
+        height: 30px;
     }
-}
-@media screen and (max-width: 500px) {
-    .main-article{
-        width: 100%;
-   
+    .post-at{
+        font-size: 12px;
     }
-    .posts{
-        border-radius: 0px;
-       
+    .post-username{
+        font-size: 17px;
     }
-    /* POST-HEADER */
-.post-header{
-    padding: 15px 15px 5px 15px;
-}
-.user-profile{
-    width: 43px;
-    height: 43px;
-}
-.post-at{
-    font-size: 11px;
-}
-.post-username{
-    font-size: 15px;
-}
-.dot-feeling{
-    font-size: 6px;
-}
-.btn-header-right{
-font-size: 13px;
-}
-.post-more-option{
-    bottom: -127px;
-    left: -185px;
-}
-.li-more-option{
-    font-size: 15px;
-}
 
+    .btn-header-right{
+    font-size: 15px;
+    }
+    .post-more-option{
+        bottom: -136px;
+        left: -185px;
+    }
 
     /* POST-BODY */
+    .post-body{
+        width: 100%;
+    }
+    .post-caption{
+        width: 95%;
+        margin: auto;
+    }
+    .post-caption p{
+    font-size: 16px;
+    }
 
-.post-caption{
-    width: 100%;
-    height: auto;
-    margin: 0;
+    .post-thumbnail{
+        max-height: 250px;
+    }
+    .preview-wrapper {
+    max-height: 250px;
+    }
 
-}
-.post-caption p{
-    margin: 0;
-    font-size: 15px;
-}
+    /* main image */
+    .preview-image {
+    max-height: 250px;
+    }
+
     /* POST-FOOTER */
-.post-footer{
-    padding: 8px 0px 8px 0px;
-}
-.post-footer-left{
-    height: auto;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: start;
-    padding-left: 15px;
-    gap: 0px;
-  
-}
-
-.post-footer-right{
-    height: auto;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: end;
-    padding-right: 15px;
-}
-
-.button-action-footer{
-    padding: 10px 12px 10px 12px;
-    font-size: 15px;
-}
-
-
-    .count-label{
+    .post-footer-left{
+        padding-left: 0px;
+        gap: 8px;
+    }
+    .post-footer-right{
+        padding-right: 0px;
+    }
+    .button-action-footer{
+        padding: 10px 15px 10px 15px;
+        font-size: 12px;
+    }
+    .secondary-article{
         display: none;
     }
 }

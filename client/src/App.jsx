@@ -190,7 +190,7 @@ const Layout = () => {
      return(
         <>
             <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
-            <main>
+            <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>
                     <Outlet context={{ username }} />

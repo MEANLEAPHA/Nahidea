@@ -15,16 +15,16 @@ import {useNavigate} from "react-router-dom";
 const Aside = (props) => {
 
     // Mobile responsive on Aside
-    // const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-        // useEffect(() => {
-        //     const handleResize = () => {
-        //         setIsMobile(window.innerWidth <= 768);
-        //     };
+        useEffect(() => {
+            const handleResize = () => {
+                setIsMobile(window.innerWidth <= 768);
+            };
 
-        //     window.addEventListener("resize", handleResize);
-        //     return () => window.removeEventListener("resize", handleResize);
-        // }, []);
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }, []);
 
     // Aside Collapse
     const [showMaxAside, setMaxAside] = useState(() => {
@@ -64,15 +64,15 @@ const Aside = (props) => {
         )
     }
     // ✅ MOBILE: only MaxAside (display block/none)
-    // if (isMobile) {
-    //     return (
-    //         <aside style={{ display: props.append ? "block" : "none" }} className='max-aside'>
+    if (isMobile) {
+        return (
+            <aside style={{ display: props.append ? "block" : "none" }} className='max-aside'>
                
-    //                     <MaxAsideUl />
+                        <MaxAsideUl />
             
-    //         </aside>
-    //     );
-    // }
+            </aside>
+        );
+    }
 
 
     

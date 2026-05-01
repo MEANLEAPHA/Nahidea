@@ -219,12 +219,13 @@ aside{
  }
  
 @media screen and (max-width:1200px){
-    .max-aside{
-    width: 22%; 
-    position: absolute; 
+      .max-aside{
+    width: 30%; 
+    position: fixed; 
     z-index: 1000;
+    height:calc(100vh - 66px);
     background-color: var(--background-color);
-    top: 0;
+   top: 61px;
     left: 0;
 }
  .nav-item{
@@ -240,14 +241,7 @@ aside{
  
 }
 @media screen and (max-width:1000px){
-    .max-aside{
-    width: 28%; 
-    position: absolute; 
-    z-index: 1000;
-    background-color: var(--background-color);
-    top: 0;
-    left: 0;
-}
+ 
 .min-aside{
     width: 7%;
 }
@@ -261,7 +255,8 @@ aside{
  
 }
 @media screen and (max-width:768px) {
-    aside{
-        display: none;
-    }
+.max-aside{
+    width: 70%; 
+    
+}
 }
