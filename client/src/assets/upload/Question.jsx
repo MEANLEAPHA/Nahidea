@@ -12,7 +12,7 @@ import {TagInput }from "../util/tagInput";
 import { useAnonymousTokens, AnonymousTokensCoolDown, AnonymousName, AnonymousProfile} from "../util/anonymousTokens";
 import { toast, ToastContainer } from "react-toastify";
 import { question_options,iconOptions, question_type } from "../data/post_type_data";
-import {MoreFieldsQuestion} from "../util/moreFlieds";
+
 import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import NahideaInfo from "../util/upload/NahideaInfo";
