@@ -94,7 +94,7 @@ const MinInfo = [
         id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },
     {
-        id:3, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(146, 108, 255)"}} className='sub-icon'/>
+        id:3, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(255, 32, 203)"}} className='sub-icon'/>
     },
     {
         id:4, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
@@ -191,7 +191,7 @@ const UserTool = ({a, icon, label, classNameIcon})=> {
 };
 
 const Explores= [
-    { id:9, a:'/gif',  icon:<FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(146, 108, 255)"}} className='icon-aside'/>, label: <label>Gif</label> },
+    { id:9, a:'/gif',  icon:<FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(255, 32, 203)"}} className='icon-aside'/>, label: <label>Gif Reaction</label> },
     { id:10, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
     { id:11, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
 ];

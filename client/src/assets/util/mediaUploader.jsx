@@ -144,29 +144,22 @@ return (
 );
 }
 
-export  function MediaPreview({ files = [] }) {
-  if (!files.length) {
-    return (
-      // <div className="media-preview-empty">
-      //     <Skeleton.Image active />
-      // </div>
-      null
-    );
-  }
+export function MediaPreview({ files = [] }) {
+  const normalizedFiles = Array.isArray(files) ? files : [files];
+  const safeFiles = normalizedFiles.filter(Boolean); // removes null/undefined
 
-  const mediaFileUrl = (file) => {
-    if(file instanceof File) {
-      return URL.createObjectURL(file);
-    }
-    return file;
-  }
+  if (!safeFiles.length) return null;
+
+  const mediaFileUrl = (file) =>
+    file instanceof File ? URL.createObjectURL(file) : file;
+
   return (
     <Carousel
       arrows
-      infinite={true}
+      infinite
       className="media-preview-carousel"
-      swipe={true}
-      draggable={true}
+      swipe
+      draggable
       autoplay={{ pauseOnHover: true }}
       autoplaySpeed={8000}
       prevArrow={
@@ -180,22 +173,86 @@ export  function MediaPreview({ files = [] }) {
         </button>
       }
     >
-      {files.map((file, idx) => (
-        <div className="carousel-slide" key={idx}>
-          {typeof file === "string" || (file.type || "").startsWith("image/") ? (
-            <div className="preview-wrapper"  style={{ "--preview-url": `url(${mediaFileUrl(file)})` }}>
-              <img
-                src={mediaFileUrl(file)}
-                alt={file.name || `preview-${idx}`}
-                className="preview-image"
-              />
-            </div>
-          ) : (
-            <div className="video-placeholder">Video file selected</div>
-          )}
-        </div>
-      ))}
+      {safeFiles.map((file, idx) => {
+        const isImage =
+          typeof file === "string" ||
+          (file && file.type && file.type.startsWith("image/"));
+
+        return (
+          <div className="carousel-slide" key={idx}>
+            {isImage ? (
+              <div
+                className="preview-wrapper"
+                style={{ "--preview-url": `url(${mediaFileUrl(file)})` }}
+              >
+                <img
+                  src={mediaFileUrl(file)}
+                  alt={file?.name || `preview-${idx}`}
+                  className="preview-image"
+                />
+              </div>
+            ) : (
+              <div className="video-placeholder">Video file selected</div>
+            )}
+          </div>
+        );
+      })}
     </Carousel>
   );
 }
+
+
+// export function MediaPreview({ files = []  }) {
+ 
+//   if (!files.length) {
+//     return (
+//       null
+//     );
+//   }
+
+//   const mediaFileUrl = (file) => {
+//     if(file instanceof File) {
+//       return URL.createObjectURL(file);
+//     }
+//     return file;
+//   }
+//   return (
+//     <Carousel
+//       arrows
+//       infinite={true}
+//       className="media-preview-carousel"
+//       swipe={true}
+//       draggable={true}
+//       autoplay={{ pauseOnHover: true }}
+//       autoplaySpeed={8000}
+//       prevArrow={
+//         <button className="slick-arrow slick-prev">
+//           <LeftOutlined />
+//         </button>
+//       }
+//       nextArrow={
+//         <button className="slick-arrow slick-next">
+//           <RightOutlined />
+//         </button>
+//       }
+//     >
+//       {files.map((file, idx) => (
+//         <div className="carousel-slide" key={idx}>
+//           {typeof file === "string" || (file.type || "").startsWith("image/") ? (
+//             <div className="preview-wrapper"  style={{ "--preview-url": `url(${mediaFileUrl(file)})` }}>
+//               <img
+//                 src={mediaFileUrl(file)}
+//                 alt={file.name || `preview-${idx}`}
+//                 className="preview-image"
+//               />
+//             </div>
+//           ) : (
+//             <div className="video-placeholder">Video file selected</div>
+//           )}
+//         </div>
+//       ))}
+//     </Carousel>
+//   );
+// }
+
 // `url(${mediaFileUrl(file)})` 

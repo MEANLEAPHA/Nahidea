@@ -7,9 +7,11 @@ import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined   } from 
   import { faUserSecret, faMask, faBold, faItalic, faUnderline, faStrikethrough, faHeading, faSubscript, faSuperscript, faQuoteLeft, faLink, faCode, faList, faList12} from "@fortawesome/free-solid-svg-icons";
   import { faImages} from "@fortawesome/free-regular-svg-icons";
 
+import {DeleteOutlined} from '@ant-design/icons';
 
-
-
+import {RightOutlined , CloseOutlined, PlusOutlined, ClearOutlined, LeftOutlined} from '@ant-design/icons';
+import { Carousel } from 'antd';
+import { Skeleton } from 'antd';
 import { useEditorState } from "@tiptap/react";
 import { Extension } from "@tiptap/core";
 
@@ -372,11 +374,11 @@ export const MarkdownPreview = ({ content }) => {
 
 
 
- export const MoreFieldsConfession = memo(({
+ export const MoreFieldsConAndQues = memo(({
   tags, setTags,
   mediaFiles, setMediaFiles,
   isAnonymous, setIsAnonymous, tokens,
-  confessionFileValue, setConfessionFileValue
+  conAndQuesFileValue, setConAndQuesFileValue
 }) => {
   const [selected, setSelected] = useState(1);
 
@@ -401,36 +403,50 @@ export const MarkdownPreview = ({ content }) => {
     </div>
       <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
      
-      {selected === 1 && (<div>
+      {selected === 1 && (
+        <div className="media-uploader">
           {
-            confessionFileValue === null ? (
+            conAndQuesFileValue === null ? (
              
-                <label >
-                   <div className="confession-file-upload" style={{padding: '50px', backgroundColor: '#dd2626'}}>
-                  <FontAwesomeIcon icon={faImages} />
+                <label className="upload-placeholder">
+                  <CloudUploadOutlined id='cloud-icon'/>
+                   
+              
                   <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setConfessionFileValue(e.target.files[0])}
-                  style={{ display: "none" }}
+                  onChange={(e) => setConAndQuesFileValue(e.target.files[0])}
+                  className="file-input"
                 />
-                  <p>Upload an image</p>
-                   </div>
+                  <small className="upload-hint">
+                      Upload image
+                    </small>
+                  
                 </label>
              
             ) : (
-              <div className="confession-file-preview">
-                <img
-                  src={URL.createObjectURL(confessionFileValue)}
-                  alt="Confession"
-                />
-                <button
-                  type="button"
-                  onClick={() => setConfessionFileValue(null)}
+              <Carousel arrows infinite={true} className="media-carousel" swipe={true} draggable={true} autoplay={{ pauseOnHover: true }} autoplaySpeed={10000}
+               prevArrow={<button className="slick-arrow slick-prev"><LeftOutlined /></button>}
+               nextArrow={<button className="slick-arrow slick-next"><RightOutlined /></button>} >
+              <div className="carousel-slide">
+                <div className="preview-wrapper"
+                      style={{ "--preview-url": `url(${URL.createObjectURL(conAndQuesFileValue)})` }}
                 >
-                  Remove
-                </button>
+                  <img
+                    src={URL.createObjectURL(conAndQuesFileValue)}
+                    alt="Confession"
+                    className="preview-image" 
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setConAndQuesFileValue(null)}
+                    className="remove-btn"
+                  >
+                    <DeleteOutlined />
+                  </button>
+                </div>
               </div>
+               </Carousel>
             )
           }
       </div>)}
@@ -440,72 +456,4 @@ export const MarkdownPreview = ({ content }) => {
       </>
   );
 });
-
- export const MoreFieldsQuestion = memo(({
-  tags, setTags,
-  mediaFiles, setMediaFiles,
-  isAnonymous, setIsAnonymous, tokens,
-  questionFileValue, setQuestionValue
-}) => {
-  const [selected, setSelected] = useState(1);
-
-  return (
-    <>
-    <div id="select-radio-type">
-  
-      <div className='radio-button-div-type'>
-        {[            
-                      {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 1},
-                      {label: 'Tags', icon: <TagsOutlined />, id: 2},
-                      {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 3},
-                    ].map((opt) => (
-          <button key={opt.id} onClick={() => setSelected(opt.id)} type="button" className='radio-button-type' style={{
-              borderBottom: selected === opt.id ? "3px solid #fd7648" : "3px solid transparent",
-              color: selected === opt.id ? "#fd7648" : "grey",
-            }}>
-            {opt.icon}{" "}{opt.label}
-          </button>
-        ))}
-      </div>
-    </div>
-      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
-     
-      {selected === 1 && (<div>
-          {
-            questionFileValue === null ? (
-             
-                <label >
-                   <div className="Question-file-upload" style={{padding: '50px', backgroundColor: '#dd2626'}}>
-                  <FontAwesomeIcon icon={faImages} />
-                  <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setQuestionValue(e.target.files[0])}
-                  style={{ display: "none" }}
-                />
-                  <p>Upload an image</p>
-                   </div>
-                </label>
-             
-            ) : (
-              <div className="Question-file-preview">
-                <img
-                  src={URL.createObjectURL(questionFileValue)}
-                  alt="Question"
-                />
-                <button
-                  type="button"
-                  onClick={() => setQuestionFileValue(null)}
-                >
-                  Remove
-                </button>
-              </div>
-            )
-          }
-      </div>)}
-      {selected === 2 && <TagInput value={tags} onChange={setTags} />}
-      {selected === 3 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
-      </div>
-      </>
-  );
-});
+ 

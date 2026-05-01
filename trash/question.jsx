@@ -1,275 +1,251 @@
-export default function Questiion(){
-const [loading, setLoading] = useState(false);
-  // question setence
-  const [title, setTitle] = useState('');
+const PreviewRadio = ({ title, filesMedia, postTag, selectType, isAnonymous, setOpenPreview,
+         questionType,
 
-  // question topic related
-  const [selectType, setSelectType] = useState(null);
+          singleChoices, 
 
-  // tag state
-  const [tags, setTags] = useState([]);
+          multipleChoices, 
+          includeAllAbove,
 
-  const [questionFile, setQuestionFile] = useState(null);
+          min,
+          max,
+          step,
+          rangeValue,
 
-  // question type state
-  const [questionType, setQuestionType] = useState(null);
+          ratingIconId,
 
-    // closed end state
-    const [yestitle, setYestitle] = useState('');
-    const [noTitle, setNoTitle] = useState('');
+          rankingChoices
 
-    // Range state
-    const [min, setMin] = useState(0);
-    const [max, setMax] = useState(100);
-    const [step, setStep] = useState(1);
-    const [rangeValue, setRangeValue] = useState(0);
+      }) => {
+  const [selected, setSelected] = useState(1);
 
-    // single choice
-    const [singleChoices, setSingleChoices] = useState(["", "", ""]);
-
-    // multiple choice
-    const [multipleChoices, setMultipleChoices] = useState(["", "", ""]);
-    const [includeAllAbove, setIncludeAllAbove] = useState(0);
+  return (
   
-    // ranking order
-    const [rankingChoices, setRankingChoices] = useState(["", "", ""]);
+    <div id="select-action-dev">
+         <div id="select-radio">
+          <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
+        <div  className='radio-button-div'>
+             {[{id: 1, label: "Preview"}, {id: 2, label: "Document"}, {id: 3, label: "Content Rule"}].map((opt) => (
+          <button
+            key={opt.id}
+            onClick={() => setSelected(opt.id)}
+            style={{
+              border: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+              color: selected === opt.id ? "#fd7648" : "grey",
+            }}
+            className='radio-button'
+          >
+            {opt.label}
+          </button>
+        ))}
+        </div>
+      </div>
 
-    // rating 
-    const [ratingIconId, setRatingIconId] = useState(1);
+      {/* Word underneath */}
+      <div id="result-selected">
+         {  <Post 
+          titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none"}
+          questionTypeValue={questionType}
 
-    const [isAnonymous, setIsAnonymous] = useState(false);
-    const { tokens, countdown, consume } = useAnonymousTokens();
+            singleChoices={singleChoices}
 
+            multipleChoices={multipleChoices}
+            includeAllAbove={includeAllAbove}
+
+            min={min}
+            max={max}
+            step={step}
+            rangeValue={rangeValue}
+
+            ratingIconId={ratingIconId}
+
+            rankingChoices={rankingChoices}
+
+          />}
+         {selected === "Document" && "D" }
+         {selected === "Content Rule" &&"C" }
+
+    </div>
+     
+    </div>
     
-    const resetCloseEnd = () => { setYestitle(""); setNoTitle(""); };
-    const resetRange = () => { setMin(null); setMax(null); setStep(1); setRangeValue(null); };
-    const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
-    const resetMultipleChoice = () => { setMultipleChoices(["","",""]); setIncludeAllAbove(false); };
-    const resetRanking = () => { setRankingChoices(["","",""]); };
-    const resetRating = () => { setRatingIconId(1); };
 
-    const resetMap = {
-      openend:        [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      closedend:      [resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      range:          [resetCloseEnd, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      singlechoice:   [resetCloseEnd, resetRange, resetMultipleChoice, resetRanking, resetRating],
-      multiplechoice: [resetCloseEnd, resetRange, resetSingleChoice, resetRanking, resetRating],
-      rankingorder:   [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
-      rating:         [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
-    };
-    const handlePostType = () => {
-      (resetMap[questionType] || []).forEach(fn => fn());
-    };
-
-    // Dusplay question type
-    let displayTypeQuestion;
-    switch(questionType){
-    case "openend" :
-      displayTypeQuestion = <OpenEnd />
-      break;
-    case "closedend" :
-      displayTypeQuestion = <ClosedEnd YestitleValue={yestitle} NoTitleValue={noTitle} setYestitle={setYestitle} setNoTitle={setNoTitle}/>
-      break;
-    case "range" :
-      displayTypeQuestion =  <RangeInput
-                                min={min}
-                                max={max}
-                                step={step}
-                                SetStep={setStep}
-                                SetMin = {setMin}
-                                SetMax = {setMax}
-                                value={rangeValue}
-                                onChange={(e) => setRangeValue(e.target.value)}
-                              />
-      break;
-    case "singlechoice" :
-      displayTypeQuestion = <SingleChoice value={singleChoices} onChange={setSingleChoices}/>
-      break;
-    case "multiplechoice" :
-      displayTypeQuestion = <MultipleChoice 
-                              value={multipleChoices}
-                              onChange={setMultipleChoices} 
-                              includeAllAbove={includeAllAbove} 
-                              setIncludeAllAbove={setIncludeAllAbove}
-                            />
-      break;
-    case "rankingorder" :
-      displayTypeQuestion = <RankingOrder value={rankingChoices} onChange={setRankingChoices} />
-      break;
-    case "rating" :
-      displayTypeQuestion = <Rating value={ratingIconId} onChange={setRatingIconId}/>
-      break;
-    default: 
-      displayTypeQuestion = <OpenEnd />
-      break;
-  }
-
-  const Card = ({value, img}) => {
-    return(
-      <label>
-        <input 
-          type="radio" 
-          name="question-type" 
-          value={value} 
-          onChange={(e) => {setQuestionType(e.target.value); handlePostType()}} 
-          checked={questionType === value} 
-          className="radio" 
-        />
-        <img 
-          src={img}
-          alt={value} 
-          className={questionType === value ? "selected" : ""} 
-        />
-      </label>
-    )
-  }
- 
-  const questionRadioType = [
-    {id:1, value:"openend", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS90nUCMSa8ongTJCpTWgR_cy5mMtuXev1NCg&s"},
-    {id:2, value:"closedend", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5OOdmroWDpWEbbytAew7LAkKvzUYhmZZx8Q&s"},
-    {id:3, value:"singlechoice", img:"https://img.freepik.com/free-vector/electric-car-white-background_1308-21368.jpg?semt=ais_user_personalization&w=740&q=80"},
-    {id:4, value:"multiplechoice", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThYff67knNe_Yfxy_91qsv35FgUhFWgvsAkA&s"},
-    {id:5, value:"range", img:"https://img.freepik.com/premium-vector/blue-car-flat-style-illustration-isolated-white-background_108231-795.jpg?semt=ais_incoming&w=740&q=80"},
-    {id:6, value:"rating", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOKVybqeCw4hx6GtIiLMrnEKczyHi9PxmIIw&s"},
-    {id:7, value:"rankingorder", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh7yenXHLnm2mRNd4ENksCtku0XUiaezTkSg&s"},
-  ];
-
-  const AppendRadioCard = () => {
-    return(
-      <>
-      {
-        questionRadioType.map(item => ( 
-          <Card key={item.id} {...item}/>
-        ))
-      }
-      </>
-    )
-  }
-    
-  
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  if(loading) return;
-  setLoading(true);
-  const formData = new FormData();
-  tags.forEach((t) => formData.append("tags[]", t));
-  formData.append("post_type", "question");
-  formData.append("question_related_to", selectType?.value ?? "general");
-  formData.append("isAnonymous", isAnonymous);
-  if(questionFile){
-     formData.append("questionFile", questionFile);
-  }
-  formData.append("question_title", title);
-
-  switch(questionType){
-    case "openend":
-      formData.append("question_type", "openend");
-      break;
-    case "closedend":
-      formData.append("question_type", "closedend");
-      formData.append("yesTitle", yestitle);
-      formData.append("noTitle", noTitle);
-      break;
-    case "range": 
-      formData.append("question_type", "range");
-      formData.append("rangeMin", min);
-      formData.append("rangeMax", max);
-      formData.append("rangeStep", step);
-      formData.append("defaultRangeValue", rangeValue);
-      break;
-    case "singlechoice":
-      formData.append("question_type", "singlechoice");
-      singleChoices.forEach((c) => formData.append("choices", c));
-      break;
-    case "multiplechoice": 
-      formData.append("question_type", "multiplechoice");
-      multipleChoices.forEach((c) => formData.append("choices", c));
-      formData.append("include_all_above", includeAllAbove);
-      break;
-    case "rankingorder":
-      formData.append("question_type", "rankingorder");
-      rankingChoices.forEach((c, i) => formData.append(`ranking[${i+1}]`, c));
-      break;
-    case "rating":
-      formData.append("question_type", "rating");
-      formData.append("rating_icon_id", ratingIconId);
-      break;
-    default:
-      formData.append("question_type", "openend");
-      break;
-  }
-
-  try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-      formData,
-      {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
-        }
-    );
-  
-    const data = res.json();
-
-    if (res.ok) {
-      res.status === 200 && toast.success(data.message);
-      if (isAnonymous) consume();
-      (resetMap[questionType] || []).forEach(fn => fn());
-      setLoading(false);
-    }
-    else{
-      setLoading(false);
-      (resetMap[questionType] || []).forEach(fn => fn());
-    }
-  } catch (err) {
-    {res.status = 500 && console.error(data.message)}
-    toast.error("Sorry our server is error please try again later");
-    (resetMap[questionType] || []).forEach(fn => fn());
-    setLoading(false);
-  }
+  );
 };
 
-    return (
-      <>
-    <form onSubmit={handleSubmit}>
-      <div className='toast-feedback'>
-        <ToastContainer position="top-right" autoClose={2000}/>
-      </div>
-      <label htmlFor="title">Caption</label>
-      <input type="text" 
-              name='title'
-              className='input-title'
-              onChange={(e)=> setTitle(e.target.value)} 
-              value={title}
-              placeholder="Type your text content here..."
-              required
-      />
-    <input type="file" accept="image/*" onChange={(e) => setQuestionFile(e.target.files[0])} />
-      <label htmlFor="type">Question related to:</label>
-       <Select
-        options={question_options} 
-        value={selectType}
-        onChange={setSelectType}
-      />
-      <br />
-   <AppendRadioCard />
+const Post = ({ titleValue, filesMediaValues, postTagsValue, selectTypeValue, isAnonymousValue, displaySelected, 
+  questionTypeValue, 
+  
+    singleChoices,
 
-  {displayTypeQuestion}
+    multipleChoices,
+    includeAllAbove,
+
+    min,
+    max,
+    step,
+    rangeValue,
+
+    ratingIconId, 
+
+    rankingChoices
+}) =>{
+     const {username} = useOutletContext();
+     const navigate = useNavigate();
+    const [displayPostOpt, setDisplayPostOpt] = useState("none");
+    const [displayBgMoreIcon, setBgMoreIcon] = useState("none");
+    const wrapperRef = useRef(null);
+    const handlePostOpt = () => {
+        const Mode = localStorage.getItem("darkMode");
+       if(displayPostOpt === "none"){
+            setDisplayPostOpt("block");
+            Mode === "true" ? setBgMoreIcon("rgb(40, 40, 40)") : setBgMoreIcon("rgb(245, 245, 245)");
+       } 
+       else{
+            setDisplayPostOpt("none");
+            setBgMoreIcon("none") 
+       } 
+    }
+    useEffect(() => {
+        function handleClickOutside(event) {
+          if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+            setDisplayPostOpt("none");
+            setBgMoreIcon("none") 
+          }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
+
+      function QuesitionType () {
+        
+        switch (questionTypeValue) {
+          case "openend":
+            return <div>Answer</div>;
+          case "closedend":
+            return <div id='closend-preview'>
+                      <div id='closend-preview-yes'>Yes</div>
+                      <div id='closend-preview-no'>No</div>
+                    </div>;
+          case "singlechoice":
+            return <div className='singlechoice-preview-div'>
+                      {singleChoices.map((singleChoice) => (
+                          <div className='singlechoice-preview-option'>
+                              <input type="radio" value={singleChoice} name="singlechoice"/>
+                               <label htmlFor={singleChoice}>{singleChoice}</label>
+                          </div> 
+                      ))}
+                    </div>;
+          case "multiplechoice":
+            return <div className='multiplechoice-preview-div'>
+                      {multipleChoices.map((multipleChoice) => (
+                          <div className='multiplechoice-preview-option'>
+                              <input type="checkbox" value={multipleChoice} name="multiplechoice"/>
+                               <label htmlFor={multipleChoice}>{multipleChoice}</label>
+                          </div> 
+                      ))}
+                      {includeAllAbove === 1 && <div className='multiplechoice-preview-option'>
+                          <input type="checkbox" value="All above" name="multiplechoice"/>
+                           <label htmlFor="All above">All above</label>
+                      </div>}
+                    </div>;
+          case "range":
+            return <div className='range-preview-div'>
+                      <div className='range-preview-option'>
+                        <label htmlFor={min}>{min}</label>
+                          <input type="range" value={rangeValue} name="range" step={step}/>
+                          <label htmlFor={max}>{max}</label>
+                          <label htmlFor={rangeValue}>{rangeValue}</label>
+                      </div>
+    
+                    </div>;
+          case "rating":
+            return <div className='rating-preview-div'>
+                  {Array.from({length:5}).map((_,i)=>(
+                    <FontAwesomeIcon 
+                      key={i}
+                      icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
+                      style={{ fontSize: "24px", color: "#ff3434" }}
+                    />
+                  ))}
+              </div>;
+          case "rankingorder":
+            return <div className='rankingorder-preview-div'>
+                      {rankingChoices.map((rankingChoice) => (
+                          <div className='rankingorder-preview-option'>
+                              <input value={rankingChoice} name="rankingorder" disabled/>
+                               <label htmlFor={rankingChoice}>{rankingChoice}</label>
+                          </div>
+                      ))};
+                    </div>;
+          default:
+            return null;
+        }
+      }
       
-  <TagInput value={tags} onChange={setTags} maxTags={5} />
+    return(
 
-  <AnonymousToggle
-          enabled={isAnonymous}
-          setEnabled={setIsAnonymous}
-          tokens={tokens}
-        />
-        <button type="submit">{loading ? "Posting..." : "Post"}</button>
-      </form>
-      <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
-      </>
-    );
+
+                <div className="posts" style={{display:displaySelected}}>
+                      <div className='post-header'>
+                              <div className='post-user-profile'>
+                                
+                                <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>
+
+                                  <div className='user-post-info'>
+                                      <p className='post-username'><span className="anonymous-name"><AnonymousNm enabled={isAnonymousValue} realName={username}/></span></p>
+                                      <p className='post-at'>Just now </p>
+                                  </div>
+                              </div>
+                              
+                            <DotDropDown/>
+                      </div>
+                      <div className='post-body'>
+                         
+
+                        {
+                          titleValue === ""  && postTagsValue.length === 0? <div className='post-skeleton-holder'><Skeleton active/></div> : (
+                            <div>
+                               <div className='post-caption'>
+                                 <p>{titleValue}</p>
+                              </div>
+                              <div className='post-content-type'>
+                                  <span className='content-type'>{selectTypeValue}</span>
+                              </div>
+                              <div className="post-question-answer-preview">
+                                  {QuesitionType()}
+                                  
+                              </div>
+                              <div className='post-tags'>
+                                  <TagsPreview tagsValue={postTagsValue}/>
+                              </div>
+                            </div>
+                          )
+                        }
+
+
+                    <div className="post-thumbnail">
+                        {filesMediaValues ? (
+                          <img
+                            src={URL.createObjectURL(filesMediaValues)}
+                            alt="Confession"
+                          />
+                        ) :   <div className="media-preview-empty">
+                                  <Skeleton.Image active />
+                              </div>}
+                      </div>
+
+                      </div>
+                      <div className='post-footer'>
+                          <div className='post-footer-left'>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} /> <p><span>0</span><span className='count-label'> Like</span></p></button>
+                              <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} /><p><span>0</span><span className='count-label'> Comment</span></p></button>
+                          </div>
+                          <div className='post-footer-right'>
+                              <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                          </div>  
+                      </div>
+                </div>
+    )
 }
