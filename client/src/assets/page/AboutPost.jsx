@@ -1,5 +1,5 @@
 // React State
-import React,{ useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -31,7 +31,7 @@ const parseJSON = (val) => {
 
 
 const AboutPost = () => {
-  const { id } = useParams(); 
+  const {id} = useParams(); 
   const [post, setPost] = useState(null);
 
   useEffect(() => {
