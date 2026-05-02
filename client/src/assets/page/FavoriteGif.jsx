@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from "react";
+import React,{ useState, useEffect, useRef, memo } from 'react';
 import { Empty } from "antd";
 import axios from "axios";
 import "../style/page/GifFeed.css";

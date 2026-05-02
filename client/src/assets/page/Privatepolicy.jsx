@@ -1,5 +1,4 @@
-
-import React, { useRef, useState } from "react";
+import React,{ useState, useEffect, useRef, memo } from 'react';
 import { Timeline } from "antd";
 import "../style/page/Privacypolicy.css";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useState, useEffect, useRef, memo } from 'react';
 import "../style/page/Search.css";
 
 const Search = () => {

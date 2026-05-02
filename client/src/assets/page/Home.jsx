@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React,{ useState, useEffect, useRef, memo } from 'react';
 import axios from "axios";
 import nahideaTran from "../img/nahidea-tran.png";
 import { useNavigate } from "react-router-dom";

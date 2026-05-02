@@ -106,7 +106,7 @@
 //   );
 // }
 
-import React, { useState } from "react";
+import React,{ useState, useEffect, useRef, memo } from 'react';
 import { CloseOutlined,ClearOutlined,TagOutlined  } from '@ant-design/icons';
 export  function TagInput({ value = [], onChange, maxTags = 5 }) {
   const [input, setInput] = useState("");

@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-
+import React,{ useState, useEffect, useRef, memo } from 'react';
 
 import "../style/page/Rule.css";
 
