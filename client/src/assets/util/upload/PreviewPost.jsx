@@ -140,7 +140,7 @@ export default function PreviewPost ({
     }
     }
     return(
-        <div className="posts" style={{display:displaySelected}}>
+        <div className="posts preview-posts" style={{display:displaySelected}}>
             <div className='post-header'>
                 <div className='post-user-profile'>
                 <AnonymousPf enabled={isAnonymousValue} realPf='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif'/>

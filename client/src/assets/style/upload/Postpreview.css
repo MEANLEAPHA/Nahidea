@@ -91,6 +91,18 @@ margin-top: 10px;
     border-bottom: none;
     border-radius: 10px;
 }
+.preview-posts{
+    border-radius:10px;
+    background-color: var(--back-con);
+}
+.preview-posts:hover{
+    background-color: none;
+     border-radius: 0px;
+}
+.about-posts{
+     background-color: none;
+     border-radius: 0px;
+}
     /* POST-HEADER */
 .post-header{
     width: 95%;

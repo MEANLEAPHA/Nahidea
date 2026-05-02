@@ -156,7 +156,21 @@ export default function Home() {
           <>
               <div>
                 <div className='post-caption' onClick={()=>{
-                  const newPost = { postId: post.id, author: post.username, title: data.title, textBody: data.text_body, mediaUrl: data.media_url, postTags: data.post_tags, type: data.type, isAnonymous: data.is_anonymous };
+                  const newPost = 
+                    { id: post.id,
+                      post_type:post.post_type,
+                      is_anonymous: post.is_anonymous || 0, anonymous_name: post.anonymous_name, anonymous_bg_color: post.anonymous_bg_color,
+                      likes_count: post.likes_count || 0,comments_count: post.comments_count || 0, views_count: post.views_count || 0,
+                      created_at:post.created_at,
+                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                      tags:post.tags,
+                      data:{
+                        type:data.type,
+                        title:data.title,
+                        text_body:data.text_body,
+                        media_url:data.media_url
+                      }
+                    };
                   sessionStorage.setItem("post", JSON.stringify(newPost));
                   navigate(`/aboutpost/${post.id}`)
                 }}>
@@ -175,7 +189,20 @@ export default function Home() {
           <>
               <div>
                    <div className='post-caption' onClick={()=>{
-                      const newPost = { postId: post.id, media_url: data.media_url };
+                      const newPost = 
+                        { id: post.id,
+                          post_type: post.post_type,
+                          anonymous_name: post.anonymous_name, is_anonymous: post.is_anonymous || 0,anonymous_bg_color: post.anonymous_bg_color,
+                          likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
+                          created_at: post.created_at,
+                          username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                          tags: post.tags,
+                          data:{
+                            type:data.type,
+                            title:data.title,
+                            media_url:data.media_url,
+                          }
+                        };
                       sessionStorage.setItem("post", JSON.stringify(newPost));
                       navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
                     }}>
@@ -200,84 +227,133 @@ export default function Home() {
       case "question":
         return (
           <>
-                            <div>
-                               <div className='post-caption' onClick={()=>{
-                                  const newPost = { postId: post.id, media_url: data.media_url, type: data.question_type };
-                                  sessionStorage.setItem("post", JSON.stringify(newPost));
-                                  navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&mediaUrl=${data.media_url}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
-                                }}>
-                                    <p>{data.title}</p>
-                                </div>
-                              <div className="post-question-answer-preview">
-                                   {data.question_type === "closedend" && (
-                                        <Space direction="vertical">
-                                          <Text>Yes: {data.yes_title}</Text>
-                                          <Text>No: {data.no_title}</Text>
-                                        </Space>
-                                      )}
+            <div>
+                <div className='post-caption' onClick={()=>{
+                  const newPost = 
+                    { id: post.id,
+                      post_type: post.post_type,
+                      is_anonymous: post.is_anonymous || 0, anonymous_bg_color: post.anonymous_bg_color,
+                      likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
+                      created_at: post.created_at,
+                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                      tags: post.tags,
+                      data:{
+                        question_type:data.question_type,
+                        question_related_to:data.question_related_to,
+                        title:data.title,
+                        media_url:data.media_url,
 
-                                      {data.question_type === "range" && (
-                                        <Text>
-                                          Range: {data.range_min} - {data.range_max}
-                                        </Text>
-                                      )}
+                        // rating
+                        rating_icon_id:data.rating_icon_id || null,
 
-                                      {data.question_type === "singlechoice" && (
-                                        <ul>
-                                          {data.choices?.map((c, i) => (
-                                            <li key={i}>{c.choice_text}</li>
-                                          ))}
-                                        </ul>
-                                      )}
+                        // range
+                        range_min:data.range_min || null,
+                        range_max:data.range_max || null,
+                        default_range_value: data.default_range_value || null,
+                        step: data.step || null,
 
-                                      {data.question_type === "multiplechoice" && (
-                                        <ul>
-                                          {data.choices?.map((c, i) => (
-                                            <li key={i}>{c.choice_text}</li>
-                                          ))}
-                                        </ul>
-                                      )}
+                        // munltiple choice
+                        choices: [
+                          data.choices?.map((c, i) => ({
+                            choice_text: c.choice_text,
+                            multiplechoice_id: c.multiplechoice_id,
+                            id: c.id,
+                            question_id: c.question_id
+                          }))
+                        ] || [],
 
-                                      {data.question_type === "rankingorder" && (
-                                        <ol>
-                                          {data.items?.map((i, idx) => (
-                                            <li key={idx}>{i.item_text}</li>
-                                          ))}
-                                        </ol>
-                                      )}
+                        // ranking
+                        items: [
+                          data.items?.map((c, i) => ({
+                            item_text: c.item_text,
+                            position: c.position,
+                            id: c.id,
+                            ranking_id: c.ranking_id,
+                            question_id: c.question_id
+                          }))
+                        ] || [],
 
-                                      {data.question_type === "rating" && (
-                                        <Text>Rating icon: {data.rating_icon_id}</Text>
-                                      )}
-                                  
-                              </div>
-                              {/* <div className='post-tags'>
-                                  <TagsPreview tagsValue={postTagsValue}/>
-                              </div> */}
-                            </div>
-                       
-
-                   <div className="post-thumbnail">
-                <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
-                  <img
-                     src={data.media_url}
-                    className="preview-image"
-                  />
+                        // single choice
+                        choices: [
+                          data.choices?.map((c, i) => ({
+                            choice_text: c.choice_text,
+                            singlechoice_id: c.singlechoice_id,
+                            id: c.id,
+                            question_id: c.question_id
+                          }))
+                        ] || [],
+                      }
+                    };
+                    sessionStorage.setItem("post", JSON.stringify(newPost));
+                    navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&mediaUrl=${data.media_url}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
+                  }}>
+                  <p>{data.title}</p>
                 </div>
+              <div className="post-question-answer-preview">
+                    {data.question_type === "closedend" && (
+                        <Space direction="vertical">
+                          <Text>Yes: {data.yes_title}</Text>
+                          <Text>No: {data.no_title}</Text>
+                        </Space>
+                      )}
+
+                      {data.question_type === "range" && (
+                        <Text>
+                          Range: {data.range_min} - {data.range_max}
+                        </Text>
+                      )}
+
+                      {data.question_type === "singlechoice" && (
+                        <ul>
+                          {data.choices?.map((c, i) => (
+                            <li key={i}>{c.choice_text}</li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {data.question_type === "multiplechoice" && (
+                        <ul>
+                          {data.choices?.map((c, i) => (
+                            <li key={i}>{c.choice_text}</li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {data.question_type === "rankingorder" && (
+                        <ol>
+                          {data.items?.map((i, idx) => (
+                            <li key={idx}>{i.item_text}</li>
+                          ))}
+                        </ol>
+                      )}
+
+                      {data.question_type === "rating" && (
+                        <Text>Rating icon: {data.rating_icon_id}</Text>
+                      )}
+                  
               </div>
+              {/* <div className='post-tags'>
+                  <TagsPreview tagsValue={postTagsValue}/>
+              </div> */}
+            </div>
+        
+
+    <div className="post-thumbnail">
+<div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+  <img
+      src={data.media_url}
+    className="preview-image"
+  />
+</div>
+</div>
           </>
         );
 
       default:
-        return <Text>Unknown post type</Text>;
+        return null;
     }
   };
 
-
-
-  // =====================
-  // UI
-  // =====================
   return (
     <div className='home-container'>
        <article id="feed-article">

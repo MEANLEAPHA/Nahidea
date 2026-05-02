@@ -54,7 +54,7 @@ p{
 .ant-list-item{
     width: 90% !important;
     margin: auto !important;
-    padding: 0 !important;
+    padding: 2px 0px 2px 0px !important;
     overflow: hidden !important;
     list-style: none !important;
     border-bottom: 1px solid var(--secondary-color) !important;
@@ -336,6 +336,10 @@ p{
 }
 
 @media screen and (max-width:768px){
+    .ant-list-item{
+        width: 100% !important;
+
+    }
     #feed-article{
     width: 100%;
     height: auto;
