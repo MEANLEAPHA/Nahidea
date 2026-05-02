@@ -32,7 +32,7 @@ const parseJSON = (val) => {
 
 const AboutPost = () => {
   const { id } = useParams(); 
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState('');
 
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
