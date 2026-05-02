@@ -17,7 +17,7 @@ import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-soli
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
+
 
 const token = localStorage.getItem("token");
 
@@ -33,6 +33,7 @@ const parseJSON = (val) => {
 const AboutPost = () => {
   const {id} = useParams(); 
   const [post, setPost] = useState(null);
+  const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
