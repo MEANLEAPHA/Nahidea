@@ -37,19 +37,17 @@ const AboutPost = () => {
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
 
-    await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    handleView();
    
     if (String(stored.postId) === String(id)) {
       setPost(stored);
     } else {
-      try{
+     handleFetchPost();
+    }
+  }, [id]);
+
+  const handleFetchPost = async () => {
+     try{
         const res = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/api/get-post/${id}`
         )
@@ -60,9 +58,22 @@ const AboutPost = () => {
       console.error(err);
       setPost([]);
     } 
-
+  }
+  const handleView = async () =>{
+    if(!token) return;
+    try{
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    }catch(err){
+      console.error(err);
     }
-  }, [id]);
+  }
 
   if (!post) {
     return (
