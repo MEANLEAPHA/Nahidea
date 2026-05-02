@@ -76,14 +76,14 @@ margin-top: 10px;
 
 /* POST UI DESIGN */
 .posts{
-    width: 90%;
+    width: 100%;
     height: auto;
     padding: 0;
     margin: auto;
     padding-top: 15px;
     margin-top: 0px;
     padding-bottom: 2px;
-    border-bottom: 1px solid var(--secondary-color);
+    /* border-bottom: 1px solid var(--secondary-color); */
    
 }
 .posts:hover{

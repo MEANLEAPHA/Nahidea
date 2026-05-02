@@ -27,23 +27,41 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding:20px;
+  padding:0px;
   flex-wrap: wrap;
   border-radius: 10px;
   margin-bottom: 15px;
-  gap: 10px;
-  background: var(--back-con);
+}
+.gif-header-text{
+  width: 50%;
+
 }
 .gif-header p{
   margin: 0;
+  color: var(--font-color);
 }
-.gif-header .btn-upload-gif{
+.gif-header-buttons{
+  width: 50%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  gap: 10px;
+  justify-content: end;
+  margin: 0;
+}
+ .btn-upload-gif{
   border: none;
-  background: var(--primary-color);
+  background: none;
   color: white;
   padding: 8px;
   border-radius: 5px;
+  border: none;
   cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 /* 🔍 Search */
 .gif-search {
@@ -77,11 +95,15 @@
 
 /* responsive */
 @media (max-width: 1200px) {
+  
   .masonry {
     column-count: 3;
   }
+    .gif-header{
+   padding: 0;
+  }
 }
-@media (max-width: 768px) {
+@media (max-width: 800px) {
    .gif-feed-container {
   padding: 15px;
 
@@ -89,10 +111,25 @@
   .masonry {
     column-count: 2;
   }
+  .gif-header{
+   padding: 0;
+  }
+  .gif-header-text{
+  width: 100%;
+
+}
+
+.gif-header-buttons{
+  width: 100%;
+
+  margin-top: 10px;
+  justify-content: start;
+
+}
 }
 @media (max-width: 480px) {
   .masonry {
-    column-count: 1;
+    column-count: 2;
   }
   .gif-feed-container {
   padding: 20px 15px 20px 15px;
@@ -100,7 +137,7 @@
 }
 }
 
-/* 🧩 Card */
+/* 🧩 Card */ 
 .gif-card {
   position: relative;
   margin-bottom: 16px;

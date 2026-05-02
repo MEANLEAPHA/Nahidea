@@ -10,8 +10,8 @@ import nahideaTran from "../img/nahidea-tran.png";
 import {gif_category} from "../data/post_type_data";
 
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-  import {faCloudArrowUp} from "@fortawesome/free-solid-svg-icons";
-  import { faHeart} from "@fortawesome/free-regular-svg-icons";
+  import {faCloudArrowUp,} from "@fortawesome/free-solid-svg-icons";
+  import { faHeart, faFaceGrinTongueWink} from "@fortawesome/free-regular-svg-icons";
 
   const token = localStorage.getItem('token');
 
@@ -164,20 +164,28 @@ export default function GifFeed() {
   return (
     <div className="gif-feed-container">
       <div className="gif-header">
-        <p>Help us upload your favourite GIFs and share them with Nahidea's community</p>
-      
-        <Dropdown menu={{ items }} placement="bottom">
-            <Button>Category</Button>
-        </Dropdown>
-          <button onClick={()=>{navigate("/favorite/gif")}} type="button"><FontAwesomeIcon icon={faHeart} beatFade style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
-        <button
-          onClick={() => navigate("/upload/gif")}
-          type="button"
-          className="btn-upload-gif"
-        >
-          <FontAwesomeIcon icon={faCloudArrowUp} fade style={{color: "rgb(38, 160, 255)",}} />
-          Upload GIF
-        </button>
+        <div className="gif-header-text">
+          <p>Help us upload your favourite GIFs and share them with Nahidea's community</p>
+        </div>
+        <div className="gif-header-buttons"> 
+          <Dropdown menu={{ items }} placement="bottom">
+            <Button className="btn-upload-gif">
+              <FontAwesomeIcon icon={faFaceGrinTongueWink} style={{color: "rgb(146, 108, 255)",}} />
+              Reaction
+            </Button>
+          </Dropdown>
+          <button onClick={()=>{navigate("/favorite/gif")}} type="button" className="btn-upload-gif"><FontAwesomeIcon icon={faHeart} beatFade style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
+          <button
+            onClick={() => navigate("/upload/gif")}
+            type="button"
+            className="btn-upload-gif"
+          >
+            <FontAwesomeIcon icon={faCloudArrowUp} fade style={{color: "rgb(38, 160, 255)",}} />
+            Upload GIF
+          </button>
+
+        </div>
+        
       </div>
 
       {/* 🔍 Search */}

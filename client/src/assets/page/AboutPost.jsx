@@ -1,12 +1,18 @@
+// React State
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+
+// style
 import "../style/page/Aboutpost.css";
 import "../style/page/Home.css";
- import "../style/upload/Postpreview.css";
- import "../style/upload/MultipleMedia.css";
+import "../style/upload/Postpreview.css";
+import "../style/upload/MultipleMedia.css";
 import {MediaPreview} from "../util/mediaUploader";
+
+
 const parseJSON = (val) => {
   try {
     return typeof val === "string" ? JSON.parse(val) : val;
@@ -54,5 +60,6 @@ const AboutPost = () => {
     </div>
   );
 };
+
 
 export default AboutPost;

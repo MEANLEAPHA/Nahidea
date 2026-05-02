@@ -51,7 +51,14 @@ p{
     overflow: hidden !important;
     list-style: none !important;
 }
-
+.ant-list-item{
+    width: 90% !important;
+    margin: auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    list-style: none !important;
+    border-bottom: 1px solid var(--secondary-color) !important;
+}
 
 
 .ant-list-item-meta-content{
