@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
+
+
 import "../style/page/Rule.css";
 
 const rules = [

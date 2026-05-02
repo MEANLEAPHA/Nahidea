@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 export default function RankingOrder ({ value, onChange }){
   const [items, setItems] = useState(value.length ? value : ["", "", ""]);
