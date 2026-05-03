@@ -256,7 +256,12 @@ margin-top: 10px;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical; */
 }
-
+.post-body-text p{
+    color: var(--font-color);
+}
+.post-body-text a{
+    color: var(--link-color)
+}
 .markdown-preview {
     width: 100% !important;
     height: auto !important;
@@ -270,8 +275,8 @@ margin-top: 10px;
     opacity: 0.8 !important;
     font-size: medium !important;
     color: var(--font-color) !important;
-    font-size: 0.9rem;  /* ~15px */
-    line-height: 1.6;
+    /* font-size: 0.9rem; 
+    line-height: 1.6; */
 }
 
 

@@ -8,8 +8,9 @@ import axios from "axios";
 // style
 import "../style/page/Aboutpost.css";
 import "../style/page/Home.css";
-import "../style/upload/Postpreview.css";
 import "../style/upload/MultipleMedia.css";
+import "../style/upload/Postpreview.css";
+
 import {MediaPreview} from "../util/mediaUploader";
 
 // util
