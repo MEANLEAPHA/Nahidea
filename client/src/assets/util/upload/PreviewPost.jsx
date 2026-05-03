@@ -151,10 +151,10 @@ export default function PreviewPost ({
                 </div>
                 <MoreDropDown/> 
             </div>
-            <div className='post-body'>
+            <div className='post-body'> 
                 {
                     titleValue === "" && textBodyValue === "" && postTagsValue.length === 0? <div className='post-skeleton-holder'><Skeleton active/></div> : (
-                    <div>
+                    <>
                         <div className='post-caption'>
                             <p>{titleValue}</p>
                         </div>
@@ -168,7 +168,7 @@ export default function PreviewPost ({
                         <div className='post-tags'>
                             <TagsPreview tagsValue={postTagsValue}/>
                         </div>
-                    </div>
+                    </>
                     )
                 }
                 <div  className='post-thumbnail'>   

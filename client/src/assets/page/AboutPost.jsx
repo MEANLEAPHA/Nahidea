@@ -101,6 +101,16 @@ const AboutPost = () => {
     );
   };
 
+ function tagSplitter(tags = "") {
+  return tags
+    .split(",")
+    .map(t => t.trim())
+    .filter(Boolean)
+    .map((t, i) => (
+      <span key={i} className="tag-text">#{t}</span>
+    ));
+}
+
 const renderPostContent = (post) => {
   const data = post.data;
 
@@ -110,11 +120,24 @@ const renderPostContent = (post) => {
     case "content":
       return (
       <>
-        <div>
+        <div className='post-body'>
+
           <div className='post-caption'>
             <p>{data.title}</p>
           </div>
-        </div>
+
+          <div className='post-content-type'>
+            <span className='content-type'>{data.type}</span>
+          </div>
+          <div className='post-body-text'>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} >
+              {data.text_body || ""}
+            </ReactMarkdown>
+          </div>
+          <div className='post-tags'>
+                {tagSplitter(data.tags)}
+          </div>
+          </div>
 
         <div  className='post-thumbnail'>         
           <MediaPreview files={parseJSON(data.media_url)}/>
