@@ -135,9 +135,9 @@ const renderPostContent = (post) => {
             </ReactMarkdown>
           </div>
           <div className='post-tags'>
-                {tagSplitter(data.tags)}
+                {tagSplitter(post.tags)}
           </div>
-          </div>
+        </div>
 
         <div  className='post-thumbnail'>         
           <MediaPreview files={parseJSON(data.media_url)}/>
