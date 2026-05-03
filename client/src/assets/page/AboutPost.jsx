@@ -12,6 +12,9 @@ import "../style/upload/Postpreview.css";
 import "../style/upload/MultipleMedia.css";
 import {MediaPreview} from "../util/mediaUploader";
 
+// util
+import MoreDropDown from "../util/upload/MoreDropDown";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
@@ -204,9 +207,12 @@ const renderPostContent = (post) => {
               <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
                 <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
               </div>
-              <p id="author-name">{post.username}</p>
+              <div className='user-post-info'>
+                <p id="author-name">{post.username}</p>
+                <p className='post-at'>{post.created_at}</p>
+              </div>
             </div>
-            <DotDropDown/>
+            <MoreDropDown/>
           </div>
 
           <div className='post-body'>

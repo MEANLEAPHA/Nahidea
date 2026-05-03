@@ -149,7 +149,7 @@ export default function PreviewPost ({
                         <p className='post-at'>Just now</p>
                     </div>
                 </div>
-                <MoreDropDown/>
+                <MoreDropDown/> 
             </div>
             <div className='post-body'>
                 {
