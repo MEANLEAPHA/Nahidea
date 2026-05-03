@@ -54,7 +54,7 @@ const AboutPost = () => {
 
     handleView();
    
-    if (String(stored.postId) === String(id)) {
+    if (String(stored.id) === String(id)) {
       setPost(stored);
     } else {
      handleFetchPost();
@@ -79,11 +79,13 @@ const AboutPost = () => {
     try{
     await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      
     );
     }catch(err){
       console.error(err);
@@ -209,7 +211,7 @@ const renderPostContent = (post) => {
   }
 };
   return (
-    <div clasName='home-container'>
+    <div className='home-container'>
       <article id="feed-article">
         <div className="posts about-posts">
 
