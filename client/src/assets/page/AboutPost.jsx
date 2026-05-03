@@ -20,7 +20,7 @@ import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-soli
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-
+const { Title, Text } = Typography;
 
 const token = localStorage.getItem("token");
 
