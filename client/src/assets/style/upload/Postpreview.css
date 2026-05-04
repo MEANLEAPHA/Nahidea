@@ -83,8 +83,7 @@ margin-top: 10px;
     padding-top: 15px;
     margin-top: 0px;
     padding-bottom: 2px;
-    /* border-bottom: 1px solid var(--secondary-color); */
-   
+    /* border-bottom: 1px solid var(--secondary-color); */  
 }
 .posts:hover{
     background-color: var(--back-con);
@@ -99,10 +98,17 @@ margin-top: 10px;
     background-color: none;
      border-radius: 0px;
 }
+
 .about-posts{
-     background-color: none;
-     border-radius: 0px;
+     width: 100%;
+    height: auto;
+    padding: 0;
+    margin: auto;
+    padding-top: 15px;
+    margin-top: 0px;
+    padding-bottom: 2px;
 }
+
 .about-posts:hover{
     background-color: none;
     border-radius: 0px;
@@ -226,6 +232,7 @@ margin-top: 10px;
     color: var(--font-color);
     opacity: 0.8;
     margin-top: 5px;
+    line-height: 1.2;
 }
 .post-content-type{
     width: 95%;

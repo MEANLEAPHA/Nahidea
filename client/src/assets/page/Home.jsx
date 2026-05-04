@@ -377,7 +377,10 @@ export default function Home() {
 
                         <div className='post-header'>
                           <div className='post-user-profile'>
-                                  <img src='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif' className="user-profile" alt="profile" />
+                                  {/* <img src='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif' className="user-profile" alt="profile" /> */}
+                                  <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
+                                    <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} id="author-pf"/>
+                                  </div>
                                   <div className='user-post-info'>
                                       <p className='post-username'>{post.username} <span className='post-type-label'>post a {post.post_type}</span></p>
                                       <p className='post-at'>{post.created_at}</p>

@@ -237,7 +237,7 @@ const renderPostContent = (post) => {
   return (
     <div className='home-container'>
       <article id="feed-article">
-        <div className="posts about-posts">
+        <div className="about-posts">
 
           <div className='post-header'>
             <div className='post-user-profile'>
