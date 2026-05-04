@@ -72,7 +72,7 @@ const AboutPost = () => {
       }
       catch (err) {
       console.error(err);
-      setPost([]);
+      setPost(null);
     } 
   }
   const handleView = async () =>{

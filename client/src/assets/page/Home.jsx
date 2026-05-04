@@ -204,7 +204,7 @@ export default function Home() {
                           }
                         };
                       sessionStorage.setItem("post", JSON.stringify(newPost));
-                      navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
+                      navigate(`/aboutpost/${post.id}`)
                     }}>
                     <p>{data.title}</p>
                 </div>
@@ -238,6 +238,7 @@ export default function Home() {
                       username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
                       tags: post.tags,
                       data:{
+                        question_id:data.id,
                         question_type:data.question_type,
                         question_related_to:data.question_related_to,
                         title:data.title,
@@ -274,8 +275,8 @@ export default function Home() {
                         ] || [],
 
                         // single choice
-                        choices: [
-                          data.choices?.map((c, i) => ({
+                        choice: [
+                          data.choice?.map((c, i) => ({
                             choice_text: c.choice_text,
                             singlechoice_id: c.singlechoice_id,
                             id: c.id,
@@ -285,56 +286,163 @@ export default function Home() {
                       }
                     };
                     sessionStorage.setItem("post", JSON.stringify(newPost));
-                    navigate(`/aboutpost?postId=${post.id}&author=${post.username}&title=${data.title}&mediaUrl=${data.media_url}&postTags=${data.post_tags}&type=${data.type}&isAnonymous=${data.is_anonymous}`)
+                    navigate(`/aboutpost/${post.id}`)
                   }}>
                   <p>{data.title}</p>
                 </div>
               <div className="post-question-answer-preview">
                     {data.question_type === "closedend" && (
-                        <Space direction="vertical">
-                          <Text>Yes: {data.yes_title}</Text>
-                          <Text>No: {data.no_title}</Text>
-                        </Space>
+                      <div onClick={
+                              ()=>{
+                                navigate(`/answer/${post.id}/${data.id}/closedend`);
+                                const QaData = {
+                                  question_id = data.id,
+                                  title = data.title
+                                }
+                                sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                              }
+                            }>
+                          <button>Yes</button>
+                          <button>No</button>
+                        </div>
                       )}
 
                       {data.question_type === "range" && (
-                        <Text>
-                          Range: {data.range_min} - {data.range_max}
-                        </Text>
+                        <div onClick={
+                          ()=>{
+                            navigate(`/answer/${post.id}/${data.id}/range`);
+                            const QaData = {
+                                  question_id = data.id,
+                                  title = data.title,
+                                  range_min = data.range_min,
+                                  range_max = data.range_max,
+                                  step = data.step,
+                                  default_range_value = data.default_range_value
+                            }
+                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                          }
+                        }>
+                          <Text>
+                            Range: {data.range_min} - {data.range_max}
+                          </Text>
+                        </div>
                       )}
 
                       {data.question_type === "singlechoice" && (
-                        <ul>
-                          {data.choices?.map((c, i) => (
-                            <li key={i}>{c.choice_text}</li>
-                          ))}
-                        </ul>
+                        <div onClick={
+                          ()=>{
+                            navigate(`/answer/${post.id}/${data.id}/singlechoice`);
+                            const QaData = {
+                                  question_id = data.id,
+                                  title = data.title,
+                                  choice: [
+                                    data.choice?.map((c, i) => ({
+                                      choice_text: c.choice_text,
+                                      singlechoice_id: c.singlechoice_id,
+                                      id: c.id,
+                                      question_id: c.question_id
+                                    }))
+                                  ] || []
+                                  
+                                }
+                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                          }
+                        }>
+                          <ul>
+                            {data.choice?.map((c, i) => (
+                              <li key={i}>{c.choice_text}</li>
+                            ))}
+                          </ul>
+                        </div>
                       )}
 
                       {data.question_type === "multiplechoice" && (
-                        <ul>
-                          {data.choices?.map((c, i) => (
-                            <li key={i}>{c.choice_text}</li>
-                          ))}
-                        </ul>
+                        <div onClick={
+                          ()=>{
+                            navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
+                            const QaData = {
+                                    question_id = data.id,
+                                    title = data.title,
+                                    choices: [
+                                      data.choices?.map((c, i) => ({
+                                        choice_text: c.choice_text,
+                                        multiplechoice_id: c.multiplechoice_id,
+                                        id: c.id,
+                                        question_id: c.question_id
+                                      }))
+                                    ] || []
+                                  }
+                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                          }
+                        }>
+                          <ul>
+                            {data.choices?.map((c, i) => (
+                              <li key={i}>{c.choice_text}</li>
+                            ))}
+                          </ul>
+                        </div>
                       )}
 
                       {data.question_type === "rankingorder" && (
-                        <ol>
-                          {data.items?.map((i, idx) => (
-                            <li key={idx}>{i.item_text}</li>
-                          ))}
-                        </ol>
+                        <div onClick={
+                          ()=>{
+                            navigate(`/answer/${post.id}/${data.id}/rankingorder`);
+                            const QaData = {
+                                    question_id = data.id,
+                                    title = data.title,
+                                    items: [
+                                      data.items?.map((c, i) => ({
+                                        item_text: c.item_text,
+                                        position: c.position,
+                                        id: c.id,
+                                        ranking_id: c.ranking_id,
+                                        question_id: c.question_id
+                                      }))
+                                    ] || []
+                                  }
+                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                          }
+                        }>
+                          <ol>
+                            {data.items?.map((i, idx) => (
+                              <li key={idx}>{i.item_text}</li>
+                            ))}
+                          </ol>
+                        </div>
                       )}
 
                       {data.question_type === "rating" && (
-                        <Text>Rating icon: {data.rating_icon_id}</Text>
+                        <div onClick={
+                          ()=>{
+                            navigate(`/answer/${post.id}/${data.id}/rating`);
+                            const QaData = {
+                                    question_id = data.id,
+                                    title = data.title,
+                                    rating_icon_id:data.rating_icon_id || null
+                                  }
+                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                          }
+                        }>
+                          <Text>Rating icon: {data.rating_icon_id}</Text>
+                        </div>
+                      )}
+
+                      {data.question_type === "openend" && (
+                        <div onClick={
+                          ()=>{
+                            navigate(`/answer/${post.id}/${data.id}/openend`);
+                            const QaData = {
+                                    question_id = data.id,
+                                    title = data.title
+                                  }
+                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                          }
+                        }>
+                          <Text>{data.title}</Text>
+                        </div>
                       )}
                   
               </div>
-              {/* <div className='post-tags'>
-                  <TagsPreview tagsValue={postTagsValue}/>
-              </div> */}
             </div>
         
 
@@ -377,14 +485,13 @@ export default function Home() {
 
                         <div className='post-header'>
                           <div className='post-user-profile'>
-                                  {/* <img src='https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif' className="user-profile" alt="profile" /> */}
                                   <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
                                     <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} id="author-pf"/>
                                   </div>
                                   <div className='user-post-info'>
                                       <p className='post-username'>{post.username} <span className='post-type-label'>post a {post.post_type}</span></p>
                                       <p className='post-at'>{post.created_at}</p>
-                                  </div>
+                                  </div> 
                               </div>
                           <DotDropDown/>
                         </div>

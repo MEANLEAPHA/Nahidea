@@ -326,11 +326,13 @@ const MemoEditor = memo(TiptapEditor);
     <div id="select-radio-type">
   
       <div className='radio-button-div-type'>
-        {[{label: 'Body Text', icon: <EditOutlined />, id: 1},
-                      {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 2},
-                      {label: 'Tags', icon: <TagsOutlined />, id: 3},
-                      {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 4},
-                    ].map((opt) => (
+        {
+          [
+            {label: 'Body Text', icon: <EditOutlined />, id: 1},
+            {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 2},
+            {label: 'Tags', icon: <TagsOutlined />, id: 3},
+            {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 4},
+          ].map((opt) => (
           <button key={opt.id} onClick={() => setSelected(opt.id)} type="button" className='radio-button-type' style={{
               borderBottom: selected === opt.id ? "3px solid #fd7648" : "3px solid transparent",
               color: selected === opt.id ? "#fd7648" : "grey",

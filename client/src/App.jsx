@@ -42,6 +42,7 @@ import AboutPost from './assets/page/AboutPost';
 import AnswerPost from './assets/page/AnswerPost';
 import Notification from './assets/page/Notification';
 import Search from './assets/page/Search';
+import AnswerQa from './assets/page/AnswerQa';
 
 
 const token = localStorage.getItem("token");
@@ -68,8 +69,8 @@ const App = () =>{
 
                     {/* post */}
                     <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>
-                    <Route path='answerpost' element={<AnswerPost/>}></Route>
-
+                    <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
+                 
                     {/* Gif */}
                     <Route path='/gif' element={<GifFeed/>}></Route>
                     <Route path='/upload/gif' element={<GifUpload/>}></Route>
