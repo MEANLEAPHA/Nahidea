@@ -296,8 +296,8 @@ export default function Home() {
                               ()=>{
                                 navigate(`/answer/${post.id}/${data.id}/closedend`);
                                 const QaData = {
-                                  question_id = data.id,
-                                  title = data.title
+                                  question_id: data.id,
+                                  title: data.title
                                 }
                                 sessionStorage.setItem("QaStore", JSON.stringify(QaData));
                               }
@@ -312,12 +312,12 @@ export default function Home() {
                           ()=>{
                             navigate(`/answer/${post.id}/${data.id}/range`);
                             const QaData = {
-                                  question_id = data.id,
-                                  title = data.title,
-                                  range_min = data.range_min,
-                                  range_max = data.range_max,
-                                  step = data.step,
-                                  default_range_value = data.default_range_value
+                                  question_id : data.id,
+                                  title : data.title,
+                                  range_min : data.range_min,
+                                  range_max : data.range_max,
+                                  step : data.step,
+                                  default_range_value : data.default_range_value
                             }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
                           }
@@ -333,8 +333,8 @@ export default function Home() {
                           ()=>{
                             navigate(`/answer/${post.id}/${data.id}/singlechoice`);
                             const QaData = {
-                                  question_id = data.id,
-                                  title = data.title,
+                                  question_id : data.id,
+                                  title : data.title,
                                   choice: [
                                     data.choice?.map((c, i) => ({
                                       choice_text: c.choice_text,
@@ -361,8 +361,8 @@ export default function Home() {
                           ()=>{
                             navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
                             const QaData = {
-                                    question_id = data.id,
-                                    title = data.title,
+                                    question_id : data.id,
+                                    title : data.title,
                                     choices: [
                                       data.choices?.map((c, i) => ({
                                         choice_text: c.choice_text,
@@ -388,8 +388,8 @@ export default function Home() {
                           ()=>{
                             navigate(`/answer/${post.id}/${data.id}/rankingorder`);
                             const QaData = {
-                                    question_id = data.id,
-                                    title = data.title,
+                                    question_id : data.id,
+                                    title : data.title,
                                     items: [
                                       data.items?.map((c, i) => ({
                                         item_text: c.item_text,
@@ -416,8 +416,8 @@ export default function Home() {
                           ()=>{
                             navigate(`/answer/${post.id}/${data.id}/rating`);
                             const QaData = {
-                                    question_id = data.id,
-                                    title = data.title,
+                                    question_id : data.id,
+                                    title : data.title,
                                     rating_icon_id:data.rating_icon_id || null
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
@@ -432,8 +432,8 @@ export default function Home() {
                           ()=>{
                             navigate(`/answer/${post.id}/${data.id}/openend`);
                             const QaData = {
-                                    question_id = data.id,
-                                    title = data.title
+                                    question_id : data.id,
+                                    title : data.title
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
                           }
