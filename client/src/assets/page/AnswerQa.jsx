@@ -117,22 +117,70 @@ const AnswerQa = () => {
                         </div>
                     );
 
+                // case "multiplechoice":
+                //     return (
+                //         <div>
+                //         {QaData?.choices?.length > 0 ? (
+                //             QaData.choices.map(c => (
+                //             <div key={c.id}>
+                //                 <input
+                //                 type="checkbox"
+                //                 id={`multi-${c.id}`}
+                //                 name="multiplechoice"
+                //                 value={c.id}
+                //                 checked={multipleChoiceInput.includes(c.id)}
+                //                 onChange={(e) => {
+                //                     const id = Number(e.target.value);
+                //                     setMultipleChoiceInput(prev =>
+                //                     prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+                //                     );
+                //                 }}
+                //                 />
+                //                 <label htmlFor={`multi-${c.id}`}>{c.choice_text}</label>
+                //             </div>
+                //             ))
+                //         ) : (
+                //             <p>Loading choices...</p>
+                //         )}
+                //         </div>
+                //     );
                 case "multiplechoice":
+                    const allSelected =
+                        QaData?.choices?.length > 0 &&
+                        multipleChoiceInput.length === QaData.choices.length;
+
                     return (
                         <div>
+                        {QaData?.include_all_above === 1 && QaData?.choices?.length > 0 && (
+                            <div>
+                            <input
+                                type="checkbox"
+                                id="select-all"
+                                checked={allSelected}
+                                onChange={(e) => {
+                                setMultipleChoiceInput(
+                                    e.target.checked ? QaData.choices.map(c => c.id) : []
+                                );
+                                }}
+                            />
+                            <label htmlFor="select-all">Select All</label>
+                            </div>
+                        )}
+
                         {QaData?.choices?.length > 0 ? (
                             QaData.choices.map(c => (
                             <div key={c.id}>
                                 <input
                                 type="checkbox"
                                 id={`multi-${c.id}`}
-                                name="multiplechoice"
                                 value={c.id}
                                 checked={multipleChoiceInput.includes(c.id)}
                                 onChange={(e) => {
                                     const id = Number(e.target.value);
                                     setMultipleChoiceInput(prev =>
-                                    prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+                                    prev.includes(id)
+                                        ? prev.filter(x => x !== id)
+                                        : [...prev, id]
                                     );
                                 }}
                                 />
