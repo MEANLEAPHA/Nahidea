@@ -310,9 +310,10 @@ export default function Home() {
                       {data.question_type === "range" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.id}/range`);
+                            navigate(`/answer/${post.id}/${data.question_id}/range`);
                             const QaData = {
-                                  question_id : data.id,
+                                  id : data.id, 
+                                  question_id : data.question_id,
                                   title : data.title,
                                   range_min : data.range_min,
                                   range_max : data.range_max,
@@ -414,8 +415,9 @@ export default function Home() {
                       {data.question_type === "rating" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.id}/rating`);
+                            navigate(`/answer/${post.id}/${data.question_id}/rating`);
                             const QaData = {
+                                    id: data.id,
                                     question_id : data.id,
                                     title : data.title,
                                     rating_icon_id:data.rating_icon_id || null
