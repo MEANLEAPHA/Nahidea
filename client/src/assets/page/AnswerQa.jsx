@@ -5,7 +5,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { iconOptions } from "../data/post_type_data";
 
-const token = localStorage.getItem("token");
+
 
 const AnswerQa = () => {
 
@@ -38,7 +38,7 @@ const AnswerQa = () => {
             const res = await axios.get(
                 `${import.meta.env.VITE_SERVER_URL}/api/get-question/${questionId}/${questionType}`
             )
-            const data = res.data;
+            const data = res.data.data;
             setQaData(data);
         }
         catch(err){
@@ -114,7 +114,7 @@ const AnswerQa = () => {
                 case "multiplechoice":
                     return (
                         <div>
-                        {QaData.multiple_choices.map(choice => (
+                        {QaData.choices.map(choice => (
                             <div key={choice.id}>
                             <input
                                 type="checkbox"
@@ -215,6 +215,7 @@ const AnswerQa = () => {
         }
     
     const handleSubmit = async (e) => {
+        const token = localStorage.getItem("token");
         e.preventDefault();
         let payload = {};
 
@@ -229,11 +230,15 @@ const AnswerQa = () => {
 
         }
 
-        await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/answer-qa/${postId}/${questionId}/${questionType}`,
-            payload,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+        try {
+            await axios.post(
+                `${import.meta.env.VITE_SERVER_URL}/api/answer-qa/${postId}/${questionId}/${questionType}`,
+                payload,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            } catch (err) {
+            console.error("POST ERROR:", err.response || err.message);
+            }
         };
 
 
