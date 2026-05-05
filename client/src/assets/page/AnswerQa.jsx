@@ -11,7 +11,7 @@ const AnswerQa = () => {
 
     const {postId, questionId, questionType} = useParams();
 
-    const [QaData, setQaData] = useState(null);
+    const [QaData, setQaData] = useState({});
 
     const [openendInput, setOpenendInput] = useState('');
     const [rangeInput, setRangeInput] = useState(null);
@@ -38,7 +38,7 @@ const AnswerQa = () => {
             const res = await axios.get(
                 `${import.meta.env.VITE_SERVER_URL}/api/get-question/${questionId}/${questionType}`
             )
-            const data = res.data.data;
+            const data = res.data.datas;
             setQaData(data);
         }
         catch(err){
@@ -48,6 +48,7 @@ const AnswerQa = () => {
     }
 
         function renderQuestion(QaData){
+            if (!QaData) return null;
             switch(questionType){
                 case "openend":
                     return(
@@ -94,108 +95,136 @@ const AnswerQa = () => {
                 case "singlechoice":
                     return (
                         <div>
-                        {QaData.choice.map(choice => (
-                            <div key={choice.singlechoice_id}>
-                            <input
+                        {QaData?.choice?.length > 0 ? (
+                            QaData.choice.map(c => (
+                            <div key={c.id}>
+                                <input
                                 type="radio"
-                                id={`single-${choice.singlechoice_id}`}
+                                id={`single-${c.id}`}
                                 name="singlechoice"
-                                value={choice.singlechoice_id}
-                                checked={singleChoiceInput === choice.singlechoice_id}
+                                value={c.id}
+                                checked={singleChoiceInput === c.id}
                                 onChange={(e) => setSingleChoiceInput(Number(e.target.value))}
-                            />
-                            <label htmlFor={`single-${choice.singlechoice_id}`}>{choice.choice_text}</label>
+                                />
+                                <label htmlFor={`single-${c.id}`}>
+                                {c.choice_text}
+                                </label>
                             </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p>Loading choices...</p>
+                        )}
                         </div>
                     );
-
 
                 case "multiplechoice":
                     return (
                         <div>
-                        {QaData.choices.map(choice => (
-                            <div key={choice.id}>
-                            <input
+                        {QaData?.choices?.length > 0 ? (
+                            QaData.choices.map(c => (
+                            <div key={c.id}>
+                                <input
                                 type="checkbox"
-                                id={`multi-${choice.multiplechoice_id}`}
+                                id={`multi-${c.id}`}
                                 name="multiplechoice"
-                                value={choice.multiplechoice_id}
-                                checked={multipleChoiceInput.includes(choice.multiplechoice_id)}
+                                value={c.id}
+                                checked={multipleChoiceInput.includes(c.id)}
                                 onChange={(e) => {
-                                const id = Number(e.target.value);
-                                setMultipleChoiceInput(prev =>
+                                    const id = Number(e.target.value);
+                                    setMultipleChoiceInput(prev =>
                                     prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-                                );
+                                    );
                                 }}
-                            />
-                            <label htmlFor={`multi-${choice.id}`}>{choice.choice_text}</label>
+                                />
+                                <label htmlFor={`multi-${c.id}`}>{c.choice_text}</label>
                             </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p>Loading choices...</p>
+                        )}
                         </div>
                     );
 
-                    
-                case "rankingorder":
-                    return (
+             case "rankingorder":
+                return (
                     <DragDropContext
-                            onDragEnd={(result) => {
-                                if (!result.destination) return;
-                                const reordered = Array.from(QaData.items);
-                                const [moved] = reordered.splice(result.source.index, 1);
-                                reordered.splice(result.destination.index, 0, moved);
+                    onDragEnd={(result) => {
+                        if (!result.destination) return;
 
-                                // Update state with new positions
-                                setRankingOrderInput(
-                                reordered.reduce((acc, item, idx) => {
-                                    acc[item.id] = idx + 1; // map option_id → position
-                                    return acc;
-                                }, {})
-                                );
+                        const reordered = Array.from(QaData?.items || []);
+                        const [moved] = reordered.splice(result.source.index, 1);
+                        reordered.splice(result.destination.index, 0, moved);
 
-                                // Also update QaData.items so UI reflects new order
-                                setQaData({ ...QaData, items: reordered });
+                        // Update state with new positions
+                        setRankingOrderInput(
+                        reordered.reduce((acc, item, idx) => {
+                            acc[item.id] = idx + 1; // map option_id → position
+                            return acc;
+                        }, {})
+                        );
+
+                        // Also update QaData.items so UI reflects new order
+                        setQaData({ ...QaData, items: reordered });
+                    }}
+                    >
+                    <Droppable droppableId="ranking-list">
+                        {(provided) => (
+                        <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            style={{
+                            width: "100%",
+                            maxWidth: "500px",
+                            margin: "0 auto",
                             }}
-                            >
-                            <Droppable droppableId="ranking-list">
-                                {(provided) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}
+                        >
+                            {QaData?.items?.length > 0 ? (
+                            QaData.items.map((item, index) => (
+                                <Draggable
+                                key={item.id}
+                                draggableId={String(item.id)}
+                                index={index}
                                 >
-                                    {QaData.items.map((item, index) => (
-                                    <Draggable key={item.id} draggableId={String(item.id)} index={index}>
-                                        {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            padding: "10px",
-                                            marginBottom: "8px",
-                                            background: snapshot.isDragging ? "#e0f7fa" : "#fafafa",
-                                            border: "1px solid #ccc",
-                                            borderRadius: "6px",
-                                            ...provided.draggableProps.style,
-                                            }}
-                                        >
-                                            <span style={{ marginRight: "10px", fontWeight: "bold" }}>
-                                            {index + 1}.
-                                            </span>
-                                            <span style={{ flex: 1 }}>{item.item_text}</span>
-                                        </div>
-                                        )}
-                                    </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
+                                {(provided, snapshot) => (
+                                    <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        padding: "10px",
+                                        marginBottom: "8px",
+                                        background: snapshot.isDragging
+                                        ? "#e0f7fa"
+                                        : "#fafafa",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "6px",
+                                        ...provided.draggableProps.style,
+                                    }}
+                                    >
+                                    <span
+                                        style={{
+                                        marginRight: "10px",
+                                        fontWeight: "bold",
+                                        }}
+                                    >
+                                        {index + 1}.
+                                    </span>
+                                    <span style={{ flex: 1 }}>{item.item_text}</span>
+                                    </div>
                                 )}
-                            </Droppable>
-                            </DragDropContext>
-                    );
+                                </Draggable>
+                            ))
+                            ) : (
+                            <p>Loading items...</p>
+                            )}
+                            {provided.placeholder}
+                        </div>
+                        )}
+                    </Droppable>
+                    </DragDropContext>
+                );
 
                 case "rating":
                     return (
@@ -203,7 +232,7 @@ const AnswerQa = () => {
                         {Array.from({length:5}).map((_,i)=>(
                             <FontAwesomeIcon 
                             key={i}
-                            icon={iconOptions.find(opt => opt.id === QaData.rating_icon_id)?.icon}
+                            icon={iconOptions.find(opt => opt.id === QaData?.rating_icon_id)?.icon}
                             style={{ fontSize: "28px", color: i < ratingInput ? "#ff3434" : "#ccc", cursor:"pointer" }}
                             onClick={() => setRatingInput(i+1)}
                             />
@@ -247,10 +276,16 @@ const AnswerQa = () => {
     return (
         <div>
             <h1>AnswerQa</h1>
-            <form onSubmit={handleSubmit} id="answer-form">
-                {renderQuestion(QaData)}
-                <button type="submit">Submit</button>
-            </form>
+            {!QaData ? (
+                <p>Loading...</p>
+            ) : (
+                <form onSubmit={handleSubmit} id="answer-form">
+                    <p>{QaData.title}</p>
+                    <p>{QaData.question_related_to}</p>
+                    {renderQuestion(QaData)}
+                    <button type="submit">Submit</button>
+                </form>
+            )}
         </div>
     );
 };
