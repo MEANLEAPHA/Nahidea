@@ -36,13 +36,7 @@ const AnswerQa = () => {
     const handleFetchQa = async () => {
         try{
             const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/api/get-question/${questionId}/${questionType}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+                `${import.meta.env.VITE_SERVER_URL}/api/get-question/${questionId}/${questionType}`
             )
             const data = res.data;
             setQaData(data);
