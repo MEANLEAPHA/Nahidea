@@ -29,24 +29,8 @@ const AnswerQa = () => {
         // else{
         //     handleFetchQa();
         // }
-        try{
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/api/get-question/${questionId}/${questionType}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            )
-            const data = res.data;
-            setQaData(data);
-        }
-        catch(err){
-            console.error(err);
-            setQaData(null);
-        }
-    });
+      handleFetchQa();
+    }, [questionId, questionType]);
 
 
     const handleFetchQa = async () => {
