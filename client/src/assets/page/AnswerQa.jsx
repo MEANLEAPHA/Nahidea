@@ -38,7 +38,7 @@ const AnswerQa = () => {
 
     useEffect(() => {
         const QaStoreRaw = sessionStorage.getItem('QaStore');
-        console.log("SESSION RAW:", sessionStorage.getItem("QaStore"));
+  
 
         if (!QaStoreRaw) {
             // handleFetchQa();
@@ -48,8 +48,7 @@ const AnswerQa = () => {
 
         const QaStore = JSON.parse(QaStoreRaw);
 
-console.log("PARSED:", QaStore);
-console.log("URL questionId:", questionId);
+
         if (String(QaStore.question_id) === String(questionId)) {
             setQaData(QaStore);
         } else {
@@ -258,7 +257,7 @@ console.log("URL questionId:", questionId);
                             {Array.from({length:5}).map((_,i)=>(
                                 <FontAwesomeIcon 
                                 key={i}
-                                icon={iconOptions.find(opt => opt.id === QaData?.rating_icon_id)?.icon}
+                                icon={iconOptions.find(opt => opt.id === QaData?.Number(rating_icon_id))?.icon}
                                 style={{ fontSize: "28px", color: i < ratingInput ? "#ff3434" : "#ccc", cursor:"pointer" }}
                                 onClick={() => setRatingInput(i+1)}
                                 />
