@@ -420,7 +420,7 @@ export default function Home() {
                                     id: data.id,
                                     question_id : data.id,
                                     title : data.title,
-                                    rating_icon_id:data.rating_icon_id || null
+                                    rating_icon_id: data.rating_icon_id
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
                             navigate(`/answer/${post.id}/${data.question_id}/rating`);

@@ -257,7 +257,7 @@ const AnswerQa = () => {
                             {Array.from({length:5}).map((_,i)=>(
                                 <FontAwesomeIcon 
                                 key={i}
-                                icon={iconOptions.find(opt => opt.id === QaData?.Number(rating_icon_id))?.icon}
+                                icon={iconOptions.find(opt => opt.id === QaData?.rating_icon_id)?.icon}
                                 style={{ fontSize: "28px", color: i < ratingInput ? "#ff3434" : "#ccc", cursor:"pointer" }}
                                 onClick={() => setRatingInput(i+1)}
                                 />
