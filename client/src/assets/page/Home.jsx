@@ -296,7 +296,7 @@ export default function Home() {
                               ()=>{
                                 navigate(`/answer/${post.id}/${data.id}/closedend`);
                                 const QaData = {
-                                  question_id: data.id,
+                                  question_id : data.question_id,
                                   title: data.title
                                 }
                                 sessionStorage.setItem("QaStore", JSON.stringify(QaData));
@@ -333,7 +333,7 @@ export default function Home() {
                         <div onClick={
                           ()=>{        
                             const QaData = {
-                                  question_id : data.id,
+                                  question_id : data.question_id,
                                   title : data.title,
                                   choice: 
                                     data.choice?.map(c => ({
@@ -361,7 +361,7 @@ export default function Home() {
                         <div onClick={
                           ()=>{
                             const QaData = {
-                                    question_id : data.id,
+                                    question_id : data.question_id,
                                     title : data.title,
                                     include_all_above : data.include_all_above,
                                     choices: 
@@ -389,7 +389,7 @@ export default function Home() {
                         <div onClick={
                           ()=>{
                             const QaData = {
-                                    question_id : data.id,
+                                    question_id : data.question_id,
                                     title : data.title,
                                     items: 
                                       data.items?.map(c => ({
@@ -418,7 +418,7 @@ export default function Home() {
                           ()=>{
                             const QaData = {
                                     // id: data.id,
-                                    question_id : data.id,
+                                    question_id : data.question_id,
                                     title : data.title,
                                     rating_icon_id: data.rating_icon_id
                                   }
@@ -435,7 +435,7 @@ export default function Home() {
                         <div onClick={
                           ()=>{
                             const QaData = {
-                                    question_id : data.id,
+                                    question_id : data.question_id,
                                     title : data.title
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
