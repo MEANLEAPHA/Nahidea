@@ -294,12 +294,12 @@ export default function Home() {
                     {data.question_type === "closedend" && (
                       <div onClick={
                               ()=>{
-                                navigate(`/answer/${post.id}/${data.id}/closedend`);
                                 const QaData = {
                                   question_id : data.question_id,
                                   title: data.title
                                 }
                                 sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                                navigate(`/answer/${post.id}/${data.question_id}/closedend`);
                               }
                             }>
                           <button>Yes</button>
@@ -346,7 +346,7 @@ export default function Home() {
                                   
                                 }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/singlechoice`);
+                            navigate(`/answer/${post.id}/${data.question_id}/singlechoice`);
                           }
                         }>
                           <ul>
@@ -374,7 +374,7 @@ export default function Home() {
                                      || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
+                            navigate(`/answer/${post.id}/${data.question_id}/multiplechoice`);
                           }
                         }>
                           <ul>
@@ -402,7 +402,7 @@ export default function Home() {
                                      || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/rankingorder`);
+                            navigate(`/answer/${post.id}/${data.question_id}/rankingorder`);
                           }
                         }>
                           <ol>
@@ -439,7 +439,7 @@ export default function Home() {
                                     title : data.title
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/openend`);
+                            navigate(`/answer/${post.id}/${data.question_id}/openend`);
                           }
                         }>
                      
