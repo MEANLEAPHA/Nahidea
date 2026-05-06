@@ -29,7 +29,7 @@ const AnswerQa = () => {
     useEffect(() => {
          const stored = localStorage.getItem('QaStore');
         const QaStore = JSON.parse(stored);
-        if(Number(QaStore.question_id) === Number(questionId)){
+        if(Number(QaStore?.question_id) === Number(questionId)){
             setQaData(QaStore);
         }
         else{
