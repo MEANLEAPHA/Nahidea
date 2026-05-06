@@ -184,7 +184,7 @@ const handleSubmit = async (e) => {
   }
   formData.append("question_title", title);
 
-  switch(questionType){
+  switch(questionType?.value){
     case "openend":
       formData.append("question_type", "openend");
       break;

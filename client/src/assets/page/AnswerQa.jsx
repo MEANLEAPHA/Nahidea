@@ -108,7 +108,7 @@ const AnswerQa = () => {
                                 id={`single-${c.id}`}
                                 name="singlechoice"
                                 value={c.id}
-                                checked={singleChoiceInput === c.id}
+                                checked={singleChoiceInput?.id === c.id}
                                 onChange={(e) => setSingleChoiceInput({ id: c.id, text: c.choice_text })}
                                 />
                                 <label htmlFor={`single-${c.id}`}>
