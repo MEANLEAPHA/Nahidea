@@ -320,7 +320,7 @@ export default function Home() {
                                   default_range_value : data.default_range_value
                             }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.question_id}/range`);
+                            navigate(`/answer/${post.id}/${data.id}/range`);
                           }
                         }>
                           <Text>
@@ -346,7 +346,7 @@ export default function Home() {
                                   
                                 }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.question_id}/singlechoice`);
+                            navigate(`/answer/${post.id}/${data.id}/singlechoice`);
                           }
                         }>
                           <ul>
@@ -374,7 +374,7 @@ export default function Home() {
                                      || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.question_id}/multiplechoice`);
+                            navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
                           }
                         }>
                           <ul>
@@ -402,7 +402,7 @@ export default function Home() {
                                      || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.question_id}/rankingorder`);
+                            navigate(`/answer/${post.id}/${data.id}/rankingorder`);
                           }
                         }>
                           <ol>
@@ -423,7 +423,7 @@ export default function Home() {
                                     rating_icon_id: data.rating_icon_id
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.question_id}/rating`);
+                            navigate(`/answer/${post.id}/${data.id}/rating`);
                           }
                         }>
                              <Text>{data.title}</Text>
@@ -439,7 +439,7 @@ export default function Home() {
                                     title : data.title
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.question_id}/openend`);
+                            navigate(`/answer/${post.id}/${data.id}/openend`);
                           }
                         }>
                      
