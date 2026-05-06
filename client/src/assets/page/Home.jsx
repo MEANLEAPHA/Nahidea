@@ -254,35 +254,35 @@ export default function Home() {
                         step: data.step || null,
 
                         // munltiple choice
-                        choices: [
-                          data.choices?.map((c, i) => ({
+                        choices: 
+                          data.choices?.map(c => ({
                             choice_text: c.choice_text,
                             multiplechoice_id: c.multiplechoice_id,
                             id: c.id,
                             question_id: c.question_id
                           }))
-                        ] || [],
+                        || [],
 
                         // ranking
-                        items: [
-                          data.items?.map((c, i) => ({
+                        items: 
+                          data.items?.map(c => ({
                             item_text: c.item_text,
                             position: c.position,
                             id: c.id,
                             ranking_id: c.ranking_id,
                             question_id: c.question_id
                           }))
-                        ] || [],
+                         || [],
 
                         // single choice
-                        choice: [
-                          data.choice?.map((c, i) => ({
+                        choice: 
+                          data.choice?.map(c => ({
                             choice_text: c.choice_text,
                             singlechoice_id: c.singlechoice_id,
                             id: c.id,
                             question_id: c.question_id
                           }))
-                        ] || [],
+                        || [],
                       }
                     };
                     sessionStorage.setItem("post", JSON.stringify(newPost));
@@ -336,14 +336,14 @@ export default function Home() {
                             const QaData = {
                                   question_id : data.id,
                                   title : data.title,
-                                  choice: [
-                                    data.choice?.map((c, i) => ({
+                                  choice: 
+                                    data.choice?.map(c => ({
                                       choice_text: c.choice_text,
                                       singlechoice_id: c.singlechoice_id,
                                       id: c.id,
                                       question_id: c.question_id
                                     }))
-                                  ] || []
+                                   || []
                                   
                                 }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
@@ -364,14 +364,14 @@ export default function Home() {
                             const QaData = {
                                     question_id : data.id,
                                     title : data.title,
-                                    choices: [
-                                      data.choices?.map((c, i) => ({
+                                    choices: 
+                                      data.choices?.map(c => ({
                                         choice_text: c.choice_text,
                                         multiplechoice_id: c.multiplechoice_id,
                                         id: c.id,
                                         question_id: c.question_id
                                       }))
-                                    ] || []
+                                     || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
                           }
@@ -391,15 +391,15 @@ export default function Home() {
                             const QaData = {
                                     question_id : data.id,
                                     title : data.title,
-                                    items: [
-                                      data.items?.map((c, i) => ({
+                                    items: 
+                                      data.items?.map(c => ({
                                         item_text: c.item_text,
                                         position: c.position,
                                         id: c.id,
                                         ranking_id: c.ranking_id,
                                         question_id: c.question_id
                                       }))
-                                    ] || []
+                                     || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
                           }

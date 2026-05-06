@@ -28,7 +28,7 @@ const AnswerQa = () => {
     
     useEffect(() => {
         const QaStore = JSON.parse(localStorage.getItem('QaStore') || '{}');
-        if(String(QaStore.id) === String(questionId)){
+        if(Number(QaStore.question_id) === Number(questionId)){
             setQaData(QaStore);
         }
         else{
@@ -63,16 +63,16 @@ const AnswerQa = () => {
                 case "range":
                     return(
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <span>{QaData.range_min}</span>
+                        <span>{QaData?.range_min}</span>
                         <input
                         type="range"
-                        min={QaData.range_min}
-                        max={QaData.range_max}
-                        step={QaData.step}
-                        value={rangeInput ?? QaData.default_range_value}
+                        min={QaData?.range_min}
+                        max={QaData?.range_max}
+                        step={QaData?.range_step}
+                        value={rangeInput ?? QaData?.default_range_value}
                         onChange={(e) => setRangeInput(e.target.value)}
                         />
-                        <span>{QaData.range_max}</span>
+                        <span>{QaData?.range_max}</span>
                     </div>
                     );
                 case "closedend":
