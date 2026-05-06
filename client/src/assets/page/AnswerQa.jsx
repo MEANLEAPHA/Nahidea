@@ -262,7 +262,7 @@ const AnswerQa = () => {
                                 onClick={() => setRatingInput(i+1)}
                                 />
                             ))}
-                              <Text>{QaData?.title}</Text>
+                              <p>{QaData?.title}</p>
                             </div>
                         );
 
