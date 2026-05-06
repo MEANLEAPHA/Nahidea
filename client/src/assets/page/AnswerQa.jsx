@@ -17,9 +17,14 @@ const AnswerQa = () => {
     const [rangeInput, setRangeInput] = useState(null);
     const [ratingInput, setRatingInput] = useState(null);
     const [closedendInput, setClosedendInput] = useState(null);
-    const [singleChoiceInput, setSingleChoiceInput] = useState(null);
-    const [multipleChoiceInput, setMultipleChoiceInput] = useState([]);
-    const [rankingOrderInput, setRankingOrderInput] = useState([]);
+
+    const [singleChoiceInput, setSingleChoiceInput] = useState({id: null, text: null});
+
+    const [multipleChoice, setMultipleChoice] = useState([]); 
+
+
+    const [rankingOrderInput, setRankingOrderInput] = useState([]);   
+    const [rankingOrderValue, setRankingOrderValue] = useState([]);   
     
     useEffect(() => {
         // const QaStore = JSON.parse(localStorage.getItem('QaStore') || '{}');
@@ -104,7 +109,10 @@ const AnswerQa = () => {
                                 name="singlechoice"
                                 value={c.id}
                                 checked={singleChoiceInput === c.id}
-                                onChange={(e) => setSingleChoiceInput(Number(e.target.value))}
+                                onChange={() => {
+                                    setSingleChoiceInput({id:Number(c.id), text:c.choice_text});
+                                    }
+                                }
                                 />
                                 <label htmlFor={`single-${c.id}`}>
                                 {c.choice_text}
@@ -116,23 +124,93 @@ const AnswerQa = () => {
                         )}
                         </div>
                     );
+                    case "multiplechoice":
+                        const allSelected =
+                            QaData?.choices?.length > 0 &&
+                            multipleChoice.length === QaData.choices.length;
+                        return (
+                            <div>
+                            {QaData?.include_all_above === 1 && QaData?.choices?.length > 0 && (
+                                <div>
+                                <input
+                                    type="checkbox"
+                                    id="select-all"
+                                    checked={allSelected}
+                                    onChange={(e) => {
+                                    setMultipleChoice(
+                                        e.target.checked
+                                        ? QaData.choices.map(c => ({ id: c.id, text: c.choice_text }))
+                                        : []
+                                    );
+                                    }}
+                                />
+                                <label htmlFor="select-all">Select All</label>
+                                </div>
+                            )}
+
+                            {QaData?.choices?.length > 0 ? (
+                                QaData.choices.map(c => (
+                                <div key={c.id}>
+                                    <input
+                                    type="checkbox"
+                                    id={`multi-${c.id}`}
+                                    value={c.id}
+                                    checked={multipleChoice.some(sel => sel.id === c.id)}
+                                    onChange={(e) => {
+                                        const id = Number(e.target.value);
+                                        setMultipleChoice(prev =>
+                                        prev.some(sel => sel.id === id)
+                                            ? prev.filter(sel => sel.id !== id)
+                                            : [...prev, { id: c.id, text: c.choice_text }]
+                                        );
+                                    }}
+                                    />
+                                    <label htmlFor={`multi-${c.id}`}>{c.choice_text}</label>
+                                </div>
+                                ))
+                            ) : (
+                                <p>Loading choices...</p>
+                            )}
+                            </div>
+                    );
 
                 // case "multiplechoice":
+                //     const allSelected =
+                //         QaData?.choices?.length > 0 &&
+                //         multipleChoiceInput.length === QaData.choices.length;
+
                 //     return (
                 //         <div>
+                //         {QaData?.include_all_above === 1 && QaData?.choices?.length > 0 && (
+                //             <div>
+                //             <input
+                //                 type="checkbox" 
+                //                 id="select-all"
+                //                 checked={allSelected}
+                //                 onChange={(e) => {
+                //                 setMultipleChoiceInput(
+                //                     e.target.checked ? QaData.choices.map(c => c.id) : []
+                //                 );
+                //                 }}
+                //             />
+                //             <label htmlFor="select-all">Select All</label>
+                //             </div>
+                //         )}
+
                 //         {QaData?.choices?.length > 0 ? (
                 //             QaData.choices.map(c => (
                 //             <div key={c.id}>
                 //                 <input
                 //                 type="checkbox"
                 //                 id={`multi-${c.id}`}
-                //                 name="multiplechoice"
                 //                 value={c.id}
                 //                 checked={multipleChoiceInput.includes(c.id)}
                 //                 onChange={(e) => {
                 //                     const id = Number(e.target.value);
                 //                     setMultipleChoiceInput(prev =>
-                //                     prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+                //                     prev.includes(id)
+                //                         ? prev.filter(x => x !== id)
+                //                         : [...prev, id]
                 //                     );
                 //                 }}
                 //                 />
@@ -144,135 +222,145 @@ const AnswerQa = () => {
                 //         )}
                 //         </div>
                 //     );
-                case "multiplechoice":
-                    const allSelected =
-                        QaData?.choices?.length > 0 &&
-                        multipleChoiceInput.length === QaData.choices.length;
+                    case "rankingorder":
+                        return (
+                            <DragDropContext
+                            onDragEnd={(result) => {
+                                if (!result.destination) return;
 
-                    return (
-                        <div>
-                        {QaData?.include_all_above === 1 && QaData?.choices?.length > 0 && (
-                            <div>
-                            <input
-                                type="checkbox"
-                                id="select-all"
-                                checked={allSelected}
-                                onChange={(e) => {
-                                setMultipleChoiceInput(
-                                    e.target.checked ? QaData.choices.map(c => c.id) : []
-                                );
-                                }}
-                            />
-                            <label htmlFor="select-all">Select All</label>
-                            </div>
-                        )}
+                                const reordered = Array.from(QaData?.items || []);
+                                const [moved] = reordered.splice(result.source.index, 1);
+                                reordered.splice(result.destination.index, 0, moved);
 
-                        {QaData?.choices?.length > 0 ? (
-                            QaData.choices.map(c => (
-                            <div key={c.id}>
-                                <input
-                                type="checkbox"
-                                id={`multi-${c.id}`}
-                                value={c.id}
-                                checked={multipleChoiceInput.includes(c.id)}
-                                onChange={(e) => {
-                                    const id = Number(e.target.value);
-                                    setMultipleChoiceInput(prev =>
-                                    prev.includes(id)
-                                        ? prev.filter(x => x !== id)
-                                        : [...prev, id]
-                                    );
-                                }}
-                                />
-                                <label htmlFor={`multi-${c.id}`}>{c.choice_text}</label>
-                            </div>
-                            ))
-                        ) : (
-                            <p>Loading choices...</p>
-                        )}
-                        </div>
-                    );
+                                // IDs in order → analytics
+                                setRankingOrderInput(reordered.map(item => item.id));
 
-             case "rankingorder":
-                return (
-                    <DragDropContext
-                    onDragEnd={(result) => {
-                        if (!result.destination) return;
+                                // Texts in order → display
+                                setRankingOrderValue(reordered.map(item => item.item_text));
 
-                        const reordered = Array.from(QaData?.items || []);
-                        const [moved] = reordered.splice(result.source.index, 1);
-                        reordered.splice(result.destination.index, 0, moved);
-
-                        // Update state with new positions
-                        setRankingOrderInput(
-                        reordered.reduce((acc, item, idx) => {
-                            acc[item.id] = idx + 1; // map option_id → position
-                            return acc;
-                        }, {})
-                        );
-
-                        // Also update QaData.items so UI reflects new order
-                        setQaData({ ...QaData, items: reordered });
-                    }}
-                    >
-                    <Droppable droppableId="ranking-list">
-                        {(provided) => (
-                        <div
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                            style={{
-                            width: "100%",
-                            maxWidth: "500px",
-                            margin: "0 auto",
+                                // Update UI
+                                setQaData({ ...QaData, items: reordered });
                             }}
-                        >
-                            {QaData?.items?.length > 0 ? (
-                            QaData.items.map((item, index) => (
-                                <Draggable
-                                key={item.id}
-                                draggableId={String(item.id)}
-                                index={index}
-                                >
-                                {(provided, snapshot) => (
-                                    <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        padding: "10px",
-                                        marginBottom: "8px",
-                                        background: snapshot.isDragging
-                                        ? "#e0f7fa"
-                                        : "#fafafa",
-                                        border: "1px solid #ccc",
-                                        borderRadius: "6px",
-                                        ...provided.draggableProps.style,
-                                    }}
-                                    >
-                                    <span
-                                        style={{
-                                        marginRight: "10px",
-                                        fontWeight: "bold",
-                                        }}
-                                    >
-                                        {index + 1}.
-                                    </span>
-                                    <span style={{ flex: 1 }}>{item.item_text}</span>
-                                    </div>
+                            >
+                            <Droppable droppableId="ranking-list">
+                                {(provided) => (
+                                <div {...provided.droppableProps} ref={provided.innerRef}>
+                                    {QaData?.items?.length > 0 ? (
+                                    QaData.items.map((item, index) => (
+                                        <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                                        {(provided, snapshot) => (
+                                            <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                padding: "10px",
+                                                marginBottom: "8px",
+                                                background: snapshot.isDragging ? "#e0f7fa" : "#fafafa",
+                                                border: "1px solid #ccc",
+                                                borderRadius: "6px",
+                                                ...provided.draggableProps.style,
+                                            }}
+                                            >
+                                            <span style={{ marginRight: "10px", fontWeight: "bold" }}>
+                                                {index + 1}.
+                                            </span>
+                                            <span style={{ flex: 1 }}>{item.item_text}</span>
+                                            </div>
+                                        )}
+                                        </Draggable>
+                                    ))
+                                    ) : (
+                                    <p>Loading items...</p>
+                                    )}
+                                    {provided.placeholder}
+                                </div>
                                 )}
-                                </Draggable>
-                            ))
-                            ) : (
-                            <p>Loading items...</p>
-                            )}
-                            {provided.placeholder}
-                        </div>
-                        )}
-                    </Droppable>
-                    </DragDropContext>
-                );
+                            </Droppable>
+                            </DragDropContext>
+                        );
+                                //  case "rankingorder":
+            //     return (
+            //         <DragDropContext
+            //         onDragEnd={(result) => {
+            //             if (!result.destination) return;
+
+            //             const reordered = Array.from(QaData?.items || []);
+            //             const [moved] = reordered.splice(result.source.index, 1);
+            //             reordered.splice(result.destination.index, 0, moved);
+
+            //             // Update state with new positions
+            //             setRankingOrderInput(
+            //             reordered.reduce((acc, item, idx) => {
+            //                 acc[item.id] = idx + 1; // map option_id → position
+            //                 return acc;
+            //             }, {})
+            //             );
+
+            //             // Also update QaData.items so UI reflects new order
+            //             setQaData({ ...QaData, items: reordered });
+            //         }}
+            //         >
+            //         <Droppable droppableId="ranking-list">
+            //             {(provided) => (
+            //             <div 
+            //                 {...provided.droppableProps}
+            //                 ref={provided.innerRef}
+            //                 style={{
+            //                 width: "100%",
+            //                 maxWidth: "500px",
+            //                 margin: "0 auto",
+            //                 }}
+            //             >
+            //                 {QaData?.items?.length > 0 ? (
+            //                 QaData.items.map((item, index) => (
+            //                     <Draggable
+            //                     key={item.id}
+            //                     draggableId={String(item.id)}
+            //                     index={index}
+            //                     >
+            //                     {(provided, snapshot) => (
+            //                         <div
+            //                         ref={provided.innerRef}
+            //                         {...provided.draggableProps}
+            //                         {...provided.dragHandleProps}
+            //                         style={{
+            //                             display: "flex",
+            //                             alignItems: "center",
+            //                             padding: "10px",
+            //                             marginBottom: "8px",
+            //                             background: snapshot.isDragging
+            //                             ? "#e0f7fa"
+            //                             : "#fafafa",
+            //                             border: "1px solid #ccc",
+            //                             borderRadius: "6px",
+            //                             ...provided.draggableProps.style,
+            //                         }}
+            //                         >
+            //                         <span
+            //                             style={{
+            //                             marginRight: "10px",
+            //                             fontWeight: "bold",
+            //                             }}
+            //                         >
+            //                             {index + 1}.
+            //                         </span>
+            //                         <span style={{ flex: 1 }}>{item.item_text}</span>
+            //                         </div>
+            //                     )}
+            //                     </Draggable>
+            //                 ))
+            //                 ) : (
+            //                 <p>Loading items...</p>
+            //                 )}
+            //                 {provided.placeholder}
+            //             </div>
+            //             )}
+            //         </Droppable>
+            //         </DragDropContext>
+            //     );
 
                 case "rating":
                     return (
@@ -300,10 +388,19 @@ const AnswerQa = () => {
            case "openend": payload.answerText = openendInput; break;
             case "closedend": payload.answerYesNo = closedendInput; break;
             case "rating": payload.ratingValue = ratingInput; break;
-            case "singlechoice": payload.optionId = singleChoiceInput; break;
-            case "multiplechoice": payload.optionIds = multipleChoiceInput; break;
-            case "rankingorder": payload.rankingMap = rankingOrderInput; break;
             case "range": payload.rangeValue = rangeInput; break;
+            case "singlechoice": 
+                payload.optionId = singleChoiceInput.id; 
+                payload.optionText = singleChoiceInput.text; 
+                break;
+            case "multiplechoice": 
+                payload.optionIds = multipleChoice.map(c => c.id);
+                payload.optionTexts = multipleChoice.map(c => c.text);
+                break;
+            case "rankingorder":
+                payload.rankingIds = rankingOrderInput;  
+                payload.rankingTexts = rankingOrderValue; 
+                break;
 
         }
 
