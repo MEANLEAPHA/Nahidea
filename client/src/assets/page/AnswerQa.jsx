@@ -26,18 +26,38 @@ const AnswerQa = () => {
     const [rankingOrderInput, setRankingOrderInput] = useState([]);   
     const [rankingOrderValue, setRankingOrderValue] = useState([]);   
     
-    useEffect(() => {
-        const QaStore = JSON.parse(sessionStorage.getItem('QaStore') || '{}');
-        if(Number(QaStore.question_id) === Number(questionId)){
-            setQaData(QaStore);
-        }
-        else{
-            // handleFetchQa();
-               setQaData({});
-        }
-    //   handleFetchQa();
-    }, [questionId, questionType]);
+    // useEffect(() => {
+    //     const QaStore = JSON.parse(sessionStorage.getItem('QaStore') || '{}');
+    //    if (QaStore?.question_id) {
+    //     setQaData(QaStore);
+    //     } else {
+    //     setQaData({});
+    //     }
+    // //   handleFetchQa();
+    // }, [questionId, questionType]);
 
+    useEffect(() => {
+        const QaStoreRaw = sessionStorage.getItem('QaStore');
+        console.log("SESSION RAW:", sessionStorage.getItem("QaStore"));
+console.log("PARSED:", QaStore);
+console.log("URL questionId:", questionId);
+        if (!QaStoreRaw) {
+            // handleFetchQa();
+             setQaData({});
+            return;
+        }
+
+        const QaStore = JSON.parse(QaStoreRaw);
+
+
+        if (String(QaStore.question_id) === String(questionId)) {
+            setQaData(QaStore);
+        } else {
+            // handleFetchQa();
+             setQaData({});
+        }
+
+    }, [questionId]);
 
     const handleFetchQa = async () => {
         try{

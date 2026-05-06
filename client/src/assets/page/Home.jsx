@@ -310,7 +310,6 @@ export default function Home() {
                       {data.question_type === "range" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.question_id}/range`);
                             const QaData = {
                                   id : data.id, 
                                   question_id : data.question_id,
@@ -321,6 +320,7 @@ export default function Home() {
                                   default_range_value : data.default_range_value
                             }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                            navigate(`/answer/${post.id}/${data.question_id}/range`);
                           }
                         }>
                           <Text>
@@ -331,8 +331,7 @@ export default function Home() {
 
                       {data.question_type === "singlechoice" && (
                         <div onClick={
-                          ()=>{
-                            navigate(`/answer/${post.id}/${data.id}/singlechoice`);
+                          ()=>{        
                             const QaData = {
                                   question_id : data.id,
                                   title : data.title,
@@ -347,6 +346,7 @@ export default function Home() {
                                   
                                 }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                            navigate(`/answer/${post.id}/${data.id}/singlechoice`);
                           }
                         }>
                           <ul>
@@ -360,7 +360,6 @@ export default function Home() {
                       {data.question_type === "multiplechoice" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
                             const QaData = {
                                     question_id : data.id,
                                     title : data.title,
@@ -375,6 +374,7 @@ export default function Home() {
                                      || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                            navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
                           }
                         }>
                           <ul>
@@ -388,7 +388,6 @@ export default function Home() {
                       {data.question_type === "rankingorder" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.id}/rankingorder`);
                             const QaData = {
                                     question_id : data.id,
                                     title : data.title,
@@ -403,6 +402,7 @@ export default function Home() {
                                      || []
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                            navigate(`/answer/${post.id}/${data.id}/rankingorder`);
                           }
                         }>
                           <ol>
@@ -416,7 +416,6 @@ export default function Home() {
                       {data.question_type === "rating" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.question_id}/rating`);
                             const QaData = {
                                     id: data.id,
                                     question_id : data.id,
@@ -424,6 +423,7 @@ export default function Home() {
                                     rating_icon_id:data.rating_icon_id || null
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                            navigate(`/answer/${post.id}/${data.question_id}/rating`);
                           }
                         }>
                           <Text>Rating icon: {data.rating_icon_id}</Text>
@@ -433,12 +433,12 @@ export default function Home() {
                       {data.question_type === "openend" && (
                         <div onClick={
                           ()=>{
-                            navigate(`/answer/${post.id}/${data.id}/openend`);
                             const QaData = {
                                     question_id : data.id,
                                     title : data.title
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
+                            navigate(`/answer/${post.id}/${data.id}/openend`);
                           }
                         }>
                           <Text>{data.title}</Text>
