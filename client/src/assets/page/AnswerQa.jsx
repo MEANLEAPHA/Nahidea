@@ -32,7 +32,8 @@ const AnswerQa = () => {
             setQaData(QaStore);
         }
         else{
-            handleFetchQa();
+            // handleFetchQa();
+               setQaData({});
         }
     //   handleFetchQa();
     }, [questionId, questionType]);
