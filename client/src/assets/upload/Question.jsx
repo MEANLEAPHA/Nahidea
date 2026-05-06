@@ -68,8 +68,8 @@ const [loading, setLoading] = useState(false);
 
 
     // closed end state
-    const [yestitle, setYestitle] = useState('');
-    const [noTitle, setNoTitle] = useState('');
+    // const [yestitle, setYestitle] = useState('');
+    // const [noTitle, setNoTitle] = useState('');
 
     // Range state
     const [min, setMin] = useState(0);
@@ -129,10 +129,10 @@ const [loading, setLoading] = useState(false);
     case "closedend":
       return (
         <ClosedEnd
-          YestitleValue={yestitle}
-          NoTitleValue={noTitle}
-          setYestitle={setYestitle}
-          setNoTitle={setNoTitle}
+          // YestitleValue={yestitle}
+          // NoTitleValue={noTitle}
+          // setYestitle={setYestitle}
+          // setNoTitle={setNoTitle}
         />
       );
     case "range":
@@ -190,8 +190,8 @@ const handleSubmit = async (e) => {
       break;
     case "closedend":
       formData.append("question_type", "closedend");
-      formData.append("yesTitle", yestitle);
-      formData.append("noTitle", noTitle);
+      // formData.append("yesTitle", yestitle);
+      // formData.append("noTitle", noTitle);
       break;
     case "range": 
       formData.append("question_type", "range");

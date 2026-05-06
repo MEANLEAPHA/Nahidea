@@ -1,30 +1,13 @@
-export default function ClosedEnd ({
-  YestitleValue,
-  NoTitleValue,
-  setYestitle,
-  setNoTitle}){
+export default function ClosedEnd (){
   return (
     <div>
-      <label>Yes answer</label>
-      <div>
-
-        <input
-          type="text"
-          value={YestitleValue}
-          onChange={(e) => setYestitle(e.target.value)}
-        />
-      </div>
-
-      <label>No answer</label>
-      <div>
-       
-        <input
-          type="text"
-          value={NoTitleValue}
-          onChange={(e) => setNoTitle(e.target.value)}
-        />
-      </div>
-
+       <button>Yes</button>
+       <button>No</button>
     </div>
   );
 };
+// {
+//   YestitleValue,
+//   NoTitleValue,
+//   setYestitle,
+//   setNoTitle}
