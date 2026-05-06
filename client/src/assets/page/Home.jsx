@@ -299,7 +299,7 @@ export default function Home() {
                                   title: data.title
                                 }
                                 sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                                navigate(`/answer/${post.id}/${data.question_id}/closedend`);
+                                navigate(`/answer/${post.id}/${data.id}/closedend`);
                               }
                             }>
                           <button>Yes</button>
