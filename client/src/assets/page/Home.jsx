@@ -417,7 +417,7 @@ export default function Home() {
                         <div onClick={
                           ()=>{
                             const QaData = {
-                                    id: data.id,
+                                    // id: data.id,
                                     question_id : data.id,
                                     title : data.title,
                                     rating_icon_id: data.rating_icon_id
@@ -426,6 +426,7 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.question_id}/rating`);
                           }
                         }>
+                             <Text>{data.title}</Text>
                           <Text>Rating icon: {data.rating_icon_id}</Text>
                         </div>
                       )}

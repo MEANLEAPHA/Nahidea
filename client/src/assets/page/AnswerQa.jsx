@@ -15,7 +15,7 @@ const AnswerQa = () => {
 
     const [openendInput, setOpenendInput] = useState('');
     const [rangeInput, setRangeInput] = useState(null);
-    const [ratingInput, setRatingInput] = useState(null);
+    const [ratingInput, setRatingInput] = useState(0);
     const [closedendInput, setClosedendInput] = useState(null);
 
     const [singleChoiceInput, setSingleChoiceInput] = useState({id: null, text: null});
@@ -262,6 +262,7 @@ const AnswerQa = () => {
                                 onClick={() => setRatingInput(i+1)}
                                 />
                             ))}
+                              <Text>{QaData?.title}</Text>
                             </div>
                         );
 
