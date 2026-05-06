@@ -39,8 +39,7 @@ const AnswerQa = () => {
     useEffect(() => {
         const QaStoreRaw = sessionStorage.getItem('QaStore');
         console.log("SESSION RAW:", sessionStorage.getItem("QaStore"));
-console.log("PARSED:", QaStore);
-console.log("URL questionId:", questionId);
+
         if (!QaStoreRaw) {
             // handleFetchQa();
              setQaData({});
@@ -49,7 +48,8 @@ console.log("URL questionId:", questionId);
 
         const QaStore = JSON.parse(QaStoreRaw);
 
-
+console.log("PARSED:", QaStore);
+console.log("URL questionId:", questionId);
         if (String(QaStore.question_id) === String(questionId)) {
             setQaData(QaStore);
         } else {
