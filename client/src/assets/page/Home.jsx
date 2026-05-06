@@ -442,7 +442,7 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/openend`);
                           }
                         }>
-                          <Text>{data.title}</Text>
+                     
                         </div>
                       )}
                   
