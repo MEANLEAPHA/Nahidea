@@ -27,9 +27,8 @@ const AnswerQa = () => {
     const [rankingOrderValue, setRankingOrderValue] = useState([]);   
     
     useEffect(() => {
-         const stored = localStorage.getItem('QaStore');
-        const QaStore = JSON.parse(stored);
-        if(Number(QaStore?.question_id) === Number(questionId)){
+        const QaStore = JSON.parse(sessionStorage.getItem('QaStore') || '{}');
+        if(Number(QaStore.question_id) === Number(questionId)){
             setQaData(QaStore);
         }
         else{

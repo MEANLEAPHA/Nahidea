@@ -364,6 +364,7 @@ export default function Home() {
                             const QaData = {
                                     question_id : data.id,
                                     title : data.title,
+                                    include_all_above : data.include_all_above,
                                     choices: 
                                       data.choices?.map(c => ({
                                         choice_text: c.choice_text,
