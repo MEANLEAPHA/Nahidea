@@ -32,7 +32,7 @@ const Comment = () => {
   const submit = async () => {
     const payload = {
       content,
-      username: username,
+      username: 'username',
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
       parent_id: state?.parent_id || null
