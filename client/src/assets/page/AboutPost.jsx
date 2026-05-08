@@ -381,7 +381,7 @@ const renderPostContent = (post) => {
         </div>
         <div className="comment-box">
           <button
-            onClick={() => navigate(`/comment/${id}`)}
+            onClick={() => navigate(`/comment`, { state: { postId: id } })}
             className="comment-btn"
           >
             Write a comment

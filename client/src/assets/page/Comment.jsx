@@ -6,6 +6,7 @@ const token = localStorage.getItem("token");
 
 const Comment = () => {
   const { state } = useLocation();
+  
   const navigate = useNavigate();
 
   const [content, setContent] = useState("");
