@@ -22,7 +22,6 @@ const Comment = () => {
   const fetchAnon = async () => {
     const res = await axios.get(
       `${import.meta.env.VITE_SERVER_URL}/api/get-anon-identity/${state.postId}`,
-      {},
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
