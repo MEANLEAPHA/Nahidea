@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 
 const token = localStorage.getItem("token");
 
 const username = sessionStorage.getItem("username");
 const Comment = () => {
   const { state } = useLocation();
+  const {username} = useOutletContext();
   
   const navigate = useNavigate();
 
+
+
+  // const [content, setContent] = useState(
+  // state?.mode === "edit" ? state?.content || "" : ""
+  // );
+  
   const [content, setContent] = useState("");
   const [gif, setGif] = useState("");
   const [isAnon, setIsAnon] = useState(false);
   const [lockedAnon, setLockedAnon] = useState(false);
 
+ 
   useEffect(() => {
     fetchAnon();
     if (state?.content) setContent(state.content);
@@ -32,7 +40,7 @@ const Comment = () => {
   const submit = async () => {
     const payload = {
       content,
-      username: 'username',
+      username: username,
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
       parent_id: state?.parent_id || null

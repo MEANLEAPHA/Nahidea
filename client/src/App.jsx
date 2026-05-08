@@ -125,7 +125,7 @@ const Layout = () => {
 
     // Aside mode tool
     const [username, setUsername] = useState('Guest');
-
+    const [userId, setUserId] = useState(null);
     const [showMaxAside, setMaxAside] = useState(() => {
             return localStorage.getItem("maxAside") === "true";
         });
@@ -160,11 +160,13 @@ const Layout = () => {
        
 
    useEffect(() => {
-  async function loadUsername() {
+  async function loadTempoInfo() {
     // 1. Check sessionStorage first
-    const cached = sessionStorage.getItem("username");
-    if (cached) {
-      setUsername(cached);
+    const cachedName = sessionStorage.getItem("username");
+    const cachedUserId = sessionStorage.getItem("userId");
+    if (cachedName && cachedUserId) {
+      setUsername(cachedName);
+      setUserId(cachedUserId);
       return;
     }
 
@@ -179,6 +181,10 @@ const Layout = () => {
 
       const data = await res.json();
       const username = data.userData?.username || data.username;
+      const userId = data.userData?.id || data.id;
+
+      sessionStorage.setItem("userId", userId);
+      setUserId(userId);
       sessionStorage.setItem("username", username);
       setUsername(username);
     } catch (err) {
@@ -186,7 +192,7 @@ const Layout = () => {
     }
   }
 
-  loadUsername();
+  loadTempoInfo();
 }, []);
 
     const toggleTheme = () =>{
@@ -198,7 +204,7 @@ const Layout = () => {
             <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>
-                    <Outlet context={{ username }} />
+                    <Outlet context={{ username, userId }} />
                 </section>
             </main>
          

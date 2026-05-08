@@ -1,9 +1,8 @@
 // React State
 import React, { useState, useEffect, useRef, memo } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 // style
@@ -48,6 +47,7 @@ const parseJSON = (val) => {
 
 const AboutPost = () => {
   const navigate = useNavigate();
+  const { username, userId} = useOutletContext();
   const {id} = useParams(); 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -186,6 +186,26 @@ const AboutPost = () => {
             Reply
           </span>
 
+        {
+          c.user_id === userId && (
+            <span
+              onClick={() => {
+                navigate("/comment", {
+                  state: {
+                    postId: id,
+                    commentId: c.id,
+                    content: c.content,
+                    mode: "edit"
+                  }
+                });
+            }
+              }
+            >
+              Edit
+            </span>
+          )
+        }
+          
           <span
             onClick={() =>
               navigate("/report", {
