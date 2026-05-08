@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, memo } from 'react';
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 // style
@@ -46,35 +47,27 @@ const parseJSON = (val) => {
 
 
 const AboutPost = () => {
+  const navigate = useNavigate();
   const {id} = useParams(); 
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
   const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
 
     handleView();
-   
+    
     if (String(stored.id) === String(id)) {
       setPost(stored);
     } else {
      handleFetchPost();
     }
+
+    fetchComments();
   }, [id]);
 
-  const handleFetchPost = async () => {
-     try{
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-post/${id}`
-        )
-        const data = res.data;
-        setPost(data);
-      }
-      catch (err) {
-      console.error(err);
-      setPost(null);
-    } 
-  }
+ // track view
   const handleView = async () =>{
     if(!token) return;
     try{
@@ -92,6 +85,126 @@ const AboutPost = () => {
       console.error(err);
     }
   }
+
+  // fetch post
+  const handleFetchPost = async () => {
+     try{
+        const res = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/api/get-post/${id}`
+        )
+        const data = res.data;
+        setPost(data);
+      }
+      catch (err) {
+      console.error(err);
+      setPost(null);
+    } 
+  }
+
+  // fetch comments/reply
+   const fetchComments = async () => {
+    const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/posts/${id}/comments`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setComments(res.data.comments);
+  };
+
+  // like
+  const toggleLike = async (commentId) => {
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
+      {},
+      { headers: { Authorization: token } }
+    );
+
+    setComments(prev =>
+      prev.map(c => {
+        if (c.id === commentId) {
+          return {
+            ...c,
+            is_liked: !c.is_liked,
+            likes_count: c.is_liked ? c.likes_count - 1 : c.likes_count + 1
+          };
+        }
+        return {
+          ...c,
+          replies: c.replies?.map(r =>
+            r.id === commentId
+              ? {
+                  ...r,
+                  is_liked: !r.is_liked,
+                  likes_count: r.is_liked ? r.likes_count - 1 : r.likes_count + 1
+                }
+              : r
+          )
+        };
+      })
+    );
+  };
+
+  // render name
+  const renderName = (c) =>
+    c.is_anonymous === 1 ? c.anonymous_name : c.username;
+
+  // render bg color for anonymous
+  const renderColor = (c) =>
+    c.is_anonymous === 1 ? c.anonymous_bg_color : "#999";
+
+  // comment card
+  const CommentCard = ({ c, isReply }) => (
+    <div className={`comment ${isReply ? "reply" : ""}`}>
+      <div
+        className="avatar"
+        style={{ background: renderColor(c) }}
+      >
+        {renderName(c)?.slice(0, 2)}
+      </div>
+
+      <div className="comment-body">
+        <div className="comment-header">
+          <b>{renderName(c)}</b>
+        </div>
+
+        <div className="comment-text">{c.content}</div>
+
+        <div className="comment-actions">
+          <span onClick={() => toggleLike(c.id)}>
+            ❤️ {c.likes_count}
+          </span>
+
+          <span
+            onClick={() =>
+              navigate("/comment", {
+                state: {
+                  postId: id,
+                  parent_id: c.id,
+                  mode: "reply"
+                }
+              })
+            }
+          >
+            Reply
+          </span>
+
+          <span
+            onClick={() =>
+              navigate("/report", {
+                state: { commentId: c.id }
+              })
+            }
+          >
+            Report
+          </span>
+        </div>
+
+        {c.replies?.length > 0 &&
+          c.replies.map(r => (
+            <CommentCard key={r.id} c={r} isReply />
+          ))}
+      </div>
+    </div>
+  );
+
 
   if (!post) {
     return (
@@ -237,8 +350,8 @@ const renderPostContent = (post) => {
   return (
     <div className='home-container'>
       <article id="feed-article">
-        <div className="about-posts">
 
+        <div className="about-posts">
           <div className='post-header'>
             <div className='post-user-profile'>
               <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
@@ -265,8 +378,19 @@ const renderPostContent = (post) => {
               <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
             </div> 
           </div>
-
         </div>
+        <div className="comment-box">
+          <button
+            onClick={() => navigate(`/comment/${id}`)}
+            className="comment-btn"
+          >
+            Write a comment
+          </button>
+
+          {comments.map(c => (
+            <CommentCard key={c.id} c={c} />
+          ))}
+      </div>
       </article>
 
       <articel id='his-article'>
@@ -288,3 +412,6 @@ const renderPostContent = (post) => {
 
 
 export default AboutPost;
+
+
+

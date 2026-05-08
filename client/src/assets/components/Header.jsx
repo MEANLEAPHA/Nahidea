@@ -14,7 +14,7 @@ import "../style/Header.css";
   import { faBars, faMagnifyingGlass, faChevronDown, faInbox, faArrowRightFromBracket, faFireFlameCurved, faMagnifyingGlassChart, faTimesCircle,faChartSimple, faGauge,faSliders,faMoon, faFlag, faCommentDots, faBug, faUser, faBook, faUsers, faComments, faComment, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faBan, faFeather, faBullhorn, faServer, faClockRotateLeft, faTrashCan, faChevronUp, faPlus, faChildReaching} from "@fortawesome/free-solid-svg-icons";
   import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus, faNewspaper, faFaceGrinWink} from "@fortawesome/free-regular-svg-icons";
 
-
+const token = localStorage.getItem("token");
 
 const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
   const navigate = useNavigate();
@@ -41,14 +41,31 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
    
 
       <div className="header-right header-children">
-  
-        <button className='button-bar-icon' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
-        <CreateDropDown />
-        <SearchOutlined className="mobile-tool bar-icon" onClick={()=>{navigate('/search')}}/>
-        <CreateDropDownMin />
-        <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
         
-        <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} />
+        {
+          token === null ? (
+            <>
+              <button style={{border:'none', background:'none', color:'var(--font-color)', cursor:'pointer'}} onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="bar-icon"/> : <SunOutlined className="bar-icon"/>}</button>
+              <button className='btn-no-token btn-signup'>
+                <span>Sign Up</span>
+              </button>
+              <button className='btn-no-token btn-login'>
+                <span>Log In</span>
+              </button>
+            </>
+          ):(
+            <>
+               <button className='button-bar-icon' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
+              <CreateDropDown />
+              <SearchOutlined className="mobile-tool bar-icon" onClick={()=>{navigate('/search')}}/>
+              <CreateDropDownMin />
+              <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
+              
+              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} />
+            </>
+          )
+
+        }
       </div>
 
     </header>
