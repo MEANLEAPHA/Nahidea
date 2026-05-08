@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const token = localStorage.getItem("token");
 
+const username = sessionStorage.getItem("username");
 const Comment = () => {
   const { state } = useLocation();
   
@@ -31,6 +32,7 @@ const Comment = () => {
   const submit = async () => {
     const payload = {
       content,
+      username: username,
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
       parent_id: state?.parent_id || null
