@@ -109,6 +109,14 @@ const AboutPost = () => {
     setComments(res.data.comments);
   };
 
+  // delete 
+  const handleDelete = async (commentId) => {
+    await axios.delete(
+      `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    fetchComments();
+  };
   // like
   const toggleLike = async (commentId) => {
     await axios.post(
@@ -188,6 +196,7 @@ const AboutPost = () => {
 
         {
           c.user_id === userId && (
+            <>
             <span
               onClick={() => {
                 navigate("/comment", {
@@ -203,6 +212,14 @@ const AboutPost = () => {
             >
               Edit
             </span>
+             <span
+              onClick={() => handleDelete(c.id)
+            }
+            
+            >
+              Delete
+            </span>
+            </>
           )
         }
           
