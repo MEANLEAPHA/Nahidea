@@ -44,6 +44,7 @@ import Notification from './assets/page/Notification';
 import Search from './assets/page/Search';
 import AnswerQa from './assets/page/AnswerQa';
 import Comment from './assets/page/Comment';
+import ReportComment from './assets/page/ReportComment';
 
 
 const token = localStorage.getItem("token");
@@ -72,6 +73,7 @@ const App = () =>{
                     <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>
                     <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
                     <Route path='/comment' element={<Comment/>}></Route>
+                    <Route path ='/report' element={<ReportComment/>}></Route>
                  
                     {/* Gif */}
                     <Route path='/gif' element={<GifFeed/>}></Route>

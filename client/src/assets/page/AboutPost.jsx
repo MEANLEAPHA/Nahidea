@@ -114,7 +114,7 @@ const AboutPost = () => {
     await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
       {},
-      { headers: { Authorization: token } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     setComments(prev =>
