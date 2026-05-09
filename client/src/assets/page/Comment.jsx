@@ -40,6 +40,7 @@ const Comment = () => {
   const submit = async () => {
     const payload = {
       content,
+      username_mention,
       username: username,
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
