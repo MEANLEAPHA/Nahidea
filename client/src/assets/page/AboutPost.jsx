@@ -173,7 +173,7 @@ const AboutPost = () => {
           <b>{renderName(c)}</b>
         </div>
 
-        <div className="comment-text">{c.content}</div>
+        <div className="comment-text"><span style={{color: 'skyblue'}}>@{c.username_mention}</span>{c.content}</div>
 
         <div className="comment-actions">
           <span onClick={() => toggleLike(c.id)}>
@@ -186,6 +186,7 @@ const AboutPost = () => {
                 state: {
                   postId: id,
                   parent_id: c.id,
+                  username_mention: renderName(c),
                   mode: "reply"
                 }
               })
@@ -194,34 +195,7 @@ const AboutPost = () => {
             Reply
           </span>
 
-        {/* {
-          c.user_id === userId && (
-            <>
-            <span
-              onClick={() => {
-                navigate("/comment", {
-                  state: {
-                    postId: id,
-                    commentId: c.id,
-                    content: c.content,
-                    mode: "edit"
-                  }
-                });
-            }
-              }
-            >
-              Edit
-            </span>
-             <span
-              onClick={() => handleDelete(c.id)
-            }
-            >
-              Delete
-            </span>
-            </>
-          )
-        } */}
-        { String(c.user_id) === String(userId) && (
+        {(c && String(c.user_id) === String(userId) && c.is_deleted === 0) && (
           <>
             <span onClick={() => {
                         navigate("/comment", {
