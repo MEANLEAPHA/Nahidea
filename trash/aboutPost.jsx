@@ -1,6 +1,6 @@
 // React State
 import React, { useState, useEffect, useRef, memo } from 'react';
-import { useParams, useOutletContext, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useOutletContext, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
@@ -47,140 +47,12 @@ const parseJSON = (val) => {
 
 const AboutPost = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { username, userId} = useOutletContext();
   const {id} = useParams(); 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingComments, setLoadingComments] = useState(false);
-
-  const [expandedReplies, setExpandedReplies] = useState({});
-
-  const [highlightedId, setHighlightedId] = useState(null);
-
-  const observerRef = useRef(null);
-
-  const targetCommentId = useRef(null);
-
-  // use Location to get comment hash
-  useEffect(() => {
-    if (location.hash) {
-      targetCommentId.current = location.hash.replace("#", "");
-    }
-  }, [location]);
-
-  // Infinite Scroll Observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        if (
-          entries[0].isIntersecting &&
-          hasMore &&
-          !loadingComments
-        ) {
-          fetchComments(page + 1);
-        }
-      },
-      {
-        threshold: 1
-      }
-    );
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => observer.disconnect();
-
-  }, [page, hasMore, loadingComments]);
-
-  // Auto Open Replies + Scroll To Target
-  useEffect(() => {
-
-    if (!targetCommentId.current || comments.length === 0) return;
-
-    const targetId = String(targetCommentId.current);
-
-    let found = false;
-
-    comments.forEach(comment => {
-
-      // top-level comment
-      if (String(comment.id) === targetId) {
-        found = true;
-      }
-
-      // replies
-      comment.replies?.forEach(reply => {
-
-        if (String(reply.id) === targetId) {
-
-          found = true;
-
-          // auto expand replies
-          setExpandedReplies(prev => ({
-            ...prev,
-            [comment.id]: true
-          }));
-        }
-      });
-    });
-
-    if (found) {
-
-      setTimeout(() => {
-
-        const el = document.getElementById(targetId);
-
-        if (el) {
-
-          el.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-          setHighlightedId(targetId);
-
-          setTimeout(() => {
-            setHighlightedId(null);
-          }, 4000);
-        }
-
-      }, 300);
-    }
-
-  }, [comments]);
-
-  // Advanced Deep Link Fetching
-  useEffect(() => {
-
-    const targetId = targetCommentId.current;
-
-    if (!targetId || !hasMore || loadingComments) return;
-
-    const found = comments.some(comment => {
-
-      if (String(comment.id) === String(targetId)) {
-        return true;
-      }
-
-      return comment.replies?.some(
-        r => String(r.id) === String(targetId)
-      );
-    });
-
-    // not found -> load next page
-    if (!found && hasMore) {
-      fetchComments(page + 1);
-    }
-
-  }, [comments, hasMore]);
-
-  // initial load
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
 
@@ -192,7 +64,7 @@ const AboutPost = () => {
      handleFetchPost();
     }
 
-    fetchComments(1);
+    fetchComments();
   }, [id]);
 
  // track view
@@ -230,49 +102,14 @@ const AboutPost = () => {
   }
 
   // fetch comments/reply
-  const fetchComments = async (pageNum = 1) => {
-    if (loadingComments || !hasMore) return;
-
-    try {
-      setLoadingComments(true);
-
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${id}/comments?page=${pageNum}&limit=10`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      const newComments = res.data.comments;
-
-      setComments(prev =>
-        pageNum === 1
-          ? newComments
-          : [...prev, ...newComments]
-      );
-
-      setHasMore(res.data.pagination.has_more);
-
-      setPage(pageNum);
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoadingComments(false);
-    }
+   const fetchComments = async () => {
+    const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/posts/${id}/comments`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setComments(res.data.comments);
   };
 
-  // toggle replies
-  const toggleReplies = (commentId) => {
-    setExpandedReplies(prev => ({
-        ...prev,
-        [commentId]: !prev[commentId]
-      }));
-  };
-
-  // delete comment
+  // delete 
   const handleDelete = async (commentId) => {
     await axios.delete(
       `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}`,
@@ -280,7 +117,7 @@ const AboutPost = () => {
     );
     fetchComments();
   };
-  // like comment
+  // like
   const toggleLike = async (commentId) => {
     await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
@@ -323,16 +160,7 @@ const AboutPost = () => {
 
   // comment card
   const CommentCard = ({ c, isReply }) => (
-    <div
-      className={`
-        comment
-        ${isReply ? "reply" : ""}
-        ${String(highlightedId) === String(c.id)
-          ? "highlight-comment"
-          : ""}
-      `}
-      id={c.id}
-    >
+    <div className={`comment ${isReply ? "reply" : ""}`} id={c.id}>
       <div
         className="avatar"
         style={{ background: renderColor(c) }}
@@ -397,26 +225,10 @@ const AboutPost = () => {
           </span>
         </div>
 
-        {c.replies?.length > 0 && (
-          <div className="reply-section">
-
-            <button
-              className="reply-toggle"
-              onClick={() => toggleReplies(c.id)}
-            >
-              {expandedReplies[c.id]
-                ? `▲ Hide replies`
-                : `▼ View ${c.replies.length} replies`}
-            </button>
-
-            {expandedReplies[c.id] &&
-              c.replies.map(r => (
-                <CommentCard key={r.id} c={r} isReply />
-              ))
-            }
-
-          </div>
-        )}
+        {c.replies?.length > 0 &&
+          c.replies.map(r => (
+            <CommentCard key={r.id} c={r} isReply />
+          ))}
       </div>
     </div>
   );
@@ -606,10 +418,6 @@ const renderPostContent = (post) => {
           {comments.map(c => (
             <CommentCard key={c.id} c={c} />
           ))}
-
-          <div ref={observerRef} style={{ height: "20px" }} />
-
-          {loadingComments && <p>Loading comments...</p>}
       </div>
       </article>
 

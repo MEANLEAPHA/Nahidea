@@ -68,3 +68,26 @@
   flex-direction: column;
   gap: 10px;
 }
+.reply-toggle{
+  background:none;
+  border:none;
+  color:skyblue;
+  cursor:pointer;
+  margin-top:8px;
+}
+
+.highlight-comment{
+  background:#3a3a3a;
+  border-radius:10px;
+  transition:0.3s;
+  animation: highlightFade 4s ease;
+}
+
+@keyframes highlightFade{
+  0%{
+    background:#5a5a5a;
+  }
+  100%{
+    background:transparent;
+  }
+}
