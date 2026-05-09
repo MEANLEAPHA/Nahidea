@@ -185,7 +185,7 @@ const AboutPost = () => {
               navigate("/comment", {
                 state: {
                   postId: id,
-                  parent_id: c.id,
+                  comment_id: c.id,
                   user_id_mention: c && Number(c.user_id) || null,
                   username_mention: renderName(c),
                   mode: "reply"

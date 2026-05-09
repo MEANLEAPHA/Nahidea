@@ -45,7 +45,7 @@ const Comment = () => {
       username: username,
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
-      parent_id: state?.parent_id || null
+      comment_id: state?.comment_id || null
     };
 
     if (state?.mode === "edit") {
