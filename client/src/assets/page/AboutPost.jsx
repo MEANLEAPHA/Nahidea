@@ -160,7 +160,7 @@ const AboutPost = () => {
 
   // comment card
   const CommentCard = ({ c, isReply }) => (
-    <div className={`comment ${isReply ? "reply" : ""}`}>
+    <div className={`comment ${isReply ? "reply" : ""}`} id={c.id}>
       <div
         className="avatar"
         style={{ background: renderColor(c) }}
