@@ -41,6 +41,7 @@ const Comment = () => {
     const payload = {
       content,
       username_mention: state?.username_mention || null,
+      user_id_mention: state?.user_id_mention || null,
       username: username,
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
