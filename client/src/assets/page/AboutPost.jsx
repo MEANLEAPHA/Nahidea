@@ -186,7 +186,7 @@ const AboutPost = () => {
                 state: {
                   postId: id,
                   parent_id: c.id,
-                  user_id_mention: c && Number(c.user_id) || 21,
+                  user_id_mention: c && Number(c.user_id) || 20,
                   username_mention: renderName(c),
                   mode: "reply"
                 }
