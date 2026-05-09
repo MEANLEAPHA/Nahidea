@@ -80,7 +80,7 @@
   background:#3a3a3a;
   border-radius:10px;
   transition:0.3s;
-  animation: highlightFade 4s ease;
+  animation: highlightFade 10s ease;
 }
 
 @keyframes highlightFade{

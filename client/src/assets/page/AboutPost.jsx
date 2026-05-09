@@ -184,12 +184,11 @@ const AboutPost = () => {
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
 
+    if(!stored || stored.id !== id) handleFetchPost();
     handleView();
     
-    if (String(stored.id) === String(id)) {
+    if (stored && stored.id) {
       setPost(stored);
-    } else {
-     handleFetchPost();
     }
 
     fetchComments(1);
@@ -348,7 +347,12 @@ const AboutPost = () => {
         <div className="comment-text"><span style={{color: 'skyblue'}}>@{c.username_mention}</span>{c.content}</div>
 
         <div className="comment-actions">
-          <span onClick={() => toggleLike(c.id)}>
+          <span onClick={(e) => {
+            e.preventDefault();
+            toggleLike(c.id);
+          }
+            
+            }>
             ❤️ {c.likes_count}
           </span>
 
