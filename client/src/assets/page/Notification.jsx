@@ -1,6 +1,6 @@
 import React,{ useState, useEffect, useRef, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {axios} from "axios";
+import axios from "axios";
 import "../style/page/Notification.css";
 
 const token = localStorage.getItem("token");
