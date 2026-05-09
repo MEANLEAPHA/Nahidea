@@ -194,7 +194,7 @@ const AboutPost = () => {
             Reply
           </span>
 
-        {
+        {/* {
           c.user_id === userId && (
             <>
             <span
@@ -215,13 +215,29 @@ const AboutPost = () => {
              <span
               onClick={() => handleDelete(c.id)
             }
-            
             >
               Delete
             </span>
             </>
           )
-        }
+        } */}
+        { String(c.user_id) === String(userId) && (
+          <>
+            <span onClick={() => {
+                        navigate("/comment", {
+                          state: {
+                            postId: id,
+                            commentId: c.id,
+                            content: c.content,
+                            mode: "edit"
+                          }
+                        });
+                    }
+                      }>Edit</span>
+            <span onClick={() => handleDelete(c.id)}>Delete</span>
+          </>
+        )}
+
           
           <span
             onClick={() =>
