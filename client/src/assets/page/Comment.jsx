@@ -54,7 +54,7 @@ const Comment = () => {
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      navigate(`/aboutpost/${state.postId}${state.commentId}`);
+      navigate(`/aboutpost/${state.postId}#${state.commentId}`);
     } else {
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/posts/${state.postId}/comments`,
@@ -62,7 +62,7 @@ const Comment = () => {
         { headers: { Authorization:  `Bearer ${token}`} }
       );
       const newCommendId = res.data.comment_id;
-      navigate(`/aboutpost/${state.postId}${newCommendId}`);
+      navigate(`/aboutpost/${state.postId}#${newCommendId}`);
     }
     
 

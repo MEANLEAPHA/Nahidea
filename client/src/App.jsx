@@ -25,6 +25,7 @@ import { jwtDecode } from "jwt-decode";
     import Question from './assets/upload/Question';
     import Confession from './assets/upload/Confession';
     import Content from './assets/upload/Content';
+    import EditContentBody from './assets/upload/EditContentBody';
 
 // Style
 import './assets/style/App.css';
@@ -74,7 +75,8 @@ const App = () =>{
                     <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
                     <Route path='/comment' element={<Comment/>}></Route>
                     <Route path ='/report' element={<ReportComment/>}></Route>
-                 
+                    <Route path='/edit/cotent/' element={<EditContentBody/>}></Route>
+
                     {/* Gif */}
                     <Route path='/gif' element={<GifFeed/>}></Route>
                     <Route path='/upload/gif' element={<GifUpload/>}></Route>
