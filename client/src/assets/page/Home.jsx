@@ -175,8 +175,9 @@ export default function Home() {
                   navigate(`/aboutpost/${post.id}`)
                 }}>
                     <p>{data.title}</p>
-                    <span onClick={()=>
+                    <span onClick={(e)=>
                       {
+                        e.stopPropagation();
                         navigate(`/edit/content`, 
                           {
                           state: {
@@ -188,7 +189,7 @@ export default function Home() {
                         }
                         );
                       }
-                      }>{data.text_body}</span>
+                      }>click</span>
                 </div>
               </div>
 
