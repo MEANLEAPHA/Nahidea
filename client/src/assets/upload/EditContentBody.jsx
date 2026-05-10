@@ -312,8 +312,12 @@ const EditContentBody = () => {
     const navigate = useNavigate();
     const [textBodyValue, setTextBodyValue] = useState('');
     useEffect(() => {
-        if (state?.bodyText) setTextBodyValue(state.bodyText);
-    },[]);
+        if (state?.bodyText) {
+          setTextBodyValue(state.bodyText);
+        } else {
+          setTextBodyValue(""); // ✅ clear when no state
+        }
+    },[state]);
 
     const handleUpdate = async() => {
         try{
