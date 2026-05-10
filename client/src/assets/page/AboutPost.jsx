@@ -65,6 +65,7 @@ const AboutPost = () => {
   const observerRef = useRef(null);
 
   const targetCommentId = useRef(null);
+  const hasScrolledToHash = useRef(false);
 
   // use Location to get comment hash
   useEffect(() => {
@@ -101,7 +102,11 @@ const AboutPost = () => {
   // Auto Open Replies + Scroll To Target
   useEffect(() => {
 
-    if (!targetCommentId.current || comments.length === 0) return;
+     if (
+        !targetCommentId.current ||
+        comments.length === 0 ||
+        hasScrolledToHash.current
+      ) return;
 
     const targetId = String(targetCommentId.current);
 
@@ -142,7 +147,7 @@ const AboutPost = () => {
             behavior: "smooth",
             block: "center"
           });
-
+          hasScrolledToHash.current = true;
           setHighlightedId(targetId);
 
           setTimeout(() => {
@@ -157,7 +162,7 @@ const AboutPost = () => {
 
   // Advanced Deep Link Fetching
   useEffect(() => {
-
+    if (hasScrolledToHash.current) return;
     const targetId = targetCommentId.current;
 
     if (!targetId || !hasMore || loadingComments) return;
@@ -184,10 +189,12 @@ const AboutPost = () => {
   useEffect(() => {
     const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
 
-    if(!stored || stored.id !== id) handleFetchPost();
+    if (!stored || String(stored.id) !== String(id)) {
+      handleFetchPost();
+    }
     handleView();
     
-    if (stored && stored.id) {
+    if (stored && String(stored.id) === String(id)) {
       setPost(stored);
     }
 
