@@ -332,7 +332,8 @@ const EditContentBody = () => {
     return (
         <div>
             <h1>Edit Content</h1>
-            <TiptapEditor onChange={textBodyValue} value={setTextBodyValue} />
+           <TiptapEditor value={textBodyValue} onChange={setTextBodyValue} />
+
         </div>
     );
 }
