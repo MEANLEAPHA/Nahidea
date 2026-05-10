@@ -17,6 +17,11 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Markdown } from "@tiptap/markdown";
 import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
+
+
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm"; 
 
 import "../style/upload/TextBody.css";
 

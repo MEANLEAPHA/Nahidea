@@ -75,7 +75,7 @@ const App = () =>{
                     <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
                     <Route path='/comment' element={<Comment/>}></Route>
                     <Route path ='/report' element={<ReportComment/>}></Route>
-                    <Route path='/edit/cotent/' element={<EditContentBody/>}></Route>
+                    <Route path='/edit/content' element={<EditContentBody/>}></Route>
 
                     {/* Gif */}
                     <Route path='/gif' element={<GifFeed/>}></Route>

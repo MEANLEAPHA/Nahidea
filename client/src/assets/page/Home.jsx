@@ -175,6 +175,20 @@ export default function Home() {
                   navigate(`/aboutpost/${post.id}`)
                 }}>
                     <p>{data.title}</p>
+                    <span onClick={()=>
+                      {
+                        navigate(`/edit/content`, 
+                          {
+                          state: {
+                            postId: post.id,
+                            contentId: data.id,
+                            bodyText: data.text_body,
+                            mode: "edit"
+                          }
+                        }
+                        );
+                      }
+                      }>{data.text_body}</span>
                 </div>
               </div>
 
