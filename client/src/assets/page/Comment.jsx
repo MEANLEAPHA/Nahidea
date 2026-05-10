@@ -49,20 +49,24 @@ const Comment = () => {
     };
 
     if (state?.mode === "edit") {
-      await axios.put(
+     const res = await axios.put(
         `${import.meta.env.VITE_SERVER_URL}/api/comments/${state.commentId}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      navigate(`/aboutpost/${state.postId}${state.commentId}`);
     } else {
-      await axios.post(
+      const res = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/posts/${state.postId}/comments`,
         payload,
         { headers: { Authorization:  `Bearer ${token}`} }
       );
+      const newCommendId = res.data.comment_id;
+      navigate(`/aboutpost/${state.postId}${newCommendId}`);
     }
+    
 
-    navigate(-1);
+    
   };
 
   return (
