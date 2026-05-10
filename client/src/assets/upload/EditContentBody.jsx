@@ -333,7 +333,7 @@ const EditContentBody = () => {
         <div>
             <h1>Edit Content</h1>
            <TiptapEditor value={textBodyValue} onChange={setTextBodyValue} />
-
+          <button type="submit" onClick={handleUpdate} className="btn"></button>
         </div>
     );
 }
