@@ -184,6 +184,7 @@ export default function Home() {
                             postId: post.id,
                             contentId: data.id,
                             bodyText: data.text_body,
+                            page: page,
                             mode: "edit"
                           }
                         }

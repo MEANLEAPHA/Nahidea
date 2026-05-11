@@ -311,11 +311,14 @@ const EditContentBody = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const [textBodyValue, setTextBodyValue] = useState('');
+
     useEffect(() => {
         if (state?.bodyText) {
           setTextBodyValue(state.bodyText);
+          setPage(state.page);
         } else {
           setTextBodyValue(""); // ✅ clear when no state
+          setPage(1);
         }
     },[state]);
 
@@ -323,7 +326,9 @@ const EditContentBody = () => {
         try{
             const res = await axios.put(
                 `${import.meta.env.VITE_SERVER_URL}/api/update-post-body-content/${state.contentId}/${state.postId}`,
-                { bodyText: textBodyValue },
+                { bodyText: textBodyValue
+          
+                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             if(res.status === 200) navigate(-1);
