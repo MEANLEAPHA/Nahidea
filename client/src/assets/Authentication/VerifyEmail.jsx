@@ -45,7 +45,7 @@ export const VerifyEmail = () => {
         toast.success("Email verified!");
 
         setTimeout(() => {
-          navigate("/setupaccount", state = { Email: data.email, UserId: data.userId });
+          navigate("/setupaccount", {state :{ Email: data.email, UserId: data.userId }});
           localStorage.removeItem("verifyEmail");
         }, 1000);
       } else {
