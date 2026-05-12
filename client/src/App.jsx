@@ -135,6 +135,11 @@ const Layout = () => {
 
     // Aside mode tool
     const [username, setUsername] = useState('Guest');
+    const [avatar, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
+    const [profession, setProfession] = useState(null);
+    const [work_location, setLocation] = useState(null);
+    const [bio, setBio] = useState("Come and join Nahidea's family!");
+    const [nickname, setNickname] = useState('whynotsignup');
     const [userId, setUserId] = useState(null);
     const [showMaxAside, setMaxAside] = useState(() => {
             return localStorage.getItem("maxAside") === "true";
@@ -173,10 +178,21 @@ const Layout = () => {
   async function loadTempoInfo() {
     // 1. Check sessionStorage first
     const cachedName = sessionStorage.getItem("username");
+    const cachedAvatar = sessionStorage.getItem("avatar");
+    const cachedLocation = sessionStorage.getItem("location");
+    const cachedBio = sessionStorage.getItem("bio");
+    const cachedNickname = sessionStorage.getItem("nickname");
     const cachedUserId = sessionStorage.getItem("userId");
+    const cachedProfession = sessionStorage.getItem("profession");
+
     if (cachedName && cachedUserId) {
       setUsername(cachedName);
       setUserId(cachedUserId);
+      setAvatar(cachedAvatar);
+      setLocation(cachedLocation);
+      setBio(cachedBio);
+      setProfession(cachedProfession);
+      setNickname(cachedNickname);
       return;
     }
 
@@ -191,12 +207,28 @@ const Layout = () => {
 
       const data = await res.json();
       const username = data.userData?.username || data.username;
+      const avatar = data.userData?.avatar_url || data.avatar_url;
+      const location = data.userData?.work_place || data.work_place;
+      const bio = data.userData?.bio || data.bio;
+      const nickname = data.userData?.nickname || data.nickname;
+      const profession = data.userData?.profession || data.profession;
       const userId = data.userData?.id || data.id;
+
 
       sessionStorage.setItem("userId", userId);
       setUserId(userId);
       sessionStorage.setItem("username", username);
       setUsername(username);
+      sessionStorage.setItem("avatar", avatar);
+      setAvatar(avatar);
+      sessionStorage.setItem("location", location);
+      setLocation(location);
+      sessionStorage.setItem("bio", bio);
+      setBio(bio);
+      sessionStorage.setItem("nickname", nickname);
+      setNickname(nickname);
+      sessionStorage.setItem("profession", profession);
+
     } catch (err) {
       console.error("Error loading username", err);
     }
@@ -214,7 +246,7 @@ const Layout = () => {
             <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>
-                    <Outlet context={{ username, userId }} />
+                    <Outlet context={{ username, userId, avatar, work_location, bio, nickname, profession }} />
                 </section>
             </main>
          

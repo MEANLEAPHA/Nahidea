@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, use } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useOutletContext} from "react-router-dom";
 
 import {MenuOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
         HomeOutlined,SignatureOutlined,BarChartOutlined,ClockCircleOutlined,HeartOutlined, RiseOutlined, FireOutlined, QuestionCircleOutlined, FlagOutlined, ReadOutlined, FileProtectOutlined,FileDoneOutlined, 
@@ -18,7 +18,7 @@ const token = localStorage.getItem("token");
 
 const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
   const navigate = useNavigate();
-
+ 
   const isMaxAside = localStorage.getItem("maxAside");
 
  
@@ -490,6 +490,7 @@ const CreateDropDownMin = () =>{
   )
 }
 const ProfileDropDown = ({ theme, toggleTheme  }) => {
+   const {avatar_url} = useOutletContext();
   const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -574,7 +575,7 @@ const ProfileDropDown = ({ theme, toggleTheme  }) => {
       <div style={{position: "relative"}} > 
         <Space>
           <img
-            src="https://ih1.redbubble.net/image.2515682869.7692/raf,360x360,075,t,fafafa:ca443f4786.jpg"
+            src={avatar_url}
             className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
           />
