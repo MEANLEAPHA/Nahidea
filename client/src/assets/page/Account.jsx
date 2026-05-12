@@ -1,342 +1,489 @@
-// App.jsx
-import { useState } from "react";
-import {
-  User,
-  Users,
-  Image,
-  Mail,
-  Globe,
-  MapPin,
-  Briefcase,
-  Camera,
-  Menu,
-  X,
-  Heart,
-  MessageCircle,
-  Share2,
-  MoreHorizontal,
-  BadgeCheck,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useOutletContext, useParams } from "react-router-dom";
 
+import { MapPin, Link2, CalendarDays, Settings, MessageCircle, Share2, Heart, Bookmark,
+         MoreHorizontal, Image, BadgeCheck, Banana,} from "lucide-react";
 import "../style/page/Account.css";
 
-const postsData = [
-  {
-    id: 1,
-    text: "Building modern scalable products requires ruthless prioritization. Most apps fail because they solve weak problems with expensive engineering.",
-    image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
-    likes: 124,
-    comments: 22,
-    time: "12 mins ago",
-  },
-  {
-    id: 2,
-    text: "Your portfolio should demonstrate outcomes, not just animations and gradients.",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop",
-    likes: 88,
-    comments: 11,
-    time: "1 hour ago",
-  },
-];
-
 export default function Account() {
-  const [activeTab, setActiveTab] = useState("profile");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [likedPosts, setLikedPosts] = useState([]);
 
-  const toggleLike = (id) => {
-    setLikedPosts((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
-    );
+  const {id} = useParams(); // use state later
+  const [activeTab, setActiveTab] = useState("posts");
+  const [followState, setFollowState] =useState("follow");
+
+  const [usernames, setUsernames] = useState("");
+  const [nicknames, setNicknames] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [workplace, setWorkplace] = useState("");
+  const [bios, setBios] = useState("");
+  const [professions, setProfessions] = useState("");
+
+  const { username, userId, avatar_url, work_location, bio, nickname, profession } = useOutletContext();
+
+  useEffect(() => {
+
+    fetchFollowStatus();
+    if(id === userId){
+
+      setUsernames(username);
+      setNicknames(nickname);
+      setAvatar(avatar_url);
+      setWorkplace(work_location);
+      setBios(bio);
+      setProfessions(profession);
+    }
+    else{
+      hadleFetchProfile();
+    }
+
+  }, []);
+
+  const hadleFetchProfile = async () => {
+
+    try{
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/get-user-info/${id}`
+      )
+      const data = res.data.userData;
+      setUsernames(data.username);
+      setNicknames(data.nickname);
+      setAvatar(data.avatar_url);
+      setWorkplace(data.work_place);
+      setBios(data.bio);
+      setProfessions(data.profession);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+  const handleFollow = async () => {
+
+    if (followState === "loading") {
+      return;
+    }
+
+    try {
+
+      setFollowState("loading");
+
+      /*
+      |----------------------------
+      | FOLLOW
+      |----------------------------
+      */
+
+      if (
+        followState === "follow"
+      ) {
+
+        const res = await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${profileUserId}`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+
+        /*
+        PRIVATE ACCOUNT
+        */
+
+        if (
+          res.data.status ===
+          "pending"
+        ) {
+
+          setFollowState(
+            "requested"
+          );
+
+        } else {
+
+          setFollowState(
+            "following"
+          );
+
+        }
+
+        return;
+      }
+
+      /*
+      |----------------------------
+      | UNFOLLOW
+      |----------------------------
+      */
+
+      if (
+        followState ===
+          "following" ||
+        followState ===
+          "requested"
+      ) {
+
+        await axios.delete(
+          `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${profileUserId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        setFollowState("follow");
+      }
+
+    } catch (err) {
+
+      console.log(err);
+
+      /*
+      restore safe state
+      */
+
+      setFollowState("follow");
+
+    }
+  };
+  const fetchFollowStatus = async () => {
+    try {
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${profileUserId}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (
+        res.data.status ===
+        "accepted"
+      ) {
+
+        setFollowState(
+          "following"
+        );
+
+      } else if (
+        res.data.status ===
+        "pending"
+      ) {
+
+        setFollowState(
+          "requested"
+        );
+
+      } else {
+
+        setFollowState("follow");
+
+      }
+
+    } catch (err) {
+
+      console.log(err);
+
+    }
+
   };
 
   return (
-    <div className={darkMode ? "app dark" : "app"}>
-      {/* MOBILE TOPBAR */}
-      <div className="mobile-topbar">
-        <button
-          className="icon-btn"
-          onClick={() => setSidebarOpen(true)}
-        >
-          <Menu size={22} />
-        </button>
+    <div className="nahideaProfilePage">
 
-        <div className="mobile-brand">Nahidea Profile</div>
+      {/* BANNER */}
+      <div className="nahideaProfileBanner">
 
-        <button
-          className="theme-btn"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? "☀️" : "🌙"}
+        <img
+          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop"
+          alt="banner"
+        />
+
+        <button className="nahideaProfileEditBannerBtn">
+          Edit Banner
         </button>
       </div>
 
-      {/* SIDEBAR OVERLAY */}
-      <div
-        className={`overlay ${sidebarOpen ? "show" : ""}`}
-        onClick={() => setSidebarOpen(false)}
-      />
+      {/* HEADER */}
+      <div className="nahideaProfileHeader">
 
-      <div className="profile-layout">
-        {/* LEFT SIDEBAR */}
-        <aside className={`sidebar ${sidebarOpen ? "show" : ""}`}>
-          <div className="sidebar-header">
-            <h2>Profile</h2>
+        <div className="nahideaProfileHeaderLeft">
 
-            <button
-              className="close-btn"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X size={20} />
-            </button>
+          <div className="nahideaProfileAvatarWrap">
+
+            <img
+              src={avatar}
+              alt="avatar"
+              className="nahideaProfileAvatar"
+            />
+
+            <div className="nahideaProfileOnlineDot" />
           </div>
 
-          <div className="intro-card">
-            <h3>Introduction</h3>
+          <div className="nahideaProfileUserInfo">
 
-            <p>
-              Product designer and startup builder focused on scalable digital
-              systems, UX strategy, and growth-first thinking.
+            <div className="nahideaProfileNameRow">
+
+              <h1>
+                {usernames}
+              </h1>
+
+              <Banana
+                size={20}
+                className="nahideaProfileVerified"
+              />
+            </div>
+
+            <p className="nahideaProfileUsername">
+              @{nicknames}
             </p>
 
-            <div className="info-list">
-              <div className="info-item">
-                <Briefcase size={18} />
-                <span>Senior Product Designer</span>
+            <p className="nahideaProfileBio">
+              {/* Founder of Nahidea.
+              Building modern
+              anonymous social
+              experiences for Gen Z. */}
+              {professions} at {workplace}
+            </p>
+
+            <div className="nahideaProfileMeta">
+
+              <span>
+                <MapPin size={15} />
+                Phnom Penh,
+                Cambodia
+              </span>
+
+              <span>
+                <Banana size={15} />
+                Joined May 2026
+              </span>
+
+              <span>
+                <Link2 size={15} />
+                nahidea.com
+              </span>
+            </div>
+
+            <div className="nahideaProfileStats">
+
+              <div>
+                <strong>
+                  12.4K
+                </strong>
+                <span>
+                  Followers
+                </span>
               </div>
 
-              <div className="info-item">
-                <Mail size={18} />
-                <span>mathew@nahidea.com</span>
+              <div>
+                <strong>
+                  483
+                </strong>
+                <span>
+                  Following
+                </span>
               </div>
 
-              <div className="info-item">
-                <Globe size={18} />
-                <span>www.nahidea.com</span>
-              </div>
-
-              <div className="info-item">
-                <MapPin size={18} />
-                <span>New York, USA</span>
+              <div>
+                <strong>
+                  97
+                </strong>
+                <span>
+                  Posts
+                </span>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="gallery-card">
-            <div className="card-header">
-              <h3>Gallery</h3>
-              <span>12</span>
-            </div>
+        {/* ACTIONS */}
+        <div className="nahideaProfileActions">
 
-            <div className="gallery-grid">
-              {[
-                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
-                "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop",
-                "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=600&auto=format&fit=crop",
-                "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop",
-              ].map((img, i) => (
-                <img key={i} src={img} alt="" />
-              ))}
+          <button
+            className={`nahideaProfileFollowBtn ${
+              followState
+            }`}
+            onClick={handleFollow}
+          >
+
+            {followState === "loading" &&
+              "Loading..."}
+
+            {followState === "follow" &&
+              "Follow"}
+
+            {followState ===
+              "requested" &&
+              "Requested"}
+
+            {followState ===
+              "following" &&
+              "Following"}
+
+          </button>
+
+          <button className="nahideaProfileMessageBtn">
+            Message
+          </button>
+
+          <button className="nahideaProfileIconBtn">
+            <Settings
+              size={18}
+            />
+          </button>
+        </div>
+      </div>
+
+      {/* BODY */}
+      <div className="nahideaProfileBody">
+
+        {/* LEFT SIDEBAR */}
+        <aside className="nahideaProfileLeftSidebar">
+
+          <div className="nahideaProfileCard">
+
+            <h3>About</h3>
+
+            <p>
+              {bio}
+            </p>
+          </div>
+
+          <div className="nahideaProfileCard">
+
+            <h3>Interests</h3>
+
+            <div className="nahideaProfileTags">
+
+              <span>Startup</span>
+              <span>React</span>
+              <span>Node.js</span>
+              <span>AI</span>
+              <span>Product</span>
+              <span>Design</span>
             </div>
           </div>
         </aside>
 
-        {/* MAIN CONTENT */}
-        <main className="main-content">
-          {/* HERO */}
-          <section className="hero-card">
-            <div className="cover-wrapper">
-              <img
-                className="cover-image"
-                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1400&auto=format&fit=crop"
-                alt=""
-              />
+        {/* CENTER */}
+        <div className="nahideaProfileFeed">
 
-              <button className="camera-btn">
-                <Camera size={18} />
-              </button>
-            </div>
+          {/* TABS */}
+          <div className="nahideaProfileTabs">
 
-            <div className="hero-content">
-              <div className="profile-avatar-wrapper">
-                <img
-                  className="profile-avatar"
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
-                  alt=""
-                />
+            <button
+              className={
+                activeTab ===
+                "posts"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setActiveTab(
+                  "posts"
+                )
+              }
+            >
+              Posts
+            </button>
 
-                <div className="verified-badge">
-                  <BadgeCheck size={18} />
-                </div>
-              </div>
+            <button
+              className={
+                activeTab ===
+                "answers"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setActiveTab(
+                  "answers"
+                )
+              }
+            >
+              Answers
+            </button>
 
-              <div className="hero-info">
-                <h1>Mathew Anderson</h1>
-                <p>Senior Product Designer</p>
-              </div>
+            <button
+              className={
+                activeTab ===
+                "media"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setActiveTab(
+                  "media"
+                )
+              }
+            >
+              Media
+            </button>
+          </div>
 
-              <div className="hero-actions">
-                <button className="follow-btn">Follow</button>
-                <button className="message-btn">Message</button>
+          {/* CREATE POST */}
+          <div className="nahideaProfileCreatePost">
 
-                <button
-                  className="theme-btn desktop-theme"
-                  onClick={() => setDarkMode(!darkMode)}
+            <img
+              src="https://api.dicebear.com/9.x/adventurer/svg?seed=Meanleap"
+              alt=""
+            />
+
+            <input
+              type="text"
+              placeholder="Share something..."
+            />
+
+            <button>
+              <Image size={18} />
+            </button>
+          </div>
+
+         
+        </div>
+
+        {/* RIGHT */}
+        <div className="nahideaProfileRightSidebar">
+
+          <div className="nahideaProfileCard">
+
+            <h3>
+              Suggested People
+            </h3>
+
+            {[1, 2, 3].map(
+              (user) => (
+                <div
+                  key={user}
+                  className="nahideaProfileSuggestUser"
                 >
-                  {darkMode ? "☀️" : "🌙"}
-                </button>
-              </div>
-            </div>
 
-            {/* STATS */}
-            <div className="stats-row">
-              <div className="stat-card">
-                <Image size={22} />
-                <h3>938</h3>
-                <p>Posts</p>
-              </div>
-
-              <div className="stat-card">
-                <Users size={22} />
-                <h3>3,586</h3>
-                <p>Followers</p>
-              </div>
-
-              <div className="stat-card">
-                <User size={22} />
-                <h3>2,659</h3>
-                <p>Following</p>
-              </div>
-            </div>
-
-            {/* TABS */}
-            <div className="tabs">
-              {["profile", "followers", "friends", "gallery"].map((tab) => (
-                <button
-                  key={tab}
-                  className={activeTab === tab ? "tab active" : "tab"}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* FEED */}
-          <section className="feed-section">
-            {/* CREATE POST */}
-            <div className="create-post">
-              <textarea placeholder="Share your thoughts..." />
-
-              <div className="create-actions">
-                <div className="left-actions">
-                  <button>📷 Photo</button>
-                  <button>📝 Article</button>
-                </div>
-
-                <button className="post-btn">Post</button>
-              </div>
-            </div>
-
-            {/* TAB CONTENT */}
-            {activeTab === "profile" && (
-              <div className="posts-wrapper">
-                {postsData.map((post) => (
-                  <div key={post.id} className="post-card">
-                    <div className="post-header">
-                      <div className="post-user">
-                        <img
-                          src="https://randomuser.me/api/portraits/men/32.jpg"
-                          alt=""
-                        />
-
-                        <div>
-                          <h4>Mathew Anderson</h4>
-                          <span>{post.time}</span>
-                        </div>
-                      </div>
-
-                      <button className="icon-btn">
-                        <MoreHorizontal size={20} />
-                      </button>
-                    </div>
-
-                    <p className="post-text">{post.text}</p>
+                  <div>
 
                     <img
-                      className="post-image"
-                      src={post.image}
+                      src={`https://api.dicebear.com/9.x/adventurer/svg?seed=user${user}`}
                       alt=""
                     />
 
-                    <div className="post-actions">
-                      <button
-                        className={
-                          likedPosts.includes(post.id)
-                            ? "liked"
-                            : ""
-                        }
-                        onClick={() => toggleLike(post.id)}
-                      >
-                        <Heart size={18} />
-                        {likedPosts.includes(post.id)
-                          ? post.likes + 1
-                          : post.likes}
-                      </button>
+                    <div>
+                      <h4>
+                        User{" "}
+                        {user}
+                      </h4>
 
-                      <button>
-                        <MessageCircle size={18} />
-                        {post.comments}
-                      </button>
-
-                      <button>
-                        <Share2 size={18} />
-                        Share
-                      </button>
+                      <span>
+                        @user
+                        {user}
+                      </span>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
 
-            {activeTab === "followers" && (
-              <div className="tab-card">
-                <h2>Followers</h2>
-                <p>3,586 people follow this account.</p>
-              </div>
-            )}
-
-            {activeTab === "friends" && (
-              <div className="tab-card">
-                <h2>Friends</h2>
-                <p>Your professional network appears here.</p>
-              </div>
-            )}
-
-            {activeTab === "gallery" && (
-              <div className="tab-card">
-                <h2>Gallery</h2>
-
-                <div className="gallery-large">
-                  {[
-                    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=900&auto=format&fit=crop",
-                    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=900&auto=format&fit=crop",
-                    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=900&auto=format&fit=crop",
-                    "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=900&auto=format&fit=crop",
-                  ].map((img, i) => (
-                    <img key={i} src={img} alt="" />
-                  ))}
+                  <button>
+                    Follow
+                  </button>
                 </div>
-              </div>
+              )
             )}
-          </section>
-        </main>
+          </div>
+        </div>
       </div>
     </div>
   );
