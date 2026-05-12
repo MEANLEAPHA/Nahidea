@@ -16,7 +16,7 @@ import "../style/Header.css";
 
 const token = localStorage.getItem("token");
 
-const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
+const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   const navigate = useNavigate();
  
   const isMaxAside = localStorage.getItem("maxAside");
@@ -61,7 +61,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
               <CreateDropDownMin />
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
               
-              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} />
+              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url} />
             </>
           )
 
@@ -489,8 +489,8 @@ const CreateDropDownMin = () =>{
   </Dropdown>
   )
 }
-const ProfileDropDown = ({ theme, toggleTheme  }) => {
-   const {avatar_url} = useOutletContext();
+const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
+   
   const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 

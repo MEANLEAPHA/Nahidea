@@ -135,7 +135,7 @@ const Layout = () => {
 
     // Aside mode tool
     const [username, setUsername] = useState('Guest');
-    const [avatar, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
+    const [avatar_url, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
     const [profession, setProfession] = useState(null);
     const [work_location, setLocation] = useState(null);
     const [bio, setBio] = useState("Come and join Nahidea's family!");
@@ -242,11 +242,11 @@ const Layout = () => {
     };
      return(
         <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
+            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url}/>
             <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>
-                    <Outlet context={{ username, userId, avatar, work_location, bio, nickname, profession }} />
+                    <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession }} />
                 </section>
             </main>
          
