@@ -97,11 +97,7 @@ const Login = () => {
         <ToastContainer position="top-right" autoClose={2000} />
         </div>
 
-        <div className='logo-container'>
-                <img src={nahideaTren}/>
-                <p>Nahidea</p>
-        </div>
-
+       
         <form onSubmit={(e) => { e.preventDefault(); SubmitLogin(); }} >        
           <div className="form-center">
 

@@ -161,6 +161,9 @@ color: rgb(0, 0, 0);
     color: black;
     margin-right: 10px;
 }
+.password-instruction{
+ font-size: small;
+}
 .div-submit button{
     width: 27%;
     background-color:var(--primary-color);
@@ -217,9 +220,7 @@ color: rgb(0, 0, 0);
 
 
 
-.password-instruction{
-    color: black;
-}
+
 
 
 @media screen and (max-width:768px){

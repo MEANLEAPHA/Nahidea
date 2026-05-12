@@ -183,10 +183,7 @@ const Register = () => {
           <ToastContainer position="top-right" autoClose={2000}/>
       </div>
 
-      <div className='logo-container'>
-                      <img src={nahideaTren}/>
-                      <p>Nahidea</p>
-      </div>
+   
       
       <form onSubmit={(e) => { e.preventDefault(); submitRegister(); }}>
         <div className="form-center">
@@ -267,12 +264,20 @@ const Register = () => {
           {/* Instruction */}
 
           <div className = 'password-instruction' style={{display:showInstruction}}>
-            <p>Password must include:</p>
-            <p style={{color:isUpperCase}}>Uppercase</p>
-            <p style={{color:isLowerCase}}>Lowercase</p>
-            <p style={{color:isNumber}}>Number</p>
-            <p style={{color:isSymbol}}>Symbol</p>
-            <p style={{color:isLength}}>Min 6 and Max 8</p>
+            <p>
+            <b style={{marginBottom:'15px'}}>Password must contain: </b>
+            <br /> 
+           
+            <span style={{color:isUpperCase}}>Uppercase</span>
+            <span>, </span>
+            <span style={{color:isLowerCase}}>Lowercase </span>
+            <span>, </span>
+            <span style={{color:isNumber}}>Number </span>
+            <span>, </span>
+            <span style={{color:isSymbol}}>Symbol </span>
+            <span>, </span>
+            <span style={{color:isLength}}>Min 6 and Max 8 </span>
+            </p>
           </div>
             <br />
             <label>Confirm Password</label>

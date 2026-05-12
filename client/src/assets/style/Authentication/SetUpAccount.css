@@ -1,0 +1,436 @@
+:root {
+  --background-color: rgb(255, 255, 255);
+  --primary-color: #fd7648;
+  --secondary-color: rgba(107, 107, 107, 0.318);
+  --font-color: rgb(0, 0, 0);
+  --back-con: rgb(245, 245, 245);
+  --primary-font: monospace;
+}
+
+.dark-theme {
+  --background-color: rgb(32, 32, 32);
+  --primary-color: #fd7648;
+  --secondary-color: rgba(220, 220, 220, 0.318);
+  --font-color: rgb(255, 255, 255);
+  --back-con: rgb(40, 40, 40);
+}
+
+/* GLOBAL */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background-color);
+  color: var(--font-color);
+  font-family: Inter, sans-serif;
+}
+
+/* PAGE */
+
+.setup-page {
+  min-height: 100vh;
+  background: var(--background-color);
+}
+
+/* MAIN CONTAINER */
+
+.setup-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* LEFT */
+
+.setup-left {
+  width: 40%;
+  background: var(--back-con);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+}
+
+.profile-card {
+  text-align: center;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: fit-content;
+  margin: auto;
+}
+
+.profile-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: white;
+  border: 5px solid var(--primary-color);
+}
+
+.edit-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  width: 50px;
+  height: 50px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--primary-color);
+  color: white;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-card h2 {
+  margin-top: 24px;
+  font-size: 34px;
+}
+
+.profile-card p {
+  color: gray;
+}
+
+/* RIGHT */
+
+.setup-right {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 50px;
+}
+
+.setup-form {
+  width: 100%;
+  max-width: 600px;
+}
+
+.input-group {
+  margin-bottom: 24px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  border: 2px solid transparent;
+  background: var(--back-con);
+  color: var(--font-color);
+
+  padding: 18px;
+  border-radius: 18px;
+
+  font-size: 16px;
+  outline: none;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: var(--primary-color);
+}
+
+.input-group textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.submit-btn {
+  width: 100%;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+
+  padding: 18px;
+  border-radius: 18px;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* AVATAR STUDIO */
+
+.avatar-studio {
+  min-height: 100vh;
+  background: var(--background-color);
+}
+
+/* TOPBAR */
+
+.studio-topbar {
+  height: 80px;
+  border-bottom: 1px solid
+    var(--secondary-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 30px;
+}
+
+.back-btn,
+.save-avatar-btn {
+  border: none;
+  background: var(--back-con);
+  color: var(--font-color);
+
+  padding: 14px 18px;
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 600;
+}
+
+.save-avatar-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* STUDIO LAYOUT */
+
+.studio-layout {
+  display: flex;
+  min-height: calc(100vh - 80px);
+}
+
+/* SIDEBARS */
+
+.studio-sidebar,
+.studio-controls {
+  width: 320px;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.studio-sidebar {
+  border-right: 1px solid
+    var(--secondary-color);
+}
+
+.studio-controls {
+  border-left: 1px solid
+    var(--secondary-color);
+}
+
+/* STYLE GRID */
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  );
+  gap: 14px;
+}
+
+.style-card {
+  background: var(--back-con);
+
+  border-radius: 18px;
+  padding: 14px;
+
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  transition: 0.2s;
+  text-align: center;
+}
+
+.style-card.active {
+  border-color: var(--primary-color);
+}
+
+.style-card img {
+  width: 80px;
+  height: 80px;
+}
+
+.style-card span {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* CENTER */
+
+.studio-preview {
+  flex: 1;
+  padding: 40px;
+}
+
+.preview-card {
+  background: var(--back-con);
+
+  border-radius: 30px;
+  padding: 40px;
+}
+
+.main-avatar {
+  width: 280px;
+  height: 280px;
+
+  display: block;
+  margin: auto;
+}
+
+/* PRESETS */
+
+.preset-section {
+  margin-top: 40px;
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    4,
+    1fr
+  );
+  gap: 14px;
+}
+
+.preset-card {
+  background: var(--background-color);
+
+  border-radius: 18px;
+  padding: 14px;
+
+  text-align: center;
+  cursor: pointer;
+
+  border: 2px solid transparent;
+}
+
+.preset-card.active {
+  border-color: var(--primary-color);
+}
+
+.preset-card img {
+  width: 70px;
+  height: 70px;
+}
+
+.preset-card span {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* CONTROLS */
+
+.control-group {
+  margin-bottom: 36px;
+}
+
+.switch-row,
+.rotate-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rotate-slider {
+  width: 100%;
+  margin: 18px 0;
+}
+
+.rotate-btn {
+  width: 100%;
+
+  border: none;
+  background: var(--back-con);
+  color: var(--font-color);
+
+  padding: 14px;
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* COLORS */
+
+.color-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.color-btn {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 50%;
+  border: 3px solid transparent;
+
+  cursor: pointer;
+}
+
+.color-btn.active {
+  border-color: white;
+}
+
+/* MOBILE */
+
+@media (max-width: 1200px) {
+  .setup-container {
+    flex-direction: column;
+  }
+
+  .setup-left {
+    width: 100%;
+    padding: 50px 20px;
+  }
+
+  .studio-layout {
+    flex-direction: column;
+  }
+
+  .studio-sidebar,
+  .studio-controls {
+    width: 100%;
+    border: none;
+  }
+
+  .preset-grid {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    );
+  }
+
+  .main-avatar {
+    width: 220px;
+    height: 220px;
+  }
+}
