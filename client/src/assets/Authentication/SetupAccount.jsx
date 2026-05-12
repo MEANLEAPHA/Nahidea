@@ -19,7 +19,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-import "../style/Authentication/SetupAccount.css";
+// import "../style/Authentication/SetupAccount.css";
+import "../style/Authentication/SetUpAccount.css";
 
 /* ------------------ */
 /* AVATAR DATA */
