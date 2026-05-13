@@ -72,138 +72,265 @@ useEffect(() => {
   }
   const handleFollow = async () => {
 
-    if (followState === "loading") {
-      return;
-    }
+  if (
+    followState === "loading"
+  ) {
+    return;
+  }
 
-    try {
+  try {
 
-      setFollowState("loading");
+    setFollowState("loading");
 
-      /*
-      |----------------------------
-      | FOLLOW
-      |----------------------------
-      */
+    /*
+    =========================
+    FOLLOW
+    =========================
+    */
 
-      if (
-        followState === "follow"
-      ) {
+    if (
+      followState === "follow" ||
+      followState === "follows_you"
+    ) {
 
-        const res = await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${id}`,
-          {},
-          {
-            headers: {
-              Authorization : `Bearer ${token}`,
-            }
-          }
-        );
-
-        /*
-        PRIVATE ACCOUNT
-        */
-
-        if (
-          res.data.status ===
-          "pending"
-        ) {
-
-          setFollowState(
-            "requested"
-          );
-
-        } else {
-
-          setFollowState(
-            "following"
-          );
-
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${id}`,
+        {},
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
         }
-
-        return;
-      }
-
-      /*
-      |----------------------------
-      | UNFOLLOW
-      |----------------------------
-      */
-
-      if (
-        followState ===
-          "following" ||
-        followState ===
-          "requested"
-      ) {
-
-        await axios.delete(
-          `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
-           {
-            headers: {
-              Authorization : `Bearer ${token}`,
-            }
-          }
-        );
-
-        setFollowState("follow");
-      }
-
-    } catch (err) {
-
-      console.log(err);
-
-      /*
-      restore safe state
-      */
-
-      setFollowState("follow");
-
-    }
-  };
-  const fetchFollowStatus = async () => {
-    try {
-
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
-         {
-            headers: {
-              Authorization : `Bearer ${token}`,
-            }
-          }
       );
 
-      if (
-        res.data.status ===
-        "accepted"
-      ) {
+      /*
+      MUTUAL FOLLOW
+      */
 
-        setFollowState(
-          "following"
-        );
+      if (res.data.mutual) {
 
-      } else if (
-        res.data.status ===
-        "pending"
-      ) {
-
-        setFollowState(
-          "requested"
-        );
+        setFollowState("mutual");
 
       } else {
 
-        setFollowState("follow");
+        setFollowState("following");
 
       }
 
-    } catch (err) {
+      return;
+    }
 
-      console.log(err);
+    /*
+    =========================
+    UNFOLLOW
+    =========================
+    */
+
+    if (
+      followState === "following" ||
+      followState === "mutual"
+    ) {
+
+      await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+      /*
+      if they still follow you
+      */
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+      setFollowState(
+        res.data.state
+      );
 
     }
 
-  };
+  } catch (err) {
+
+    console.log(err);
+
+    setFollowState("follow");
+
+  }
+
+};
+  // const handleFollow = async () => {
+
+  //   if (followState === "loading") {
+  //     return;
+  //   }
+
+  //   try {
+
+  //     setFollowState("loading");
+
+  //     /*
+  //     |----------------------------
+  //     | FOLLOW
+  //     |----------------------------
+  //     */
+
+  //     if (
+  //       followState === "follow"
+  //     ) {
+
+  //       const res = await axios.post(
+  //         `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${id}`,
+  //         {},
+  //         {
+  //           headers: {
+  //             Authorization : `Bearer ${token}`,
+  //           }
+  //         }
+  //       );
+
+  //       /*
+  //       PRIVATE ACCOUNT
+  //       */
+
+  //       if (
+  //         res.data.status ===
+  //         "pending"
+  //       ) {
+
+  //         setFollowState(
+  //           "requested"
+  //         );
+
+  //       } else {
+
+  //         setFollowState(
+  //           "following"
+  //         );
+
+  //       }
+
+  //       return;
+  //     }
+
+  //     /*
+  //     |----------------------------
+  //     | UNFOLLOW
+  //     |----------------------------
+  //     */
+
+  //     if (
+  //       followState ===
+  //         "following" ||
+  //       followState ===
+  //         "requested"
+  //     ) {
+
+  //       await axios.delete(
+  //         `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
+  //          {
+  //           headers: {
+  //             Authorization : `Bearer ${token}`,
+  //           }
+  //         }
+  //       );
+
+  //       setFollowState("follow");
+  //     }
+
+  //   } catch (err) {
+
+  //     console.log(err);
+
+  //     /*
+  //     restore safe state
+  //     */
+
+  //     setFollowState("follow");
+
+  //   }
+  // };
+  const fetchFollowStatus =
+async () => {
+
+  try {
+
+    const res = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+    setFollowState(
+      res.data.state
+    );
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
+  // const fetchFollowStatus = async () => {
+  //   try {
+
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
+  //        {
+  //           headers: {
+  //             Authorization : `Bearer ${token}`,
+  //           }
+  //         }
+  //     );
+
+  //     if (
+  //       res.data.status ===
+  //       "accepted"
+  //     ) {
+
+  //       setFollowState(
+  //         "following"
+  //       );
+
+  //     } else if (
+  //       res.data.status ===
+  //       "pending"
+  //     ) {
+
+  //       setFollowState(
+  //         "requested"
+  //       );
+
+  //     } else {
+
+  //       setFollowState("follow");
+
+  //     }
+
+  //   } catch (err) {
+
+  //     console.log(err);
+
+  //   }
+
+  // };
 
   return (
     <div className="nahideaProfilePage">
@@ -317,28 +444,38 @@ useEffect(() => {
         {/* ACTIONS */}
         <div className="nahideaProfileActions">
 
+        
           <button
-            className={`nahideaProfileFollowBtn ${
-              followState
-            }`}
-            onClick={handleFollow}
-          >
+  className="nahideaProfileFollowBtn"
+  onClick={handleFollow}
+>
 
-            {followState === "loading" &&
-              "Loading..."}
+{
+  followState === "loading"
+  && "Loading..."
+}
 
-            {followState === "follow" &&
-              "Follow"}
+{
+  followState === "follow"
+  && "Follow"
+}
 
-            {followState ===
-              "requested" &&
-              "Requested"}
+{
+  followState === "following"
+  && "Following"
+}
 
-            {followState ===
-              "following" &&
-              "Following"}
+{
+  followState === "follows_you"
+  && "Follow Back"
+}
 
-          </button>
+{
+  followState === "mutual"
+  && "Friends"
+}
+
+</button>
 
           <button className="nahideaProfileMessageBtn">
             Message
