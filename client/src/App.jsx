@@ -165,6 +165,8 @@ const Layout = () => {
     const [showMaxAside, setMaxAside] = useState(() => {
             return localStorage.getItem("maxAside") === "true";
         });
+
+    const [online, setIsOnline] = useState(false);
     
     useEffect(()=>{
         localStorage.setItem("maxAside", showMaxAside)
@@ -262,14 +264,15 @@ const Layout = () => {
         setDarkMode(prev => !prev)
     };
 
-    const isOnline = onlineUsers.includes(String(id));
+     setIsOnline(onlineUsers.includes(String(id)))
+
      return(
         <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url} isOnline={isOnline}/>
+            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url} isOnline={online}/>
             <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>
-                    <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession, isOnline }} />
+                    <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession, isOnline: online }} />
                 </section>
             </main>
          
