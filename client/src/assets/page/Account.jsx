@@ -24,7 +24,7 @@ export default function Account() {
   useEffect(() => {
 
     fetchFollowStatus();
-    if(id === userId){
+    if(String(id) === String(userId)){
 
       setUsernames(username);
       setNicknames(nickname);
