@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, use } from "react";
-import {Link, useNavigate, useOutletContext} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 import {MenuOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
         HomeOutlined,SignatureOutlined,BarChartOutlined,ClockCircleOutlined,HeartOutlined, RiseOutlined, FireOutlined, QuestionCircleOutlined, FlagOutlined, ReadOutlined, FileProtectOutlined,FileDoneOutlined, 
@@ -16,7 +16,7 @@ import "../style/Header.css";
 
 const token = localStorage.getItem("token");
 
-const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
+const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url, isOnline}) => {
   const navigate = useNavigate();
  
   const isMaxAside = localStorage.getItem("maxAside");
@@ -61,7 +61,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
               <CreateDropDownMin />
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
               
-              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url} />
+              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url} isOnline={isOnline}/>
             </>
           )
 
