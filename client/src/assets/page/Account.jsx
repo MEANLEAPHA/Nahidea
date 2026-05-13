@@ -1,36 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useOutletContext, useParams } from "react-router-dom";
-import { socket } from "../../socket";
+
 import { MapPin, Link2, CalendarDays, Settings, MessageCircle, Share2, Heart, Bookmark,
          MoreHorizontal, Image, BadgeCheck, Banana,} from "lucide-react";
 import "../style/page/Account.css";
 
 const token = localStorage.getItem("token");
-
+  const {id} = useParams(); // use state later
 export default function Account() {
 
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  useEffect(() => {
+//   const [onlineUsers, setOnlineUsers] = useState([]);
+//   useEffect(() => {
 
-  socket.on(
-    "online-users",
-    (users) => {
+//   socket.on(
+//     "online-users",
+//     (users) => {
 
-      setOnlineUsers(users);
+//       setOnlineUsers(users);
 
-    }
-  );
+//     }
+//   );
 
-  return () => {
+//   return () => {
 
-    socket.off("online-users");
+//     socket.off("online-users");
 
-  };
+//   };
 
-}, []);
+// }, []);
 
-  const {id} = useParams(); // use state later
+
   const [activeTab, setActiveTab] = useState("posts");
   const [followState, setFollowState] =useState("follow");
 
@@ -41,7 +41,7 @@ export default function Account() {
   const [bios, setBios] = useState("");
   const [professions, setProfessions] = useState("");
 
-  const { username, userId, avatar_url, work_location, bio, nickname, profession } = useOutletContext();
+  const { username, userId, avatar_url, work_location, bio, nickname, profession, isOnline } = useOutletContext();
 
 useEffect(() => {
 
@@ -352,8 +352,7 @@ async () => {
 
   // };
 
-  const isOnline =
-  onlineUsers.includes(String(id));
+  // const isOnline = onlineUsers.includes(String(id));
   return (
     <div className="nahideaProfilePage">
 
@@ -387,7 +386,7 @@ async () => {
               className="nahideaProfileOnlineDot"
               style={{
                 backgroundColor:
-                  isOnline ? "#c522a5" : "#6b7280",
+                  isOnline ? "yellowgreen" : "#6b7280",
               }}
             />
           </div>
@@ -490,7 +489,14 @@ async () => {
 
 {
   followState === "following"
-  && "Following"
+  && (
+    <>
+    <span>
+      Following
+    </span>
+    <Unfollow/>
+    </>
+  )
 }
 
 {
@@ -500,7 +506,14 @@ async () => {
 
 {
   followState === "mutual"
-  && "Friends"
+  && (
+    <>
+    <span>
+      Friends
+    </span>
+    <Unfollow/>
+    </>
+  )
 }
 
 </button>
@@ -671,4 +684,35 @@ async () => {
       </div>
     </div>
   );
+}
+
+const Unfollow = () => {
+
+  const handleUnfollow = async () => {
+    try{
+      const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // const data = response.data;
+      // if(data.mutual === false){
+      //   setFollowState("follow");
+      // }
+
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+  return(
+   <button
+   className="nahideaProfileFollowBtn"
+   onClick={handleUnfollow}
+   >
+     Unfollow
+   </button>
+  )
 }

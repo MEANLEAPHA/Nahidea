@@ -489,10 +489,10 @@ const CreateDropDownMin = () =>{
   </Dropdown>
   )
 }
-const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
+const ProfileDropDown = ({ theme, toggleTheme, avatar_url, isOnline}) => {
    
   const navigate = useNavigate();
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);

@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 
 import { jwtDecode } from "jwt-decode";
 
+import { socket } from "./socket";
 
 // Import Page
 
@@ -133,6 +134,26 @@ const Layout = () => {
     //     return <Login/>
     // }
 
+    const [onlineUsers, setOnlineUsers] = useState([]);
+      useEffect(() => {
+    
+      socket.on(
+        "online-users",
+        (users) => {
+    
+          setOnlineUsers(users);
+    
+        }
+      );
+    
+      return () => {
+    
+        socket.off("online-users");
+    
+      };
+    
+    }, []);
+
     // Aside mode tool
     const [username, setUsername] = useState('Guest');
     const [avatar_url, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
@@ -240,13 +261,15 @@ const Layout = () => {
     const toggleTheme = () =>{
         setDarkMode(prev => !prev)
     };
+
+    const isOnline = onlineUsers.includes(String(id));
      return(
         <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url}/>
+            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url} isOnline={isOnline}/>
             <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>
-                    <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession }} />
+                    <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession, isOnline }} />
                 </section>
             </main>
          
