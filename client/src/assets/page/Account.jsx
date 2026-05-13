@@ -6,6 +6,8 @@ import { MapPin, Link2, CalendarDays, Settings, MessageCircle, Share2, Heart, Bo
          MoreHorizontal, Image, BadgeCheck, Banana,} from "lucide-react";
 import "../style/page/Account.css";
 
+const token = localStorage.getItem("token");
+
 export default function Account() {
 
   const {id} = useParams(); // use state later
@@ -92,7 +94,9 @@ useEffect(() => {
           `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${id}`,
           {},
           {
-            withCredentials: true,
+            headers: {
+              Authorization : `Bearer ${token}`,
+            }
           }
         );
 
@@ -135,8 +139,10 @@ useEffect(() => {
 
         await axios.delete(
           `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
-          {
-            withCredentials: true,
+           {
+            headers: {
+              Authorization : `Bearer ${token}`,
+            }
           }
         );
 
@@ -160,9 +166,11 @@ useEffect(() => {
 
       const res = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
-        {
-          withCredentials: true,
-        }
+         {
+            headers: {
+              Authorization : `Bearer ${token}`,
+            }
+          }
       );
 
       if (
