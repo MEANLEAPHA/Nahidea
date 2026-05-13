@@ -41,6 +41,7 @@ export default function Account() {
   const [bios, setBios] = useState("");
   const [professions, setProfessions] = useState("");
 
+  const [online, setOnline] = useState(false);
   const { username, userId, avatar_url, work_location, bio, nickname, profession, isOnline } = useOutletContext();
 
 useEffect(() => {
@@ -49,6 +50,7 @@ useEffect(() => {
     return;
   }
 
+  setOnline(isOnline);
   const isOwnProfile =
     String(id) ===
     String(userId);
@@ -69,6 +71,7 @@ useEffect(() => {
     fetchFollowStatus();
 
   }
+
 
 }, [id, userId]);
 
@@ -386,7 +389,7 @@ async () => {
               className="nahideaProfileOnlineDot"
               style={{
                 backgroundColor:
-                  isOnline ? "yellowgreen" : "#6b7280",
+                  online ? "yellowgreen" : "#6b7280",
               }}
             />
           </div>
