@@ -21,25 +21,36 @@ export default function Account() {
 
   const { username, userId, avatar_url, work_location, bio, nickname, profession } = useOutletContext();
 
-  useEffect(() => {
+useEffect(() => {
+
+  if (!id || !userId) {
+    return;
+  }
+
+  const isOwnProfile =
+    String(id) ===
+    String(userId);
+
+  if (isOwnProfile) {
+
+    setUsernames(username);
+    setNicknames(nickname);
+    setAvatar(avatar_url);
+    setWorkplace(work_location);
+    setBios(bio);
+    setProfessions(profession);
+
+  } else {
+
+    handleFetchProfile();
 
     fetchFollowStatus();
-    if(String(id) === String(userId)){
 
-      setUsernames(username);
-      setNicknames(nickname);
-      setAvatar(avatar_url);
-      setWorkplace(work_location);
-      setBios(bio);
-      setProfessions(profession);
-    }
-    else{
-      hadleFetchProfile();
-    }
+  }
 
-  }, []);
+}, [id, userId]);
 
-  const hadleFetchProfile = async () => {
+  const handleFetchProfile = async () => {
 
     try{
       const res = await axios.get(
@@ -49,7 +60,7 @@ export default function Account() {
       setUsernames(data.username);
       setNicknames(data.nickname);
       setAvatar(data.avatar_url);
-      setWorkplace(data.work_place);
+      setWorkplace(data.work_location);
       setBios(data.bio);
       setProfessions(data.profession);
     }
@@ -78,7 +89,7 @@ export default function Account() {
       ) {
 
         const res = await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${profileUserId}`,
+          `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${id}`,
           {},
           {
             withCredentials: true,
@@ -123,7 +134,7 @@ export default function Account() {
       ) {
 
         await axios.delete(
-          `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${profileUserId}`,
+          `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
           {
             withCredentials: true,
           }
@@ -148,7 +159,7 @@ export default function Account() {
     try {
 
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${profileUserId}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
         {
           withCredentials: true,
         }
