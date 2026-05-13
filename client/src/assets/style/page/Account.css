@@ -103,10 +103,10 @@
   height: 20px;
 
   border-radius: 50%;
-  background: #2ecc71;
+
 
   border: 3px solid
-    var(--background-color);
+  
 }
 
 .nahideaProfileUserInfo {

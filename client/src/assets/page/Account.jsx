@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useOutletContext, useParams } from "react-router-dom";
-
+import { socket } from "../../socket";
 import { MapPin, Link2, CalendarDays, Settings, MessageCircle, Share2, Heart, Bookmark,
          MoreHorizontal, Image, BadgeCheck, Banana,} from "lucide-react";
 import "../style/page/Account.css";
@@ -9,6 +9,26 @@ import "../style/page/Account.css";
 const token = localStorage.getItem("token");
 
 export default function Account() {
+
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  useEffect(() => {
+
+  socket.on(
+    "online-users",
+    (users) => {
+
+      setOnlineUsers(users);
+
+    }
+  );
+
+  return () => {
+
+    socket.off("online-users");
+
+  };
+
+}, []);
 
   const {id} = useParams(); // use state later
   const [activeTab, setActiveTab] = useState("posts");
@@ -332,6 +352,8 @@ async () => {
 
   // };
 
+  const isOnline =
+  onlineUsers.includes(String(id));
   return (
     <div className="nahideaProfilePage">
 
@@ -361,7 +383,13 @@ async () => {
               className="nahideaProfileAvatar"
             />
 
-            <div className="nahideaProfileOnlineDot" />
+            <div
+              className="nahideaProfileOnlineDot"
+              style={{
+                backgroundColor:
+                  isOnline ? "#c522a5" : "#6b7280",
+              }}
+            />
           </div>
 
           <div className="nahideaProfileUserInfo">
