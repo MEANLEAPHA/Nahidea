@@ -14,6 +14,7 @@ import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import { useAnonymousTokens, AnonymousTokensCoolDown} from "../util/anonymousTokens";
 import NahideaInfo from "../util/upload/NahideaInfo";
+import AnimatedIcon from "../util/upload/AnimatedIcon";
 
 // ant import
 import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, 
@@ -126,14 +127,34 @@ export default function Confession() {
             <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
           </div>
 
-          <Select
+          {/* <Select
             options={confession_options}
             value={selectType}
             onChange={setSelectType}
             classNamePrefix="custom"
             placeholder="Select Content Type"
-          />
+          /> */}
 
+          <Select
+              options={confession_options}
+              value={selectType}
+              onChange={setSelectType}
+              classNamePrefix="custom"
+              placeholder="Select Confession Type"
+              formatOptionLabel={(option) => (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <AnimatedIcon src={option.icon} />
+
+                  <span>{option.label}</span>
+                </div>
+              )}
+            />
           <div className="title-wrapper">
               <p className="title-label" >Confession Text</p>
               <textarea

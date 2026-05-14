@@ -134,9 +134,12 @@ const Layout = () => {
     //     return <Login/>
     // }
 
+    
+
     const [onlineUsers, setOnlineUsers] = useState([]);
       useEffect(() => {
     
+     handleTrackLogin();
       socket.on(
         "online-users",
         (users) => {
@@ -153,6 +156,22 @@ const Layout = () => {
       };
     
     }, []);
+
+    const handleTrackLogin = async() =>{
+        try{
+            await axios.post(
+                `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+        }catch(err){
+            console.error(err);
+        }
+    }
 
     // Aside mode tool
     const [username, setUsername] = useState('Guest');
@@ -270,7 +289,7 @@ const Layout = () => {
 
      return(
         <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url} isOnline={isOnline}/>
+            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url}/>
             <main style={{position:'relative'}}>
                 <Aside append={showMaxAside}/>
                 <section>

@@ -16,11 +16,13 @@ import "../style/Header.css";
 
 const token = localStorage.getItem("token");
 
-const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url, isOnline}) => {
+const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   const navigate = useNavigate();
  
   const isMaxAside = localStorage.getItem("maxAside");
-
+ useEffect(() => {
+   
+ })
  
   return (
      <header>
@@ -61,7 +63,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url, isOnlin
               <CreateDropDownMin />
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
               
-              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url} isOnline={isOnline}/>
+              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>
           )
 
@@ -483,13 +485,14 @@ const CreateDropDownMin = () =>{
     <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
           <button className='button-create-icon-min mobile-tool'>
         <Space>
+      
           <PlusOutlined className='createbar-icon' /><span style={{fontWeight:"bold", opacity:"0.9"}}>Create</span>
         </Space>
         </button>
   </Dropdown>
   )
 }
-const ProfileDropDown = ({ theme, toggleTheme, avatar_url, isOnline}) => {
+const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
    
   const navigate = useNavigate();
   
@@ -582,7 +585,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url, isOnline}) => {
           <div id="user-status">
             <div
               id="user-status-dot"
-              style={{ backgroundColor: isOnline ? "yellowgreen" : "grey" }}
+              style={{ backgroundColor:"yellowgreen" }}
             ></div>
           </div>
         </Space>
@@ -592,3 +595,5 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url, isOnline}) => {
 };
 
 export default Header;
+
+

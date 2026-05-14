@@ -11,6 +11,7 @@ import { useAnonymousTokens, AnonymousTokensCoolDown } from "../util/anonymousTo
 import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import NahideaInfo from "../util/upload/NahideaInfo";
+import AnimatedIcon from "../util/upload/AnimatedIcon";
 
 // data import
 import { content_options } from "../data/post_type_data";
@@ -125,13 +126,33 @@ export default function Content() {
             <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
           </div>
 
-          <Select
+          {/* <Select
             options={content_options}
             value={selectType}
             onChange={setSelectType}
             classNamePrefix="custom"
             placeholder="Select Content Type"
-          />
+          /> */}
+          <Select
+          options={content_options}
+          value={selectType}
+          onChange={setSelectType}
+          classNamePrefix="custom"
+          placeholder="Select Content Type"
+          formatOptionLabel={(option) => (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <AnimatedIcon src={option.icon} />
+
+              <span>{option.label}</span>
+            </div>
+          )}
+        />
 
           <div className="title-wrapper">
             <p className="title-label" >Title</p>
