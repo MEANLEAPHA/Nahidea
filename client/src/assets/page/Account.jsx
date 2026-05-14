@@ -7,7 +7,7 @@ import { MapPin, Link2, CalendarDays, Settings, MessageCircle, Share2, Heart, Bo
 import "../style/page/Account.css";
 
 const token = localStorage.getItem("token");
-  const {id} = useParams(); // use state later
+
 export default function Account() {
 
 //   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -30,7 +30,7 @@ export default function Account() {
 
 // }, []);
 
-
+  const {id} = useParams(); // use state later
   const [activeTab, setActiveTab] = useState("posts");
   const [followState, setFollowState] =useState("follow");
 
@@ -690,7 +690,7 @@ async () => {
 }
 
 const Unfollow = () => {
-
+  const {id} = useParams(); // use state later
   const handleUnfollow = async () => {
     try{
       const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/unfollow/${id}`,
