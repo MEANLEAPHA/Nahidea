@@ -52,6 +52,7 @@ import ReportComment from './assets/page/ReportComment';
 
 import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
+import HallOfFame from './assets/page/HallOfFame';
 
 const token = localStorage.getItem("token");
 
@@ -78,12 +79,16 @@ const App = () =>{
                     <Route path='/create/content' element={<Content/>}></Route>
 
 
+
                     {/* post */}
                     <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>
                     <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
                     <Route path='/comment' element={<Comment/>}></Route>
                     <Route path ='/report' element={<ReportComment/>}></Route>
                     <Route path='/edit/content' element={<EditContentBody/>}></Route>
+
+                    {/* Hall of fame */}
+                    <Route path='/halloffame' element={<HallOfFame/>}></Route>
 
                     {/* Gif */}
                     <Route path='/gif' element={<GifFeed/>}></Route>

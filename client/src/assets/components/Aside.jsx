@@ -106,7 +106,7 @@ const MinInfo = [
         id:6, a: '/trending', icon:  <RiseOutlined  className='sub-icon'/>
     },
     {
-        id:7, a: '/haloffame', icon: <FireOutlined className='sub-icon'/>
+        id:7, a: '/halloffame', icon: <FireOutlined className='sub-icon'/>
     },
 ]
 

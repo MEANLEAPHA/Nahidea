@@ -1,0 +1,70 @@
+/* HallOfFame.css */
+.hof-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #1e1e2f;
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.hof-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #ffd700;
+}
+
+.hof-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hof-item {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.hof-item:last-child {
+  border-bottom: none;
+}
+
+.hof-rank {
+  font-size: 1.2rem;
+  font-weight: bold;
+  width: 40px;
+  text-align: center;
+  color: #ffd700;
+}
+
+.hof-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 1rem;
+  border: 2px solid #ffd700;
+}
+
+.hof-info {
+  flex: 1;
+}
+
+.hof-username {
+  display: block;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.hof-profession {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.hof-score {
+  font-weight: bold;
+  color: #00e676;
+}
