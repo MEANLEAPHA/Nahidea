@@ -1,58 +1,55 @@
+// react state
 import React,{ useState, useEffect, useRef, memo } from 'react';
 import axios from "axios";
-import nahideaTran from "../img/nahidea-tran.png";
-import { useNavigate } from "react-router-dom";
-import {MediaPreview} from "../util/mediaUploader";
-import{TagsPreview} from "../util/tagInput";
-import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
-import "../style/page/Home.css";
- import "../style/upload/Postpreview.css";
- import "../style/upload/MultipleMedia.css";
-import {
-  List,
-  Card,
-  Avatar,
-  Typography,
-  Tag,
-  Space,
-  Spin,
-  Empty,
-  Button,
-} from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
-import nahIdeaAuth from "../img/nahIdeaAuth.png";
 
-import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined  } from '@ant-design/icons';
+// antd
+import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown} from "antd";
+const { Title, Text } = Typography;
+import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined,
+          FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, 
+          SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,
+          EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
+      } from '@ant-design/icons';
+
+// fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
-import {PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined} from '@ant-design/icons';
-import { Dropdown } from 'antd';
-const { Title, Text } = Typography;
-const parseJSON = (val) => {
-  try {
-    return typeof val === "string" ? JSON.parse(val) : val;
-  } catch {
-    return [];
-  }
-};
+// util
+import { useNavigate } from "react-router-dom";
+import {MediaPreview} from "../util/mediaUploader";
+import{TagsPreview} from "../util/tagInput";
+import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
+
+// style
+import "../style/page/Home.css";
+import "../style/upload/Postpreview.css";
+import "../style/upload/MultipleMedia.css";
+
+// img
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import nahideaTran from "../img/nahidea-tran.png";
+
+
+
 
 export default function Home() {
 
   const navigate = useNavigate();
 
+  // posts
   const [posts, setPosts] = useState([]);
 
+  // loading
   const [loading, setLoading] = useState(false); 
   const [fetching, setFetching] = useState(false); 
   const [source, setSource] = useState("");
   const [error, setError] = useState(null);
 
+  // pagination
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-
-
 
   // ex
   const [isAnonymous, setIsAnonymous] = useState(1);
@@ -61,19 +58,13 @@ export default function Home() {
   const [username, setUsername] = useState("Meanleap");
   const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
-  // =====================
   // INITIAL LOAD
-  // =====================
-
   useEffect(() => {
     fetchPosts(1);
     setPage(1);
   }, []);
 
-  // =====================
   // SCROLL LISTENER
-  // =====================
-
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -82,7 +73,7 @@ export default function Home() {
         !loading &&
         !fetching &&
         hasMore
-      ) {
+      ){
         setPage((prev) => {
           const next = prev + 1;
           fetchPosts(next);
@@ -95,9 +86,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, fetching, hasMore]);
 
-  // =====================
   // FETCH POSTS
-  // =====================
   const fetchPosts = async (nextPage = 1) => {
     if (fetching) return;
 
@@ -131,9 +120,7 @@ export default function Home() {
     }
   };
 
-  // =====================
   // REFRESH
-  // =====================
   const handleRefresh = () => {
     setPosts([]);
     setPage(1);
@@ -142,10 +129,9 @@ export default function Home() {
     fetchPosts(1);
   };
 
-
-  
-  // Content style
+  // Render post style
   const renderPostContent = (post) => {
+
     const data = post.data;
 
     if (!data) return <Text type="secondary">No content</Text>;
@@ -155,10 +141,10 @@ export default function Home() {
         return (
           <>
               <div>
-                <div className='post-caption' onClick={()=>{
+                <div className='post-caption' onClick={ () => {
                   const newPost = 
                     { id: post.id,
-                      post_type:post.post_type,
+                      post_type: post.post_type,
                       is_anonymous: post.is_anonymous || 0, anonymous_name: post.anonymous_name, anonymous_bg_color: post.anonymous_bg_color,
                       likes_count: post.likes_count || 0,comments_count: post.comments_count || 0, views_count: post.views_count || 0,
                       created_at:post.created_at,
@@ -171,9 +157,9 @@ export default function Home() {
                         media_url:data.media_url
                       }
                     };
-                  sessionStorage.setItem("post", JSON.stringify(newPost));
-                  navigate(`/aboutpost/${post.id}`)
-                }}>
+                    sessionStorage.setItem("post", JSON.stringify(newPost));
+                    navigate(`/aboutpost/${post.id}`)
+                  }}>
                     <p>{data.title}</p>
                     <span onClick={(e)=>
                       {
@@ -193,7 +179,6 @@ export default function Home() {
                       }>click</span>
                 </div>
               </div>
-
               <div  className='post-thumbnail'>         
                 <MediaPreview files={parseJSON(data.media_url)}/>
               </div>
@@ -224,14 +209,12 @@ export default function Home() {
                     }}>
                     <p>{data.title}</p>
                 </div>
-
               </div>
                   
               <div className="post-thumbnail">
                 <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                   <img
-                     src={data.media_url}
-         
+                    src={data.media_url}
                     className="preview-image"
                   />
                 </div>
@@ -244,7 +227,7 @@ export default function Home() {
         return (
           <>
             <div>
-                <div className='post-caption' onClick={()=>{
+                <div className='post-caption' onClick={ () => {
                   const newPost = 
                     { id: post.id,
                       post_type: post.post_type,
@@ -442,7 +425,7 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/rating`);
                           }
                         }>
-                             <Text>{data.title}</Text>
+                          <Text>{data.title}</Text>
                           <Text>Rating icon: {data.rating_icon_id}</Text>
                         </div>
                       )}
@@ -464,16 +447,12 @@ export default function Home() {
                   
               </div>
             </div>
-        
 
-    <div className="post-thumbnail">
-<div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
-  <img
-      src={data.media_url}
-    className="preview-image"
-  />
-</div>
-</div>
+            <div className="post-thumbnail">
+              <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+                <img src={data.media_url} className="preview-image"/>
+              </div>
+            </div>
           </>
         );
 
@@ -484,7 +463,7 @@ export default function Home() {
 
   return (
     <div className='home-container'>
-       <article id="feed-article">
+      <article id="feed-article">
             {error ? (
               <div class='error-container'>
                 <Loader />
@@ -505,15 +484,15 @@ export default function Home() {
 
                         <div className='post-header'>
                           <div className='post-user-profile'>
-                                  <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
-                                    <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} id="author-pf"/>
-                                  </div>
-                                  <div className='user-post-info'>
-                                      <p className='post-username'>{post.username} <span className='post-type-label'>post a {post.post_type}</span></p>
-                                      <p className='post-at'>{post.created_at}</p>
-                                  </div> 
-                              </div>
-                          <DotDropDown/>
+                            <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
+                              <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} id="author-pf"/>
+                            </div>
+                            <div className='user-post-info'>
+                                <p className='post-username'>{post.username} <span className='post-type-label'>post a {post.post_type}</span></p>
+                                <p className='post-at'>{post.created_at}</p>
+                            </div> 
+                          </div>
+                          <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}/>
                         </div>
 
                         <div className='post-body'>
@@ -543,69 +522,68 @@ export default function Home() {
                 )}
               </>
             )}
-       </article>
+      </article>
 
+      <article id='his-article'>
+        <div className="history-container">
 
-       <article id='his-article'>
-            <div className="history-container">
-                <div className='history-container-header'>
-                  <label>History</label>
-                  <span>See All</span>
-                </div>
-                <div className='history-list-ul'>          
-                        <div className="post-history-card">
-                          <div className='post-history-card-info'>
-                              <div id="author-info">
-                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
-                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
-                                </div>
-                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
-                              </div>
-                              <div id="title-div">
-                                <p id="title">
-                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
-                                </p>
-                              </div>
-                              
-                            </div>
-                            
-                        </div>
-                        <div className="post-history-card">
-                          <div className='post-history-card-info'>
-                               <div id="author-info">
-                                <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
-                                     <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
-                                </div>
-                                <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
-                              </div>
-                              <div id="title-div">
-                                <p id="title">
-                                  "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
-                                </p>
-                              </div>
-                              
-                            </div>
-                            <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
-                              <img src="https://study.com/cimages/multimages/16/line5062014251101771877.jpg"/>
-                            </div>
-                            
-                        </div>
-                        
-                </div>
+            <div className='history-container-header'>
+              <label>History</label>
+              <span>See All</span>
             </div>
-                        
-            <div className='rule-absolute'>   
-                <p>Nahidea Rule</p>     
-                <p>Private Policy</p>
-                <p>User Agreement</p>
-               <p>Accessibility</p>
-               <div>
-                <p>Nahidea. © 2026. All rights reserved </p>
-               </div>
-                
+
+            <div className='history-list-ul'>   
+
+              <div className="post-history-card">
+                <div className='post-history-card-info'>
+                    <div id="author-info">
+                      <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                            <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                      </div>
+                      <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                    </div>
+                    <div id="title-div">
+                      <p id="title">
+                        "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                      </p>
+                    </div>
+                </div>
+              </div>
+              <div className="post-history-card">
+                <div className='post-history-card-info'>
+                      <div id="author-info">
+                      <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
+                            <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
+                      </div>
+                      <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
+                    </div>
+                    <div id="title-div">
+                      <p id="title">
+                        "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
+                      </p>
+                    </div>
+                    
+                  </div>
+                  <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
+                    <img src="https://study.com/cimages/multimages/16/line5062014251101771877.jpg"/>
+                  </div>
+              </div>
+                    
             </div>
+        </div> 
+
+        <div className='rule-absolute'>   
+          <p onClick={()=>{navigate('/nahidearule')}}>Nahidea Rule</p>     
+          <p onClick={()=>{navigate('/privacypolicy')}}>Private Policy</p>
+          <p onClick={()=>{navigate('/useragreement')}}>User Agreement</p>
+          <p onClick={()=>{navigate('/accessibility')}}>Accessibility</p>
+          <div>
+          <p>Nahidea. © 2026. All rights reserved </p>
+          </div>
+        </div>
              
-        </article>
+      </article>
+
     </div>
    
   );
@@ -619,30 +597,50 @@ const Loader = () => {
   )
 };
 
-const DotDropDown = () => {
+const DotDropDown = ({ownerId, post_type, post_id}) => {
 
-  const menuItems = [
+  const menuItemsForAll = [
     {
       label: (
         <li >
-       View Account
+          Copy Link
         </li>
       ),
       key: "0",
     },
     {
       label: (
-        <li
-        >
-          hi
+        <li>
+          Report Post
+        </li>
+      ),
+      key: "1",
+    }
+  ];
+  
+  const menuItemsForOwner = [
+    {
+      label : (
+       post_type === "content" && (
+        <li>
+          Edit Content Body
+        </li>
+       )
+      ),
+      key: "0"
+    },
+    {
+      label: (
+        <li>
+          Delete
         </li>
       ),
       key: "1",
     },
     {
       label: (
-        <li >
-         <span>Setting</span>
+        <li>
+          Copy link
         </li>
       ),
       key: "2",
@@ -650,37 +648,15 @@ const DotDropDown = () => {
     {
       label: (
         <li >
-       <span>Help</span>
+          Report Post
         </li>
       ),
       key: "3",
     },
-    {
-      label: (
-        <li >
-      <span>Feedback</span>
-        </li>
-      ),
-      key: "4",
-    },
-    {  label: (
-     
-         <hr />
-     
-      ),
-      key: "5" },
-    {
-      label: (
-        <li >
-     Logout
-        </li>
-      ),
-      key: "6",
-    },
   ];
 
   return (
-    <Dropdown menu={{ items: menuItems }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+    <Dropdown menu={{ items: String(ownerId) === String(sessionStorage.getItem("userId")) ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
       <div className='post-header-right'>
       <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
       </div>
@@ -688,6 +664,14 @@ const DotDropDown = () => {
   );
 };
 
+// Function covert string to array
+const parseJSON = (val) => {
+  try {
+    return typeof val === "string" ? JSON.parse(val) : val;
+  } catch {
+    return [];
+  }
+};
 
 
   // <div class="ant-list ant-list-split css-ch9ese css-var-root">

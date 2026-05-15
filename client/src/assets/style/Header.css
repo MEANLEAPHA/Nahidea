@@ -505,7 +505,8 @@ display: flex;
     font-family: sans-serif;
 }
 .btn-signup{
-    background-color: var(--secondary-color);
+    background-color: none;
+    background: none;
     color: var(--font-color);
     opacity: 0.9;
 }

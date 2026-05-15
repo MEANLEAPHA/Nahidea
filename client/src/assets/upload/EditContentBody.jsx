@@ -311,17 +311,18 @@ const EditContentBody = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const [textBodyValue, setTextBodyValue] = useState('');
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         if (state?.bodyText) {
           setTextBodyValue(state.bodyText);
           setPage(state.page);
         } else {
-          setTextBodyValue(""); // ✅ clear when no state
+          setTextBodyValue(""); 
           setPage(1);
         }
     },[state]);
-
+ 
     const handleUpdate = async() => {
         try{
             const res = await axios.put(
