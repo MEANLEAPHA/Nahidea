@@ -175,7 +175,7 @@ const handleSubmit = async (e) => {
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "question");
   formData.append("question_related_to", selectType?.value ?? "general");
-  formData.append("question_related_to_icon", selectedIcon?.icon || null);
+  formData.append("question_related_to_icon", selectedIcon || null);
   formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
   if(anonymousName) formData.append("anonymousName", anonymousName);
   if(questionFile){
@@ -281,8 +281,8 @@ const handleSubmit = async (e) => {
               value={selectType}
               // onChange={setSelectType}
               onChange={(option) => {
-                setSelectType(option.value);
-                setSelectedIcon(option.icon); // save icon value
+                setSelectType(option);        // store the whole option
+                setSelectedIcon(option.icon); // store icon string
               }}
               classNamePrefix="custom"
               placeholder="Select Confession Type"

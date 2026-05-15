@@ -78,7 +78,7 @@ export default function Confession() {
     formData.append("post_type", "confession");
     formData.append("confession_title", title);
     formData.append("confession_type", selectType?.value ?? "general");
-    formData.append("confession_type_icon", selectedIcon?.icon || null);
+    formData.append("confession_type_icon", selectedIcon || null);
     formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
     if (confessionFile) {
       formData.append("confessionFile", confessionFile);
@@ -143,8 +143,8 @@ export default function Confession() {
               value={selectType}
               // onChange={setSelectType}
               onChange={(option) => {
-                setSelectType(option.value);
-                setSelectedIcon(option.icon); // save icon value
+                setSelectType(option);        // store the whole option
+                setSelectedIcon(option.icon); // store icon string
               }}
               classNamePrefix="custom"
               placeholder="Select Confession Type"

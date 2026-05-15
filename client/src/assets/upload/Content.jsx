@@ -83,7 +83,7 @@ export default function Content() {
       formData.append("content_title", title);
       formData.append("text_body", textBody);
       formData.append("content_type", selectType?.value ?? "general");
-      formData.append("content_type_icon", selectedIcon?.icon || null);
+      formData.append("content_type_icon", selectedIcon || null);
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
       tags.forEach((t) => formData.append("tags[]", t));
       mediaFiles.forEach((f) => formData.append("contentFile", f));
@@ -133,8 +133,8 @@ export default function Content() {
           options={content_options}
           value={selectType}
           onChange={(option) => {
-            setSelectType(option.value);
-            setSelectedIcon(option.icon); // save icon value
+            setSelectType(option);        // store the whole option
+            setSelectedIcon(option.icon); // store icon string
           }}
           classNamePrefix="custom"
           placeholder="Select Content Type"

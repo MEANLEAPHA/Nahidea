@@ -621,6 +621,8 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
   const navigate = useNavigate();
 
   const isOwner = String(ownerId) === String(userId);
+  console.log("ownerId:", ownerId, typeof ownerId);
+  console.log("userId:", userId, typeof userId);
 
 
   const menuItemsForAll = [
