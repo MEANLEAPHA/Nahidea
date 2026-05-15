@@ -16,11 +16,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
+
 // util
 import { useNavigate } from "react-router-dom";
 import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
+import AnimatedIcon from "../util/upload/AnimatedIcon";
 
 // style
 import "../style/page/Home.css";
@@ -212,12 +214,13 @@ export default function Home() {
               </div>
                   
               <div className="post-thumbnail">
-                <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+                {/* <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                   <img
                     src={data.media_url}
                     className="preview-image"
                   />
-                </div>
+                </div> */}
+                <MediaPreview files={parseJSON(data.media_url)}/>
               </div>
 
           </>
@@ -449,9 +452,10 @@ export default function Home() {
             </div>
 
             <div className="post-thumbnail">
-              <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+              {/* <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                 <img src={data.media_url} className="preview-image"/>
-              </div>
+              </div> */}
+              <MediaPreview files={parseJSON(data.media_url)}/>
             </div>
           </>
         );
@@ -488,7 +492,9 @@ export default function Home() {
                               <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} id="author-pf"/>
                             </div>
                             <div className='user-post-info'>
-                                <p className='post-username'>{post.username} <span className='post-type-label'>post a {post.post_type}</span></p>
+                                <p className='post-username'>
+                                  {post.username} <div className='dot'></div> <div className='category-post-div'><span className="post-type-label">Experience</span> <AnimatedIcon src="https://cdn.lordicon.com/hbvgknxo.json" /></div>
+                                </p>
                                 <p className='post-at'>{post.created_at}</p>
                             </div> 
                           </div>
@@ -505,6 +511,7 @@ export default function Home() {
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
+                               <div className='button-action-footer button-action-footer-last post-type' style={{backgroundColor : post.post_type === "confession" ? 'violet' : post.post_type === "question" ? 'gold' : post.post_type === "content" ? 'skyblue' : "grey"}}>{post.post_type}</div>
                               <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
                             </div> 
                         </div>
@@ -599,6 +606,13 @@ const Loader = () => {
 
 const DotDropDown = ({ownerId, post_type, post_id}) => {
 
+  const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
+  const navigate = useNavigate();
+  useEffect(() => {
+    const currentId = sessionStorage.getItem("userId");
+    setUserId(currentId);
+  }, []);
+
   const menuItemsForAll = [
     {
       label: (
@@ -656,7 +670,7 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
   ];
 
   return (
-    <Dropdown menu={{ items: String(ownerId) === String(sessionStorage.getItem("userId")) ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+    <Dropdown menu={{ items: String(ownerId) === String(userId) ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
       <div className='post-header-right'>
       <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
       </div>
@@ -689,7 +703,7 @@ const parseJSON = (val) => {
   //                     />
   //                     <div className="user-post-info">
   //                       <p className="post-username">
-  //                         meanleapha <span className="post-type-label">post a content</span>
+  //                         meanleapha <div className='dot'></div> <div className='category-post-div'><span className="post-type-label">post a content</span> <AnimatedIcon src="https://cdn.lordicon.com/hbvgknxo.json" /></div>
   //                       </p>
   //                       <p className="post-at">2 days ago</p>
   //                     </div>
@@ -808,6 +822,7 @@ const parseJSON = (val) => {
   //                     </button>
   //                   </div>
   //                   <div className="post-footer-right">
+  //                     <div className='button-action-footer button-action-footer-last post-type' style={{background: 'violet'}}>Confession</div>
   //                     <button className="button-action-footer button-action-footer-last">
   //                       <svg
   //                         data-prefix="far"
