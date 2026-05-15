@@ -41,6 +41,7 @@ export default function Confession() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [selectType, setSelectType] = useState(null);
+  const [selectedIcon, setSelectedIcon] = useState(null);
   const [confessionFile, setFile] = useState(null);
   const refFile = useRef(null);
   const [tags, setTags] = useState([]);
@@ -54,6 +55,7 @@ export default function Confession() {
     setFile(null);
     setIsAnonymous(false);
     setSelectType(null);
+    setSelectedIcon(null);
     setLoading(false);
     if(refFile.current){
       refFile.current.value = "";
@@ -76,6 +78,7 @@ export default function Confession() {
     formData.append("post_type", "confession");
     formData.append("confession_title", title);
     formData.append("confession_type", selectType?.value ?? "general");
+    formData.append("confession_type_icon", selectedIcon?.icon || null);
     formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
     if (confessionFile) {
       formData.append("confessionFile", confessionFile);
@@ -138,7 +141,11 @@ export default function Confession() {
           <Select
               options={confession_options}
               value={selectType}
-              onChange={setSelectType}
+              // onChange={setSelectType}
+              onChange={(option) => {
+                setSelectType(option.value);
+                setSelectedIcon(option.icon); // save icon value
+              }}
               classNamePrefix="custom"
               placeholder="Select Confession Type"
               formatOptionLabel={(option) => (

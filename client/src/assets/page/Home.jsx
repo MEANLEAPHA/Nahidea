@@ -58,7 +58,7 @@ export default function Home() {
   const [anonymousName, setAnonymousName] = useState("Anony972mous");
   const [anonymousBg, setAnonymousBg] = useState("yellowgreen");
   const [username, setUsername] = useState("Meanleap");
-  const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
+
 
   // INITIAL LOAD
   useEffect(() => {
@@ -468,6 +468,7 @@ export default function Home() {
   return (
     <div className='home-container'>
       <article id="feed-article">
+        
             {error ? (
               <div class='error-container'>
                 <Loader />
@@ -487,18 +488,28 @@ export default function Home() {
                       <div className="posts">
 
                         <div className='post-header'>
+
                           <div className='post-user-profile'>
+
                             <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
-                              <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} id="author-pf"/>
+                              <img src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url} id="author-pf"/>
                             </div>
+
                             <div className='user-post-info'>
-                                <p className='post-username'>
-                                  {post.username} <div className='dot'></div> <div className='category-post-div'><span className="post-type-label">Experience</span> <AnimatedIcon src="https://cdn.lordicon.com/hbvgknxo.json" /></div>
-                                </p>
-                                <p className='post-at'>{post.created_at}</p>
+                              <p className='post-username'>
+                                {post.username} 
+                                <div className='dot'></div>
+                                <div className='category-post-div'>
+                                  <span className="post-type-label">{post.data.type}</span> 
+                                  <AnimatedIcon src={post.cate_icon} />
+                                </div>
+                              </p>
+                              <p className='post-at'>{post.created_at}</p>
                             </div> 
                           </div>
+
                           <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}/>
+
                         </div>
 
                         <div className='post-body'>
@@ -511,7 +522,6 @@ export default function Home() {
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
-                               <div className='button-action-footer button-action-footer-last post-type' style={{backgroundColor : post.post_type === "confession" ? 'violet' : post.post_type === "question" ? 'gold' : post.post_type === "content" ? 'skyblue' : "grey"}}>{post.post_type}</div>
                               <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
                             </div> 
                         </div>
@@ -529,6 +539,7 @@ export default function Home() {
                 )}
               </>
             )}
+
       </article>
 
       <article id='his-article'>
@@ -606,12 +617,11 @@ const Loader = () => {
 
 const DotDropDown = ({ownerId, post_type, post_id}) => {
 
-  const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
+  const [userId] = useState(() => sessionStorage.getItem("userId")); // immediate init
   const navigate = useNavigate();
-  useEffect(() => {
-    const currentId = sessionStorage.getItem("userId");
-    setUserId(currentId);
-  }, []);
+
+  const isOwner = String(ownerId) === String(userId);
+
 
   const menuItemsForAll = [
     {
@@ -670,7 +680,7 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
   ];
 
   return (
-    <Dropdown menu={{ items: String(ownerId) === String(userId) ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+    <Dropdown menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
       <div className='post-header-right'>
       <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
       </div>

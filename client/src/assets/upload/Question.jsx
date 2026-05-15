@@ -56,6 +56,7 @@ const [loading, setLoading] = useState(false);
 
   // question topic related
   const [selectType, setSelectType] = useState(null);
+  const [selectedIcon, setSelectedIcon] = useState(null);
 
   // tag state
   const [tags, setTags] = useState([]);
@@ -67,11 +68,6 @@ const [loading, setLoading] = useState(false);
   const [questionType, setQuestionType] = useState('openend');
 
   // const [questionType, setquestionType] = useState("openend");
-
-
-    // closed end state
-    // const [yestitle, setYestitle] = useState('');
-    // const [noTitle, setNoTitle] = useState('');
 
     // Range state
     const [min, setMin] = useState(0);
@@ -99,7 +95,7 @@ const [loading, setLoading] = useState(false);
     // preview toggle
      const [openPreview, setOpenPreview] = useState(false);
 
-    const resetMain = () => {setAnonymousName(null),setSelectType(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
+    const resetMain = () => {setAnonymousName(null),setSelectType(null), setSelectIcon(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
     const resetCloseEnd = () => { setYestitle(""); setNoTitle(""); };
     const resetRange = () => { setMin(0); setMax(100); setStep(1); setRangeValue(0); };
     const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
@@ -179,6 +175,7 @@ const handleSubmit = async (e) => {
   tags.forEach((t) => formData.append("tags[]", t));
   formData.append("post_type", "question");
   formData.append("question_related_to", selectType?.value ?? "general");
+  formData.append("question_related_to_icon", selectedIcon?.icon || null);
   formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
   if(anonymousName) formData.append("anonymousName", anonymousName);
   if(questionFile){
@@ -282,7 +279,11 @@ const handleSubmit = async (e) => {
             <Select
               options={question_options} 
               value={selectType}
-              onChange={setSelectType}
+              // onChange={setSelectType}
+              onChange={(option) => {
+                setSelectType(option.value);
+                setSelectedIcon(option.icon); // save icon value
+              }}
               classNamePrefix="custom"
               placeholder="Select Confession Type"
               formatOptionLabel={(option) => (

@@ -48,6 +48,7 @@ export default function Content() {
   const [title, setTitle] = useState("");
   const [textBody, setTextBody] = useState("");
   const [selectType, setSelectType] = useState(null);
+  const [selectedIcon, setSelectedIcon] = useState(null);
   const [tags, setTags] = useState([]);
   const [mediaFiles, setMediaFiles] = useState([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -62,6 +63,7 @@ export default function Content() {
     setMediaFiles([]);
     setIsAnonymous(false);
     setSelectType(null);
+    setSelectedIcon(null);
   }
 
   // handle submit form
@@ -80,7 +82,8 @@ export default function Content() {
       formData.append("post_type", "content");
       formData.append("content_title", title);
       formData.append("text_body", textBody);
-      formData.append("content_type", selectType?.value || "general");
+      formData.append("content_type", selectType?.value ?? "general");
+      formData.append("content_type_icon", selectedIcon?.icon || null);
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
       tags.forEach((t) => formData.append("tags[]", t));
       mediaFiles.forEach((f) => formData.append("contentFile", f));
@@ -126,17 +129,13 @@ export default function Content() {
             <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
           </div>
 
-          {/* <Select
-            options={content_options}
-            value={selectType}
-            onChange={setSelectType}
-            classNamePrefix="custom"
-            placeholder="Select Content Type"
-          /> */}
           <Select
           options={content_options}
           value={selectType}
-          onChange={setSelectType}
+          onChange={(option) => {
+            setSelectType(option.value);
+            setSelectedIcon(option.icon); // save icon value
+          }}
           classNamePrefix="custom"
           placeholder="Select Content Type"
           formatOptionLabel={(option) => (
