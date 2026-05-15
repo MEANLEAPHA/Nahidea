@@ -500,7 +500,7 @@ export default function Home() {
                                 {post.username} 
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
-                                  <span className="post-type-label">{post.data.type}</span> 
+                                  <span className="post-type-label">{post?.data?.type}</span> 
                                   <AnimatedIcon src={post.cate_icon} />
                                 </div>
                               </p>
