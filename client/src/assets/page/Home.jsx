@@ -619,12 +619,9 @@ const Loader = () => {
   )
 };
 
-const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) => {
-
-  
+const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }) => {
   const { userId } = useOutletContext();
   const navigate = useNavigate();
-
   const [openReport, setOpenReport] = useState(false);
 
   const isOwner = Number(ownerId) === Number(userId);
@@ -640,7 +637,7 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
     },
     {
       label: (
-         <li onClick={() => setOpenReport(true)}>
+        <li onClick={() => setOpenReport(true)}>
           <FlagOutlined /> Report Post
           <ReportPostModal
             open={openReport}
@@ -650,36 +647,24 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
         </li>
       ),
       key: "1",
-    }
+    },
   ];
-  
+
   const menuItemsForOwner = [
-    {
-      label : (
-       post_type === "content" ? (
-        <li onClick={(e)=>
-                      {
-                        e.stopPropagation();
-                        navigate(`/edit/content`, 
-                          {
-                          state: {
-                            postId: post_id,
-                            contentId: contentId,
-                            bodyText: text_body,
-                            page: page,
-                            mode: "edit"
-                          }
-                        }
-                        );
-                      }
-                      }>
-         <EditOutlined />  Edit Content Body
+    post_type === "content" && {
+      label: (
+        <li
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/edit/content", {
+              state: { postId: post_id, contentId, bodyText: text_body, page, mode: "edit" },
+            });
+          }}
+        >
+          <EditOutlined /> Edit Body
         </li>
-       ) : (
-        null
-       )
       ),
-      key: "0"
+      key: "0",
     },
     {
       label: (
@@ -700,30 +685,36 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
     {
       label: (
         <li onClick={() => setOpenReport(true)}>
-         <FlagOutlined /> Report Post
-         <ReportPostModal
-          open={openReport}
-          setOpen={setOpenReport}
-          postId={post_id}
-        />
+          <FlagOutlined /> Report Post
+          <ReportPostModal
+            open={openReport}
+            setOpen={setOpenReport}
+            postId={post_id}
+          />
         </li>
       ),
       key: "3",
     },
-  ];
+  ].filter(Boolean);
 
   return (
-    <Dropdown menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
-      <div className='post-header-right'>
-      <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+    <Dropdown
+      menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }}
+      trigger={["click"]}
+      classNames={{ root: "profile-dropdown" }}
+    >
+      <div className="post-header-right">
+        <FontAwesomeIcon icon={faEllipsisVertical} className="icon-formore" />
       </div>
     </Dropdown>
   );
 };
 
+
 const handleDeletePost = async (postId) => {
   try {
-    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`, { headers: { Authorization: `Bearer ${token}` } });
+    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`,
+       { headers: { Authorization: `Bearer ${token}` } });
     message.success("Post deleted successfully");
   } catch (err) {
     console.error(err);
@@ -1103,3 +1094,114 @@ const parseJSON = (val) => {
   //           </div>
   //         </div>
   //       </div>
+
+
+
+
+
+
+
+
+
+
+//   const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) => {
+
+  
+//   const { userId } = useOutletContext();
+//   const navigate = useNavigate();
+
+//   const [openReport, setOpenReport] = useState(false);
+
+//   const isOwner = Number(ownerId) === Number(userId);
+
+//   const menuItemsForAll = [
+//     {
+//       label: (
+//         <li onClick={() => handleCopyLink(post_id)}>
+//           <LinkOutlined /> Copy link
+//         </li>
+//       ),
+//       key: "0",
+//     },
+//     {
+//       label: (
+//          <li onClick={() => setOpenReport(true)}>
+//           <FlagOutlined /> Report Post
+//           <ReportPostModal
+//             open={openReport}
+//             setOpen={setOpenReport}
+//             postId={post_id}
+//           />
+//         </li>
+//       ),
+//       key: "1",
+//     }
+//   ];
+  
+//   const menuItemsForOwner = [
+//     {
+//       label : (
+//        post_type === "content" ? (
+//         <li onClick={(e)=>
+//                       {
+//                         e.stopPropagation();
+//                         navigate(`/edit/content`, 
+//                           {
+//                           state: {
+//                             postId: post_id,
+//                             contentId: contentId,
+//                             bodyText: text_body,
+//                             page: page,
+//                             mode: "edit"
+//                           }
+//                         }
+//                         );
+//                       }
+//                       }>
+//          <EditOutlined />  Edit Content Body
+//         </li>
+//        ) : (
+//         null
+//        )
+//       ),
+//       key: "0"
+//     },
+//     {
+//       label: (
+//         <li onClick={() => handleDeletePost(post_id)}>
+//           <DeleteOutlined /> Delete
+//         </li>
+//       ),
+//       key: "1",
+//     },
+//     {
+//       label: (
+//         <li onClick={() => handleCopyLink(post_id)}>
+//           <LinkOutlined /> Copy link
+//         </li>
+//       ),
+//       key: "2",
+//     },
+//     {
+//       label: (
+//         <li onClick={() => setOpenReport(true)}>
+//          <FlagOutlined /> Report Post
+//          <ReportPostModal
+//           open={openReport}
+//           setOpen={setOpenReport}
+//           postId={post_id}
+//         />
+//         </li>
+//       ),
+//       key: "3",
+//     },
+//   ];
+
+//   return (
+//     <Dropdown menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
+//       <div className='post-header-right'>
+//       <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+//       </div>
+//     </Dropdown>
+//   );
+// };
