@@ -346,7 +346,7 @@ export const question_options = [
   {
     value: "money_problem",
     label: "Money Problem",
-    icon: "https://cdn.lordicon.com/ksmdxpie.json",
+    icon: "https://cdn.lordicon.com/wwneckwc.json",
   },
   {
     value: "family_issue",
@@ -406,7 +406,7 @@ export const question_options = [
   {
     value: "startup_help",
     label: "Startup Help",
-    icon: "https://cdn.lordicon.com/abdvcwct.json",
+    icon: "https://cdn.lordicon.com/jdgfsfzr.json",
   },
   {
     value: "ai_question",
@@ -416,7 +416,7 @@ export const question_options = [
   {
     value: "food_question",
     label: "Food Question",
-    icon: "https://cdn.lordicon.com/jeuxydnh.json",
+    icon: "https://cdn.lordicon.com/jeuxydnh.json" ,
   },
   {
     value: "travel_help",
