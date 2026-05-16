@@ -510,7 +510,7 @@ export default function Home() {
                           </div>
 
                           <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
-                                        page={page} text_body={post.data.text_body} contentId={post.data.id}
+                                        page={page || 1} text_body={post.data.text_body || ""} contentId={post.data.id || 1}
                           />
 
                         </div>
