@@ -19,7 +19,6 @@ import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashC
 
 
 // util
-import { useNavigate } from "react-router-dom";
 import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
@@ -621,7 +620,7 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
   
   const { userId } = useOutletContext();
   const navigate = useNavigate();
-  
+
   const isOwner = Number(ownerId) === Number(userId);
   console.log("ownerId:", ownerId, typeof ownerId);
   console.log("userId:", userId, typeof userId);
