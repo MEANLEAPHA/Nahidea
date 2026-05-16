@@ -8,7 +8,7 @@ import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdo
 const { Title, Text } = Typography;
 import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined,
           FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, 
-          SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,FlagOutlined,LinkOutlined,
+          SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,FlagOutlined,LinkOutlined,DeleteOutlined,
           EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
       } from '@ant-design/icons';
 
@@ -35,7 +35,8 @@ import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import nahideaTran from "../img/nahidea-tran.png";
 
 
-
+// token 
+const token = localStorage.getItem("token");
 
 export default function Home() {
 
@@ -627,9 +628,6 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
   const [openReport, setOpenReport] = useState(false);
 
   const isOwner = Number(ownerId) === Number(userId);
-  console.log("ownerId:", ownerId, typeof ownerId);
-  console.log("userId:", userId, typeof userId);
-
 
   const menuItemsForAll = [
     {
@@ -675,7 +673,7 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
                         );
                       }
                       }>
-          Edit Content Body
+         <EditOutlined />  Edit Content Body
         </li>
        ) : (
         null
@@ -686,7 +684,7 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
     {
       label: (
         <li onClick={() => handleDeletePost(post_id)}>
-          Delete
+          <DeleteOutlined /> Delete
         </li>
       ),
       key: "1",
@@ -725,7 +723,7 @@ const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) 
 
 const handleDeletePost = async (postId) => {
   try {
-    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`);
+    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`, { headers: { Authorization: `Bearer ${token}` } });
     message.success("Post deleted successfully");
   } catch (err) {
     console.error(err);
