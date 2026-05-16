@@ -564,7 +564,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
     {
       label: (
         <li onClick={() => navigate("/logout")}>
-          <LogoutOutlined /> Logout
+          <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
         </li>
       ),
       key: "6",

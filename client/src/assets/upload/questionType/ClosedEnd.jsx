@@ -6,8 +6,3 @@ export default function ClosedEnd (){
     </div>
   );
 };
-// {
-//   YestitleValue,
-//   NoTitleValue,
-//   setYestitle,
-//   setNoTitle}

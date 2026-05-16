@@ -4,11 +4,11 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import axios from "axios";
 
 // antd
-import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown} from "antd";
+import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown, message} from "antd";
 const { Title, Text } = Typography;
 import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined,
           FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, 
-          SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,
+          SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,FlagOutlined,LinkOutlined,
           EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
       } from '@ant-design/icons';
 
@@ -23,6 +23,7 @@ import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 import AnimatedIcon from "../util/upload/AnimatedIcon";
+import ReportPostModal from './ReportPostModal'
 
 // style
 import "../style/page/Home.css";
@@ -163,7 +164,7 @@ export default function Home() {
                     navigate(`/aboutpost/${post.id}`)
                   }}>
                     <p>{data.title}</p>
-                    <span onClick={(e)=>
+                    {/* <span onClick={(e)=>
                       {
                         e.stopPropagation();
                         navigate(`/edit/content`, 
@@ -178,7 +179,7 @@ export default function Home() {
                         }
                         );
                       }
-                      }>click</span>
+                      }>click</span> */}
                 </div>
               </div>
               <div  className='post-thumbnail'>         
@@ -508,7 +509,9 @@ export default function Home() {
                             </div> 
                           </div>
 
-                          <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}/>
+                          <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
+                                        page={page} text_body={post.data.text_body} contentId={post.data.id}
+                          />
 
                         </div>
 
@@ -615,11 +618,13 @@ const Loader = () => {
   )
 };
 
-const DotDropDown = ({ownerId, post_type, post_id}) => {
+const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) => {
 
   
   const { userId } = useOutletContext();
   const navigate = useNavigate();
+
+  const [openReport, setOpenReport] = useState(false);
 
   const isOwner = Number(ownerId) === Number(userId);
   console.log("ownerId:", ownerId, typeof ownerId);
@@ -629,16 +634,21 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
   const menuItemsForAll = [
     {
       label: (
-        <li >
-          Copy Link
+        <li onClick={() => handleCopyLink(post_id)}>
+          <LinkOutlined /> Copy link
         </li>
       ),
       key: "0",
     },
     {
       label: (
-        <li>
-          Report Post
+         <li onClick={() => setOpenReport(true)}>
+          <FlagOutlined /> Report Post
+          <ReportPostModal
+            open={openReport}
+            setOpen={setOpenReport}
+            postId={post_id}
+          />
         </li>
       ),
       key: "1",
@@ -648,17 +658,34 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
   const menuItemsForOwner = [
     {
       label : (
-       post_type === "content" && (
-        <li>
+       post_type === "content" ? (
+        <li onClick={(e)=>
+                      {
+                        e.stopPropagation();
+                        navigate(`/edit/content`, 
+                          {
+                          state: {
+                            postId: post_id,
+                            contentId: contentId,
+                            bodyText: text_body,
+                            page: page,
+                            mode: "edit"
+                          }
+                        }
+                        );
+                      }
+                      }>
           Edit Content Body
         </li>
+       ) : (
+        null
        )
       ),
       key: "0"
     },
     {
       label: (
-        <li>
+        <li onClick={() => handleDeletePost(post_id)}>
           Delete
         </li>
       ),
@@ -666,16 +693,21 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
     },
     {
       label: (
-        <li>
-          Copy link
+        <li onClick={() => handleCopyLink(post_id)}>
+          <LinkOutlined /> Copy link
         </li>
       ),
       key: "2",
     },
     {
       label: (
-        <li >
-          Report Post
+        <li onClick={() => setOpenReport(true)}>
+         <FlagOutlined /> Report Post
+         <ReportPostModal
+          open={openReport}
+          setOpen={setOpenReport}
+          postId={post_id}
+        />
         </li>
       ),
       key: "3",
@@ -689,6 +721,33 @@ const DotDropDown = ({ownerId, post_type, post_id}) => {
       </div>
     </Dropdown>
   );
+};
+
+const handleDeletePost = async (postId) => {
+  try {
+    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`);
+    message.success("Post deleted successfully");
+  } catch (err) {
+    console.error(err);
+    message.error("Failed to delete post");
+  }
+};
+// copy fun
+const handleCopyLink = async (postId) => {
+  try {
+
+    const postUrl = `https://nahidea.onrender.com/aboutpost/${postId}`;
+
+    await navigator.clipboard.writeText(postUrl);
+
+    message.success("Link copied successfully");
+
+  } catch (err) {
+
+    console.error(err);
+
+    message.error("Failed to copy link");
+  }
 };
 
 // Function covert string to array

@@ -656,24 +656,19 @@ display: flex;
     .not-mobile-tool{
         display: none;
     }
-
-    
      .header-left{
         gap: 0px;
         padding: 0px 0px 0px 5px;
     }
-    
-    
     .logo-font-main{
         font-size: 32px;
     }
     .header-right{
-      
-         padding: 0px 5px 0px 0px;
-        gap: 5px;
+        padding: 0px 5px 0px 0px;
+        gap: 0px;
     }
     .bar-icon{
-        font-size: 17px;
+        font-size: 15px;
         padding: 8px;
     }
     .bar-icon:hover{

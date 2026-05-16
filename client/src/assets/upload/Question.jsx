@@ -127,10 +127,6 @@ const [loading, setLoading] = useState(false);
     case "closedend":
       return (
         <ClosedEnd
-          // YestitleValue={yestitle}
-          // NoTitleValue={noTitle}
-          // setYestitle={setYestitle}
-          // setNoTitle={setNoTitle}
         />
       );
     case "range":
@@ -189,8 +185,6 @@ const handleSubmit = async (e) => {
       break;
     case "closedend":
       formData.append("question_type", "closedend");
-      // formData.append("yesTitle", yestitle);
-      // formData.append("noTitle", noTitle);
       break;
     case "range": 
       formData.append("question_type", "range");
@@ -276,6 +270,7 @@ const handleSubmit = async (e) => {
               classNamePrefix="custom"
               placeholder="Select Question Related To"
             /> */}
+            
             <Select
               options={question_options} 
               value={selectType}
