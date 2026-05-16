@@ -1,5 +1,6 @@
 // react state
 import React,{ useState, useEffect, useRef, memo } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import axios from "axios";
 
 // antd
@@ -617,10 +618,11 @@ const Loader = () => {
 
 const DotDropDown = ({ownerId, post_type, post_id}) => {
 
-  const [userId] = useState(() => sessionStorage.getItem("userId")); // immediate init
+  
+  const { userId } = useOutletContext();
   const navigate = useNavigate();
-
-  const isOwner = String(ownerId) === String(userId);
+  
+  const isOwner = Number(ownerId) === Number(userId);
   console.log("ownerId:", ownerId, typeof ownerId);
   console.log("userId:", userId, typeof userId);
 
