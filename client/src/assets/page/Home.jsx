@@ -467,6 +467,22 @@ export default function Home() {
     }
   };
 
+  const handleLike = async (postId, ownerId) => {
+      try{
+        await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
+                          {},
+                          { headers: { Authorization: `Bearer ${token}` } }
+                        );
+        setPosts((prev) => ({
+          ...prev,
+          is_liked: !prev.is_liked,
+          likes_count: prev.is_liked ? prev.likes_count - 1 : prev.likes_count + 1,
+        }));
+      }
+      catch(err){
+        console.log(err);
+      }
+  }
   return (
     <div className='home-container'>
       <article id="feed-article">
@@ -522,7 +538,13 @@ export default function Home() {
 
                         <div className='post-footer'>
                             <div className='post-footer-left'>
-                              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
+                              <button className='button-action-footer'
+                                      type='button'
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleLike(post.id, post.ownerId);
+                                      }}
+                                      ><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
