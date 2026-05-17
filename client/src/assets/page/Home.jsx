@@ -542,7 +542,7 @@ export default function Home() {
                                       type='button'
                                       onClick={(e) => {
                                         e.preventDefault();
-                                        handleLike(post.id, post.ownerId);
+                                        handleLike(post.id, post.user_id);
                                       }}
                                       ><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
