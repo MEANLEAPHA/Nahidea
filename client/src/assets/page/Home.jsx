@@ -44,6 +44,7 @@ export default function Home() {
 
   // posts
   const [posts, setPosts] = useState([]);
+  const [likingPosts, setLikingPosts] = useState(new Set());
 
   // loading
   const [loading, setLoading] = useState(false); 
@@ -99,7 +100,12 @@ export default function Home() {
       setLoading(true);
 
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`
+        `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       const payload = res.data;
@@ -467,22 +473,66 @@ export default function Home() {
     }
   };
 
-  const handleLike = async (postId, ownerId) => {
-      try{
-        await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
-                          {},
-                          { headers: { Authorization: `Bearer ${token}` } }
-                        );
-        setPosts((prev) => ({
-          ...prev,
-          is_liked: !prev.is_liked,
-          likes_count: prev.is_liked ? prev.likes_count - 1 : prev.likes_count + 1,
-        }));
+const handleLike = async (postId, ownerId) => {
+if (likingPosts.has(postId)) return;
+setLikingPosts(prev => new Set(prev).add(postId));
+  // optimistic update
+  setPosts(prev =>
+    prev.map(post => {
+
+      if (post.id !== postId) return post;
+
+      return {
+        ...post,
+        is_liked: !post.is_liked,
+        likes_count: post.is_liked
+          ? post.likes_count - 1
+          : post.likes_count + 1
+      };
+    })
+  );
+
+  try {
+
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-      catch(err){
-        console.log(err);
-      }
+    );
+
+  } catch (err) {
+
+    // rollback on fail
+    setPosts(prev =>
+      prev.map(post => {
+
+        if (post.id !== postId) return post;
+
+        return {
+          ...post,
+          is_liked: !post.is_liked,
+          likes_count: post.is_liked
+            ? post.likes_count - 1
+            : post.likes_count + 1
+        };
+      })
+    );
+
+    console.log(err);
   }
+  finally {
+  setLikingPosts(prev => {
+    const next = new Set(prev);
+    next.delete(postId);
+    return next;
+  });
+}
+}
+
   return (
     <div className='home-container'>
       <article id="feed-article">
@@ -538,13 +588,19 @@ export default function Home() {
 
                         <div className='post-footer'>
                             <div className='post-footer-left'>
-                              <button className='button-action-footer'
-                                      type='button'
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleLike(post.id, post.user_id);
-                                      }}
-                                      ><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
+                              <button
+                                className={`button-action-footer ${
+                                  likingPosts.has(post.id) ? "liking" : ""
+                                }`}
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleLike(post.id, post.user_id);
+                                }}
+                                disabled={likingPosts.has(post.id)}
+                              ><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> 
+                              <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p>
+                              </button>
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
