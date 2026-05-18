@@ -135,181 +135,266 @@ const App = () =>{
 
 
 
-const Layout = () => {
-     // if(!token){
-    //     return <Login/>
-    // }
+// const Layout = () => {
+//      // if(!token){
+//     //     return <Login/>
+//     // }
 
     
 
-    const [onlineUsers, setOnlineUsers] = useState([]);
-      useEffect(() => {
+//     const [onlineUsers, setOnlineUsers] = useState([]);
+//       useEffect(() => {
     
-  handleTrackLogin();
-      socket.on(
-        "online-users",
-        (users) => {
+//          handleTrackLogin();
+//       socket.on(
+//         "online-users",
+//         (users) => {
     
-          setOnlineUsers(users);
+//           setOnlineUsers(users);
     
-        }
-      );
+//         }
+//       );
     
-      return () => {
+//       return () => {
     
-        socket.off("online-users");
+//         socket.off("online-users");
     
-      };
+//       };
     
-    }, []);
+//     }, []);
 
     
 
-    const handleTrackLogin = async() =>{
-        try{
-            await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-        }catch(err){
-            console.error(err);
-        }
-    }
+//     const handleTrackLogin = async() =>{
+//         try{
+//             await axios.post(
+//                 `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
+//                 {},
+//                 {
+//                     headers: {
+//                         Authorization: `Bearer ${token}`,
+//                     },
+//                 }
+//             );
+//         }catch(err){
+//             console.error(err);
+//         }
+//     }
 
-    // Aside mode tool
-    const [username, setUsername] = useState('Guest');
-    const [avatar_url, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
-    const [profession, setProfession] = useState(null);
-    const [work_location, setLocation] = useState(null);
-    const [bio, setBio] = useState("Come and join Nahidea's family!");
-    const [nickname, setNickname] = useState('whynotsignup');
-    const [userId, setUserId] = useState(null);
-    const [showMaxAside, setMaxAside] = useState(() => {
-            return localStorage.getItem("maxAside") === "true";
-        });
+//     // Aside mode tool
+//     const [username, setUsername] = useState('Guest');
+//     const [avatar_url, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
+//     const [profession, setProfession] = useState(null);
+//     const [work_location, setLocation] = useState(null);
+//     const [bio, setBio] = useState("Come and join Nahidea's family!");
+//     const [nickname, setNickname] = useState('whynotsignup');
+//     const [userId, setUserId] = useState(null);
+//     const [showMaxAside, setMaxAside] = useState(() => {
+//             return localStorage.getItem("maxAside") === "true";
+//         });
 
     
     
-    useEffect(()=>{
-        localStorage.setItem("maxAside", showMaxAside)
-    },
-    [showMaxAside]
-    );
+//     useEffect(()=>{
+//         localStorage.setItem("maxAside", showMaxAside)
+//     },
+//     [showMaxAside]
+//     );
 
-    const toggleAside = () =>{
-            setMaxAside(prev => !prev)
-    };
+//     const toggleAside = () =>{
+//             setMaxAside(prev => !prev)
+//     };
     
-    // Theme mode tool
-    const [darkMode, setDarkMode] = useState( () => {
-        return localStorage.getItem("darkMode") === "true"; 
-    });
+//     // Theme mode tool
+//     const [darkMode, setDarkMode] = useState( () => {
+//         return localStorage.getItem("darkMode") === "true"; 
+//     });
 
-    useEffect(
-        () => {
-            if(darkMode){
-                document.body.classList.add("dark-theme")
-            }
-            else{
-                document.body.classList.remove("dark-theme")
-            }
-            localStorage.setItem("darkMode", darkMode);
-        },
-        [darkMode]
-    );
+//     useEffect(
+//         () => {
+//             if(darkMode){
+//                 document.body.classList.add("dark-theme")
+//             }
+//             else{
+//                 document.body.classList.remove("dark-theme")
+//             }
+//             localStorage.setItem("darkMode", darkMode);
+//         },
+//         [darkMode]
+//     );
        
 
-   useEffect(() => {
-  async function loadTempoInfo() {
-    // 1. Check sessionStorage first
-    const cachedName = sessionStorage.getItem("username");
-    const cachedAvatar = sessionStorage.getItem("avatar");
-    const cachedLocation = sessionStorage.getItem("location");
-    const cachedBio = sessionStorage.getItem("bio");
-    const cachedNickname = sessionStorage.getItem("nickname");
-    const cachedUserId = sessionStorage.getItem("userId");
-    const cachedProfession = sessionStorage.getItem("profession");
+//    useEffect(() => {
+//   async function loadTempoInfo() {
+//     // 1. Check sessionStorage first
+//     const cachedName = sessionStorage.getItem("username");
+//     const cachedAvatar = sessionStorage.getItem("avatar");
+//     const cachedLocation = sessionStorage.getItem("location");
+//     const cachedBio = sessionStorage.getItem("bio");
+//     const cachedNickname = sessionStorage.getItem("nickname");
+//     const cachedUserId = sessionStorage.getItem("userId");
+//     const cachedProfession = sessionStorage.getItem("profession");
 
-    if (cachedName && cachedUserId) {
-      setUsername(cachedName);
-      setUserId(cachedUserId);
-      setAvatar(cachedAvatar);
-      setLocation(cachedLocation);
-      setBio(cachedBio);
-      setProfession(cachedProfession);
-      setNickname(cachedNickname);
-      return;
-    }
+//     if (cachedName && cachedUserId) {
+//       setUsername(cachedName);
+//       setUserId(cachedUserId);
+//       setAvatar(cachedAvatar);
+//       setLocation(cachedLocation);
+//       setBio(cachedBio);
+//       setProfession(cachedProfession);
+//       setNickname(cachedNickname);
+//       return;
+//     }
 
-    // 2. Ask backend for username (backend decodes token itself)
-    try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-      if (!res.ok) throw new Error("Failed to fetch username");
+//     // 2. Ask backend for username (backend decodes token itself)
+//     try {
+//       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/me`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         }
+//       });
+//       if (!res.ok) throw new Error("Failed to fetch username");
 
-      const data = await res.json();
-      const username = data.userData?.username || data.username;
-      const avatar = data.userData?.avatar_url || data.avatar_url;
-      const location = data.userData?.work_place || data.work_place;
-      const bio = data.userData?.bio || data.bio;
-      const nickname = data.userData?.nickname || data.nickname;
-      const profession = data.userData?.profession || data.profession;
-      const userId = data.userData?.id || data.id;
+//       const data = await res.json();
+//       const username = data.userData?.username || data.username;
+//       const avatar = data.userData?.avatar_url || data.avatar_url;
+//       const location = data.userData?.work_place || data.work_place;
+//       const bio = data.userData?.bio || data.bio;
+//       const nickname = data.userData?.nickname || data.nickname;
+//       const profession = data.userData?.profession || data.profession;
+//       const userId = data.userData?.id || data.id;
 
 
-      sessionStorage.setItem("userId", userId);
-      setUserId(userId);
-      sessionStorage.setItem("username", username);
-      setUsername(username);
-      sessionStorage.setItem("avatar", avatar);
-      setAvatar(avatar);
-      sessionStorage.setItem("location", location);
-      setLocation(location);
-      sessionStorage.setItem("bio", bio);
-      setBio(bio);
-      sessionStorage.setItem("nickname", nickname);
-      setNickname(nickname);
-      sessionStorage.setItem("profession", profession);
+//       sessionStorage.setItem("userId", userId);
+//       setUserId(userId);
+//       sessionStorage.setItem("username", username);
+//       setUsername(username);
+//       sessionStorage.setItem("avatar", avatar);
+//       setAvatar(avatar);
+//       sessionStorage.setItem("location", location);
+//       setLocation(location);
+//       sessionStorage.setItem("bio", bio);
+//       setBio(bio);
+//       sessionStorage.setItem("nickname", nickname);
+//       setNickname(nickname);
+//       sessionStorage.setItem("profession", profession);
+//       setProfession(profession);
 
-    } catch (err) {
-      console.error("Error loading username", err);
-    }
-  }
+//     } catch (err) {
+//       console.error("Error loading username", err);
+//     }
+//   }
 
-  loadTempoInfo();
-}, []);
+//   loadTempoInfo();
+// }, []);
 
-    const toggleTheme = () =>{
-        setDarkMode(prev => !prev)
+//     const toggleTheme = () =>{
+//         setDarkMode(prev => !prev)
+//     };
+
+//      const isOnline = userId ? onlineUsers.includes(String(userId)) : false;
+
+
+
+//      return(
+//         <>
+//             <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url}/>
+//             <main style={{position:'relative'}}>
+//                 <Aside append={showMaxAside}/>
+//                 <section>
+//                     <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession, isOnline }} />
+//                 </section>
+//             </main>
+         
+//         </>
+//     )
+// }
+
+const Layout = () => {
+
+  const { user, token, loading } = useAuth();
+
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
+  // socket
+  useEffect(() => {
+
+    if (!user || !token) return;
+
+    const socket = connectSocket({
+      token,
+      userId: user.id,
+    });
+
+    socket.on("online-users", (users) => {
+      setOnlineUsers(users);
+    });
+
+    return () => {
+      socket.off("online-users");
+      disconnectSocket();
     };
 
-     const isOnline = userId ? onlineUsers.includes(String(userId)) : false;
+  }, [user, token]);
 
+  // track login
+  useEffect(() => {
 
+    if (!token) return;
 
-     return(
-        <>
-            <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url}/>
-            <main style={{position:'relative'}}>
-                <Aside append={showMaxAside}/>
-                <section>
-                    <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession, isOnline }} />
-                </section>
-            </main>
-         
-        </>
-    )
-}
+    const handleTrackLogin = async () => {
 
+      try {
 
+        await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+      }
+    };
+
+    handleTrackLogin();
+
+  }, [token]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const isOnline =
+    user?.id
+      ? onlineUsers.includes(String(user.id))
+      : false;
+
+  return (
+    <>
+      <Header avatar_url={user?.avatar_url} />
+
+      <main style={{ position: "relative" }}>
+        <Aside />
+
+        <section>
+          <Outlet
+            context={{
+              user,
+              isOnline,
+            }}
+          />
+        </section>
+      </main>
+    </>
+  );
+};
 
 
 

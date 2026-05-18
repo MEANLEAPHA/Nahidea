@@ -9,27 +9,6 @@ import "../style/page/Account.css";
 const token = localStorage.getItem("token");
 
 export default function Account() {
-
-//   const [onlineUsers, setOnlineUsers] = useState([]);
-//   useEffect(() => {
-
-//   socket.on(
-//     "online-users",
-//     (users) => {
-
-//       setOnlineUsers(users);
-
-//     }
-//   );
-
-//   return () => {
-
-//     socket.off("online-users");
-
-//   };
-
-// }, []);
-
   const {id} = useParams(); // use state later
   const [activeTab, setActiveTab] = useState("posts");
   const [followState, setFollowState] =useState("follow");
@@ -42,34 +21,31 @@ export default function Account() {
   const [professions, setProfessions] = useState("");
 
 
-  const { username, userId, avatar_url, work_location, bio, nickname, profession, isOnline } = useOutletContext();
+  const { user, isOnline } = useOutletContext();
 
 useEffect(() => {
 
-  if (!id || !userId) {
+  if (!id || !user.id) {
     return;
   }
 
   
   const isOwnProfile =
     String(id) ===
-    String(userId);
+    String(user.id);
 
   if (isOwnProfile) {
 
-    setUsernames(username);
-    setNicknames(nickname);
-    setAvatar(avatar_url);
-    setWorkplace(work_location);
-    setBios(bio);
-    setProfessions(profession);
+    setUsernames(user.username);
+    setNicknames(user.nickname);
+    setAvatar(user.avatar_url);
+    setWorkplace(user.work_location);
+    setBios(user.bio);
+    setProfessions(user.profession);
 
   } else {
-
     handleFetchProfile();
-
     fetchFollowStatus();
-
   }
 
 
