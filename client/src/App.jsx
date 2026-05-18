@@ -140,7 +140,6 @@ const Layout = () =>
 
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-
   // socket
   useEffect(() => {
 
@@ -161,6 +160,42 @@ const Layout = () =>
     };
 
   }, [user, token]);
+
+  const [showMaxAside, setMaxAside] = useState(() => {
+        return localStorage.getItem("maxAside") === "true";
+    });
+  
+    useEffect(()=>{
+        localStorage.setItem("maxAside", showMaxAside)
+    },
+    [showMaxAside]
+    );
+
+    const toggleAside = () =>{
+            setMaxAside(prev => !prev)
+    };
+    
+    // Theme mode tool
+    const [darkMode, setDarkMode] = useState( () => {
+        return localStorage.getItem("darkMode") === "true"; 
+    });
+
+    useEffect(
+        () => {
+            if(darkMode){
+                document.body.classList.add("dark-theme")
+            }
+            else{
+                document.body.classList.remove("dark-theme")
+            }
+            localStorage.setItem("darkMode", darkMode);
+        },
+        [darkMode]
+    );
+    const toggleTheme = () =>{
+        setDarkMode(prev => !prev)
+    };
+       
 
   // track login
   useEffect(() => {
@@ -203,7 +238,7 @@ const Layout = () =>
 
   return (
     <>
-      <Header avatar_url={user?.avatar_url} />
+      <Header avatar_url={user?.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
 
       <main style={{ position: "relative" }}>
         <Aside />

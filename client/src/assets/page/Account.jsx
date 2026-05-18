@@ -49,7 +49,7 @@ useEffect(() => {
   }
 
 
-}, [id, userId]);
+}, [id, user.id]);
 
   const handleFetchProfile = async () => {
 
