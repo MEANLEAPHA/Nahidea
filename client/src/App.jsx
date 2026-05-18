@@ -2,8 +2,8 @@ import React,{ useState, useEffect, useRef, memo } from 'react';
 import {BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { getSocket } from "./socket";
 
-import { socket } from "./socket";
 
 
 // Import Page
@@ -129,7 +129,105 @@ const App = () =>{
 }
  
 
+const Layout = () => 
+    {
 
+  const { user, token, loading } = useAuth();
+
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
+
+  // socket
+  useEffect(() => {
+
+    if (!user || !token) return;
+
+    const socket = connectSocket({
+      token,
+      userId: user.id,
+    });
+
+    socket.on("online-users", (users) => {
+      setOnlineUsers(users);
+    });
+
+    return () => {
+      socket.off("online-users");
+      disconnectSocket();
+    };
+
+  }, [user, token]);
+
+  // track login
+  useEffect(() => {
+
+    if (!token) return;
+
+    const handleTrackLogin = async () => {
+
+      try {
+
+        await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+      }
+    };
+
+    handleTrackLogin();
+
+  }, [token]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const isOnline =
+    user?.id
+      ? onlineUsers.includes(String(user.id))
+      : false;
+
+  return (
+    <>
+      <Header avatar_url={user?.avatar_url} />
+
+      <main style={{ position: "relative" }}>
+        <Aside />
+
+        <section>
+          <Outlet
+            context={{
+              user,
+              isOnline,
+            }}
+          />
+        </section>
+      </main>
+    </>
+  );
+};
+
+
+
+
+const NotFound = () =>{
+    return(
+        <h1>
+            Not Found
+        </h1>
+    )
+}
+export default App;
 
 
 
@@ -309,102 +407,3 @@ const App = () =>{
 //         </>
 //     )
 // }
-
-const Layout = () => {
-
-  const { user, token, loading } = useAuth();
-
-  const [onlineUsers, setOnlineUsers] = useState([]);
-
-  // socket
-  useEffect(() => {
-
-    if (!user || !token) return;
-
-    const socket = connectSocket({
-      token,
-      userId: user.id,
-    });
-
-    socket.on("online-users", (users) => {
-      setOnlineUsers(users);
-    });
-
-    return () => {
-      socket.off("online-users");
-      disconnectSocket();
-    };
-
-  }, [user, token]);
-
-  // track login
-  useEffect(() => {
-
-    if (!token) return;
-
-    const handleTrackLogin = async () => {
-
-      try {
-
-        await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-      } catch (err) {
-
-        console.error(err);
-
-      }
-    };
-
-    handleTrackLogin();
-
-  }, [token]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  const isOnline =
-    user?.id
-      ? onlineUsers.includes(String(user.id))
-      : false;
-
-  return (
-    <>
-      <Header avatar_url={user?.avatar_url} />
-
-      <main style={{ position: "relative" }}>
-        <Aside />
-
-        <section>
-          <Outlet
-            context={{
-              user,
-              isOnline,
-            }}
-          />
-        </section>
-      </main>
-    </>
-  );
-};
-
-
-
-
-const NotFound = () =>{
-    return(
-        <h1>
-            Not Found
-        </h1>
-    )
-}
-export default App;
-
