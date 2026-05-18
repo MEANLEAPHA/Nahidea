@@ -520,7 +520,7 @@ async () => {
             <h3>About</h3>
 
             <p>
-              {bio}
+              {bios}
             </p>
           </div>
 

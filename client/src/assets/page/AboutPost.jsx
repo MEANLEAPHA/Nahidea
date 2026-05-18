@@ -206,7 +206,7 @@ const AboutPost = () => {
     if(!token) return;
     try{
     await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
+      `${import.meta.env.VITE_SERVER_URL}/api/record-view-post/${id}`,
         {},
         {
           headers: {
