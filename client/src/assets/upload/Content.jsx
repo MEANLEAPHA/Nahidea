@@ -11,7 +11,7 @@ import { useAnonymousTokens, AnonymousTokensCoolDown } from "../util/anonymousTo
 import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import NahideaInfo from "../util/upload/NahideaInfo";
-import AnimatedIcon from "../util/upload/AnimatedIcon";
+import {AnimatedIcon} from "../util/upload/AnimatedIcon";
 
 // data import
 import { content_options } from "../data/post_type_data";

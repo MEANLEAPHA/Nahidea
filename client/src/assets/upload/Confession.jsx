@@ -14,7 +14,7 @@ import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import { useAnonymousTokens, AnonymousTokensCoolDown} from "../util/anonymousTokens";
 import NahideaInfo from "../util/upload/NahideaInfo";
-import AnimatedIcon from "../util/upload/AnimatedIcon";
+import {AnimatedIcon} from "../util/upload/AnimatedIcon";
 
 // ant import
 import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, 

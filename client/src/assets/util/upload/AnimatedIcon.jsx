@@ -24,7 +24,7 @@ import { AppstoreOutlined } from "@ant-design/icons";
 
 let lordIconLoaded = false;
 
-export default function AnimatedIcon({ src }) {
+export function AnimatedIcon({ src }) {
   const [isValid, setIsValid] = useState(true);
 
   // Load lordicon script only once
@@ -73,7 +73,7 @@ export default function AnimatedIcon({ src }) {
   );
 }
 
-export default function DisplayAnimatedIcon({ src }) {
+export function DisplayAnimatedIcon({ src }) {
 
   useEffect(() => {
       const script = document.createElement("script");

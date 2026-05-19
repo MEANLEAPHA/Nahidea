@@ -22,7 +22,7 @@ import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashC
 import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
-import DisplayAnimatedIcon from "../util/upload/AnimatedIcon";
+import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
 import ReportPostModal from './ReportPostModal'
 
 // style
