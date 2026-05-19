@@ -576,7 +576,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
       <div style={{position: "relative"}} > 
         <Space>
           <img
-            src={avatar_url}
+            src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
             className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
           />

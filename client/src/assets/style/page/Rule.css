@@ -21,7 +21,6 @@
   display:flex;
   gap:30px;
   margin: auto;
-  overflow: hidden;
   box-sizing:border-box;
 }
 
@@ -75,6 +74,7 @@
   font-size:clamp(2.2rem,5vw,4rem);
   margin-bottom:14px;
   line-height:1.1;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .subtitle{
@@ -83,6 +83,7 @@
   opacity:0.8;
   margin-bottom:40px;
   max-width:750px;
+  color: var(--font-color);
 }
 
 /* RULE CARD */
@@ -163,7 +164,10 @@
     overflow-x:auto;
     position:sticky;
     top:60px;
-    background:var(--back-con);
+     /* GLASS EFFECT */
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
     padding-bottom:0px;
     border: 1px solid var(--secondary-color);
     padding: 5px;

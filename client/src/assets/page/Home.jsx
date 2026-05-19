@@ -22,7 +22,7 @@ import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashC
 import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
-import AnimatedIcon from "../util/upload/AnimatedIcon";
+import DisplayAnimatedIcon from "../util/upload/AnimatedIcon";
 import ReportPostModal from './ReportPostModal'
 
 // style
@@ -569,7 +569,9 @@ setLikingPosts(prev => new Set(prev).add(postId));
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
-                                  <AnimatedIcon src={post.cate_icon} />
+                                  {post.cate_icon && (
+                                    <DisplayAnimatedIcon src={post.cate_icon} />
+                                  )}
                                 </div>
                               </p>
                               <p className='post-at'>{post.created_at}</p>

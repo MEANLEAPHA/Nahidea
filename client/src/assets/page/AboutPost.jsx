@@ -194,6 +194,7 @@ const AboutPost = () => {
       handleFetchPost();
     }
     handleView();
+     handleHistory();
     
     if (stored && String(stored.id) === String(id)) {
       setPost(stored);
@@ -208,6 +209,24 @@ const AboutPost = () => {
     try{
     await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/api/record-view-post/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      
+    );
+    }catch(err){
+      console.error(err);
+    }
+  }
+
+  const handleHistory = async () =>{
+    if(!token) return;
+    try{
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
         {},
         {
           headers: {
