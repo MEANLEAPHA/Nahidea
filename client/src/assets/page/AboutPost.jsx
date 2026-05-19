@@ -240,6 +240,7 @@ const AboutPost = () => {
     }
   }
 
+
   // fetch post
   const handleFetchPost = async () => {
      try{
@@ -503,7 +504,12 @@ const renderPostContent = (post) => {
             </ReactMarkdown>
           </div>
           <div className='post-tags'>
+            {post.tags && (
+              <div>
                 {tagSplitter(post.tags)}
+              </div>
+            )}
+                
           </div>
         </div>
 

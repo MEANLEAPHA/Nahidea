@@ -73,21 +73,40 @@ export function AnimatedIcon({ src }) {
   );
 }
 
-export function DisplayAnimatedIcon({ src }) {
+// export function DisplayAnimatedIcon({ src }) {
 
+//   useEffect(() => {
+//       const script = document.createElement("script");
+//       script.src = "https://cdn.lordicon.com/lordicon.js";
+//       script.async = true;
+
+//       document.body.appendChild(script);
+//   }, []);
+//   return (
+//     <lord-icon
+//       src={src}
+//       trigger="loop"
+//       delay="3000"
+//       style={{ width: "20px", height: "20px" }}
+//     ></lord-icon>
+//   );
+// }
+export default function DisplayAnimatedIcon({src}) {
   useEffect(() => {
-      const script = document.createElement("script");
-      script.src = "https://cdn.lordicon.com/lordicon.js";
-      script.async = true;
-
-      document.body.appendChild(script);
+    const script = document.createElement("script");
+    script.src = "https://cdn.lordicon.com/lordicon.js";
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
+
   return (
-    <lord-icon
-      src={src}
-      trigger="loop"
-      delay="3000"
-      style={{ width: "20px", height: "20px" }}
-    ></lord-icon>
+
+      <lord-icon
+        src={src}
+        trigger="loop"
+        delay="3000"
+        style={{ width: "20px", height: "20px" }}
+      ></lord-icon>
+      
   );
 }

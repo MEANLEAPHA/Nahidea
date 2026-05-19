@@ -822,11 +822,25 @@ const handleCopyLink = async (postId) => {
 // Function covert string to array
 const parseJSON = (val) => {
   try {
-    return typeof val === "string" ? JSON.parse(val) : val;
+    if (typeof val === "string") {
+      const parsed = JSON.parse(val);
+      return Array.isArray(parsed) ? parsed : [parsed];
+    }
+    // if it's already an array, keep it; if it's a single value, wrap it
+    return Array.isArray(val) ? val : [val];
   } catch {
-    return [];
+    // if JSON.parse fails, just wrap the raw string
+    return [val];
   }
 };
+
+// const parseJSON = (val) => {
+//   try {
+//     return typeof val === "string" ? JSON.parse(val) : val;
+//   } catch {
+//     return [];
+//   }
+// };
 
 
   // <div class="ant-list ant-list-split css-ch9ese css-var-root">

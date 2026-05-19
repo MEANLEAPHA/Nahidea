@@ -15,6 +15,7 @@ import "../style/Header.css";
   import { faBookmark, faCircleQuestion, faCopy, faHeart, faMessage, faPenToSquare, faUserAlt, faSun, faBell, faSquarePlus, faNewspaper, faFaceGrinWink} from "@fortawesome/free-regular-svg-icons";
 
 const token = localStorage.getItem("token");
+import { useAuth } from '../context/AuthContext';
 
 const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   const navigate = useNavigate();
@@ -494,6 +495,17 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
    
   const navigate = useNavigate();
   
+ const {user} = useAuth();
+
+  const userId = user?.id;
+  const username = user?.username;
+  const nickname = user?.nickname;
+  const avatar_url = user?.avatar_url;
+  const work_location = user?.work_location;
+  const bio = user?.bio;
+  const profession = user?.profession;
+ 
+
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -511,7 +523,17 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
   const menuItems = [
     {
       label: (
-        <li onClick={() => navigate("/user")}>
+        <li onClick={() => navigate("/account", {
+          state: {
+            userId: userId,
+            username: username,
+            nickname: nickname,
+            avatar_url: avatar_url,
+            work_location: work_location,
+            bio: bio,
+            profession: profession
+          }
+        })}>
           <UserOutlined /> View Account
         </li>
       ),
@@ -564,7 +586,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
     {
       label: (
         <li onClick={() => navigate("/logout")}>
-          <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
+          <FontAwesomeIcon icon={faArrowRightFromBracket} /> <span>Logout</span>
         </li>
       ),
       key: "6",

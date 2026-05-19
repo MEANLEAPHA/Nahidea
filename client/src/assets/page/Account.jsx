@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext, useParams, useLocation } from "react-router-dom";
 
 import { MapPin, Link2, CalendarDays, Settings, MessageCircle, Share2, Heart, Bookmark,
          MoreHorizontal, Image, BadgeCheck, Banana,} from "lucide-react";
@@ -10,6 +10,7 @@ const token = localStorage.getItem("token");
 
 export default function Account() {
   const {id} = useParams(); // use state later
+  const { state } = useLocation();
   const [activeTab, setActiveTab] = useState("posts");
   const [followState, setFollowState] =useState("follow");
 
@@ -31,17 +32,17 @@ useEffect(() => {
 
   
   const isOwnProfile =
-    String(id) ===
+    String(state?.userId) ===
     String(user.id);
 
   if (isOwnProfile) {
 
-    setUsernames(user.username);
-    setNicknames(user.nickname);
-    setAvatar(user.avatar_url);
-    setWorkplace(user.work_location);
-    setBios(user.bio);
-    setProfessions(user.profession);
+    setUsernames(state?.username);
+    setNicknames(state?.nickname);
+    setAvatar(state?.avatar_url);
+    setWorkplace(state?.work_location);
+    setBios(state?.bio);
+    setProfessions(state?.profession);
 
   } else {
     handleFetchProfile();
@@ -55,7 +56,7 @@ useEffect(() => {
 
     try{
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-user-info/${id}`
+        `${import.meta.env.VITE_SERVER_URL}/api/get-user-info/${state?.userId}`
       )
       const data = res.data.userData;
       setUsernames(data.username);
