@@ -454,6 +454,16 @@ margin-top: 10px;
     margin-top: 10px;
     height: auto;
 }
+.ant-carousel{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+}
+.media-preview-carousel, .slick-list, .carousel-slide, .slick-track, .slick-slide{
+    height: auto !important;
+}
+
 
 .preview-wrapper {
   position: relative;

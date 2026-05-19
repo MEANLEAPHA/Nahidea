@@ -537,6 +537,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
     <div className='home-container'>
       <article id="feed-article">
         
+  
             {error ? (
               <div class='error-container'>
                 <Loader />
@@ -833,6 +834,7 @@ const parseJSON = (val) => {
     return [val];
   }
 };
+
 
 // const parseJSON = (val) => {
 //   try {
