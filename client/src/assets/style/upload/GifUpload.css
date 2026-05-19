@@ -1,73 +1,4 @@
-/* GifUpload.css
-
-.gif-upload-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-}
-
-.gif-upload-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.gif-upload-header h2 {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.gif-upload-header p {
-  font-size: 0.95rem;
-  color: #666;
-}
-
-.gif-upload-header a {
-  color: #1890ff;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.gif-upload-header a:hover {
-  text-decoration: underline;
-}
-
-.ant-form-item {
-  margin-bottom: 1rem;
-}
-
-.ant-input, .ant-select-selector {
-  border-radius: 8px !important;
-}
-
-.ant-btn-primary {
-  width: 100%;
-  border-radius: 8px;
-  font-weight: 600;
-  padding: 0.75rem;
-}
-
-
-@media (max-width: 768px) {
-  .gif-upload-container {
-    padding: 1.5rem;
-  }
-  .gif-upload-header h2 {
-    font-size: 1.4rem;
-  }
-}
-@media (max-width: 480px) {
-  .gif-upload-container {
-    padding: 1rem;
-  }
-  .gif-upload-header h2 {
-    font-size: 1.2rem;
-  }
-} */
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
 :root {
   --background-color: rgb(255, 255, 255);
   --primary-color: #fd7648;
@@ -86,31 +17,37 @@
 }
 
 .gif-upload-container {
-  width: 80%;
-  min-height:auto;
- 
+  width: 100%;
+  max-width: 900px;
   padding: 2rem;
-  font-family: var(--primary-font);
   margin: auto;
+  font-family: var(--primary-font);
   color: var(--font-color);
+  background: var(--background-color);
+  border-radius: 16px;
 }
 
+/* Header */
 .gif-upload-header {
   text-align: center;
   margin-bottom: 2rem;
 }
-.gif-upload-header p{
-    margin: 0;
-}
-.gif-upload-header .p-head{
-  font-size: xx-large;
+.gif-upload-header .p-head {
+  font-size: 2.2rem;
   font-weight: 700;
-  color: var(--secondary-color);
-  margin:0;
-  border: none;
-  font-family: monospace;
+  color: var(--font-color);
+  margin-bottom: 0.5rem;
+   font-family: "Irish Grover", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.gif-upload-header p {
+  color: var(--font-color);
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
+/* Provider grid */
 .gif-provider-grid {
   display: flex;
   justify-content: center;
@@ -121,28 +58,149 @@
 }
 
 .gif-provider-grid img {
-
   height: 60px;
   object-fit: contain;
   cursor: pointer;
   transition: transform 0.2s ease;
-
-  
   padding: 0;
 }
-
 .gif-provider-grid img:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
+/* Form fields */
+.ant-form-item {
+  margin-bottom: 1.2rem;
+}
+.ant-input, .ant-select-selector {
+  border-radius: 8px !important;
+  min-height: 44px;
+  font-size: 0.95rem;
+  background: var(--back-con);
+  color: var(--font-color) !important;
+
+}
+
+.ant-input:focus {
+  box-shadow: none !important;
+  border: 1px solid var(--primary-color) !important;
+  box-shadow: none !important;
+  outline: #fd7648 !important;
+  background-color: none !important;
+   background: none !important;
+}
+
+/* Paste button inside input */
+.ant-input-group-addon .ant-btn-link {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Preview */
 .gif-preview {
   text-align: center;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
-
 .gif-preview img {
   max-width: 100%;
-  height: auto;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* Submit button */
+.ant-btn-primary {
+  background: skyblue;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  height: 48px;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.ant-btn-primary:hover {
+  background: #e65f30;
+  transform: translateY(-2px);
+}
+
+.gif-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-row input,
+.form-row select {
+  flex: 1;
+  min-height: 48px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: var(--primary-font);
+  background: var(--back-con);
+  color: var(--font-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(253,118,72,0.25);
+  outline: none;
+}
+
+/* URL input with paste button */
+.url-input {
+  display: flex;
+  flex: 1;
+}
+.url-input input {
+  flex: 1;
+  border-radius: 8px 0 0 8px;
+}
+.url-input button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0 1rem;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.url-input button:hover {
+  background: #e65f30;
+}
+
+/* Preview */
+.gif-preview img {
+  max-width: 100%;
+  border-radius: 12px;
+
+}
+
+/* Submit button */
+.submit-btn{
+ 
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  height: 48px;
+  cursor: pointer;
+  background: skyblue !important;
+}
+.submit-btn:hover {
+
+  transform: translateY(-2px);
+}
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

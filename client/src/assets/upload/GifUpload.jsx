@@ -1,20 +1,22 @@
-
-
 import React, { useState } from "react";
-import { Form, Input, Button, Select, message } from "antd";
 import axios from "axios";
 import "../style/upload/GifUpload.css";
-import {gif_category} from "../data/post_type_data";
-
+import { gif_category } from "../data/post_type_data";
 
 export default function GifUpload() {
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
-  const [form] = Form.useForm(); // ✅ create form instance
 
-  const handleSubmit = async (values) => {
-    if (!values.gif_url.toLowerCase().endsWith(".gif")) {
-      message.error("Only .gif links are allowed.");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const gif_name = formData.get("gif_name");
+    const gif_label = formData.get("gif_label");
+    const gif_url = formData.get("gif_url");
+    const gif_type = formData.get("gif_type");
+
+    if (!gif_url.toLowerCase().endsWith(".gif")) {
+      alert("Only .gif links are allowed.");
       return;
     }
 
@@ -22,21 +24,16 @@ export default function GifUpload() {
       setLoading(true);
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/gifs/upload`,
-        {
-          gif_name: values.gif_name,
-          gif_label: values.gif_label, // renamed label -> tag
-          gif_url: values.gif_url,
-          gif_type: values.gif_type,
-        }
+        { gif_name, gif_label, gif_url, gif_type }
       );
       if (res.data.success) {
-        message.success("Uploaded");
+        alert("Uploaded");
       } else {
-        message.error(res.data.error);
+        alert(res.data.error);
       }
     } catch (err) {
       console.error(err);
-      message.error("Upload failed");
+      alert("Upload failed");
     } finally {
       setLoading(false);
     }
@@ -45,10 +42,10 @@ export default function GifUpload() {
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      form.setFieldsValue({ gif_url: text }); // ✅ set value in form
+      document.querySelector("input[name='gif_url']").value = text;
       setPreviewUrl(text);
     } catch {
-      message.error("Failed to paste from clipboard");
+      alert("Failed to paste from clipboard");
     }
   };
 
@@ -56,57 +53,45 @@ export default function GifUpload() {
     <div className="gif-upload-container">
       <div className="gif-upload-header">
         <p className="p-head">Upload Your Favorite GIF Is Very Easy</p>
-        <p>Choose any GIF provider and paste the link down below</p>
-        <div className="gif-provider-grid">
-          <a href="https://giphy.com" target="_blank" rel="noopener noreferrer">
-            <img src="https://giphy.com/static/img/giphy-be-animated-logo.gif" alt="Giphy" />
-          </a>
-          <a href="https://tenor.com" target="_blank" rel="noopener noreferrer">
-            <img src="https://miro.medium.com/1*5hX-Oevy9NZ7KC_OP4LyLA.gif" alt="Tenor" />
-          </a>
-          <a href="https://imgur.com" target="_blank" rel="noopener noreferrer">
-            <img src="https://i.imgur.com/HnJkrC5.gif" alt="Imgur" />
-          </a>
-          <a href="https://www.gifbin.com" target="_blank" rel="noopener noreferrer">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3A2uVIZMtPo9l4ChNQZd5gr0MXAi-JwPNyQ&s" alt="GIFbin" />
-          </a>
-          <a href="https://www.tumblr.com/explore/gifs" target="_blank" rel="noopener noreferrer">
-            <img src="https://64.media.tumblr.com/bd6fff7623438e399cdd5d197d08910b/tumblr_no5c6imzO61r7ealro1_r1_540.gif" alt="Reaction GIFs" />
-          </a>
-        </div>
+        <p>Support only .gif</p>
       </div>
 
-      <Form form={form} onFinish={handleSubmit} layout="vertical">
-        <Form.Item name="gif_name" rules={[{ required: true }]}>
-          <Input placeholder="GIF Name (e.g. Dancing SpongeBob)" />
-        </Form.Item>
-        <Form.Item name="gif_label" rules={[{ required: true }]}>
-          <Input placeholder="Tags (e.g. funny, cartoon, party)" />
-        </Form.Item>
-        <Form.Item name="gif_url" rules={[{ required: true }]}>
-          <Input
-            placeholder="Paste GIF URL"
-            addonAfter={<Button type="link" onClick={handlePaste}>Paste</Button>}
-            onChange={(e) => setPreviewUrl(e.target.value)}
-          />
-        </Form.Item>
+      <form onSubmit={handleSubmit} className="gif-form">
+
+        <div className="form-row">
+          <input name="gif_name" placeholder="GIF Name (e.g. Dancing SpongeBob)" required />
+          
+          <select name="gif_type" required>
+            <option value="">Select GIF Category</option>
+            {gif_category.map((cat) => (
+              <option key={cat.value} value={cat.value}>{cat.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-row">
+          <input name="gif_label" placeholder="Tags (e.g. funny, cartoon, party)" required />
+          <div className="url-input">
+            <input
+              name="gif_url"
+              placeholder="Paste GIF URL"
+              required
+              onChange={(e) => setPreviewUrl(e.target.value)}
+            />
+            <button type="button" onClick={handlePaste}>Paste</button>
+          </div>
+        </div>
+
         {previewUrl && previewUrl.toLowerCase().endsWith(".gif") && (
           <div className="gif-preview">
             <img src={previewUrl} alt="GIF Preview" />
           </div>
         )}
-        <Form.Item name="gif_type" rules={[{ required: true }]}>
-          <Select
-            placeholder="Select GIF Category"
-            options={gif_category}
-            showSearch
-            style={{ width: "100%" }}
-          />
-        </Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Submit
-        </Button>
-      </Form>
+
+        <button type="submit" disabled={loading} className="submit-btn">
+          {loading ? "Uploading..." : "Upload"}
+        </button>
+      </form>
     </div>
   );
 }

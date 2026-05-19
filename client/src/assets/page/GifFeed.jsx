@@ -168,19 +168,22 @@ export default function GifFeed() {
           <p>Help us upload your favourite GIFs and share them with Nahidea's community</p>
         </div>
         <div className="gif-header-buttons"> 
-          <Dropdown menu={{ items }} placement="bottom">
-            <Button className="btn-upload-gif">
-              <FontAwesomeIcon icon={faFaceGrinTongueWink} style={{color: "rgb(146, 108, 255)",}} />
-              Reaction
-            </Button>
-          </Dropdown>
-          <button onClick={()=>{navigate("/favorite/gif")}} type="button" className="btn-upload-gif"><FontAwesomeIcon icon={faHeart} beatFade style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
+          <div className="gif-dropdown">
+            <Dropdown menu={{ items }} placement="bottom" getPopupContainer={(trigger) => trigger.parentNode}>
+              <Button className="btn-upload-gif">
+                <FontAwesomeIcon icon={faFaceGrinTongueWink} style={{color: "rgb(146, 108, 255)",}} />
+                Reaction
+              </Button>
+            </Dropdown>
+          </div>
+          
+          <button onClick={()=>{navigate("/favorite/gif")}} type="button" className="btn-upload-gif"><FontAwesomeIcon icon={faHeart}  style={{color: "rgb(223, 83, 193)",}} />Favourites</button>
           <button
             onClick={() => navigate("/upload/gif")}
             type="button"
             className="btn-upload-gif"
           >
-            <FontAwesomeIcon icon={faCloudArrowUp} fade style={{color: "rgb(38, 160, 255)",}} />
+            <FontAwesomeIcon icon={faCloudArrowUp} style={{color: "rgb(38, 160, 255)",}} />
             Upload GIF
           </button>
 
@@ -199,8 +202,7 @@ export default function GifFeed() {
         className="gif-search"
       />
 
-      {/* 🔄 Loading */}
-      {loading && <Loader />}
+      
 
       {/* ❌ Empty */}
       {!loading && gifs.length === 0 && <Empty description="No GIFs found" />}
@@ -313,13 +315,6 @@ function GifCard({ gif }) {
   );
 }
 
-const Loader = () => {
-  return(
-     <div className="loader-container">
-          <img src={nahideaTran} alt="Loading..." className="loader-img"/>
-    </div>
-  )
-};
 
 
 
