@@ -454,7 +454,7 @@ margin-top: 10px;
     margin-top: 10px;
     height: auto;
 }
-.ant-carousel{
+/* .ant-carousel{
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -462,7 +462,7 @@ margin-top: 10px;
 }
 .media-preview-carousel, .slick-list, .carousel-slide, .slick-track, .slick-slide{
     height: auto !important;
-}
+} */
 
 
 .preview-wrapper {
