@@ -549,7 +549,7 @@ margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: auto;
+  width: 100%;
   max-width: 100%;
   max-height: 380px;
   border-radius: 25px;
@@ -581,6 +581,7 @@ margin-top: 10px;
   z-index: 0;
   pointer-events: none; /* avoid interfering with clicks */
 }
+
 
 /* 8. Optional: remove any unwanted padding/margin from carousel elements */
 .ant-carousel,
