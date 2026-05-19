@@ -455,15 +455,18 @@ margin-top: 10px;
     height: auto;
 }
 /* .ant-carousel{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: auto !important;
-}
-.media-preview-carousel, .slick-list, .carousel-slide, .slick-track, .slick-slide{
-    height: auto !important;
-} */
 
+} */
+/* Ensure the carousel containers don't override flex centering */
+.media-preview-carousel,
+.slick-list,
+.slick-track,
+.slick-slide,
+.carousel-slide {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
 
 .preview-wrapper {
   position: relative;
@@ -487,7 +490,7 @@ margin-top: 10px;
   max-width: 100%;
   margin: auto;
   max-height: 380px;
-  object-fit: cover; 
+  object-fit: contain;
   position: relative;
   padding: 0;
   z-index: 1;
