@@ -552,6 +552,7 @@ margin-top: 10px;
   width: 100%;
   max-width: 100%;
   max-height: 380px;
+  height: auto;
   border-radius: 25px;
   overflow: hidden;
   margin: 0 auto; /* fallback horizontal centering */
