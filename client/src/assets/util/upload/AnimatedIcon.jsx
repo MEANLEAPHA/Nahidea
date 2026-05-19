@@ -91,7 +91,7 @@ export function AnimatedIcon({ src }) {
 //     ></lord-icon>
 //   );
 // }
-export default function DisplayAnimatedIcon({src}) {
+export  function DisplayAnimatedIcon({src}) {
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://cdn.lordicon.com/lordicon.js";
