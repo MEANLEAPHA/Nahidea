@@ -500,7 +500,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
   const userId = user?.id;
   const username = user?.username;
   const nickname = user?.nickname;
-  const avatar_url = user?.avatar_url;
+  const avatar = user?.avatar_url;
   const work_location = user?.work_location;
   const bio = user?.bio;
   const profession = user?.profession;
@@ -528,7 +528,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
             userId: userId,
             username: username,
             nickname: nickname,
-            avatar_url: avatar_url,
+            avatar_url: avatar,
             work_location: work_location,
             bio: bio,
             profession: profession
