@@ -75,7 +75,7 @@ const App = () =>{
                     <Route path='/home' element={<Home/>}></Route>
 
                     {/* Account */}
-                    <Route path='/account/:id' element={<Account/>}></Route>
+                    <Route path='/account' element={<Account/>}></Route>
                     
                     {/* Upload posts */}
                     <Route path='/create/question' element={<Question/>}></Route>
