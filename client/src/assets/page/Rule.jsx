@@ -7,49 +7,49 @@ const rules = [
     id: "respect",
     title: "Be Respectful",
     content:
-      "Treat others with respect. Harassment, hate speech, or personal attacks are not allowed."
+      "Treat everyone with basic respect, even during disagreements. Personal attacks, harassment, hate speech, intimidation, or targeted bullying are not tolerated. Criticize ideas constructively instead of attacking individuals. A healthy community is built on discussion, not hostility."
   },
   {
     id: "authentic",
     title: "Be Authentic",
     content:
-      "Do not impersonate others or misrepresent your identity. Use the platform honestly."
+      "Do not impersonate other people, organizations, or public figures. Avoid fake engagement, misleading identities, or dishonest behavior designed to manipulate trust. People should feel confident that conversations and interactions on Nahidea are genuine."
   },
   {
     id: "content",
-    title: "Post Quality Content",
+    title: "Post Valuable Content",
     content:
-      "Share meaningful, relevant, and helpful content. Avoid spam, low-effort posts, or repetitive submissions."
+      "Share content that informs, inspires, teaches, entertains, or meaningfully contributes to discussion. Avoid repetitive spam, meaningless reposts, engagement bait, or low-effort submissions. Quality matters more than quantity."
   },
   {
     id: "misinformation",
     title: "No Misinformation",
     content:
-      "Do not spread false or misleading information. Content should be accurate to the best of your knowledge."
+      "Do not intentionally spread false, deceptive, or manipulated information. When sharing news, facts, tutorials, or advice, make a reasonable effort to ensure accuracy. Misleading content that could harm people or manipulate public trust may be removed."
   },
   {
     id: "safety",
-    title: "Keep It Safe",
+    title: "Keep The Community Safe",
     content:
-      "Do not post harmful, illegal, or dangerous content. This includes threats, self-harm encouragement, or exploitation."
+      "Content involving threats, violence, criminal activity, exploitation, self-harm encouragement, or dangerous behavior is strictly prohibited. Nahidea should remain a safe environment where users can participate without fear or harm."
   },
   {
     id: "privacy",
     title: "Respect Privacy",
     content:
-      "Do not share personal or sensitive information without consent."
+      "Never share private or sensitive information without clear consent. This includes addresses, passwords, phone numbers, personal documents, financial details, or private conversations. Respect the boundaries and safety of others."
   },
   {
     id: "spam",
-    title: "No Spam or Abuse",
+    title: "No Spam or Manipulation",
     content:
-      "Avoid excessive self-promotion, bots, or attempts to manipulate engagement."
+      "Avoid excessive self-promotion, fake giveaways, referral abuse, automated posting, or attempts to artificially manipulate engagement metrics. Build attention through genuine value instead of exploiting the system."
   },
   {
     id: "moderation",
-    title: "Follow Moderation",
+    title: "Follow Moderation Decisions",
     content:
-      "Respect decisions made by moderators. Violations may result in content removal or account restrictions."
+      "Moderators may remove content or restrict accounts to protect the platform and community experience. Repeated violations, attempts to bypass enforcement, or abuse toward moderators can result in stronger penalties, including permanent suspension."
   }
 ];
 
@@ -121,7 +121,7 @@ export default function Rule() {
               </h2>
             </div>
 
-            <p>{rule.content}</p>
+            <p className="rule-content">{rule.content}</p>
           </section>
         ))}
       </div>

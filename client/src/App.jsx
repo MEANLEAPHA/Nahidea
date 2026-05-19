@@ -238,7 +238,7 @@ const Layout = () =>
 
   return (
     <>
-      <Header avatar_url={user.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
+      <Header avatar_url={user?.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
 
       <main style={{ position: "relative" }}>
         <Aside />
