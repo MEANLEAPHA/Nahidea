@@ -571,7 +571,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
                                   {post.cate_icon && (
-                                    <DisplayAnimatedIcon src={post.cate_icon} />
+                                    <DisplayAnimatedIcon src={post?.data?.cate_icon || null} />
                                   )}
                                 </div>
                               </p>
