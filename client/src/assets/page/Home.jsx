@@ -615,7 +615,7 @@ const handleFavorite = async (postId) => {
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
-                                  {post.cate_icon && (
+                                  {post?.data?.cate_icon && (
                                     <DisplayAnimatedIcon src={post?.data?.cate_icon || 'https://cdn.lordicon.com/ulnswmkk.json'} />
                                   )}
                                 </div>
