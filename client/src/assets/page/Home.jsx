@@ -45,6 +45,7 @@ export default function Home() {
   // posts
   const [posts, setPosts] = useState([]);
   const [likingPosts, setLikingPosts] = useState(new Set());
+  const [favoritingPosts, setFavoritingPosts] = useState(new Set());
 
   // loading
   const [loading, setLoading] = useState(false); 
@@ -171,22 +172,6 @@ export default function Home() {
                     navigate(`/aboutpost/${post.id}`)
                   }}>
                     <p>{data.title}</p>
-                    {/* <span onClick={(e)=>
-                      {
-                        e.stopPropagation();
-                        navigate(`/edit/content`, 
-                          {
-                          state: {
-                            postId: post.id,
-                            contentId: data.id,
-                            bodyText: data.text_body,
-                            page: page,
-                            mode: "edit"
-                          }
-                        }
-                        );
-                      }
-                      }>click</span> */}
                 </div>
               </div>
               <div  className='post-thumbnail'>         
@@ -532,7 +517,67 @@ setLikingPosts(prev => new Set(prev).add(postId));
   });
 }
 }
+const handleFavorite = async (postId) => {
 
+  if (favoritingPosts.has(postId)) return;
+
+  setFavoritingPosts(prev => new Set(prev).add(postId));
+
+  // optimistic update
+  setPosts(prev =>
+    prev.map(post => {
+
+      if (post.id !== postId) return post;
+
+      return {
+        ...post,
+        is_favorited: !post.is_favorited
+      };
+    })
+  );
+
+  try {
+
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+  } catch (err) {
+
+    // rollback
+    setPosts(prev =>
+      prev.map(post => {
+
+        if (post.id !== postId) return post;
+
+        return {
+          ...post,
+          is_favorited: !post.is_favorited
+        };
+      })
+    );
+
+    console.log(err);
+
+  } finally {
+
+    setFavoritingPosts(prev => {
+
+      const next = new Set(prev);
+
+      next.delete(postId);
+
+      return next;
+
+    });
+  }
+};
   return (
     <div className='home-container'>
       <article id="feed-article">
@@ -571,7 +616,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
                                   {post.cate_icon && (
-                                    <DisplayAnimatedIcon src={post?.data?.cate_icon || null} />
+                                    <DisplayAnimatedIcon src={post?.data?.cate_icon || 'https://cdn.lordicon.com/ulnswmkk.json'} />
                                   )}
                                 </div>
                               </p>
@@ -607,7 +652,17 @@ setLikingPosts(prev => new Set(prev).add(postId));
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
-                              <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                       
+                              <button
+                                className={`button-action-footer button-action-footer-last ${
+                                  post.is_favorited ? "favorited" : ""
+                                }`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleFavorite(post.id);
+                                }}
+                              ><FontAwesomeIcon icon={faBookmark} />
+                              </button>
                             </div> 
                         </div>
 

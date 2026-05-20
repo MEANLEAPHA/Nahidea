@@ -300,9 +300,9 @@ const AboutPost = () => {
   };
 
   // delete comment
-  const handleDelete = async (commentId) => {
+  const handleDelete = async (commentId, postId) => {
     await axios.delete(
-      `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}`,
+      `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/${postId}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     fetchComments();
@@ -420,7 +420,7 @@ const AboutPost = () => {
                         });
                     }
                       }>Edit</span>
-            <span onClick={() => handleDelete(c.id)}>Delete</span>
+            <span onClick={() => handleDelete(c.id, id)}>Delete</span>
           </>
         )}
 

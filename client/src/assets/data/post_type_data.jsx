@@ -472,7 +472,6 @@ export const iconOptions = [
   { id: 4, name: "crying", icon: faSadTear },
 ];
 
-
 export const question_type = [
   {id:1, label:"Open End", value:"openend"},
   {id:2, label:"Closed End", value:"closedend"},
@@ -482,7 +481,6 @@ export const question_type = [
   {id:6, label:"Rating", value:"rating"},
   {id:7, label:"Ranking Order", value:"rankingorder"}
 ];
-
 
 
 export const gif_category = [
