@@ -33,6 +33,9 @@ import { useAuth } from './assets/context/AuthContext';
     import Content from './assets/upload/Content';
     import EditContentBody from './assets/upload/EditContentBody';
 
+    //util
+    import getToken from './assets/util/auth';
+
 // Style
 import './assets/style/App.css';
 import './assets/style/Main.css';
@@ -58,10 +61,7 @@ import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
 
-const token = localStorage.getItem("token");
-
-
-
+// const token = localStorage.getItem("token");
 
 const App = () =>{
     return(
@@ -196,6 +196,15 @@ const Layout = () =>
         setDarkMode(prev => !prev)
     };
        
+    useEffect(() => {
+      
+      if (!token) {
+        // auto logout if expired
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiry");
+        navigate("/login");
+      }
+    }, []);
 
   // track login
   useEffect(() => {
