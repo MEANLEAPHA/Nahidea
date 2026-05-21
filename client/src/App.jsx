@@ -131,19 +131,126 @@ const App = () =>{
 }
  
 
-const Layout = () => 
-    {
+const Layout = () => {
+
   const navigate = useNavigate();
-  const { user, token, loading } = useAuth();
+
+  const {
+    user,
+    token,
+    loading,
+    logout,
+  } = useAuth();
 
   const [onlineUsers, setOnlineUsers] = useState([]);
 
+  // =========================================
+  // AXIOS 401 INTERCEPTOR
+  // =========================================
+  useEffect(() => {
 
+    const interceptor = axios.interceptors.response.use(
 
-  // socket
+      (response) => response,
+
+      (error) => {
+
+        if (error.response?.status === 401) {
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenExpiry");
+
+          disconnectSocket();
+
+          if (logout) logout();
+
+          window.location.href = "/login";
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+
+  }, [logout]);
+
+  // =========================================
+  // SESSION VALIDATION
+  // =========================================
+  useEffect(() => {
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const expiry = Number(
+      localStorage.getItem("tokenExpiry")
+    );
+
+    // invalid expiry
+    if (!expiry) {
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+
+      disconnectSocket();
+
+      navigate("/login");
+
+      return;
+    }
+
+    // expired
+    if (Date.now() > expiry) {
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+
+      disconnectSocket();
+
+      if (logout) logout();
+
+      navigate("/login");
+
+      return;
+    }
+
+    // auto logout timer
+    const timeout = setTimeout(() => {
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+
+      disconnectSocket();
+
+      if (logout) logout();
+
+      navigate("/login");
+
+    }, expiry - Date.now());
+
+    return () => clearTimeout(timeout);
+
+  }, [token, navigate, logout]);
+
+  // =========================================
+  // SOCKET CONNECTION
+  // =========================================
   useEffect(() => {
 
     if (!user || !token) return;
+
+    const expiry = Number(
+      localStorage.getItem("tokenExpiry")
+    );
+
+    if (!expiry || Date.now() > expiry) {
+      return;
+    }
 
     const socket = connectSocket({
       token,
@@ -155,56 +262,27 @@ const Layout = () =>
     });
 
     return () => {
+
       socket.off("online-users");
+
       disconnectSocket();
     };
 
   }, [user, token]);
 
-  const [showMaxAside, setMaxAside] = useState(() => {
-        return localStorage.getItem("maxAside") === "true";
-    });
-  
-    useEffect(()=>{
-        localStorage.setItem("maxAside", showMaxAside)
-    },
-    [showMaxAside]
-    );
-
-    const toggleAside = () =>{
-            setMaxAside(prev => !prev)
-    };
-    
-    // Theme mode tool
-    const [darkMode, setDarkMode] = useState( () => {
-        return localStorage.getItem("darkMode") === "true"; 
-    });
-
-    useEffect(
-        () => {
-            if(darkMode){
-                document.body.classList.add("dark-theme")
-            }
-            else{
-                document.body.classList.remove("dark-theme")
-            }
-            localStorage.setItem("darkMode", darkMode);
-        },
-        [darkMode]
-    );
-    const toggleTheme = () =>{
-        setDarkMode(prev => !prev)
-    };
-       
-
-  // track login
+  // =========================================
+  // LOGIN TRACKING
+  // =========================================
   useEffect(() => {
 
-     const expiry = localStorage.getItem("tokenExpiry");
-    if (Date.now() > Number(expiry)) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-      navigate("/login");
+    if (!token) return;
+
+    const expiry = Number(
+      localStorage.getItem("tokenExpiry")
+    );
+
+    if (!expiry || Date.now() > expiry) {
+      return;
     }
 
     const handleTrackLogin = async () => {
@@ -223,7 +301,7 @@ const Layout = () =>
 
       } catch (err) {
 
-        console.error(err);
+        console.error("track login error:", err);
 
       }
     };
@@ -232,20 +310,82 @@ const Layout = () =>
 
   }, [token]);
 
+  // =========================================
+  // ASIDE STATE
+  // =========================================
+  const [showMaxAside, setMaxAside] = useState(() => {
+    return localStorage.getItem("maxAside") === "true";
+  });
+
+  useEffect(() => {
+
+    localStorage.setItem(
+      "maxAside",
+      showMaxAside
+    );
+
+  }, [showMaxAside]);
+
+  const toggleAside = () => {
+    setMaxAside(prev => !prev);
+  };
+
+  // =========================================
+  // THEME STATE
+  // =========================================
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
+
+  useEffect(() => {
+
+    if (darkMode) {
+      document.body.classList.add("dark-theme");
+    }
+    else {
+      document.body.classList.remove("dark-theme");
+    }
+
+    localStorage.setItem(
+      "darkMode",
+      darkMode
+    );
+
+  }, [darkMode]);
+
+  const toggleTheme = () => {
+    setDarkMode(prev => !prev);
+  };
+
+  // =========================================
+  // LOADING
+  // =========================================
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // =========================================
+  // ONLINE STATUS
+  // =========================================
   const isOnline =
     user?.id
       ? onlineUsers.includes(String(user.id))
       : false;
 
+  // =========================================
+  // RENDER
+  // =========================================
   return (
     <>
-      <Header avatar_url={user?.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
+      <Header
+        avatar_url={user?.avatar_url}
+        onToggleAside={toggleAside}
+        onToggleTheme={toggleTheme}
+        currentTheme={darkMode}
+      />
 
       <main style={{ position: "relative" }}>
+
         <Aside />
 
         <section>
@@ -256,10 +396,11 @@ const Layout = () =>
             }}
           />
         </section>
+
       </main>
     </>
   );
-};
+}
 
 
 
@@ -276,67 +417,40 @@ export default App;
 
 
 
+// const Layout = () => 
+//     {
+//   const navigate = useNavigate();
+//   const { user, token, loading } = useAuth();
 
-// const Layout = () => {
-//      // if(!token){
-//     //     return <Login/>
-//     // }
+//   const [onlineUsers, setOnlineUsers] = useState([]);
 
-    
 
-//     const [onlineUsers, setOnlineUsers] = useState([]);
-//       useEffect(() => {
-    
-//          handleTrackLogin();
-//       socket.on(
-//         "online-users",
-//         (users) => {
-    
-//           setOnlineUsers(users);
-    
-//         }
-//       );
-    
-//       return () => {
-    
-//         socket.off("online-users");
-    
-//       };
-    
-//     }, []);
 
-    
+//   // socket
+//   useEffect(() => {
 
-//     const handleTrackLogin = async() =>{
-//         try{
-//             await axios.post(
-//                 `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
-//                 {},
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${token}`,
-//                     },
-//                 }
-//             );
-//         }catch(err){
-//             console.error(err);
-//         }
-//     }
+//     if (!user || !token) return;
 
-//     // Aside mode tool
-//     const [username, setUsername] = useState('Guest');
-//     const [avatar_url, setAvatar] = useState("https://api.dicebear.com/9.x/adventurer/svg?seed=Alex");
-//     const [profession, setProfession] = useState(null);
-//     const [work_location, setLocation] = useState(null);
-//     const [bio, setBio] = useState("Come and join Nahidea's family!");
-//     const [nickname, setNickname] = useState('whynotsignup');
-//     const [userId, setUserId] = useState(null);
-//     const [showMaxAside, setMaxAside] = useState(() => {
-//             return localStorage.getItem("maxAside") === "true";
-//         });
+//     const socket = connectSocket({
+//       token,
+//       userId: user.id,
+//     });
 
-    
-    
+//     socket.on("online-users", (users) => {
+//       setOnlineUsers(users);
+//     });
+
+//     return () => {
+//       socket.off("online-users");
+//       disconnectSocket();
+//     };
+
+//   }, [user, token]);
+
+//   const [showMaxAside, setMaxAside] = useState(() => {
+//         return localStorage.getItem("maxAside") === "true";
+//     });
+  
 //     useEffect(()=>{
 //         localStorage.setItem("maxAside", showMaxAside)
 //     },
@@ -364,90 +478,71 @@ export default App;
 //         },
 //         [darkMode]
 //     );
-       
-
-//    useEffect(() => {
-//   async function loadTempoInfo() {
-//     // 1. Check sessionStorage first
-//     const cachedName = sessionStorage.getItem("username");
-//     const cachedAvatar = sessionStorage.getItem("avatar");
-//     const cachedLocation = sessionStorage.getItem("location");
-//     const cachedBio = sessionStorage.getItem("bio");
-//     const cachedNickname = sessionStorage.getItem("nickname");
-//     const cachedUserId = sessionStorage.getItem("userId");
-//     const cachedProfession = sessionStorage.getItem("profession");
-
-//     if (cachedName && cachedUserId) {
-//       setUsername(cachedName);
-//       setUserId(cachedUserId);
-//       setAvatar(cachedAvatar);
-//       setLocation(cachedLocation);
-//       setBio(cachedBio);
-//       setProfession(cachedProfession);
-//       setNickname(cachedNickname);
-//       return;
-//     }
-
-//     // 2. Ask backend for username (backend decodes token itself)
-//     try {
-//       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/me`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       });
-//       if (!res.ok) throw new Error("Failed to fetch username");
-
-//       const data = await res.json();
-//       const username = data.userData?.username || data.username;
-//       const avatar = data.userData?.avatar_url || data.avatar_url;
-//       const location = data.userData?.work_place || data.work_place;
-//       const bio = data.userData?.bio || data.bio;
-//       const nickname = data.userData?.nickname || data.nickname;
-//       const profession = data.userData?.profession || data.profession;
-//       const userId = data.userData?.id || data.id;
-
-
-//       sessionStorage.setItem("userId", userId);
-//       setUserId(userId);
-//       sessionStorage.setItem("username", username);
-//       setUsername(username);
-//       sessionStorage.setItem("avatar", avatar);
-//       setAvatar(avatar);
-//       sessionStorage.setItem("location", location);
-//       setLocation(location);
-//       sessionStorage.setItem("bio", bio);
-//       setBio(bio);
-//       sessionStorage.setItem("nickname", nickname);
-//       setNickname(nickname);
-//       sessionStorage.setItem("profession", profession);
-//       setProfession(profession);
-
-//     } catch (err) {
-//       console.error("Error loading username", err);
-//     }
-//   }
-
-//   loadTempoInfo();
-// }, []);
-
 //     const toggleTheme = () =>{
 //         setDarkMode(prev => !prev)
 //     };
+       
 
-//      const isOnline = userId ? onlineUsers.includes(String(userId)) : false;
+//   // track login
+//   useEffect(() => {
 
+//      const expiry = localStorage.getItem("tokenExpiry");
+//     if (Date.now() > Number(expiry)) {
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("tokenExpiry");
+//       navigate("/login");
+//     }
 
+//     const handleTrackLogin = async () => {
 
-//      return(
-//         <>
-//             <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} avatar_url={avatar_url}/>
-//             <main style={{position:'relative'}}>
-//                 <Aside append={showMaxAside}/>
-//                 <section>
-//                     <Outlet context={{ username, userId, avatar_url, work_location, bio, nickname, profession, isOnline }} />
-//                 </section>
-//             </main>
-         
-//         </>
-//     )
-// }
+//       try {
+
+//         await axios.post(
+//           `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
+//           {},
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           }
+//         );
+
+//       } catch (err) {
+
+//         console.error(err);
+
+//       }
+//     };
+
+//     handleTrackLogin();
+
+//   }, [token]);
+
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   const isOnline =
+//     user?.id
+//       ? onlineUsers.includes(String(user.id))
+//       : false;
+
+//   return (
+//     <>
+//       <Header avatar_url={user?.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode}/>
+
+//       <main style={{ position: "relative" }}>
+//         <Aside />
+
+//         <section>
+//           <Outlet
+//             context={{
+//               user,
+//               isOnline,
+//             }}
+//           />
+//         </section>
+//       </main>
+//     </>
+//   );
+// };

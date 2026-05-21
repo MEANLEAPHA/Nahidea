@@ -59,11 +59,10 @@ const Login = () => {
         res.status === 200 && toast.success(data.message);
         localStorage.setItem("token", data.token);
         
-        const expiry = Date.now() + 5 * 60 * 1000; // 5 minutes
-        localStorage.setItem("tokenExpiry", expiry);
+        
 
-        // const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
-        // localStorage.setItem("tokenExpiry", expiry);
+        const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
+        localStorage.setItem("tokenExpiry", expiry);
 
         setTimeout(() => {
           navigate("/home");
