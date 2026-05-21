@@ -17,6 +17,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
+// lucide
+import {
+  Heart,
+  HeartOff,
+  Bookmark,
+  LoaderCircle
+} from "lucide-react";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
@@ -637,6 +644,45 @@ const handleFavorite = async (postId) => {
                         <div className='post-footer'>
                             <div className='post-footer-left'>
                               <button
+                                  className={`button-action-footer like-button ${
+                                    post.is_liked ? "liked" : ""
+                                  }`}
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleLike(post.id, post.user_id);
+                                  }}
+                                  disabled={likingPosts.has(post.id)}
+                                >
+                                  <div className="action-icon-wrapper">
+
+                                    {likingPosts.has(post.id) ? (
+
+                                      <LoaderCircle
+                                        size={19}
+                                        className="button-action-footer-icon loading-spin"
+                                      />
+
+                                    ) : (
+
+                                      <Heart
+                                        size={19}
+                                        className={`button-action-footer-icon heart-icon ${
+                                          post.is_liked ? "heart-active" : ""
+                                        }`}
+                                        fill={post.is_liked ? "currentColor" : "none"}
+                                      />
+
+                                    )}
+
+                                  </div>
+
+                                  <p>
+                                    <span>{post.likes_count}</span>
+                                    <span className='count-label'> Like</span>
+                                  </p>
+                                </button>
+                              {/* <button
                                 className={`button-action-footer ${
                                   likingPosts.has(post.id) ? "liking" : ""
                                 }`}
@@ -648,12 +694,44 @@ const handleFavorite = async (postId) => {
                                 disabled={likingPosts.has(post.id)}
                               ><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> 
                               <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p>
-                              </button>
+                              </button>  */}
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
-                       
-                              <button
+                                <button
+                                    className={`button-action-footer button-action-footer-last favorite-button ${
+                                      post.is_favorited ? "favorited" : ""
+                                    }`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleFavorite(post.id);
+                                    }}
+                                    disabled={favoritingPosts.has(post.id)}
+                                  >
+                                    <div className="action-icon-wrapper">
+
+                                      {favoritingPosts.has(post.id) ? (
+
+                                        <LoaderCircle
+                                          size={18}
+                                          className="button-action-footer-icon loading-spin"
+                                        />
+
+                                      ) : (
+
+                                        <Bookmark
+                                          size={18}
+                                          className={`button-action-footer-icon bookmark-icon ${
+                                            post.is_favorited ? "bookmark-active" : ""
+                                          }`}
+                                          fill={post.is_favorited ? "currentColor" : "none"}
+                                        />
+
+                                      )}
+
+                                    </div>
+                                  </button>
+                              {/* <button
                                 className={`button-action-footer button-action-footer-last ${
                                   post.is_favorited ? "favorited" : ""
                                 }`}
@@ -662,7 +740,7 @@ const handleFavorite = async (postId) => {
                                   handleFavorite(post.id);
                                 }}
                               ><FontAwesomeIcon icon={faBookmark} />
-                              </button>
+                              </button> */}
                             </div> 
                         </div>
 

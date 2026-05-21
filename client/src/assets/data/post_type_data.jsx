@@ -30,7 +30,7 @@ export const content_options = [
   {
     value: "relationship",
     label: "Relationship",
-    icon: "https://cdn.lordicon.com/ewmfucya.json", //
+    icon: "https://cdn.lordicon.com/zqggznpp.json", //
   },
   {
     value: "religion",
@@ -70,7 +70,7 @@ export const content_options = [
   {
     value: "travel",
     label: "Travel",
-    icon: "https://cdn.lordicon.com/dhmavvpz.json", //
+    icon: "https://cdn.lordicon.com/muqcnbpa.json", //
   },
   {
     value: "food",
@@ -80,7 +80,7 @@ export const content_options = [
   {
     value: "sports",
     label: "Sports",
-    icon: "https://cdn.lordicon.com/uijoyceh.json", //
+    icon: "https://cdn.lordicon.com/gkiywisz.json", //
   },
   {
     value: "art",
@@ -168,7 +168,7 @@ export const confession_options = [
   {
     value: "heartbreak",
     label: "Heartbreak",
-    icon: "https://cdn.lordicon.com/nocovwne.json",
+    icon: "https://cdn.lordicon.com/ewmfucya.json", //
   },
   {
     value: "situationship",
@@ -188,22 +188,22 @@ export const confession_options = [
   {
     value: "lonely",
     label: "Feeling Lonely",
-    icon: "https://cdn.lordicon.com/vryosahy.json",
+    icon: "https://cdn.lordicon.com/ltffebyg.json", //
   },
   {
     value: "overthinking",
     label: "Overthinking",
-    icon: "https://cdn.lordicon.com/mfmkufkr.json",
+    icon: "https://cdn.lordicon.com/uewczsuz.json", //
   },
   {
     value: "stress",
     label: "Stress",
-    icon: "https://cdn.lordicon.com/smwmetfi.json",
+    icon: "https://cdn.lordicon.com/kpjdxodr.json", //
   },
   {
     value: "depression",
     label: "Depression",
-    icon: "https://cdn.lordicon.com/yozpgryn.json",
+    icon: "https://cdn.lordicon.com/egdmrpms.json", //
   },
   {
     value: "insecurity",
@@ -218,7 +218,7 @@ export const confession_options = [
   {
     value: "teacher_story",
     label: "Teacher Story",
-    icon: "https://cdn.lordicon.com/kbtmbyzy.json",
+    icon: "https://cdn.lordicon.com/zbtbhzsg.json", //
   },
   {
     value: "work_drama",
@@ -228,12 +228,12 @@ export const confession_options = [
   {
     value: "boss_drama",
     label: "Boss Drama",
-    icon: "https://cdn.lordicon.com/slkvcfos.json",
+    icon: "https://cdn.lordicon.com/elcmkycs.json", //
   },
   {
     value: "embarrassing",
     label: "Embarrassing Moment",
-    icon: "https://cdn.lordicon.com/gsqxdxog.json",
+    icon: "https://cdn.lordicon.com/avlfdgbi.json", //
   },
   {
     value: "regret",
@@ -316,152 +316,152 @@ export const question_options = [
   {
     value: "relationship",
     label: "Relationship",
-    icon: "https://cdn.lordicon.com/ulnswmkk.json",
+    icon: "https://cdn.lordicon.com/ajzwsrcs.json", //
   },
   {
     value: "dating",
     label: "Dating",
-    icon: "https://cdn.lordicon.com/hpivxauj.json",
+    icon: "https://cdn.lordicon.com/tvzhtfne.json", //
   },
   {
     value: "friendship",
     label: "Friendship",
-    icon: "https://cdn.lordicon.com/ayhtotha.json",
+    icon: "https://cdn.lordicon.com/hbfkszba.json", //
   },
   {
     value: "school_life",
     label: "School Life",
-    icon: "https://cdn.lordicon.com/qwjfapmb.json",
+    icon: "https://cdn.lordicon.com/uvhtrvux.json", //
   },
   {
     value: "university_life",
     label: "University Life",
-    icon: "https://cdn.lordicon.com/kbtmbyzy.json",
+    icon: "https://cdn.lordicon.com/jznyltqt.json", //
   },
   {
     value: "career_advice",
     label: "Career Advice",
-    icon: "https://cdn.lordicon.com/wwneckwc.json",
+    icon: "https://cdn.lordicon.com/qaeqyqcc.json", //
   },
   {
     value: "money_problem",
     label: "Money Problem",
-    icon: "https://cdn.lordicon.com/wwneckwc.json",
+    icon: "https://cdn.lordicon.com/tzovitfd.json", //
   },
   {
     value: "family_issue",
     label: "Family Issue",
-    icon: "https://cdn.lordicon.com/kdduutaw.json",
+    icon: "https://cdn.lordicon.com/oeydjyyv.json", //
   },
   {
     value: "mental_health",
     label: "Mental Health",
-    icon: "https://cdn.lordicon.com/fjvfsqea.json",
+    icon: "https://cdn.lordicon.com/beukdauc.json", //
   },
   {
     value: "gaming_help",
     label: "Gaming Help",
-    icon: "https://cdn.lordicon.com/msoeawqm.json",
+    icon: "https://cdn.lordicon.com/xtbppedy.json", //
   },
   {
     value: "tech_help",
     label: "Tech Help",
-    icon: "https://cdn.lordicon.com/zlyxhzar.json",
+    icon: "https://cdn.lordicon.com/uqxlhxnl.json", //
   },
   {
     value: "fashion_advice",
     label: "Fashion Advice",
-    icon: "https://cdn.lordicon.com/nhfyhmlt.json",
+    icon: "https://cdn.lordicon.com/efmfrlbq.json", //
   },
   {
     value: "fitness_help",
     label: "Fitness Help",
-    icon: "https://cdn.lordicon.com/qhgmphtg.json",
+    icon: "https://cdn.lordicon.com/crlbyqpf.json", //
   },
   {
     value: "life_advice",
     label: "Life Advice",
-    icon: "https://cdn.lordicon.com/rhrmfnhf.json",
+    icon: "https://cdn.lordicon.com/nqkijyip.json", //
   },
   {
     value: "social_media",
     label: "Social Media",
-    icon: "https://cdn.lordicon.com/ayhtotha.json",
+    icon: "https://cdn.lordicon.com/vqkaxtlm.json", //
   },
   {
     value: "study_help",
     label: "Study Help",
-    icon: "https://cdn.lordicon.com/qwjfapmb.json",
+    icon: "https://cdn.lordicon.com/nwfpiryp.json", //
   },
   {
     value: "hot_take",
     label: "Hot Take",
-    icon: "https://cdn.lordicon.com/mecwbjnp.json",
+    icon: "https://cdn.lordicon.com/igoofjrx.json", //
   },
   {
     value: "random_question",
     label: "Random Question",
-    icon: "https://cdn.lordicon.com/jdgfsfzr.json",
+    icon: "https://cdn.lordicon.com/hwfggmas.json", //
   },
   {
     value: "startup_help",
     label: "Startup Help",
-    icon: "https://cdn.lordicon.com/jdgfsfzr.json",
+    icon: "https://cdn.lordicon.com/xuqkksyh.json", //
   },
   {
     value: "ai_question",
     label: "AI Question",
-    icon: "https://cdn.lordicon.com/iltqorsz.json",
+    icon: "https://cdn.lordicon.com/uqxlhxnl.json", //
   },
   {
     value: "food_question",
     label: "Food Question",
-    icon: "https://cdn.lordicon.com/jeuxydnh.json" ,
+    icon: "https://cdn.lordicon.com/crlbyqpf.json", //
   },
   {
     value: "travel_help",
     label: "Travel Help",
-    icon: "https://cdn.lordicon.com/osuxyevn.json",
+    icon: "https://cdn.lordicon.com/ebfcponz.json", //
   },
   {
     value: "fitness_question",
     label: "Fitness Question",
-    icon: "https://cdn.lordicon.com/qhgmphtg.json",
+    icon: "https://cdn.lordicon.com/esqizcnh.json", //
   },
   {
     value: "religion_question",
     label: "Religion Question",
-    icon: "https://cdn.lordicon.com/ebjjjrhp.json",
+    icon: "https://cdn.lordicon.com/vtqihmgx.json", //
   },
   {
     value: "gaming_question",
     label: "Gaming Question",
-    icon: "https://cdn.lordicon.com/msoeawqm.json",
+    icon: "https://cdn.lordicon.com/xtbppedy.json", //
   },
   {
     value: "work_problem",
     label: "Work Problem",
-    icon: "https://cdn.lordicon.com/slkvcfos.json",
+    icon: "https://cdn.lordicon.com/qaeqyqcc.json", //
   },
   {
     value: "toxic_friend",
     label: "Toxic Friend",
-    icon: "https://cdn.lordicon.com/zpxybbhl.json",
+    icon: "https://cdn.lordicon.com/azxkyjta.json", //
   },
   {
     value: "self_improvement",
     label: "Self Improvement",
-    icon: "https://cdn.lordicon.com/yxczfiyc.json",
+    icon: "https://cdn.lordicon.com/ccsmfmxn.json", //
   },
   {
     value: "confusing_situation",
     label: "Confusing Situation",
-    icon: "https://cdn.lordicon.com/mfmkufkr.json",
+    icon: "https://cdn.lordicon.com/jkayhxkv.json", //
   },
   {
     value: "future_goal",
     label: "Future Goal",
-    icon: "https://cdn.lordicon.com/yxczfiyc.json",
+    icon: "https://cdn.lordicon.com/ioqhhtdq.json", //
   },
 ];
 

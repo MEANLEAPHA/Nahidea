@@ -621,6 +621,123 @@ margin-top: 10px;
    opacity: 1;
 }
 
+.button-action-footer:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.like-button,
+.favorite-button {
+  transition:
+    transform 0.18s ease,
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.like-button:hover,
+.favorite-button:hover {
+  transform: translateY(-1px);
+}
+
+.action-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   HEART
+========================= */
+
+.heart-icon {
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease,
+    fill 0.25s ease;
+}
+
+.heart-active {
+  color: #ff3b5c;
+  animation: heartPop 0.35s ease;
+}
+
+.like-button.liked {
+  color: #ff3b5c;
+}
+
+/* =========================
+   BOOKMARK
+========================= */
+
+.bookmark-icon {
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease,
+    fill 0.25s ease;
+}
+
+.bookmark-active {
+  color: #f59e0b;
+  animation: bookmarkPop 0.35s ease;
+}
+
+.favorite-button.favorited {
+  color: #f59e0b;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-spin {
+  animation: spin 0.8s linear infinite;
+  opacity: 0.8;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes heartPop {
+
+  0% {
+    transform: scale(0.7);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bookmarkPop {
+
+  0% {
+    transform: scale(0.75);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
 
 /* 
 question answer preview */
