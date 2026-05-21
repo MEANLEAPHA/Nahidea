@@ -138,12 +138,7 @@ const Layout = () =>
 
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  const expiry = localStorage.getItem("tokenExpiry");
-  if (Date.now() > Number(expiry)) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("tokenExpiry");
-    navigate("/login");
-  }
+
 
   // socket
   useEffect(() => {
@@ -205,7 +200,12 @@ const Layout = () =>
   // track login
   useEffect(() => {
 
-    if (!token) return;
+     const expiry = localStorage.getItem("tokenExpiry");
+    if (Date.now() > Number(expiry)) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+      navigate("/login");
+    }
 
     const handleTrackLogin = async () => {
 
