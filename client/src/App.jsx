@@ -1,5 +1,6 @@
 import React,{ useState, useEffect, useRef, memo } from 'react';
-import {BrowserRouter, Routes, Route, Outlet, useNavigate} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Outlet, useNavigate, Navigate} from 'react-router-dom';
+
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -180,62 +181,13 @@ const Layout = () => {
   // =========================================
   // SESSION VALIDATION
   // =========================================
-  useEffect(() => {
+ if (loading) {
+  return <div>Loading...</div>;
+}
 
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    const expiry = Number(
-      localStorage.getItem("tokenExpiry")
-    );
-
-    // invalid expiry
-    if (!expiry) {
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-
-      disconnectSocket();
-
-      navigate("/login");
-
-      return;
-    }
-
-    // expired
-    if (Date.now() > expiry) {
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-
-      disconnectSocket();
-
-      if (logout) logout();
-
-      navigate("/login");
-
-      return;
-    }
-
-    // auto logout timer
-    const timeout = setTimeout(() => {
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-
-      disconnectSocket();
-
-      if (logout) logout();
-
-      navigate("/login");
-
-    }, expiry - Date.now());
-
-    return () => clearTimeout(timeout);
-
-  }, [token, navigate, logout]);
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
 
   // =========================================
   // SOCKET CONNECTION

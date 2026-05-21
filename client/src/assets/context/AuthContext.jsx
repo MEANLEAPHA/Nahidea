@@ -12,58 +12,138 @@ export const AuthProvider = ({ children }) => {
   );
 
   const [loading, setLoading] = useState(true);
+  const logout = () => {
 
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenExpiry");
+
+    setToken(null);
+    setUser(null);
+
+  };
   useEffect(() => {
 
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+  const validateSession = async () => {
 
-    const fetchMe = async () => {
+    try {
 
-      try {
+      // no token
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
 
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      // expiry check
+      const expiry = Number(
+        localStorage.getItem("tokenExpiry")
+      );
 
-        const data = res.data.userData || res.data;
-
-        setUser({
-          id: data.id,
-          username: data.username,
-          avatar_url: data.avatar_url,
-          profession: data.profession,
-          work_location: data.work_place,
-          bio: data.bio,
-          nickname: data.nickname,
-        });
-
-      } catch (err) {
-
-        console.error(err);
+      if (!expiry || Date.now() > expiry) {
 
         localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiry");
 
         setToken(null);
         setUser(null);
-
-      } finally {
-
         setLoading(false);
 
+        return;
       }
-    };
 
-    fetchMe();
+      // validate token with backend
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  }, [token]);
+      const data = res.data.userData || res.data;
+
+      setUser({
+        id: data.id,
+        username: data.username,
+        avatar_url: data.avatar_url,
+        profession: data.profession,
+        work_location: data.work_place,
+        bio: data.bio,
+        nickname: data.nickname,
+      });
+
+    } catch (err) {
+
+      console.error(err);
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+
+      setToken(null);
+      setUser(null);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  };
+
+  validateSession();
+
+}, [token]);
+  // useEffect(() => {
+
+  //   if (!token) {
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   const fetchMe = async () => {
+
+  //     try {
+
+  //       const res = await axios.get(
+  //         `${import.meta.env.VITE_SERVER_URL}/api/me`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       const data = res.data.userData || res.data;
+
+  //       setUser({
+  //         id: data.id,
+  //         username: data.username,
+  //         avatar_url: data.avatar_url,
+  //         profession: data.profession,
+  //         work_location: data.work_place,
+  //         bio: data.bio,
+  //         nickname: data.nickname,
+  //       });
+
+  //     } catch (err) {
+
+  //       console.error(err);
+
+  //       localStorage.removeItem("token");
+
+  //       setToken(null);
+  //       setUser(null);
+
+  //     } finally {
+
+  //       setLoading(false);
+
+  //     }
+  //   };
+
+  //   fetchMe();
+
+  // }, [token]);
 
   return (
     <AuthContext.Provider
@@ -73,12 +153,14 @@ export const AuthProvider = ({ children }) => {
         loading,
         setUser,
         setToken,
+        logout,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
 
 export const useAuth = () => useContext(AuthContext);
 
