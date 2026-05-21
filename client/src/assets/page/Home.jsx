@@ -294,7 +294,7 @@ export default function Home() {
                   }}>
                   <p>{data.title}</p>
                 </div>
-              <div className="post-question-answer-preview">
+              <div className="post-question-answer-preview closed-preview-card question-preview-card">
                     {data.question_type === "closedend" && (
                       <div onClick={
                               ()=>{
@@ -306,13 +306,26 @@ export default function Home() {
                                 navigate(`/answer/${post.id}/${data.id}/closedend`);
                               }
                             }>
-                          <button>Yes</button>
-                          <button>No</button>
+                           <div className="question-preview-header">
+                            <span className="question-badge yesno-badge">
+                              Yes / No
+                            </span>
+                          </div>
+
+                          <div className="question-preview-options two-grid">
+                            <div className="option-chip yes-chip">
+                              Yes
+                            </div>
+
+                            <div className="option-chip no-chip">
+                              No
+                            </div>
+                          </div>
                         </div>
                       )}
 
                       {data.question_type === "range" && (
-                        <div onClick={
+                        <div  className="question-preview-card range-card" onClick={
                           ()=>{
                             const QaData = {
                               
@@ -327,14 +340,25 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/range`);
                           }
                         }>
-                          <Text>
-                            Range: {data.range_min} - {data.range_max}
-                          </Text>
-                        </div>
+                          <div className="question-preview-header">
+                                <span className="question-badge range-badge">
+                                  Range
+                                </span>
+                              </div>
+
+                              <div className="range-preview-bar">
+                                <div className="range-preview-fill" />
+                              </div>
+
+                              <div className="range-values">
+                                <span>{data.range_min}</span>
+                                <span>{data.range_max}</span>
+                              </div>
+                         </div>
                       )}
 
                       {data.question_type === "singlechoice" && (
-                        <div onClick={
+                        <div className="question-preview-card" onClick={
                           ()=>{        
                             const QaData = {
                                     question_id : data.id,
@@ -353,16 +377,29 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/singlechoice`);
                           }
                         }>
-                          <ul>
-                            {data.choice?.map((c, i) => (
-                              <li key={i}>{c.choice_text}</li>
-                            ))}
-                          </ul>
+                          <div className="question-preview-header">
+                              <span className="question-badge">
+                                Pick One
+                              </span>
+                            </div>
+
+                            <div className="question-preview-options two-grid">
+
+                              {data.choices?.map((c, i) => (
+                                <div
+                                  key={i}
+                                  className="option-chip"
+                                >
+                                  {c.choice_text}
+                                </div>
+                              ))}
+
+                            </div>
                         </div>
                       )}
 
                       {data.question_type === "multiplechoice" && (
-                        <div onClick={
+                        <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
                                      question_id : data.id,
@@ -381,16 +418,29 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
                           }
                         }>
-                          <ul>
+                          <div className="question-preview-header">
+                            <span className="question-badge multi-badge">
+                              Multiple Choice
+                            </span>
+                          </div>
+
+                          <div className="question-preview-options two-grid">
+
                             {data.choices?.map((c, i) => (
-                              <li key={i}>{c.choice_text}</li>
+                              <div
+                                key={i}
+                                className="option-chip"
+                              >
+                                {c.choice_text}
+                              </div>
                             ))}
-                          </ul>
+
+                          </div>
                         </div>
                       )}
 
                       {data.question_type === "rankingorder" && (
-                        <div onClick={
+                        <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
                                       question_id : data.id,
@@ -409,11 +459,28 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/rankingorder`);
                           }
                         }>
-                          <ol>
-                            {data.items?.map((i, idx) => (
-                              <li key={idx}>{i.item_text}</li>
+                          <div className="question-preview-header">
+                            <span className="question-badge rank-badge">
+                              Rank Order
+                            </span>
+                          </div>
+
+                          <div className="question-preview-options two-grid">
+
+                            {data.items?.map((item, idx) => (
+                              <div
+                                key={idx}
+                                className="option-chip rank-chip"
+                              >
+                                <span className="rank-number">
+                                  #{idx + 1}
+                                </span>
+
+                                {item.item_text}
+                              </div>
                             ))}
-                          </ol>
+
+                          </div>
                         </div>
                       )}
 

@@ -723,7 +723,7 @@ BUTTON STATES
 
 /* 
 question answer preview */
-
+/* 
 .post-question-answer-preview{
     width: 95%;
     margin: auto;
@@ -734,8 +734,6 @@ question answer preview */
 }
 
 
-/* 
-closend-preview */
 #closend-preview{
     display: flex;
     padding: 0;
@@ -763,7 +761,6 @@ closend-preview */
       padding: 10px 0px 10px 0px;
 }
 
-/* singlechoice */
 
 .singlechoice-preview-div{
     width: 50%;
@@ -784,6 +781,267 @@ closend-preview */
 }
 .singlechoice-preview-option label{
     color: var(--font-color);
+} */
+ /* =========================================
+QUESTION PREVIEW
+========================================= */
+
+.post-question-answer-preview{
+  width:95%;
+  margin:auto;
+}
+
+/* =========================================
+CARD
+========================================= */
+
+.question-preview-card{
+  width:100%;
+
+  padding:18px;
+
+  border-radius:22px;
+
+  background:var(--back-con);
+
+  border:1px solid var(--secondary-color);
+
+  margin-top:14px;
+
+  cursor:pointer;
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.question-preview-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(255,255,255,.08);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+}
+
+/* =========================================
+HEADER
+========================================= */
+
+.question-preview-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:15px;
+}
+
+/* =========================================
+BADGE
+========================================= */
+
+.question-badge{
+  padding:6px 12px;
+
+  border-radius:999px;
+
+  font-size:.72rem;
+  font-weight:600;
+
+  background:rgba(255,255,255,.06);
+
+  color:var(--font-color);
+}
+
+.yesno-badge{
+  background:
+    rgba(0,200,120,.12);
+
+  color:#31d98c;
+}
+
+.multi-badge{
+  background:
+    rgba(255,180,0,.12);
+
+  color:#ffbe3b;
+}
+
+.rank-badge{
+  background:
+    rgba(124,92,255,.12);
+
+  color:#9d85ff;
+}
+
+.range-badge{
+  background:
+    rgba(0,180,255,.12);
+
+  color:#54c8ff;
+}
+
+/* =========================================
+OPTIONS GRID
+========================================= */
+
+.question-preview-options{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap:12px;
+}
+
+/* =========================================
+OPTION CHIP
+========================================= */
+
+.option-chip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:52px;
+
+  padding:12px;
+
+  border-radius:16px;
+
+  background:
+    rgba(255,255,255,.04);
+
+  border:
+    1px solid rgba(255,255,255,.05);
+
+  color:var(--font-color);
+
+  font-size:.92rem;
+  font-weight:500;
+
+  text-align:center;
+
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease;
+}
+
+.question-preview-card:hover .option-chip{
+  background:
+    rgba(255,255,255,.06);
+}
+
+.option-chip:hover{
+  transform:scale(1.02);
+}
+
+/* =========================================
+YES NO
+========================================= */
+
+.yes-chip{
+  color:#2dd881;
+
+  background:
+    rgba(45,216,129,.08);
+}
+
+.no-chip{
+  color:#ff6b6b;
+
+  background:
+    rgba(255,107,107,.08);
+}
+
+/* =========================================
+RANK
+========================================= */
+
+.rank-chip{
+  justify-content:flex-start;
+
+  gap:10px;
+}
+
+.rank-number{
+  width:26px;
+  height:26px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    rgba(124,92,255,.16);
+
+  color:#a88cff;
+
+  font-size:.75rem;
+  font-weight:700;
+}
+
+/* =========================================
+RANGE
+========================================= */
+
+.range-preview-bar{
+  width:100%;
+  height:10px;
+
+  border-radius:999px;
+
+  overflow:hidden;
+
+  margin-top:10px;
+
+  background:
+    rgba(255,255,255,.06);
+}
+
+.range-preview-fill{
+  width:65%;
+  height:100%;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #54c8ff,
+      #7d7bff
+    );
+}
+
+.range-values{
+  margin-top:10px;
+
+  display:flex;
+  justify-content:space-between;
+
+  font-size:.85rem;
+
+  opacity:.75;
+}
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media (max-width:768px){
+
+  .question-preview-options{
+    grid-template-columns:1fr;
+  }
+
+  .question-preview-card{
+    padding:15px;
+  }
+
 }
 @media screen and (max-width: 1000px) {
     #feed-article{
