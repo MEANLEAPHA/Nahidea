@@ -756,7 +756,52 @@ margin-top: 10px;
   }
 }
 
+.action-icon-wrapper{
+  width:20px;
+  height:20px;
 
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.button-action-footer-icon{
+  transition:
+    color 0.25s ease,
+    fill 0.25s ease,
+    transform 0.25s ease;
+
+  will-change: transform;
+}
+
+/* LIKE ACTIVE */
+.liked-heart{
+  color:#ff3b5c;
+
+  filter:
+    drop-shadow(0 0 10px rgba(255,59,92,0.35));
+}
+
+/* FAVORITE ACTIVE */
+.favorited-bookmark{
+  color:#f5b301;
+
+  filter:
+    drop-shadow(0 0 10px rgba(245,179,1,0.35));
+}
+
+/* button smoothing */
+.like-button,
+.favorite-button{
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.like-button:hover,
+.favorite-button:hover{
+  transform:translateY(-1px);
+}
 
 /* 
 question answer preview */

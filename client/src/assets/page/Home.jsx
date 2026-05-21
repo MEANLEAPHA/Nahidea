@@ -25,7 +25,7 @@ import {
   LoaderCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { Heart, Bookmark } from "lucide-react";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
@@ -645,82 +645,173 @@ const handleFavorite = async (postId) => {
 
                         <div className='post-footer'>
                             <div className='post-footer-left'>
-                              <motion.div
-                                whileTap={{ scale: 0.8 }}
-                                animate={
-                                  likingPosts.has(post.id)
-                                    ? {
-                                        scale: [1, 1.35, 1],
-                                        rotate: [0, -12, 12, 0]
-                                      }
-                                    : {}
-                                }
-                                transition={{
-                                  duration: 0.45,
-                                  ease: "easeInOut"
-                                }}
-                              >
-                                <Heart
-                                  size={20}
-                                  strokeWidth={2.3}
-                                  className={`
-                                    button-action-footer-icon
-                                    ${post.is_liked ? "liked-heart" : ""}
-                                  `}
-                                  fill={post.is_liked ? "currentColor" : "none"}
-                                />
-                              </motion.div>
+                              <button
+  className={`button-action-footer button-action-footer-last favorite-button ${
+    post.is_favorited ? "favorited" : ""
+  }`}
+  onClick={(e) => {
+    e.preventDefault();
+    handleFavorite(post.id);
+  }}
+>
+  <motion.div
+    className="action-icon-wrapper"
+    whileTap={{ scale: 0.75 }}
+    animate={
+      favoritingPosts.has(post.id)
+        ? {
+            scale: [1, 1.25, 1],
+            y: [0, -5, 0]
+          }
+        : {}
+    }
+    transition={{
+      duration: 0.4,
+      ease: "easeInOut"
+    }}
+  >
+    <AnimatePresence mode="wait">
+
+      {post.is_favorited ? (
+
+        <motion.div
+          key="favorited"
+          initial={{
+            scale: 0.4,
+            opacity: 0,
+            y: 10
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1,
+            y: 0
+          }}
+          exit={{
+            scale: 0.4,
+            opacity: 0,
+            y: 10
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 22
+          }}
+        >
+          <Bookmark
+            size={18}
+            className="button-action-footer-icon favorited-bookmark"
+            fill="currentColor"
+          />
+        </motion.div>
+
+      ) : (
+
+        <motion.div
+          key="unfavorited"
+          initial={{
+            scale: 0.4,
+            opacity: 0
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1
+          }}
+          exit={{
+            scale: 0.4,
+            opacity: 0
+          }}
+          transition={{
+            duration: 0.2
+          }}
+        >
+          <Bookmark
+            size={18}
+            className="button-action-footer-icon"
+          />
+        </motion.div>
+
+      )}
+
+    </AnimatePresence>
+  </motion.div>
+</button>
                               {/* <button
-                                className={`button-action-footer ${
-                                  likingPosts.has(post.id) ? "liking" : ""
-                                }`}
-                                type="button"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleLike(post.id, post.user_id);
-                                }}
-                                disabled={likingPosts.has(post.id)}
-                              ><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> 
-                              <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p>
-                              </button>  */}
+                                  className={`button-action-footer like-button ${
+                                    post.is_liked ? "liked" : ""
+                                  }`}
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleLike(post.id, post.user_id);
+                                  }}
+                                  disabled={likingPosts.has(post.id)}
+                                >
+                                  <div className="action-icon-wrapper">
+
+                                    {likingPosts.has(post.id) ? (
+
+                                      <LoaderCircle
+                                        size={19}
+                                        className="button-action-footer-icon loading-spin"
+                                      />
+
+                                    ) : (
+
+                                      <Heart
+                                        size={19}
+                                        className={`button-action-footer-icon heart-icon ${
+                                          post.is_liked ? "heart-active" : ""
+                                        }`}
+                                        fill={post.is_liked ? "currentColor" : "none"}
+                                      />
+
+                                    )}
+
+                                  </div>
+
+                                  <p>
+                                    <span>{post.likes_count}</span>
+                                    <span className='count-label'> Like</span>
+                                  </p>
+                                </button> */}
+                       
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
-                                <motion.div
-                                  whileTap={{ scale: 0.8 }}
-                                  animate={
-                                    favoritingPosts.has(post.id)
-                                      ? {
-                                          scale: [1, 1.25, 1],
-                                          y: [0, -4, 0]
-                                        }
-                                      : {}
-                                  }
-                                  transition={{
-                                    duration: 0.4,
-                                    ease: "easeInOut"
-                                  }}
-                                >
-                                  <Bookmark
-                                    size={20}
-                                    strokeWidth={2.3}
-                                    className={`
-                                      button-action-footer-icon
-                                      ${post.is_favorited ? "favorited-bookmark" : ""}
-                                    `}
-                                    fill={post.is_favorited ? "currentColor" : "none"}
-                                  />
-                                </motion.div>
-                              {/* <button
-                                className={`button-action-footer button-action-footer-last ${
-                                  post.is_favorited ? "favorited" : ""
-                                }`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleFavorite(post.id);
-                                }}
-                              ><FontAwesomeIcon icon={faBookmark} />
-                              </button> */}
+                                <button
+                                    className={`button-action-footer button-action-footer-last favorite-button ${
+                                      post.is_favorited ? "favorited" : ""
+                                    }`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleFavorite(post.id);
+                                    }}
+                                    disabled={favoritingPosts.has(post.id)}
+                                  >
+                                    <div className="action-icon-wrapper">
+
+                                      {favoritingPosts.has(post.id) ? (
+
+                                        <LoaderCircle
+                                          size={18}
+                                          className="button-action-footer-icon loading-spin"
+                                        />
+
+                                      ) : (
+
+                                        <Bookmark
+                                          size={18}
+                                          className={`button-action-footer-icon bookmark-icon ${
+                                            post.is_favorited ? "bookmark-active" : ""
+                                          }`}
+                                          fill={post.is_favorited ? "currentColor" : "none"}
+                                        />
+
+                                      )}
+
+                                    </div>
+                                  </button>
+                           
                             </div> 
                         </div>
 
