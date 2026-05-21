@@ -61,8 +61,6 @@ import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
 
-// const token = localStorage.getItem("token");
-
 const App = () =>{
     return(
         <BrowserRouter>
@@ -135,10 +133,17 @@ const App = () =>{
 
 const Layout = () => 
     {
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const { user, token, loading } = useAuth();
 
   const [onlineUsers, setOnlineUsers] = useState([]);
+
+  const expiry = localStorage.getItem("tokenExpiry");
+  if (Date.now() > Number(expiry)) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenExpiry");
+    navigate("/login");
+  }
 
   // socket
   useEffect(() => {
@@ -196,15 +201,6 @@ const Layout = () =>
         setDarkMode(prev => !prev)
     };
        
-    // useEffect(() => {
-      
-    //   if (!token) {
-    
-    //     localStorage.removeItem("token");
-    //     localStorage.removeItem("tokenExpiry");
-    //     navigate("/login");
-    //   }
-    // }, []);
 
   // track login
   useEffect(() => {
