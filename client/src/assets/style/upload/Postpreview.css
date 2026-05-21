@@ -576,8 +576,8 @@ margin-top: 10px;
     padding: 0px;
     display: flex;
     justify-content: space-between;
-     height: auto;
-     margin: 10px auto;
+    height: auto;
+    margin: 10px auto;
 }
 .post-footer-left{
     height: auto;
@@ -610,15 +610,14 @@ margin-top: 10px;
     opacity: 0.8;
     font-size: small;
     cursor: pointer;
+    transition:
+        background-color .2s ease,
+        transform .15s ease,
+        opacity .2s ease;
 }
-.button-action-footer p{
-    color: var(--font-color);
-    margin: 0; 
-    font-size: smaller;
-}
-
 .button-action-footer:hover{
-   opacity: 1;
+    opacity: 1;
+    transform:translateY(-1px);
 }
 
 .button-action-footer:disabled {
@@ -626,72 +625,104 @@ margin-top: 10px;
   cursor: not-allowed;
 }
 
-
-.heart-icon {
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease,
-    fill 0.25s ease;
+.button-action-footer:active{
+  transform:scale(.97);
 }
 
-.heart-active {
-  color: #ff3b5c;
-  animation: heartPop 0.35s ease;
+.button-action-footer p{
+    color: var(--font-color);
+    margin: 0; 
+    font-size: smaller;
 }
 
 
-
+/* =========================================
+ICON WRAPPER
+========================================= */
 
 .action-icon-wrapper{
+  position:relative;
+
   width:20px;
   height:20px;
+
+  min-width:20px;
+  min-height:20px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:visible;
+}
+
+/* =========================================
+ICON LAYER
+========================================= */
+
+.icon-layer{
+  position:absolute;
+
+  inset:0;
 
   display:flex;
   align-items:center;
   justify-content:center;
 }
 
-.button-action-footer-icon{
-  transition:
-    color 0.25s ease,
-    fill 0.25s ease,
-    transform 0.25s ease;
+/* =========================================
+SVG
+========================================= */
 
-  will-change: transform;
+.button-action-footer-icon{
+  width:19px;
+  height:19px;
+
+  stroke-width:2.2;
+
+  flex-shrink:0;
+
+  display:block;
 }
 
-/* LIKE ACTIVE */
+/* =========================================
+LIKE ACTIVE
+========================================= */
+
 .liked-heart{
   color:#ff3b5c;
 
   filter:
-    drop-shadow(0 0 10px rgba(255,59,92,0.35));
+    drop-shadow(0 0 8px rgba(255,59,92,.28));
 }
 
-/* FAVORITE ACTIVE */
+/* =========================================
+FAVORITE ACTIVE
+========================================= */
+
 .favorited-bookmark{
   color:#f5b301;
 
   filter:
-    drop-shadow(0 0 10px rgba(245,179,1,0.35));
+    drop-shadow(0 0 8px rgba(245,179,1,.28));
 }
 
-/* button smoothing */
-.like-button,
-.favorite-button{
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+/* =========================================
+BUTTON STATES
+========================================= */
+
+.like-button.liked{
+  background:
+    rgba(255,59,92,.08);
 }
 
-.like-button:hover,
-.favorite-button:hover{
-  transform:translateY(-1px);
+.favorite-button.favorited{
+  background:
+    rgba(245,179,1,.08);
 }
 
 /* 
 question answer preview */
-
 
 .post-question-answer-preview{
     width: 95%;

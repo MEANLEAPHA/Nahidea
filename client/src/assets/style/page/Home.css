@@ -323,6 +323,35 @@ p{
 
 
 
+.marquee-wrapper {
+  overflow: hidden;
+  background: #222;
+  color: #fff;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.marquee {
+  display: flex;
+  gap: 50px;
+  white-space: nowrap;
+  animation: scroll 10s linear infinite;
+}
+
+.marquee span {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+}
 
 
 @media screen and (max-width:1000px){
