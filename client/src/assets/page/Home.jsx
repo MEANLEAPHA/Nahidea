@@ -645,51 +645,52 @@ const handleFavorite = async (postId) => {
 
                         <div className='post-footer'>
                             <div className='post-footer-left'>
-                              <button
-  className={`button-action-footer button-action-footer-last favorite-button ${
-    post.is_favorited ? "favorited" : ""
+                            <button
+  className={`button-action-footer like-button ${
+    post.is_liked ? "liked" : ""
   }`}
+  type="button"
   onClick={(e) => {
     e.preventDefault();
-    handleFavorite(post.id);
+    handleLike(post.id, post.user_id);
   }}
 >
   <motion.div
     className="action-icon-wrapper"
     whileTap={{ scale: 0.75 }}
     animate={
-      favoritingPosts.has(post.id)
+      likingPosts.has(post.id)
         ? {
-            scale: [1, 1.25, 1],
-            y: [0, -5, 0]
+            scale: [1, 1.35, 1],
+            rotate: [0, -15, 15, 0]
           }
         : {}
     }
     transition={{
-      duration: 0.4,
+      duration: 0.45,
       ease: "easeInOut"
     }}
   >
     <AnimatePresence mode="wait">
 
-      {post.is_favorited ? (
+      {post.is_liked ? (
 
         <motion.div
-          key="favorited"
+          key="liked"
           initial={{
             scale: 0.4,
             opacity: 0,
-            y: 10
+            rotate: -25
           }}
           animate={{
             scale: 1,
             opacity: 1,
-            y: 0
+            rotate: 0
           }}
           exit={{
             scale: 0.4,
             opacity: 0,
-            y: 10
+            rotate: 25
           }}
           transition={{
             type: "spring",
@@ -697,9 +698,9 @@ const handleFavorite = async (postId) => {
             damping: 22
           }}
         >
-          <Bookmark
-            size={18}
-            className="button-action-footer-icon favorited-bookmark"
+          <Heart
+            size={19}
+            className="button-action-footer-icon liked-heart"
             fill="currentColor"
           />
         </motion.div>
@@ -707,7 +708,7 @@ const handleFavorite = async (postId) => {
       ) : (
 
         <motion.div
-          key="unfavorited"
+          key="unliked"
           initial={{
             scale: 0.4,
             opacity: 0
@@ -724,8 +725,8 @@ const handleFavorite = async (postId) => {
             duration: 0.2
           }}
         >
-          <Bookmark
-            size={18}
+          <Heart
+            size={19}
             className="button-action-footer-icon"
           />
         </motion.div>
@@ -734,6 +735,11 @@ const handleFavorite = async (postId) => {
 
     </AnimatePresence>
   </motion.div>
+
+  <p>
+    <span>{post.likes_count}</span>
+    <span className="count-label"> Like</span>
+  </p>
 </button>
                               {/* <button
                                   className={`button-action-footer like-button ${
