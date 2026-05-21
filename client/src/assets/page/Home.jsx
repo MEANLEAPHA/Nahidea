@@ -25,7 +25,7 @@ import {
   LoaderCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Bookmark } from "lucide-react";
+
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
