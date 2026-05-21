@@ -146,7 +146,7 @@ const Layout = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   // =========================================
-  // AXIOS 401 INTERCEPTOR
+  // AXIOS INTERCEPTOR
   // =========================================
   useEffect(() => {
 
@@ -163,9 +163,11 @@ const Layout = () => {
 
           disconnectSocket();
 
-          if (logout) logout();
+          logout?.();
 
-          window.location.href = "/login";
+          navigate("/login", {
+            replace: true
+          });
         }
 
         return Promise.reject(error);
@@ -176,25 +178,14 @@ const Layout = () => {
       axios.interceptors.response.eject(interceptor);
     };
 
-  }, [logout]);
+  }, [navigate, logout]);
 
   // =========================================
-  // SESSION VALIDATION
-  // =========================================
- if (loading) {
-  return <div>Loading...</div>;
-}
-
-  if (!token || !user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // =========================================
-  // SOCKET CONNECTION
+  // SOCKET
   // =========================================
   useEffect(() => {
 
-    if (!user || !token) return;
+    if (!token || !user) return;
 
     const expiry = Number(
       localStorage.getItem("tokenExpiry")
@@ -220,10 +211,10 @@ const Layout = () => {
       disconnectSocket();
     };
 
-  }, [user, token]);
+  }, [token, user]);
 
   // =========================================
-  // LOGIN TRACKING
+  // AUTO LOGOUT
   // =========================================
   useEffect(() => {
 
@@ -233,9 +224,51 @@ const Layout = () => {
       localStorage.getItem("tokenExpiry")
     );
 
-    if (!expiry || Date.now() > expiry) {
+    if (!expiry) return;
+
+    const remaining = expiry - Date.now();
+
+    if (remaining <= 0) {
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+
+      disconnectSocket();
+
+      logout?.();
+
+      navigate("/login", {
+        replace: true
+      });
+
       return;
     }
+
+    const timeout = setTimeout(() => {
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+
+      disconnectSocket();
+
+      logout?.();
+
+      navigate("/login", {
+        replace: true
+      });
+
+    }, remaining);
+
+    return () => clearTimeout(timeout);
+
+  }, [token, navigate, logout]);
+
+  // =========================================
+  // TRACK LOGIN
+  // =========================================
+  useEffect(() => {
+
+    if (!token) return;
 
     const handleTrackLogin = async () => {
 
@@ -253,7 +286,7 @@ const Layout = () => {
 
       } catch (err) {
 
-        console.error("track login error:", err);
+        console.error(err);
 
       }
     };
@@ -263,7 +296,7 @@ const Layout = () => {
   }, [token]);
 
   // =========================================
-  // ASIDE STATE
+  // ASIDE
   // =========================================
   const [showMaxAside, setMaxAside] = useState(() => {
     return localStorage.getItem("maxAside") === "true";
@@ -283,7 +316,7 @@ const Layout = () => {
   };
 
   // =========================================
-  // THEME STATE
+  // THEME
   // =========================================
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true";
@@ -291,12 +324,10 @@ const Layout = () => {
 
   useEffect(() => {
 
-    if (darkMode) {
-      document.body.classList.add("dark-theme");
-    }
-    else {
-      document.body.classList.remove("dark-theme");
-    }
+    document.body.classList.toggle(
+      "dark-theme",
+      darkMode
+    );
 
     localStorage.setItem(
       "darkMode",
@@ -310,14 +341,18 @@ const Layout = () => {
   };
 
   // =========================================
-  // LOADING
+  // AFTER ALL HOOKS
   // =========================================
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
+
   // =========================================
-  // ONLINE STATUS
+  // ONLINE
   // =========================================
   const isOnline =
     user?.id
@@ -352,7 +387,7 @@ const Layout = () => {
       </main>
     </>
   );
-}
+};
 
 
 
