@@ -196,15 +196,15 @@ const Layout = () =>
         setDarkMode(prev => !prev)
     };
        
-    useEffect(() => {
+    // useEffect(() => {
       
-      if (!token) {
-        // auto logout if expired
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenExpiry");
-        navigate("/login");
-      }
-    }, []);
+    //   if (!token) {
+    
+    //     localStorage.removeItem("token");
+    //     localStorage.removeItem("tokenExpiry");
+    //     navigate("/login");
+    //   }
+    // }, []);
 
   // track login
   useEffect(() => {

@@ -90,7 +90,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => getToken());   // ✅ use helper
+  const [token, setToken] = useState(localStorage.getItem("token"));   // ✅ use helper
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
