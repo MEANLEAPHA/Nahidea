@@ -23,10 +23,33 @@ const BaseFlipCard = ({
   back,
   frontClass = "",
 }) => {
+
+  const [startY, setStartY] = useState(0);
+
   return (
     <div
       className={`flip-card ${isFlipped ? "flipped" : ""}`}
-      onClick={onFlip}
+
+      onTouchStart={(e) => {
+        setStartY(e.touches[0].clientY);
+      }}
+
+      onTouchEnd={(e) => {
+
+        const endY = e.changedTouches[0].clientY;
+
+        const moved = Math.abs(endY - startY);
+
+        /* user is scrolling */
+        if (moved > 12) return;
+
+        onFlip();
+
+      }}
+
+      onClick={() => {
+        onFlip();
+      }}
     >
       <div className="flip-card-inner">
 
