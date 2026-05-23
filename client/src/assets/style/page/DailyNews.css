@@ -80,20 +80,20 @@
   flex-shrink: 0;
 
   position: relative;
+
+  cursor: pointer;
 }
 
 .flip-card-inner {
+  position: relative;
+
   width: 100%;
   height: 100%;
-
-  position: relative;
 
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-
-  will-change: transform;
 }
 
 .flip-card.flipped .flip-card-inner {
@@ -124,27 +124,20 @@
 
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-
-  will-change: transform;
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 /* FRONT */
 
 .flip-card-front {
   z-index: 2;
-  transform: rotateY(0deg) translateZ(1px);
+
+  transform: rotateY(0deg);
 }
 
 /* BACK */
 
 .flip-card-back {
-  transform: rotateY(180deg) translateZ(1px);
+  transform: rotateY(180deg);
 
   display: flex;
   flex-direction: column;
@@ -166,6 +159,8 @@
   -webkit-overflow-scrolling: touch;
 
   scrollbar-width: none;
+
+  overscroll-behavior: contain;
 }
 
 .card-scroll-content::-webkit-scrollbar {
@@ -173,7 +168,37 @@
 }
 
 /* =========================
-   BACKGROUND LAYERS
+   FIX SCROLL AREA BLEED
+========================= */
+
+.story-cards-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+
+  overscroll-behavior-x: contain;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.story-cards-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.story-cards {
+  display: flex;
+  gap: 18px;
+
+  width: max-content;
+
+  padding: 0.5rem 0;
+}
+
+/* =========================
+   BACKGROUND
 ========================= */
 
 .card-with-bg,
@@ -190,21 +215,6 @@
   position: absolute;
   inset: 0;
 }
-
-/* FIX SAFARI LAYER BLEED */
-
-.card-overlay,
-.wiki-overlay,
-.wiki-bg,
-.card-icons,
-.flip-card-front h4 {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-/* =========================
-   OVERLAYS
-========================= */
 
 .card-overlay,
 .wiki-overlay {
@@ -226,9 +236,7 @@
   z-index: 0;
 }
 
-/* =========================
-   WIKI BLUR BG
-========================= */
+/* blur bg */
 
 .wiki-overlay::before {
   content: "";
@@ -251,6 +259,7 @@
 
 .card-icons {
   position: absolute;
+
   top: 1rem;
   left: 0.8rem;
 
@@ -273,19 +282,6 @@
   color: white;
 }
 
-.flip-hint {
-  position: absolute;
-
-  bottom: 1rem;
-  left: 1rem;
-
-  z-index: 3;
-
-  color: rgba(255,255,255,0.75);
-
-  font-size: 0.75rem;
-}
-
 /* =========================
    TEXT
 ========================= */
@@ -300,7 +296,6 @@
 
   word-break: break-word;
 }
-
 /* =========================
    SCROLL AREA
 ========================= */

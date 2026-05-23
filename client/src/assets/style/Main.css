@@ -20,6 +20,7 @@
 
 body{
     margin: 0;
+     overflow-x: hidden;
 }
 main{
     display: flex;
@@ -27,5 +28,5 @@ main{
     padding: 0;
  position: relative;
  height: auto;
-   overflow-x: hidden;
+  
 }

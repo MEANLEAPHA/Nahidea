@@ -58,9 +58,7 @@ const BaseFlipCard = ({
         </div>
 
         <div className="flip-card-back">
-          <div className="card-scroll-content">
-            {back}
-          </div>
+          {back}
         </div>
 
       </div>
