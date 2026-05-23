@@ -23,33 +23,10 @@ const BaseFlipCard = ({
   back,
   frontClass = "",
 }) => {
-
-  const [startY, setStartY] = useState(0);
-
   return (
     <div
       className={`flip-card ${isFlipped ? "flipped" : ""}`}
-
-      onTouchStart={(e) => {
-        setStartY(e.touches[0].clientY);
-      }}
-
-      onTouchEnd={(e) => {
-
-        const endY = e.changedTouches[0].clientY;
-
-        const moved = Math.abs(endY - startY);
-
-        /* user is scrolling */
-        if (moved > 12) return;
-
-        onFlip();
-
-      }}
-
-      onClick={() => {
-        onFlip();
-      }}
+      onClick={onFlip}
     >
       <div className="flip-card-inner">
 
@@ -58,7 +35,9 @@ const BaseFlipCard = ({
         </div>
 
         <div className="flip-card-back">
-          {back}
+          <div className="card-scroll-content">
+            {back}
+          </div>
         </div>
 
       </div>
@@ -450,15 +429,9 @@ export default function DailyNews() {
             </>
           }
           back={
-            <div
-              className="wiki-summary-content"
-              onScroll={(e) => {
-                e.stopPropagation(); // keep flip from triggering
-              }}
-            >
+            <div className="wiki-summary-content" onScroll={(e) => e.stopPropagation()}>
               {data.extract}
             </div>
-
           }
         />
       );

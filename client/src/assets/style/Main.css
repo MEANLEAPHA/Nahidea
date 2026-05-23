@@ -18,15 +18,12 @@
      --back-con:rgb(40, 40, 40);
 }
 
-body{
-    margin: 0;
-     overflow-x: hidden;
-}
+
 main{
     display: flex;
     margin: 0;
     padding: 0;
- position: relative;
- height: auto;
+    position: relative;
+    height: auto;
   
 }

@@ -22,7 +22,7 @@
 }
 
 .daily-container {
-  width: 90%;
+  width: 95%;
   margin: auto;
   background: var(--background-color);
   border-bottom: 2px solid var(--secondary-color);
@@ -73,69 +73,45 @@
 .flip-card {
   width: 320px;
   height: 190px;
-
-  perspective: 1600px;
-  -webkit-perspective: 1600px;
-
+  perspective: 1400px;
   flex-shrink: 0;
-
-  position: relative;
-
-  cursor: pointer;
 }
 
 .flip-card-inner {
-  position: relative;
-
   width: 100%;
   height: 100%;
-
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
+  position: relative;
+  /* transform-style: preserve-3d; */
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .flip-card.flipped .flip-card-inner {
   transform: rotateY(180deg);
 }
 
-/* =========================
-   BOTH SIDES
-========================= */
-
 .flip-card-front,
 .flip-card-back {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   border-radius: 24px;
 
-  overflow: hidden;
-
-  background: var(--back-con);
-
-  border: 1px solid var(--secondary-color);
+  overflow: visible; /* allow child scroll areas to work */
+ 
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   box-shadow: var(--card-shadow);
 
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  border: 1px solid var(--secondary-color);
+
+  background: var(--back-con);
 }
-
-/* FRONT */
-
-.flip-card-front {
-  z-index: 2;
-
-  transform: rotateY(0deg);
+.flip-card-front{
+ overflow: hidden;
 }
-
-/* BACK */
-
 .flip-card-back {
   transform: rotateY(180deg);
 
@@ -143,58 +119,11 @@
   flex-direction: column;
 }
 
-/* =========================
-   SCROLL CONTENT
-========================= */
-
 .card-scroll-content {
-  width: 100%;
-  height: 100%;
-
+  flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
-
+  scrollbar-width: none;
   padding: 1rem;
-
-  -webkit-overflow-scrolling: touch;
-
-  scrollbar-width: none;
-
-  overscroll-behavior: contain;
-}
-
-.card-scroll-content::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================
-   FIX SCROLL AREA BLEED
-========================= */
-
-.story-cards-wrapper {
-  width: 100%;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  scrollbar-width: none;
-
-  overscroll-behavior-x: contain;
-
-  -webkit-overflow-scrolling: touch;
-}
-
-.story-cards-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-.story-cards {
-  display: flex;
-  gap: 18px;
-
-  width: max-content;
-
-  padding: 0.5rem 0;
 }
 
 /* =========================
@@ -204,7 +133,6 @@
 .card-with-bg,
 .wiki-front {
   position: relative;
-
   background-size: cover;
   background-position: center;
 }
@@ -219,83 +147,170 @@
 .card-overlay,
 .wiki-overlay {
   z-index: 1;
+  opacity: 0.5;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,0.2) 0%,
-      rgba(0,0,0,0.7) 100%
-    );
 }
 
 .wiki-bg {
-  background-size: contain;
+  background-size:contain;
+  
   background-position: center;
   background-repeat: no-repeat;
-
-  z-index: 0;
+  z-index: 100;
 }
-
-/* blur bg */
-
+.wiki-overlay{
+  width: 100%;
+  height: auto;
+}
 .wiki-overlay::before {
   content: "";
-
   position: absolute;
-  inset: -10px;
-
-  background: var(--preview) center/cover no-repeat;
-
-  filter: blur(12px);
-
+  inset: 0;
   transform: scale(1.1);
-
-  z-index: -1;
+  background: var(--preview) center/cover no-repeat; /* use the variable */
+  filter: blur(8px); /* blur strength */
+  z-index: -1; /* behind content */
 }
 
 /* =========================
    FRONT CONTENT
 ========================= */
 
-.card-icons {
+.card-icons{
   position: absolute;
-
   top: 1rem;
   left: 0.8rem;
 
-  z-index: 3;
+  z-index: 1;
 
   color: white;
-
   font-size: 1.3rem;
 }
 
 .flip-card-front h4 {
   position: relative;
-
   z-index: 3;
 
   margin-top: 3rem;
-
   padding: 0 1rem;
 
   color: white;
 }
 
+.flip-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+
+  z-index: 3;
+
+  color: rgba(255,255,255,0.75);
+
+  font-size: 0.75rem;
+}
+
 /* =========================
-   TEXT
+   QUESTION
+========================= */
+
+.question-front {
+  color: white;
+}
+
+.question-text {
+  position: relative;
+  z-index: 3;
+
+  padding: 0 1rem;
+
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+.options-list {
+  position: relative;
+  z-index: 3;
+
+  padding: 1rem;
+}
+
+.option-item {
+  margin-bottom: 0.5rem;
+
+  background: rgba(255,255,255,0.14);
+
+  border-radius: 12px;
+
+  padding: 0.45rem 0.7rem;
+
+  font-size: 0.8rem;
+}
+
+/* =========================
+   JOKE
+========================= */
+
+.joke-setup {
+  position: relative;
+  z-index: 3;
+
+  padding: 0 1rem;
+
+  color: white;
+
+  line-height: 1.5;
+}
+
+/* =========================
+   WIKI
+========================= */
+
+.wiki-text-content {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+ 
+
+  height: 100%;
+
+  padding: 0rem; 
+  font-size: small;
+  overflow: hidden;
+
+  color: white;
+}
+
+.wiki-title {
+  font-weight: 700;
+  
+  line-height: 1.4;
+}
+
+/* =========================
+   BACK
 ========================= */
 
 .card-content,
 .wiki-summary-content {
+  width: 100%;
+  height: 100%;
+
+  scroll-behavior: smooth;
+  position: relative;
+  z-index: 2;
+ 
   color: var(--font-color);
-
   line-height: 1.6;
+  font-size: small;
 
-  font-size: 0.92rem;
-
-  word-break: break-word;
+   overflow-y: auto;       /* only vertical scroll */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+  scrollbar-width: thin;  /* Firefox */
+  
 }
+
 /* =========================
    SCROLL AREA
 ========================= */
