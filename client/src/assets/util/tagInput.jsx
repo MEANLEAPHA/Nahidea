@@ -164,9 +164,11 @@ export  function TagInput({ value = [], onChange, maxTags = 5 }) {
   return (
     <div className="tags-input-wrapper">
       <div className="tags-label">
-       <div id="tags-label-header"><TagOutlined /> Tags </div> <div style={{opacity: '0.8'}}>Press Enter or comma to add tags</div>
+       <div id="tags-label-header">Tags </div> <div style={{opacity: '0.8'}}>Press Enter or comma to add tags</div>
       </div>
-      <div className={`tags-input ${error ? "has-error" : ""}`}>
+      
+          <div className={`tags-input ${error ? "has-error" : ""}`}>
+      <div id='tag-preview'>
         {value.map((t, i) => (
           <span className="tag" key={t + i}>
             <span className="tag-text">{t}</span>
@@ -177,6 +179,8 @@ export  function TagInput({ value = [], onChange, maxTags = 5 }) {
         ))}
 
       </div>
+      </div>
+    
       <input
           className="tag-input"
           value={input}

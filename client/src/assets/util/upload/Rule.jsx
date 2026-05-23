@@ -1,73 +1,579 @@
-import React,{ useState, useEffect, useRef, memo } from 'react';
-import { Menu } from 'antd';
+import React, { useState } from "react";
+import { Menu } from "antd";
 import {
-  MailOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-  UserOutlined,
-  VideoCameraOutlined} from '@ant-design/icons';
+  SafetyOutlined,
+  MessageOutlined,
+  BulbOutlined,
+  WarningOutlined,
+  GlobalOutlined,
+  SmileFilled,
+  HeartOutlined,
+  SoundFilled
+} from "@ant-design/icons";
 
-export default function Rule () {
-  
-  const [current, setCurrent] = useState('1');
- 
-  const onClick = e => {
-    console.log('click ', e);
+export default function Rule({ setRule }) {
+  const [current, setCurrent] = useState("1");
+
+  const onClick = (e) => {
     setCurrent(e.key);
   };
+
   return (
-    <>
-      
-      <Menu
-       
-        onClick={onClick}
-        style={{ width: 256 }}
-        defaultOpenKeys={['sub1']}
-        selectedKeys={[current]}
-        mode="inline"
-        items={items}
-      />
-    </>
+   
+      <>
+        <p className="rule-title">{setRule.slice(0, 1).toUpperCase() + setRule.slice(1)} Rule</p>
+          <Menu
+            onClick={onClick}
+            style={{ width: "100%" }}
+            defaultOpenKeys={["sub2"]}
+            selectedKeys={[current]}
+            mode="inline"
+            items={setRule === "content" ? contentItems : setRule === "confession" ? confessionItems : questionItems}
+          />
+          <div className='rule-agree-div'>
+              <p className="rule-agree"><SoundFilled /> By posting, you agree to help keep the platform safe, useful, and enjoyable for everyone. Happy Posting </p>
+          </div>
+   
+      </>
+
+    
+ 
   );
+}
+
+const textStyle = {
+  whiteSpace: "normal",
+  wordBreak: "break-word",
+  lineHeight: "1.6",
 };
-const items = [
+
+const questionItems = [
   {
-    key: 'sub1',
-    label: 'Rule 1',
-    icon: <MailOutlined />,
+    key: "sub1",
+    label: "Respect Others",
+    icon: <HeartOutlined />,
     children: [
-      { key: '1', label: 'hi' },
-      { key: '2', label: 'Option 2' },
-      { key: '3', label: 'Option 3' },
-      { key: '4', label: 'Option 4' },
-    ],
-  },
-  {
-    key: 'sub2',
-    label: 'Rule blah blah',
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: '5', label: 'Option 5' },
-      { key: '6', label: 'Option 6' },
       {
-        key: 'sub3',
-        label: 'Submenu',
-        children: [
-          { key: '7', label: 'Option 7' },
-          { key: '8', label: 'Option 8' },
-        ],
+        key: "1",
+        label: (
+          <span style={textStyle}>
+            Treat other users with basic respect, even when you disagree with
+            them.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "2",
+        label: (
+          <span style={textStyle}>
+            Do not post harassment, hate speech, bullying, threats, or personal
+            attacks toward individuals or groups.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            Healthy debates are welcome. Toxic behavior and intentionally hostile
+            discussions are not.
+          </span>
+        ),
+        disabled: true,
       },
     ],
   },
+
   {
-    key: 'sub4',
-    label: 'Rule of Survival',
-    icon: <SettingOutlined />,
+    key: "sub2",
+    label: "Ask Clear & Helpful Questions",
+    icon: <MessageOutlined />,
     children: [
-      { key: '9', label: 'Option 9' },
-      { key: '10', label: 'Option 10' },
-      { key: '11', label: 'Option 11' },
-      { key: '12', label: 'Option 12' },
+      {
+        key: "4",
+        label: (
+          <span style={textStyle}>
+            Use a clear title that explains your question instead of vague titles
+            like “Help” or “Urgent”.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "5",
+        label: (
+          <span style={textStyle}>
+            Include enough context so others can understand your situation and
+            provide meaningful answers.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "6",
+        label: (
+          <span style={textStyle}>
+            Keep posts relevant to the selected topic or category.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "7",
+        label: (
+          <span style={textStyle}>
+            Low-effort, misleading, or spam-style posts may be removed to keep
+            discussions useful.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub3",
+    label: "Share Honest Information",
+    icon: <BulbOutlined />,
+    children: [
+      {
+        key: "8",
+        label: (
+          <span style={textStyle}>
+            Do not intentionally spread false information, fake stories, scams,
+            or manipulated content.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "9",
+        label: (
+          <span style={textStyle}>
+            If you are unsure about something, ask questions openly instead of
+            presenting assumptions as facts.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "10",
+        label: (
+          <span style={textStyle}>
+            When discussing serious topics, providing sources or evidence is
+            encouraged.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub4",
+    label: "Protect Privacy & Safety",
+    icon: <SafetyOutlined />,
+    children: [
+      {
+        key: "11",
+        label: (
+          <span style={textStyle}>
+            Do not share personal, private, or confidential information about
+            yourself or other people.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "12",
+        label: (
+          <span style={textStyle}>
+            Avoid posting content that promotes illegal, dangerous, or harmful
+            activities.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "13",
+        label: (
+          <span style={textStyle}>
+            Report abusive or suspicious content instead of engaging with it.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub5",
+    label: "Keep the Community Useful",
+    icon: <GlobalOutlined />,
+    children: [
+      {
+        key: "14",
+        label: (
+          <span style={textStyle}>
+            Avoid excessive self-promotion, repetitive posting, or unrelated
+            advertising.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "15",
+        label: (
+          <span style={textStyle}>
+            Contribute in a way that helps others learn, discuss, or solve
+            problems together.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "16",
+        label: (
+          <span style={textStyle}>
+            Content that seriously violates these guidelines may be removed to
+            maintain a safe and high-quality experience.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+];
+
+const confessionItems = [
+  {
+    key: "sub1",
+    label: "Stay Respectful",
+    icon: <HeartOutlined />,
+    children: [
+      {
+        key: "1",
+        label: (
+          <span style={textStyle}>
+            Confessions should not be used to attack, shame, humiliate, or harass other people.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "2",
+        label: (
+          <span style={textStyle}>
+            Hate speech, bullying, threats, and abusive language are not allowed.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            Strong emotions are okay. Targeted hostility and toxic behavior are not.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub2",
+    label: "Protect Privacy",
+    icon: <SafetyOutlined />,
+    children: [
+      {
+        key: "4",
+        label: (
+          <span style={textStyle}>
+            Do not share personal information such as full names, phone numbers, addresses, school details, or private photos.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "5",
+        label: (
+          <span style={textStyle}>
+            Avoid exposing or identifying other people without their permission.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "6",
+        label: (
+          <span style={textStyle}>
+            Anonymous posting is meant for honest expression, not revenge or public targeting.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub3",
+    label: "Keep It Genuine",
+    icon: <BulbOutlined />,
+    children: [
+      {
+        key: "7",
+        label: (
+          <span style={textStyle}>
+            Share real thoughts, experiences, or feelings instead of fake stories made to provoke reactions.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "8",
+        label: (
+          <span style={textStyle}>
+            Avoid spam, trolling, repetitive posting, or intentionally misleading content.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "9",
+        label: (
+          <span style={textStyle}>
+            Sensitive topics are allowed, but posts that encourage harm, violence, or dangerous behavior may be removed.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub4",
+    label: "Keep the Space Safe",
+    icon: <GlobalOutlined />,
+    children: [
+      {
+        key: "10",
+        label: (
+          <span style={textStyle}>
+            This space is for open expression, support, and discussion — not personal attacks or conflict escalation.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "11",
+        label: (
+          <span style={textStyle}>
+            Content involving illegal activity, exploitation, or harmful behavior may be removed for community safety.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "12",
+        label: (
+          <span style={textStyle}>
+            Repeated or serious violations may result in content removal or account restrictions.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+];
+
+const contentItems = [
+  {
+    key: "sub1",
+    label: "Create Meaningful Content",
+    icon: <BulbOutlined />,
+    children: [
+      {
+        key: "1",
+        label: (
+          <span style={textStyle}>
+            Share content that is helpful, creative, informative, entertaining,
+            or meaningful to others.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "2",
+        label: (
+          <span style={textStyle}>
+            Avoid low-effort spam, repetitive posting, or misleading content
+            created only to gain attention.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            Use clear titles, captions, or descriptions so people can understand
+            your content quickly.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub2",
+    label: "Respect the Community",
+    icon: <SafetyOutlined />,
+    children: [
+      {
+        key: "4",
+        label: (
+          <span style={textStyle}>
+            Do not post hate speech, harassment, bullying, or intentionally
+            harmful content toward others.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "5",
+        label: (
+          <span style={textStyle}>
+            Discussions and criticism are welcome, but personal attacks and toxic
+            behavior are not.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "6",
+        label: (
+          <span style={textStyle}>
+            Respect different opinions, backgrounds, and perspectives within the
+            community.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub3",
+    label: "Share Honest & Original Content",
+    icon: <MessageOutlined />,
+    children: [
+      {
+        key: "7",
+        label: (
+          <span style={textStyle}>
+            Do not intentionally spread false information, scams, impersonation,
+            or manipulated content designed to deceive people.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "8",
+        label: (
+          <span style={textStyle}>
+            Give proper credit when sharing someone else’s work, ideas, or media.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "9",
+        label: (
+          <span style={textStyle}>
+            Avoid reposting the same content repeatedly across the platform.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub4",
+    label: "Protect Privacy & Safety",
+    icon: <WarningOutlined />,
+    children: [
+      {
+        key: "10",
+        label: (
+          <span style={textStyle}>
+            Do not share private, personal, or confidential information about
+            yourself or others.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "11",
+        label: (
+          <span style={textStyle}>
+            Content promoting illegal, dangerous, exploitative, or harmful
+            activities may be removed.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "12",
+        label: (
+          <span style={textStyle}>
+            Report suspicious or abusive content to help keep the community safe.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+
+  {
+    key: "sub5",
+    label: "Help Build a Better Platform",
+    icon: <GlobalOutlined />,
+    children: [
+      {
+        key: "13",
+        label: (
+          <span style={textStyle}>
+            Encourage thoughtful discussions, creativity, learning, and positive
+            interactions within the community.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "14",
+        label: (
+          <span style={textStyle}>
+            Excessive advertising, engagement bait, or manipulative posting may
+            be limited or removed.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
+        key: "15",
+        label: (
+          <span style={textStyle}>
+            Content that seriously violates community guidelines may be removed
+            to maintain a high-quality experience for everyone.
+          </span>
+        ),
+        disabled: true,
+      },
     ],
   },
 ];

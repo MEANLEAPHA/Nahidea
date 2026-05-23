@@ -20,55 +20,6 @@
      --link-color:#1a73e8;
 }
 
-#pre-view-body{
-width: 80%;
-margin: auto;
-height: 100%;
-display: flex;
-margin-top: 10px;
-}
-
-#select-action-dev{
-    width: 95%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    justify-content: end;
-    margin-top: 15px;
-}
-#select-radio{
-    display: flex;
-    width: 70%;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0;
-    margin: auto;
-}
-#result-selected{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-#preview-closed-arrow{
-     border: none;
-    height: auto;
-    opacity: 0.8;
-    background: var(--back-con);
-    color: var(--font-color);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 10px ;
-    border-radius: 25px;
-}
-#preview-closed-arrow:hover{
-    opacity: 1;
-}
-
-
-
-
 
 
 
@@ -179,8 +130,9 @@ margin-top: 10px;
    margin: 0;
    padding: 0;
    display: flex;
+ 
    align-items: center;
-  gap: 3px;
+  gap: 1px;
 }
 .post-type-label{
     font-size: 17px;
@@ -216,14 +168,22 @@ margin-top: 10px;
     height: auto !important;
      margin: auto !important;
      overflow: hidden !important;
-     padding: 0 !important;
+    
 } 
+.ant-skeleton-title{
+    margin-top:15px !important;
+}
 .ant-skeleton-section{
     width: 100% !important;
+    margin-top: 20px !important;
 }
 .ant-skeleton-paragraph{
     width: 100% !important;
    
+}
+.post-thumbnail .ant-skeleton-image{
+    width: 100% !important;
+    height: 250px !important;
 }
 
 .post-body{
@@ -502,6 +462,7 @@ margin-top: 10px;
  height: 100%;            /* fill the slide height */
   border-radius: 25px;
   overflow: hidden;
+
   margin: 0 auto; /* fallback horizontal centering */
 }
 
@@ -521,6 +482,7 @@ margin-top: 10px;
   content: "";
   position: absolute;
   inset: 0;
+  
   border-radius: 25px;
   background: var(--preview-url) center/cover no-repeat;
   filter: blur(40px);
@@ -541,6 +503,7 @@ margin-top: 10px;
 .carousel-slide {
   margin: 0;
   padding: 0;
+  width: 100% !important;
 }
 
 /* 9. If you also use .post-image somewhere */
@@ -675,12 +638,7 @@ SVG
 ========================================= */
 
 .button-action-footer-icon{
-  width:19px;
-  height:19px;
 
-  stroke-width:2.2;
-
-  flex-shrink:0;
 
   display:block;
 }
@@ -1027,7 +985,17 @@ RANGE
 
   opacity:.75;
 }
+.ant-menu-item-disabled {
+  white-space: normal !important;
+  line-height: 1.5 !important;
+  height: auto !important;
+  padding: 8px 16px !important;
+}
 
+.ant-menu-item-disabled .ant-menu-title-content {
+  white-space: normal !important;
+  word-break: break-word !important;
+}
 /* =========================================
 RESPONSIVE
 ========================================= */

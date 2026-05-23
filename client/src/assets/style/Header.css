@@ -605,6 +605,7 @@ display: flex;
         padding: 7px;
         border-radius: 10px;
         cursor: pointer;
+        gap: 0px;
     }
     .createbar-icon{
         font-size: 18px;

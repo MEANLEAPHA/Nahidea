@@ -1,5 +1,5 @@
 // react state
-import React,{ useState, useEffect, useRef, memo } from 'react';
+import React,{ useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import axios from "axios";
 
@@ -42,6 +42,7 @@ import "../style/upload/MultipleMedia.css";
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import nahideaTran from "../img/nahidea-tran.png";
+import DailyNews from './DailyNews';
 
 
 // token 
@@ -294,9 +295,9 @@ export default function Home() {
                   }}>
                   <p>{data.title}</p>
                 </div>
-              <div className="post-question-answer-preview closed-preview-card question-preview-card">
+              <div className="post-question-answer-preview">
                     {data.question_type === "closedend" && (
-                      <div onClick={
+                      <div classNmae ='closed-preview-card question-preview-card' onClick={
                               ()=>{
                                 const QaData = {
                                     question_id : data.id,
@@ -325,7 +326,7 @@ export default function Home() {
                       )}
 
                       {data.question_type === "range" && (
-                        <div  className="question-preview-card range-card" onClick={
+                        <div className="question-preview-card range-card" onClick={
                           ()=>{
                             const QaData = {
                               
@@ -657,7 +658,7 @@ const handleFavorite = async (postId) => {
   return (
     <div className='home-container'>
       <article id="feed-article">
-        <Daily/>
+        <DailyNews/>
   
             {error ? (
               <div class='error-container'>
@@ -1163,101 +1164,6 @@ const parseJSON = (val) => {
     return [val];
   }
 };
-
-
-
-function Marquee({ text }) {
-  return (
-    <div className="marquee-wrapper">
-      <div className="marquee">
-        <span>{text}</span>
-        <span>{text}</span>
-      </div>
-    </div>
-  );
-}
-
- function Daily() {
-  const [data, setData] = useState({ funFacts: [], advice: [], jokes: [] });
-
-  const fetchDaily = async () => {
-    try {
-      const [factsRes, adviceRes, jokesRes] = await Promise.allSettled([
-        Promise.all(
-          Array.from({ length: 3 }, () =>
-            axios.get("https://asli-fun-fact-api.herokuapp.com/")
-          )
-        ),
-        Promise.all(
-          Array.from({ length: 3 }, () =>
-            axios.get("https://api.adviceslip.com/advice")
-          )
-        ),
-        Promise.all(
-          Array.from({ length: 3 }, () =>
-            axios.get(
-              "https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,racist,sexist,explicit"
-            )
-          )
-        ),
-      ]);
-
-      const funFacts =
-        factsRes.status === "fulfilled"
-          ? factsRes.value.map((r) => r.data.data || r.data)
-          : [];
-      const advice =
-        adviceRes.status === "fulfilled"
-          ? adviceRes.value.map((r) => r.data.slip.advice)
-          : [];
-      const jokes =
-        jokesRes.status === "fulfilled"
-          ? jokesRes.value.map((r) =>
-              r.data.type === "single"
-                ? r.data.joke
-                : `${r.data.setup} — ${r.data.delivery}`
-            )
-          : [];
-
-      setData({ funFacts, advice, jokes });
-    } catch (err) {
-      console.error("Error fetching daily data", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchDaily();
-  }, []);
-
-  // Build a 3-word marquee phrase from first items
-  const marqueeText = [data.funFacts[0], data.advice[0], data.jokes[0]]
-    .map((t) => (t ? t.split(" ")[0] : ""))
-    .join(" ");
-
-  return (
-    <div className="daily">
-      <h1>Daily Inspiration</h1>
-      <button onClick={fetchDaily}>Refresh</button>
-
-      <Marquee text={marqueeText || "Loading..."} />
-
-      <div className="grid">
-        <div>
-          <h3>Fun Facts</h3>
-          <ul>{data.funFacts.map((f, i) => <li key={i}>{f}</li>)}</ul>
-        </div>
-        <div>
-          <h3>Advice</h3>
-          <ul>{data.advice.map((a, i) => <li key={i}>{a}</li>)}</ul>
-        </div>
-        <div>
-          <h3>Jokes</h3>
-          <ul>{data.jokes.map((j, i) => <li key={i}>{j}</li>)}</ul>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 
 

@@ -373,7 +373,7 @@ const Layout = () => {
 
       <main style={{ position: "relative" }}>
 
-        <Aside />
+        <Aside append={showMaxAside} />
 
         <section>
           <Outlet

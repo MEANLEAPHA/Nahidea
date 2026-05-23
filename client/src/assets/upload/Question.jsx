@@ -67,7 +67,6 @@ const [loading, setLoading] = useState(false);
   // question type state
   const [questionType, setQuestionType] = useState('openend');
 
-  // const [questionType, setquestionType] = useState("openend");
 
     // Range state
     const [min, setMin] = useState(0);
@@ -96,7 +95,6 @@ const [loading, setLoading] = useState(false);
      const [openPreview, setOpenPreview] = useState(false);
 
     const resetMain = () => {setAnonymousName(null),setSelectType(null), setSelectIcon(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
-    const resetCloseEnd = () => { setYestitle(""); setNoTitle(""); };
     const resetRange = () => { setMin(0); setMax(100); setStep(1); setRangeValue(0); };
     const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
     const resetMultipleChoice = () => { setMultipleChoices(["","",""]); setIncludeAllAbove(false); };
@@ -105,13 +103,13 @@ const [loading, setLoading] = useState(false);
   
 
     const resetMap = {
-      openend:        [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      openend:        [ resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
       closedend:      [resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      range:          [resetCloseEnd, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
-      singlechoice:   [resetCloseEnd, resetRange, resetMultipleChoice, resetRanking, resetRating],
-      multiplechoice: [resetCloseEnd, resetRange, resetSingleChoice, resetRanking, resetRating],
-      rankingorder:   [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
-      rating:         [resetCloseEnd, resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
+      range:          [ resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+      singlechoice:   [ resetRange, resetMultipleChoice, resetRanking, resetRating],
+      multiplechoice: [ resetRange, resetSingleChoice, resetRanking, resetRating],
+      rankingorder:   [ resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
+      rating:         [ resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
     };
 
 
@@ -263,14 +261,6 @@ const handleSubmit = async (e) => {
               <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
             </div>
              
-            {/* <Select
-              options={question_options} 
-              value={selectType}
-              onChange={setSelectType}
-              classNamePrefix="custom"
-              placeholder="Select Question Related To"
-            /> */}
-            
             <Select
               options={question_options} 
               value={selectType}
@@ -280,7 +270,7 @@ const handleSubmit = async (e) => {
                 setSelectedIcon(option?.icon); // store icon string
               }}
               classNamePrefix="custom"
-              placeholder="Select Confession Type"
+              placeholder="Select Question Type"
               formatOptionLabel={(option) => (
                 <div
                   style={{
@@ -300,7 +290,7 @@ const handleSubmit = async (e) => {
 
 
             <div className="title-wrapper">
-              <p className="title-label" >Confession Text</p>
+              <p className="title-label" >Question Text</p>
                   
               <textarea
                 value={title}
@@ -341,19 +331,21 @@ const handleSubmit = async (e) => {
 
             <div id="form-footer">
               <button type="submit" disabled={loading} id="content-post-button">
-                {loading ? "Confessing..." : "Confess"}
+                {loading ? "Uploading..." : "Upload"}
               </button>
             </div>
 
           </form>
           <div id="article-rule">
-            <Rule/>
+            <Rule setRule="question" />
           </div>
         </article>
 
         <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
               <PreviewRadio
-                title={title} filesMedia= {questionFile} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}
+                title={title} filesMedia={questionFile} postTag={tags} selectType={selectType?.value}
+                isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} selectTypeIcon={selectedIcon}
+                post_type='question'
 
                 questionType={questionType?.value}
                 singleChoices={singleChoices}
@@ -378,40 +370,40 @@ const handleSubmit = async (e) => {
     );
 }
 
-const QuestionAnswerPreview = ({ questionType }) => {
-  switch (questionType) {
-    case "openend":
-      return null;
+// const QuestionAnswerPreview = ({ questionType }) => {
+//   switch (questionType) {
+//     case "openend":
+//       return null;
 
-    case "closedend":
-      return <div>yes/no</div>;
+//     case "closedend":
+//       return <div>yes/no</div>;
 
-    case "range":
-      return <div>range</div>;
+//     case "range":
+//       return <div>range</div>;
 
-    case "singlechoice":
-      return <div>singlechoice</div>;
+//     case "singlechoice":
+//       return <div>singlechoice</div>;
 
-    case "multiplechoice":
-      return <div>multiplechoice</div>;
+//     case "multiplechoice":
+//       return <div>multiplechoice</div>;
 
-    case "rankingorder":
-      return <div>rankingorder</div>;
+//     case "rankingorder":
+//       return <div>rankingorder</div>;
 
-    case "rating":
-      return <div>rating</div>;
+//     case "rating":
+//       return <div>rating</div>;
 
-    default:
-      return null;
-  }
-};
-const questionOptions = [
-  { value: "openend", label: "Open End" },
-  { value: "closedend", label: "Closed End" },
-  { value: "singlechoice", label: "Single Choice" },
-  { value: "multiplechoice", label: "Multiple Choice" },
-  { value: "range", label: "Range" },
-  { value: "rating", label: "Rating" },
-  { value: "rankingorder", label: "Ranking Order" },
-];
+//     default:
+//       return null;
+//   }
+// };
+// const questionOptions = [
+//   { value: "openend", label: "Open End" },
+//   { value: "closedend", label: "Closed End" },
+//   { value: "singlechoice", label: "Single Choice" },
+//   { value: "multiplechoice", label: "Multiple Choice" },
+//   { value: "range", label: "Range" },
+//   { value: "rating", label: "Rating" },
+//   { value: "rankingorder", label: "Ranking Order" },
+// ];
 

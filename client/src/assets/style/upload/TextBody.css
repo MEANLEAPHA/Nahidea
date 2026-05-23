@@ -191,3 +191,15 @@ padding: 0;
     }
   
 }
+
+@media screen and (max-width:500px){
+    .toolbar-text-body{
+      gap: 11px; 
+    }
+    .toolbar-text-body button {
+      padding: 5px;
+     font-size: 12px;
+    }
+    
+  
+}

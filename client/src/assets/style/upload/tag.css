@@ -22,7 +22,7 @@
   font-family:  sans-serif;
   width: 99.5%;
   height: auto;
- margin-top: 10px;
+ margin-top: 0px;
  padding-bottom: 5px;
    background-color:var(--back-con);
     border: 1px solid var(--secondary-color);
@@ -69,6 +69,17 @@
   background: #fff5f5;
 }
 
+#tag-preview{
+  width: 98%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: auto;
+  
+  padding: 0;
+
+}
 /* Tag style */
 .tag {
   position: relative;
@@ -78,7 +89,8 @@
   color: var(--font-color);
   font-size: 13px;
   padding: 6px 12px 6px 16px;
-  margin-right: 6px;
+  margin-left: 0;
+  margin-right: 10px;
   line-height: 1;
  box-shadow: 0 1px 2px var(--back-con);
  
@@ -143,6 +155,7 @@ cursor: auto;
 
 .tag-remove:hover {
   opacity: 1;
+  color: tomato;
 }
 
 /* Input field */
@@ -190,7 +203,8 @@ cursor: auto;
 
 .btn-clear:hover {
 opacity: 1;
-  background: #b31e1e66;
+  background: tomato;
+
 }
 
 /* Count */

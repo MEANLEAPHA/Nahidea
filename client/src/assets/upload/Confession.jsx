@@ -196,12 +196,16 @@ export default function Confession() {
         
         </form>
         <div id="article-rule">
-          <Rule/>
+          <Rule setRule="confession" />
         </div>
       </article>
 
       <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
-        <PreviewRadio  title={title} filesMedia= {confessionFile} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}/>
+        <PreviewRadio  
+          title={title} filesMedia= {confessionFile} postTag={tags} selectType={selectType?.value} 
+          isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} post_type='confession'
+          selectTypeIcon={selectedIcon}
+          />
       </article>
 
       <NahideaInfo />

@@ -189,13 +189,19 @@ export default function Content() {
 
         </form>
         <div id="article-rule">
-          <Rule/>
+          <Rule setRule="content" />
         </div>
         
       </article>
 
       <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
-        <PreviewRadio textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} selectType={selectType?.value} isAnonymous={isAnonymous} setOpenPreview={setOpenPreview}/>
+        <PreviewRadio 
+          textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} 
+          selectType={selectType?.value} selectTypeIcon={selectedIcon}
+          isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} 
+          post_type ='content'
+
+        />
       </article>
       
       <NahideaInfo />

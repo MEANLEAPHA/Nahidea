@@ -64,9 +64,8 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
               <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>
-          )
-
-        }
+          )}
+         
       </div>
 
     </header>

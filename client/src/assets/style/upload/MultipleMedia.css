@@ -119,7 +119,7 @@ width: 100%;
   z-index: 2;
 }
 .remove-btn:hover{
-  color: #b31e1e;
+  color: tomato;
   opacity: 1;
 }
 .video-placeholder {
