@@ -9,7 +9,9 @@ import {
   faHandshake,
   faQuestionCircle,
   faBook,
+  faBrain,
   faSyncAlt,
+  faSeedling
 } from "@fortawesome/free-solid-svg-icons";
 
 /* =========================
@@ -208,7 +210,7 @@ export default function DailyNews() {
     {
       id: "wiki",
       title: "Knowledge",
-      icon: faBook,
+      icon: faBrain,
       fetcher: fetchWikipedia,
     },
     {
@@ -222,7 +224,7 @@ export default function DailyNews() {
     {
       id: "advice",
       title: "Advice",
-      icon: faHandshake,
+      icon: faSeedling,
       fetcher: fetchAdvice,
       bg: bgImages.advice,
     },
@@ -418,7 +420,7 @@ export default function DailyNews() {
                 <FontAwesomeIcon
                   className="card-icons"
                   icon={cat.icon}
-                  style={{zIndex:'100'}}
+                  style={{zIndex:'100', color: '#F1B9C4'}}
                 />
 
                 <h4 style={{zIndex:'100'}}>{cat.title}</h4>
@@ -456,6 +458,7 @@ export default function DailyNews() {
             <FontAwesomeIcon
               className="card-icons"
               icon={cat.icon}
+              style={{zIndex:'100', color: cat.icon === faSeedling ? 'yellowgreen' : 'gold'}}
             />
             <h4>{cat.title}</h4>
           </>

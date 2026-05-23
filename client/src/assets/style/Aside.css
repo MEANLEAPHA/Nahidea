@@ -19,7 +19,7 @@
 }
 
 aside{
-     height: calc(100vh - 66px);
+     height: calc(100vh - 50px);
      margin: 0;
      padding: 0;
      position: sticky;
@@ -223,9 +223,9 @@ aside{
     width: 30%; 
     position: fixed; 
     z-index: 1000;
-    height:calc(100vh - 66px);
+    height:calc(100vh - 50px);
     background-color: var(--background-color);
-   top: 61px;
+   top: 50px;
     left: 0;
 }
  .nav-item{

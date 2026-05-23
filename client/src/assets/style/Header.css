@@ -543,11 +543,9 @@ display: flex;
        
     }
      .header-left{
-       
         justify-content: start;
-        padding: 0px 0px 0px 10px;
-          
-    
+        padding: 0px 0px 0px 10px; 
+        gap: 10px;
     }
     .logo-font-main{
         margin-left: 5px;
@@ -595,7 +593,7 @@ display: flex;
            background: #fd7648;
     }
     .button-create-icon-min{
-        background-color: var(--back-con);
+        background-color: transparent;
         border: none;
         display: flex;
         align-items: center;
@@ -608,7 +606,7 @@ display: flex;
         gap: 0px;
     }
     .createbar-icon{
-        font-size: 18px;
+        font-size: 20px;
     }
     .aside-dropdown{
     width: 80%;
@@ -669,7 +667,7 @@ display: flex;
         gap: 0px;
     }
     .bar-icon{
-        font-size: 15px;
+        font-size: 20px;
         padding: 8px;
     }
     .bar-icon:hover{

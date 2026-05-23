@@ -29,8 +29,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
      <header>
 
       <div className="header-left header-children">
-        {isMaxAside === "true" ? <MenuUnfoldOutlined className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} /> : <MenuFoldOutlined  className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} />}
-
+        <MenuOutlined className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} />
         <p className='logo-font-main not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
         
          
@@ -57,14 +56,14 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
             </>
           ):(
             <>
-              <button className='button-bar-icon' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
+              <button className='button-bar-icon not-mobile-tool' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
               <CreateDropDown />
               <SearchOutlined className="mobile-tool bar-icon" onClick={()=>{navigate('/search')}}/>
               <CreateDropDownMin />
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
               <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>
-          )}
+           )} 
          
       </div>
 
@@ -483,8 +482,7 @@ const CreateDropDownMin = () =>{
     <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
           <button className='button-create-icon-min mobile-tool'>
         <Space>
-      
-          <PlusOutlined className='createbar-icon' /><span style={{fontWeight:"bold", opacity:"0.9"}}>Create</span>
+          <PlusSquareOutlined className='createbar-icon'/>
         </Space>
         </button>
   </Dropdown>

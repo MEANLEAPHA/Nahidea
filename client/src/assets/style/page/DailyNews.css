@@ -22,7 +22,7 @@
 }
 
 .daily-container {
-  width: 95%;
+  width: 90%;
   margin: auto;
   background: var(--background-color);
   border-bottom: 2px solid var(--secondary-color);
@@ -180,6 +180,7 @@
 .wiki-overlay{
   width: 100%;
   height: auto;
+  opacity: 0.1;
 }
 .wiki-overlay::before {
   content: "";
@@ -189,6 +190,7 @@
   background: var(--preview) center/cover no-repeat; /* use the variable */
   filter: blur(8px); /* blur strength */
   z-index: -1; /* behind content */
+
 }
 
 /* =========================
@@ -326,7 +328,8 @@
 
    overflow-y: auto;       /* only vertical scroll */
   -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
-  scrollbar-width: thin;  /* Firefox */
+      scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--background-color);
   
 }
 
