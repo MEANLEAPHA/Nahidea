@@ -347,9 +347,9 @@ const Layout = () => {
     return <div>Loading...</div>;
   }
 
-  // if (!token || !user) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
 
   // =========================================
   // ONLINE
