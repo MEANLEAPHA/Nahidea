@@ -399,17 +399,16 @@ export default function Home() {
                         </div>
 
                         <div className="question-preview-options two-grid">
-                        {data.choice
-                        .slice(0, data.choice.length > 4 ? 3 : 4)
+                        {data.choice?.slice(0, data.choice?.length > 4 ? 3 : 4)
                         .map((c, i) => (
                             <div key={i} className="option-chip">
                             {c.choice_text}
                             </div>
                         ))}
 
-                        {data.choice.length > 4 && (
+                        {data.choice?.length > 4 && (
                         <div className="option-chip more-chip">
-                            +{data.choice.length - 3} more
+                            +{data.choice?.length - 3} more
                         </div>
                         )}
 
@@ -449,17 +448,16 @@ export default function Home() {
                           </div>
 
                          <div className="question-preview-options two-grid">
-                            {data.choices
-                            .slice(0, data.choices.length > 4 ? 3 : 4)
+                            {data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4)
                             .map((c, i) => (
                                 <div key={i} className="option-chip">
                                 {c.choice_text}
                                 </div>
                             ))}
 
-                            {data.choices.length > 4 && (
+                            {data.choices?.length > 4 && (
                             <div className="option-chip more-chip">
-                                +{data.choices.length - 3} more
+                                +{data.choices?.length - 3} more
                             </div>
                             )}
 
@@ -497,8 +495,7 @@ export default function Home() {
                           </div>
 
                           <div className="question-preview-options two-grid">
-                                {data.items
-                                    .slice(0, data.items.length > 4 ? 3 : 4)
+                                {data.items?.slice(0, data.items?.length > 4 ? 3 : 4)
                                     .map((item, idx) => (
                                     <div
                                         key={idx}
@@ -514,9 +511,9 @@ export default function Home() {
                                     </div>
                                     ))}
 
-                                {data.items.length > 4 && (
+                                {data.items?.length > 4 && (
                                     <div className="option-chip more-chip">
-                                    +{data.items.length - 3} more
+                                    +{data.items?.length - 3} more
                                     </div>
                                 )}
                             </div>
