@@ -216,7 +216,7 @@ export default function Home() {
       case "confession":
         return (
           <>
-              <div>
+           
                    <div className='post-caption' onClick={()=>{
                       const newPost = 
                         { id: post.id,
@@ -259,7 +259,7 @@ export default function Home() {
                     }}>
                     <p>{data.title}</p>
                 </div>
-              </div>
+             
                   
               <div className="post-thumbnail">
                 <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
@@ -277,91 +277,8 @@ export default function Home() {
       case "question":
         return (
           <>
-            <div>
-                <div className='post-caption' onClick={ () => {
-                  const newPost = 
-                    { id: post.id,
-                      post_type: post.post_type,
-                      is_anonymous: post.is_anonymous || 0, anonymous_bg_color: post.anonymous_bg_color,
-                      likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                      created_at: post.created_at,
-                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      tags: post.tags,
-                      data:{
-                        question_id:data.id,
-                        question_type:data.question_type,
-                        question_related_to:data.question_related_to,
-                        title:data.title,
-                        media_url:data.media_url,
-
-                        // rating
-                        rating_icon_id:data.rating_icon_id || null,
-
-                        // range
-                        range_min:data.range_min || null,
-                        range_max:data.range_max || null,
-                        default_range_value: data.default_range_value || null,
-                        step: data.step || null,
-
-                        // munltiple choice
-                        choices: 
-                          data.choices?.map(c => ({
-                            choice_text: c.choice_text,
-                            multiplechoice_id: c.multiplechoice_id,
-                            id: c.id,
-                            question_id: c.question_id
-                          }))
-                        || [],
-
-                        // ranking
-                        items: 
-                          data.items?.map(c => ({
-                            item_text: c.item_text,
-                            position: c.position,
-                            id: c.id,
-                            ranking_id: c.ranking_id,
-                            question_id: c.question_id
-                          }))
-                         || [],
-
-                        // single choice
-                        choice: 
-                          data.choice?.map(c => ({
-                            choice_text: c.choice_text,
-                            singlechoice_id: c.singlechoice_id,
-                            id: c.id,
-                            question_id: c.question_id
-                          }))
-                        || [],
-                      }
-                    };
-                    sessionStorage.setItem("post", JSON.stringify(newPost));
-
-                       const HisData = {
-                      id: post.id,
-                      title: data.title,
-                      mediaSrc : data.media_url,
-                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                      isAnonymous: post.is_anonymous,
-                      anonymousBg: post.anonymous_bg_color,
-                    }
-                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                    let newList;
-                    if (recentDataHis.some(item => item.id === post.id)) {
-                      const raminData = recentDataHis.filter(item => item.id !== post.id);
-                      newList = [HisData, ...raminData].slice(0, 50);
-                    } else {
-                      newList = [HisData, ...recentDataHis].slice(0, 50);
-                    }
-
-                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
-                    navigate(`/aboutpost/${post.id}`)
-                  }}>
-                  <p>{data.title}</p>
-                </div>
-              <div className="post-question-answer-preview">
+      
+                 <div className="post-question-answer-preview">
                     {data.question_type === "closedend" && (
 
                         <div className="closed-preview-card question-preview-card" onClick={
@@ -658,8 +575,89 @@ export default function Home() {
                       )}
                   
               </div>
-            </div>
+                <div className='post-caption' onClick={ () => {
+                  const newPost = 
+                    { id: post.id,
+                      post_type: post.post_type,
+                      is_anonymous: post.is_anonymous || 0, anonymous_bg_color: post.anonymous_bg_color,
+                      likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
+                      created_at: post.created_at,
+                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                      tags: post.tags,
+                      data:{
+                        question_id:data.id,
+                        question_type:data.question_type,
+                        question_related_to:data.question_related_to,
+                        title:data.title,
+                        media_url:data.media_url,
 
+                        // rating
+                        rating_icon_id:data.rating_icon_id || null,
+
+                        // range
+                        range_min:data.range_min || null,
+                        range_max:data.range_max || null,
+                        default_range_value: data.default_range_value || null,
+                        step: data.step || null,
+
+                        // munltiple choice
+                        choices: 
+                          data.choices?.map(c => ({
+                            choice_text: c.choice_text,
+                            multiplechoice_id: c.multiplechoice_id,
+                            id: c.id,
+                            question_id: c.question_id
+                          }))
+                        || [],
+
+                        // ranking
+                        items: 
+                          data.items?.map(c => ({
+                            item_text: c.item_text,
+                            position: c.position,
+                            id: c.id,
+                            ranking_id: c.ranking_id,
+                            question_id: c.question_id
+                          }))
+                         || [],
+
+                        // single choice
+                        choice: 
+                          data.choice?.map(c => ({
+                            choice_text: c.choice_text,
+                            singlechoice_id: c.singlechoice_id,
+                            id: c.id,
+                            question_id: c.question_id
+                          }))
+                        || [],
+                      }
+                    };
+                    sessionStorage.setItem("post", JSON.stringify(newPost));
+
+                       const HisData = {
+                      id: post.id,
+                      title: data.title,
+                      mediaSrc : data.media_url,
+                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
+                      isAnonymous: post.is_anonymous,
+                      anonymousBg: post.anonymous_bg_color,
+                    }
+                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+
+                    let newList;
+                    if (recentDataHis.some(item => item.id === post.id)) {
+                      const raminData = recentDataHis.filter(item => item.id !== post.id);
+                      newList = [HisData, ...raminData].slice(0, 50);
+                    } else {
+                      newList = [HisData, ...recentDataHis].slice(0, 50);
+                    }
+
+                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
+                    navigate(`/aboutpost/${post.id}`)
+                  }}>
+                  <p>{data.title}</p>
+                </div>
             <div className="post-thumbnail">
               <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                 <img src={data.media_url} className="preview-image"/>
