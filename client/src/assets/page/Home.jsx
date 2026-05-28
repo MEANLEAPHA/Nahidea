@@ -16,6 +16,7 @@ import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,Search
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
 
 // lucide
 import {
