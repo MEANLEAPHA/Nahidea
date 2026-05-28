@@ -194,9 +194,9 @@ export default function Home() {
                     let newList;
                     if (recentDataHis.some(item => item.id === post.id)) {
                       const raminData = recentDataHis.filter(item => item.id !== post.id);
-                      newList = [HisData, ...raminData].slice(0, 5);
+                      newList = [HisData, ...raminData].slice(0, 50);
                     } else {
-                      newList = [HisData, ...recentDataHis].slice(0, 5);
+                      newList = [HisData, ...recentDataHis].slice(0, 50);
                     }
 
                     localStorage.setItem("recentPostHis", JSON.stringify(newList));
@@ -231,6 +231,28 @@ export default function Home() {
                           }
                         };
                       sessionStorage.setItem("post", JSON.stringify(newPost));
+
+                        const HisData = {
+                          id: post.id,
+                          title: data.title,
+                          mediaSrc : data.media_url,
+                          author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                          authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
+                          isAnonymous: post.is_anonymous,
+                          anonymousBg: post.anonymous_bg_color,
+                        }
+                        const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+
+                        let newList;
+                        if (recentDataHis.some(item => item.id === post.id)) {
+                          const raminData = recentDataHis.filter(item => item.id !== post.id);
+                          newList = [HisData, ...raminData].slice(0, 50);
+                        } else {
+                          newList = [HisData, ...recentDataHis].slice(0, 50);
+                        }
+
+                        localStorage.setItem("recentPostHis", JSON.stringify(newList));
+
                       navigate(`/aboutpost/${post.id}`)
                     }}>
                     <p>{data.title}</p>
@@ -312,13 +334,35 @@ export default function Home() {
                       }
                     };
                     sessionStorage.setItem("post", JSON.stringify(newPost));
+
+                       const HisData = {
+                      id: post.id,
+                      title: data.title,
+                      mediaSrc : data.media_url,
+                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
+                      isAnonymous: post.is_anonymous,
+                      anonymousBg: post.anonymous_bg_color,
+                    }
+                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+
+                    let newList;
+                    if (recentDataHis.some(item => item.id === post.id)) {
+                      const raminData = recentDataHis.filter(item => item.id !== post.id);
+                      newList = [HisData, ...raminData].slice(0, 50);
+                    } else {
+                      newList = [HisData, ...recentDataHis].slice(0, 50);
+                    }
+
+                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
                     navigate(`/aboutpost/${post.id}`)
                   }}>
                   <p>{data.title}</p>
                 </div>
               <div className="post-question-answer-preview">
                     {data.question_type === "closedend" && (
-                      <div classNmae ='closed-preview-card question-preview-card' onClick={
+
+                        <div className="closed-preview-card question-preview-card" onClick={
                               ()=>{
                                 const QaData = {
                                     question_id : data.id,
@@ -328,26 +372,29 @@ export default function Home() {
                                 navigate(`/answer/${post.id}/${data.id}/closedend`);
                               }
                             }>
-                           <div className="question-preview-header">
+                        <div className="question-preview-header">
                             <span className="question-badge yesno-badge">
-                              Yes / No
+                             <FontAwesomeIcon icon={faThumbsUp}/> Yes / No <FontAwesomeIcon icon={faThumbsDown}/>
+                            </span>
+                            <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
 
-                          <div className="question-preview-options two-grid">
-                            <div className="option-chip yes-chip">
+                          <div className="yesno-div">
+                            <div className="yes-chip">
                               Yes
                             </div>
 
-                            <div className="option-chip no-chip">
+                            <div className="no-chip">
                               No
                             </div>
-                          </div>
                         </div>
+                    </div>
                       )}
 
                       {data.question_type === "range" && (
-                        <div className="question-preview-card range-card" onClick={
+                         <div className= "question-preview-card" onClick={
                           ()=>{
                             const QaData = {
                               
@@ -362,24 +409,45 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/range`);
                           }
                         }>
-                          <div className="question-preview-header">
-                                <span className="question-badge range-badge">
-                                  Range
-                                </span>
-                              </div>
 
-                              <div className="range-preview-bar">
-                                <div className="range-preview-fill" />
-                              </div>
+                <div className="question-preview-header">
+                            <span className="question-badge range-badge">
+                            <FontAwesomeIcon icon={faLocationCrosshairs} /> Range
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                          </div>
+                          <div className='range-preview-option'>
+                                  <label id="min-label">{min}</label>
 
-                              <div className="range-values">
-                                <span>{data.range_min}</span>
-                                <span>{data.range_max}</span>
-                              </div>
-                         </div>
+                <div className="range-wrapper">
+                    <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    value={rangeValue}
+                    onChange={(e) => setRangeValue(Number(e.target.value))}
+                    />
+                        <div
+                    className="custom-thumb"
+                    style={{
+                        left: `${((rangeValue - min) / (max - min)) * 100}%`
+                    }}
+                    >
+                    {rangeValue}
+                    </div>
+                </div>
+                <label id="max-label">{max}</label>
+                          </div>
+              
+
+                </div>
                       )}
 
                       {data.question_type === "singlechoice" && (
+            
                         <div className="question-preview-card" onClick={
                           ()=>{        
                             const QaData = {
@@ -399,28 +467,35 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/singlechoice`);
                           }
                         }>
-                          <div className="question-preview-header">
-                              <span className="question-badge">
-                                Pick One
-                              </span>
-                            </div>
-
-                            <div className="question-preview-options two-grid">
-
-                              {data.choices?.map((c, i) => (
-                                <div
-                                  key={i}
-                                  className="option-chip"
-                                >
-                                  {c.choice_text}
-                                </div>
-                              ))}
-
-                            </div>
+        
+                        <div className="question-preview-header">
+                        <span className="question-badge single-badge"><FontAwesomeIcon icon={faHandPointer} /> Pick One</span>
+                        <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
                         </div>
+
+                        <div className="question-preview-options two-grid">
+                        {singleChoices
+                        .slice(0, singleChoices.length > 4 ? 3 : 4)
+                        .map((c, i) => (
+                            <div key={i} className="option-chip">
+                            {c}
+                            </div>
+                        ))}
+
+                        {singleChoices.length > 4 && (
+                        <div className="option-chip more-chip">
+                            +{singleChoices.length - 3} more
+                        </div>
+                        )}
+
+                        </div>
+                    </div>
                       )}
 
                       {data.question_type === "multiplechoice" && (
+        
                         <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
@@ -440,25 +515,33 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
                           }
                         }>
-                          <div className="question-preview-header">
-                            <span className="question-badge multi-badge">
-                              Multiple Choice
+        
+                        <div className="question-preview-header">
+                            <span className="question-badge multiple-badge">
+                             <FontAwesomeIcon icon={faHandPeace} /> Pick Multiple
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
 
-                          <div className="question-preview-options two-grid">
-
-                            {data.choices?.map((c, i) => (
-                              <div
-                                key={i}
-                                className="option-chip"
-                              >
-                                {c.choice_text}
-                              </div>
+                         <div className="question-preview-options two-grid">
+                            {multipleChoices
+                            .slice(0, multipleChoices.length > 4 ? 3 : 4)
+                            .map((c, i) => (
+                                <div key={i} className="option-chip">
+                                {c}
+                                </div>
                             ))}
 
-                          </div>
+                            {multipleChoices.length > 4 && (
+                            <div className="option-chip more-chip">
+                                +{multipleChoices.length - 3} more
+                            </div>
+                            )}
+
                         </div>
+                    </div>
                       )}
 
                       {data.question_type === "rankingorder" && (
@@ -481,33 +564,46 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/rankingorder`);
                           }
                         }>
-                          <div className="question-preview-header">
+                    <div className="question-preview-header">
                             <span className="question-badge rank-badge">
-                              Rank Order
+                              <FontAwesomeIcon icon={faHand} /> Move the Rankings
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
 
                           <div className="question-preview-options two-grid">
+                                {rankingChoices
+                                    .slice(0, rankingChoices.length > 4 ? 3 : 4)
+                                    .map((item, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="option-chip rank-chip"
+                                    >
+                                        <span className="rank-number">
+                                        #{idx + 1}
+                                        </span>
 
-                            {data.items?.map((item, idx) => (
-                              <div
-                                key={idx}
-                                className="option-chip rank-chip"
-                              >
-                                <span className="rank-number">
-                                  #{idx + 1}
-                                </span>
+                                        <span className="rank-text">
+                                        {item}
+                                        </span>
+                                    </div>
+                                    ))}
 
-                                {item.item_text}
-                              </div>
-                            ))}
-
-                          </div>
-                        </div>
+                                {rankingChoices.length > 4 && (
+                                    <div className="option-chip more-chip">
+                                    +{rankingChoices.length - 3} more
+                                    </div>
+                                )}
+                            </div>
+                    </div>
                       )}
 
                       {data.question_type === "rating" && (
-                        <div onClick={
+
+
+                        <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
                                     // id: data.id,
@@ -519,13 +615,26 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/rating`);
                           }
                         }>
-                          <Text>{data.title}</Text>
-                          <Text>Rating icon: {data.rating_icon_id}</Text>
-                        </div>
+                 <div className="question-preview-header">
+                            <span className="question-badge rating-badge">
+                              <FontAwesomeIcon icon={faStar} /> Rate
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                          </div>
+                {Array.from({length:5}).map((_,i)=>(
+                    <FontAwesomeIcon 
+                    key={i}
+                    icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
+                    style={{ fontSize: "24px", color: "grey" }}
+                    />
+                ))}
+            </div>
                       )}
 
                       {data.question_type === "openend" && (
-                        <div onClick={
+                        <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
                                       question_id : data.id,
@@ -535,8 +644,15 @@ export default function Home() {
                             navigate(`/answer/${post.id}/${data.id}/openend`);
                           }
                         }>
-                     
-                        </div>
+                        <div className="question-preview-header question-preview-header-open-end">
+                            <span className="question-badge openend-badge">
+                               <SignatureOutlined /> Write Your Answer
+                            </span>
+                            <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                          </div>
+                    </div>
                       )}
                   
               </div>
@@ -1216,7 +1332,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
             }}
           >
             <img
-              src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf}
+              src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
               alt="user-profile"
               id="author-pf"
             />
@@ -1226,12 +1342,12 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
         <div id="title-div">
           <p id="title">{item.title}</p>
         </div>
-        <button
+        {/* <button
           id="history-card-delete"
           onClick={() => deletePostHistory(item.id)}
         >
           Delete
-        </button>
+        </button> */}
       </div>
 
       {safeImg && (
@@ -1247,43 +1363,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
 };
 
 
-// const RecentHistory = () => {
-//   const [recentDataHis, setRecentDataHis] = useState([]);
-//   useEffect(() => {
-//     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-//     setRecentDataHis(postData);
-//   },[]);
-
-//   if(recentDataHis.length === 0){
-//       return null
-//   };
-
-
-//   const handleClearPostHistory = () => {
-//     const update = recentDataHis.slice( recentDataHis.length);
-//     localStorage.setItem("recentPostHis", JSON.stringify(update));
-//     setRecentDataHis(update);
-//   }
-
-//   return(
-//     <div className="history-container">
-
-//       <div className='history-container-header'>
-//         <label>Recent History</label>
-//         <span onClick = {handleClearPostHistory()}>Clear All</span>
-//       </div>
-  
-//       <div className='history-list-ul'>   
-
-//         {recentDataHis.map((item) => (
-//             postHistoryCard(item)
-//         ))}       
-//       </div>
-
-//     </div> 
-//   )
-// };
-
+ 
 // const postHistoryCard = (item) => {
 //   const deletePostHistory = (postId) => {
 //     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
