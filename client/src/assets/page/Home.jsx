@@ -161,7 +161,6 @@ export default function Home() {
       case "content":
         return (
           <>
-              <div>
                 <div className='post-caption' onClick={ () => {
                   const newPost = 
                     { id: post.id,
@@ -178,12 +177,34 @@ export default function Home() {
                         media_url:data.media_url
                       }
                     };
+
                     sessionStorage.setItem("post", JSON.stringify(newPost));
-                    navigate(`/aboutpost/${post.id}`)
+
+                    const HisData = {
+                      id: post.id,
+                      title: data.title,
+                      mediaSrc : data.media_url,
+                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
+                      isAnonymous: post.is_anonymous,
+                      anonymousBg: post.anonymous_bg_color,
+                    }
+                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+
+                    let newList;
+                    if (recentDataHis.some(item => item.id === post.id)) {
+                      const raminData = recentDataHis.filter(item => item.id !== post.id);
+                      newList = [HisData, ...raminData].slice(0, 5);
+                    } else {
+                      newList = [HisData, ...recentDataHis].slice(0, 5);
+                    }
+
+                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
+
+                    navigate(`/aboutpost/${post.id}`);
                   }}>
                     <p>{data.title}</p>
                 </div>
-              </div>
               <div  className='post-thumbnail'>         
                 <MediaPreview files={parseJSON(data.media_url)}/>
               </div>
@@ -958,52 +979,7 @@ const handleFavorite = async (postId) => {
       </article>
 
       <article id='his-article'>
-        <div className="history-container">
-
-            <div className='history-container-header'>
-              <label>History</label>
-              <span>See All</span>
-            </div>
-
-            <div className='history-list-ul'>   
-
-              <div className="post-history-card">
-                <div className='post-history-card-info'>
-                    <div id="author-info">
-                      <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
-                            <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
-                      </div>
-                      <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
-                    </div>
-                    <div id="title-div">
-                      <p id="title">
-                        "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
-                      </p>
-                    </div>
-                </div>
-              </div>
-              <div className="post-history-card">
-                <div className='post-history-card-info'>
-                      <div id="author-info">
-                      <div id="author-pf-div" style={{backgroundColor : isAnonymous === 1 ? anonymousBg : ""}}>
-                            <img src={isAnonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf"/>
-                      </div>
-                      <p id="author-name">{isAnonymous === 1 ? anonymousName : username}</p>
-                    </div>
-                    <div id="title-div">
-                      <p id="title">
-                        "Should superheroes kill" is a fundamentally uninteresting theme because it is a solved problem (Mostly Invincible, some others)
-                      </p>
-                    </div>
-                    
-                  </div>
-                  <div className="media-holder" style={{ "--preview-url-history-post": `url(https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg)` }}>
-                    <img src="https://study.com/cimages/multimages/16/line5062014251101771877.jpg"/>
-                  </div>
-              </div>
-                    
-            </div>
-        </div> 
+        <RecentHistory />
 
         <div className='rule-absolute'>   
           <p onClick={()=>{navigate('/nahidearule')}}>Nahidea Rule</p>     
@@ -1167,9 +1143,178 @@ const parseJSON = (val) => {
 
 
 
+const RecentHistory = () => {
+  const [recentDataHis, setRecentDataHis] = useState([]);
+
+  useEffect(() => {
+    const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+    setRecentDataHis(postData);
+  }, []);
+
+  if (recentDataHis.length === 0) {
+    return null;
+  }
+
+  const handleClearPostHistory = () => {
+    localStorage.setItem("recentPostHis", JSON.stringify([]));
+    setRecentDataHis([]);
+  };
+
+  const deletePostHistory = (postId) => {
+    const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+    const update = postData.filter((item) => item.id !== postId);
+    localStorage.setItem("recentPostHis", JSON.stringify(update));
+    setRecentDataHis(update);
+  };
+
+  return (
+    <div className="history-container">
+      <div className="history-container-header">
+        <label>Recent History</label>
+        <span onClick={handleClearPostHistory}>Clear All</span>
+      </div>
+
+      <div className="history-list-ul">
+        {recentDataHis.map((item) => (
+          <PostHistoryCard
+            key={item.id}
+            item={item}
+            deletePostHistory={deletePostHistory}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const PostHistoryCard = ({ item, deletePostHistory }) => {
+  // Safe image renderer
+  let safeImg = null;
+  try {
+    if (typeof item.mediaSrc === "string") {
+      if (item.mediaSrc.trim().startsWith("[")) {
+        const arr = JSON.parse(item.mediaSrc);
+        if (Array.isArray(arr) && arr.length > 0) {
+          safeImg = arr[0];
+        }
+      } else {
+        safeImg = item.mediaSrc;
+      }
+    }
+  } catch (err) {
+    console.warn("Invalid mediaSrc format", err);
+  }
+
+  return (
+    <div className="post-history-card">
+      <div className="post-history-card-info">
+        <div id="author-info">
+          <div
+            id="author-pf-div"
+            style={{
+              backgroundColor: item.isAnonymous === 1 ? item.anonymousBg : "",
+            }}
+          >
+            <img
+              src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf}
+              alt="user-profile"
+              id="author-pf"
+            />
+          </div>
+          <p id="author-name">{item.author}</p>
+        </div>
+        <div id="title-div">
+          <p id="title">{item.title}</p>
+        </div>
+        <button
+          id="history-card-delete"
+          onClick={() => deletePostHistory(item.id)}
+        >
+          Delete
+        </button>
+      </div>
+
+      {safeImg && (
+        <div
+          className="media-holder"
+          style={{ "--preview-url-history-post": `url(${safeImg})` }}
+        >
+          <img src={safeImg} alt="post-media" />
+        </div>
+      )}
+    </div>
+  );
+};
 
 
+// const RecentHistory = () => {
+//   const [recentDataHis, setRecentDataHis] = useState([]);
+//   useEffect(() => {
+//     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+//     setRecentDataHis(postData);
+//   },[]);
 
+//   if(recentDataHis.length === 0){
+//       return null
+//   };
+
+
+//   const handleClearPostHistory = () => {
+//     const update = recentDataHis.slice( recentDataHis.length);
+//     localStorage.setItem("recentPostHis", JSON.stringify(update));
+//     setRecentDataHis(update);
+//   }
+
+//   return(
+//     <div className="history-container">
+
+//       <div className='history-container-header'>
+//         <label>Recent History</label>
+//         <span onClick = {handleClearPostHistory()}>Clear All</span>
+//       </div>
+  
+//       <div className='history-list-ul'>   
+
+//         {recentDataHis.map((item) => (
+//             postHistoryCard(item)
+//         ))}       
+//       </div>
+
+//     </div> 
+//   )
+// };
+
+// const postHistoryCard = (item) => {
+//   const deletePostHistory = (postId) => {
+//     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+//     const update = postData.filter((item) => item.postId !== postId);
+//     localStorage.setItem("recentPostHis", JSON.stringify(update));
+//     setRecentDataHis(update);
+//   }
+//   return (
+//       <div className="post-history-card" key={item.postId}>
+//         <div className='post-history-card-info'>
+//             <div id="author-info">
+//               <div id="author-pf-div" style={{backgroundColor : item.isAnonymous === 1 ? item.anonymousBg : ""}}>
+//                     <img src={item.isAnonymous === 1 ? nahIdeaAuth : item.authorPf} alt="user-profile" id="author-pf"/>
+//               </div>
+//               <p id="author-name">{item.author}</p>
+//             </div>
+//             <div id="title-div">
+//               <p id="title">
+//                 {item.title}
+//               </p>
+//             </div>
+//             <button id="history-card-delete" onClick={() => {deletePostHistory(item.postId)}}>Delete</button>
+//           </div>
+//           {item.imgSrc && (
+//             <div className="media-holder" style={{ "--preview-url-history-post": `url(${item.imgSrc})` }}>
+//               <img src={item.imgSrc}/> 
+//             </div>
+//           )}
+//       </div>
+//   )
+// }
 
 
 

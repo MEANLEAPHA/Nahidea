@@ -101,29 +101,40 @@
   width: 100%;
   height: 100%;
   border-radius: 24px;
-  text-align: center;
+
   overflow: visible; /* allow child scroll areas to work */
- padding: 10px;
+ 
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 
   box-shadow: var(--card-shadow);
- display: flex;
- align-items: center;
+
   border: 1px solid var(--secondary-color);
  
   background: var(--back-con);
 }
 .flip-card-front{
  overflow: hidden;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ text-align: center;
 }
 .flip-card-back {
   transform: rotateY(180deg);
   background: var(--back-con);
    background-image: none !important; /* prevent any background bleeding */
-  
+  display: flex;
+  flex-direction: column;
 }
-
+.top-card-daily{
+ position: absolute;
+  top: 1rem;
+  left: 0.8rem;
+  z-index: 100;
+  opacity: 0.8;
+  color:var(--font-color);
+}
 .card-scroll-content {
   flex: 1;
   overflow-y: auto;
@@ -196,26 +207,12 @@
 /* =========================
    FRONT CONTENT
 ========================= */
-.top-card-daily{
-    position: absolute;
-  top: 1rem;
-  left: 0.8rem;
-  width: auto;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  z-index: 100;
- color: var(--font-color);
- opacity: 0.7;
-}
+
 .card-icons{
- 
-  color:var(--font-color);
+
+  color: var(--font-color);
   font-size: 1.3rem;
 }
-
 
 .flip-hint {
   position: absolute;
@@ -232,6 +229,7 @@
 /* =========================
    QUESTION
 ========================= */
+
 
 
 .question-text {
@@ -271,8 +269,9 @@
   position: relative;
   z-index: 3;
 
- 
+  padding: 0 1rem;
 
+  color: white;
 
   line-height: 1.5;
 }

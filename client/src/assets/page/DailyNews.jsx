@@ -336,7 +336,7 @@ export default function DailyNews() {
                   className="card-icons"
                   icon={cat.icon}
                 />
-         
+                {cat.title}
               </div>
              
               
@@ -379,6 +379,7 @@ export default function DailyNews() {
                 icon={cat.icon}
               />
 
+                 Joke
                 </div>
               
                {data.setup}
@@ -425,6 +426,7 @@ export default function DailyNews() {
                   icon={cat.icon}
                 />
 
+              {cat.title}
                 </div>
           
 
@@ -466,7 +468,7 @@ export default function DailyNews() {
               icon={cat.icon}
               style={{zIndex:'100'}}
             />
-
+            {cat.title}
               </div>
             
           </>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, use } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {data, Link, useNavigate} from "react-router-dom";
 
 import {MenuOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
         HomeOutlined,SignatureOutlined,BarChartOutlined,ClockCircleOutlined,HeartOutlined, RiseOutlined, FireOutlined, QuestionCircleOutlined, FlagOutlined, ReadOutlined, FileProtectOutlined,FileDoneOutlined, 
@@ -185,6 +185,7 @@ const Search = () => {
       </>
   );
 }
+
 
 const RecentSearch = () => {
   const [recentData, setRecentData] = useState([]);
