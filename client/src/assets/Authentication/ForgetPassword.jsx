@@ -71,10 +71,7 @@ export const ForgetPassword = () => {
         <ToastContainer position="top-right" autoClose={2000} />
         </div>
 
-        <div className='logo-container'>
-                <img src={nahideaTren}/>
-                <p>Nahidea</p>
-        </div>
+
 
         <form onSubmit={(e) => { e.preventDefault();  handleSubmit(); }} >        
           <div className="form-center">
@@ -109,14 +106,7 @@ export const ForgetPassword = () => {
           </div>
         </div>
         </form>
-        <div className='container-image'>
-          <div className='container-image-center'>
-            <h1 className="not-mobile greeting">Design later</h1>
-            <img src={nahIdeaAuth} className="auth-img" />
-            <p className='logo-font'>Nahidea</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
-          </div>
-        </div>
+   
       </div>
   
   );

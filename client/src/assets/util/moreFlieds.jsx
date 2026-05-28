@@ -285,6 +285,7 @@ const normalizeUrl = (url) => {
 
       {linkModal.open && (
         <div className="link-modal">
+          <p id="link-label">Add your Link here</p>
           <input
             placeholder="Text"
             value={linkModal.text}
@@ -299,9 +300,9 @@ const normalizeUrl = (url) => {
               setLinkModal({ ...linkModal, url: e.target.value })
             }
           />
-          <div>
-            <button onClick={applyLink} type="button">Apply</button>
-            <button onClick={() => setLinkModal({ open: false })} type="button">
+          <div className='link-model-action'>
+            <button onClick={applyLink} type="button" id='btn-apply-link'>Apply</button>
+            <button onClick={() => setLinkModal({ open: false })} type="button" id='btn-cancel-link'>
               Cancel
             </button>
           </div>

@@ -161,13 +161,6 @@ export const NewPassword = () => {
             <div className='toast-feedback'>
               <ToastContainer position="top-right" autoClose={2000} />
             </div>
-      
-            <div className='logo-container'>
-              <img src={nahideaTren}/>
-              <p>Nahidea</p>
-            </div>
-      
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -262,7 +255,7 @@ export const NewPassword = () => {
         />
          </div>
      
-        <div className="div-input div-submit">
+        <div className="div-input div-submit reset-input">
              <button disabled={!isValid || loading}>
           {loading ? "Saving..." : "Reset Password"}
         </button>
@@ -273,14 +266,6 @@ export const NewPassword = () => {
        
         </div>
       </form>
-      <div className='container-image'>
-        <div className='container-image-center'>
-          <h1 className="not-mobile greeting">Design later</h1>
-          <img src={nahIdeaAuth} className="auth-img" />
-          <p className='logo-font'>Nahidea</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
-        </div>
-    </div>
     </div>
   );
 };

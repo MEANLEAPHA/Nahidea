@@ -145,13 +145,6 @@ export const VerifyEmailForgetPassword = () => {
         <div className='toast-feedback'>
               <ToastContainer position="top-right" autoClose={2000} />
             </div>
-      
-            <div className='logo-container'>
-              <img src={nahideaTren}/>
-              <p>Nahidea</p>
-            </div>
-
-   
 
       <form
         onSubmit={(e) => {
@@ -173,13 +166,13 @@ export const VerifyEmailForgetPassword = () => {
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "");
                         setPin(value);
-                        className="input-auth"
                       }}
+                        className="input-auth"
                     />
                 </div>
                 <div className="div-input div-submit">
                        <button disabled={pin.length !== 6 || loading}>
-                    {loading ? "Verifying..." : "Verify"}
+                    {loading ? "..." : "Verify"}
                   </button>
                   <p
                     onClick={handleResendPin}
@@ -195,14 +188,6 @@ export const VerifyEmailForgetPassword = () => {
          
         </div>
       </form>
-       <div className='container-image'>
-                    <div className='container-image-center'>
-                      <h1 className="not-mobile greeting">Design later</h1>
-                      <img src={nahIdeaAuth} className="auth-img" />
-                      <p className='logo-font'>Nahidea</p>
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
-                    </div>
-                  </div>
     </div>
   );
 };

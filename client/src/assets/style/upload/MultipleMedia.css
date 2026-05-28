@@ -1,7 +1,7 @@
 
 /* image uploader */
 .media-uploader {
-  width: 99.50%;
+  width: 100%;
   padding: 0;
   margin: 0;
   height: auto;
@@ -212,7 +212,6 @@ width: 100%;
   display: flex !important;
   margin: 0 !important;
   padding: 0 !important;
-
 }
 
 

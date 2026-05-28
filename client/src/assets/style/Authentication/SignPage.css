@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Yeseva+One&display=swap');
 :root{
     /* --background-color:white; */
      --background-color: rgb(234, 234, 234);
@@ -26,11 +27,15 @@
     padding: 0;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content:center;
     align-items: center;
     position: relative;
-
+    background-image: url(../../img/nahidea-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
 .toast-feedback{
     position: absolute;
     top: 0px;
@@ -41,14 +46,16 @@ p{
     font-family: sans-serif;
 }
 .container-form form{
-    width: 50%;
+    max-width: 50%;
+    width: 40%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-   background: var(--primary-color);
-    height: 100%;
+    background: transparent;
+    height: auto;
     padding: 0;
+    
     
 }
 .form-center{
@@ -56,11 +63,19 @@ p{
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    border-bottom-right-radius: 35%;
+     padding: 20px;
     width: 100%;
     height: 100%;
    margin: 0;
-   background-color: white;
+
+    border-radius: 50px;
+     /* Base translucent background (fallback for browsers without blur) */
+  background: rgba(255, 255, 255, 0.682); /* light glass */
+  /* For dark themes, you can swap to rgba(0,0,0,0.25) */
+
+  /* Modern glass effect */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(18px); /* Safari/WebKit */
 }
 
 .logo-container{
@@ -82,15 +97,23 @@ p{
     font-family:"Yeseva One", serif;
 }
 .p-page{
-    color: rgb(0, 0, 0);
-    display: flex;
-    gap: 5px;
-    margin:0;
-    font-family: sans-serif;
+    font-family: "Baloo 2", sans-serif;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size:35px;
+    margin: 0;
+}
+.p2-page{
+    margin: 0;
+    text-align: center;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: bold;
+    color:rgb(53, 53, 53);
 }
 .p-page span:first-child{
     font-size: 30px;
     font-weight: bold;
+
     color: var(--primary-color);
 }
 .p-page span:last-child{
@@ -105,10 +128,10 @@ p{
     opacity: 1;
 }
 .container-input{
-    width: 65%;
+    width: 90%;
     /* background-color: #FCD999; */
      
-    padding: 10px 0px 10px 0px;
+    padding: 5px 0px 5px 0px;
 }
 label{
     color: rgb(0, 0, 0);
@@ -128,6 +151,7 @@ label{
 
     border: 1px solid rgb(62, 62, 62);
 }
+
 .div-submit{
     display: flex;
     justify-content: space-between;
@@ -150,6 +174,7 @@ label{
     background: none;
 padding: 10px;
 border: none;
+
 color: rgb(0, 0, 0);
 }
 .input-auth:focus{
@@ -216,10 +241,21 @@ color: rgb(0, 0, 0);
     margin: 0;
 }
 
+.reset-input button{
+        width: 100%;
+        font-size: small;
+    }
+    
 
 
+@media screen and (max-width:1200px){
+       .container-form form{
+    max-width: 85%;
+    width: 60%;
 
+}
 
+}
 
 
 
@@ -228,15 +264,18 @@ color: rgb(0, 0, 0);
         flex-direction: column;
        
     }
+ 
     .container-form form{
         width: 100%;
       
-         height: 100vh;
-         border-radius: 0;
+         height:auto;
     }
-    .form-center{
-        border-radius: 0;
-    }
+       .container-form form{
+    max-width: 95%;
+    width: 90%;
+
+}
+
     .container-image{
         width: 100%;
         display: none;

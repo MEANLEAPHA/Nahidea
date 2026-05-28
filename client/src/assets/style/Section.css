@@ -25,9 +25,10 @@ section{
     height: auto;
 
 }
-@media screen and (max-width:1300px){
+@media screen and (max-width:1200px){
     section{
-    width: 80%;
+    width:90%;
+
 }
 }
 

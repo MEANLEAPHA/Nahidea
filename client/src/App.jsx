@@ -61,6 +61,7 @@ import ReportComment from './assets/page/ReportComment';
 import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
+import ReportHistory from './assets/page/ReportHistory';
 
 const App = () =>{
     return(
@@ -100,19 +101,24 @@ const App = () =>{
 
                     {/* User assistant */}
                     <Route path='/help' element={<Help/>}></Route>
-                    <Route path='/useragreement' element = {<UserAgreement/>} />
-                    <Route path='/nahidearule' element={<Rule/>} />
-                    <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
-                    <Route path='/accessibility' element={<Accessibility/>}></Route>
-
+                   
                     {/* User Dashboard */}
                     <Route path='/notification' element={<Notification/>}></Route>
+
+                    {/* feedback */}
+                    <Route path='/reporthistory' element={<ReportHistory/>}></Route> 
 
                     {/* tool */}
                     <Route path='/search' element={<Search />}></Route>
                     <Route path='/avatarplayground' element={<AvatarPlayground/>}></Route>
 
                 </Route>
+
+                {/* User assistant */}
+                <Route path='/useragreement' element = {<UserAgreement/>} />
+                <Route path='/nahidearule' element={<Rule/>} />
+                <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
+                <Route path='/accessibility' element={<Accessibility/>}></Route>
 
                 {/* Authentication */}
                 <Route path='/login' element={<Login/>}></Route>
@@ -347,9 +353,9 @@ const Layout = () => {
     return <div>Loading...</div>;
   }
 
-  if (!token || !user) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!token || !user) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   // =========================================
   // ONLINE

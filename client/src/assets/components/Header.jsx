@@ -43,7 +43,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
    
 
       <div className="header-right header-children">
-        
+{/*         
         {
           token === null ? (
             <>
@@ -54,7 +54,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
                 <span>Log In</span>
               </button>
             </>
-          ):(
+          ):( */}
             <>
               <button className='button-bar-icon not-mobile-tool' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
               <CreateDropDown />
@@ -63,7 +63,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
               <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>
-           )} 
+           {/* )}  */}
          
       </div>
 

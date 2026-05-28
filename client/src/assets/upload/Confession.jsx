@@ -38,6 +38,12 @@ import "../style/upload/Postpreview.css";
 
 
 export default function Confession() {
+
+   // if(!token) {
+  //   window.location.href = "/"; 
+  //   // login form
+  // }
+
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [selectType, setSelectType] = useState(null);
@@ -49,6 +55,7 @@ export default function Confession() {
 
   const { tokens, countdown, consume } = useAnonymousTokens();
   const [openPreview, setOpenPreview] = useState(false);
+
   const resetAll = () => {
     setTitle("");
     setTags([]);
@@ -64,13 +71,24 @@ export default function Confession() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (loading) return;
     setLoading(true);
 
     if (!title.trim()) {
-      toast.error("Confession title is required");
+      toast.error("Please enter confession title");
       setLoading(false);
       return;
+    }
+    if(selectType === null) {
+              toast.warning("Please select confession topic");
+              setLoading(false);
+              return;
+    }
+    if(tags.length === 0 ) {
+          toast.warning("Please add some #hashtags");
+          setLoading(false);
+          return;
     }
 
     const formData = new FormData();
@@ -112,7 +130,11 @@ export default function Confession() {
       );
       resetAll();
     }
-     resetAll();
+    finally {
+      setLoading(false);
+      resetAll();
+    }
+    
   };
 
   return (
@@ -130,14 +152,6 @@ export default function Confession() {
             <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
           </div>
 
-          {/* <Select
-            options={confession_options}
-            value={selectType}
-            onChange={setSelectType}
-            classNamePrefix="custom"
-            placeholder="Select Content Type"
-          /> */}
-
           <Select
               options={confession_options}
               value={selectType}
@@ -147,7 +161,7 @@ export default function Confession() {
                 setSelectedIcon(option?.icon); // store icon string
               }}
               classNamePrefix="custom"
-              placeholder="Select Confession Type"
+              placeholder="Select Confession Topic"
               formatOptionLabel={(option) => (
                 <div
                   style={{

@@ -8,6 +8,7 @@
     border-radius: 10px;
     padding: 0px;
     overflow: hidden;
+    
 }
 .toolbar-text-body{
     width: 95%;
@@ -177,13 +178,66 @@ padding: 0;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: var(--background-color);
-    border: 1px solid var(--secondary-color);
+    border: 1px solid var(--primary-color);
     border-radius: 10px;
-    padding: 100px;
+    padding: 40px 10px 50px 10px;
+    min-width: 330px;
     width: 400px;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: auto;
+}
+#link-label{
+  color: var(--font-color);
+  font-size: large;
+  margin: 0;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.link-modal input{
+  width: 90%;
+  background: none;
+  padding: 10px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 10px;
+  color: var(--font-color);
+}
+.link-modal input:focus{
+  outline: none;
+  border: 2px solid var(--secondary-color);
+}
+.link-model-action{
+  width: 90%;
+  margin: auto;
+  justify-content: space-evenly;
+  height: auto;
+  display: flex;
+}
+.link-modal button{
+  width: 48%;
+   border: none;
+  color: white;
+  opacity: 0.8;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 8px;
 }
 
+.link-modal #btn-apply-link{
+  background: rgb(76, 76, 222);
+}
+.link-modal #btn-cancel-link{
+    background: tomato;
+}
+
+.link-modal button:hover{
+  opacity: 1;
+  transform: scale(0.9)
+}
 
 @media screen and (max-width:768px){
     .toolbar-text-body{
@@ -198,7 +252,7 @@ padding: 0;
     }
     .toolbar-text-body button {
       padding: 5px;
-     font-size: 12px;
+     font-size: 11px;
     }
     
   

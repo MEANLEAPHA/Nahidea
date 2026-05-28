@@ -34,6 +34,7 @@ export default function PreviewRadio ({
   rankingChoices
 
 }) {
+  
   const [selected, setSelected] = useState(1);
 
   return (
@@ -89,7 +90,14 @@ export default function PreviewRadio ({
 
           />
           }
-         {selected === 2 && "HElooooooooooo" }
+         {selected === 2 && (
+           <div id="tutorial-div">
+             {post_type === "content" && <ContentTutorial />}
+             {post_type === "confession" && <ConfessionTutorial />}
+             {post_type === "question" && <QuestionTutorial />}
+           </div>
+           
+         ) }
          {selected === 3 && (
           <div id="content-rule-div">
             <Rule setRule={post_type}/>
@@ -103,3 +111,31 @@ export default function PreviewRadio ({
 
   );
 };
+
+
+const ContentTutorial = () => {
+  return (
+    <div className="tutorial-div">
+      <iframe src="https://www.youtube.com/embed/lfxEbZr8Tjo?si=fwpdkOrQ1TFQz7-r" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen className="tutorial-video"></iframe>
+      <p className="tutorial-title">Upload Content Tutorial</p>
+    </div>
+  );
+}
+
+const ConfessionTutorial = () => {
+  return (
+    <div className="tutorial-div">
+      <iframe src="https://www.youtube.com/embed/lfxEbZr8Tjo?si=fwpdkOrQ1TFQz7-r" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen className="tutorial-video"></iframe>
+      <p className="tutorial-title">Upload Confession Tutorial</p>
+    </div>
+  );
+}
+
+const QuestionTutorial = () => {
+  return (
+    <div className="tutorial-div">
+      <iframe src="https://www.youtube.com/embed/lfxEbZr8Tjo?si=fwpdkOrQ1TFQz7-r" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen className="tutorial-video"></iframe>
+      <p className="tutorial-title">Upload Question Tutorial</p>
+    </div>
+  );
+}

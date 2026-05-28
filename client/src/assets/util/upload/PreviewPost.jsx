@@ -4,10 +4,12 @@ import { useNavigate, useOutletContext} from "react-router-dom";
 
 // ant import
 import { Skeleton, Menu, Switch, Dropdown, Space  } from 'antd';
+import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 
 // fontAwesome import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faHeart, faMessage} from "@fortawesome/free-regular-svg-icons";
+import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
 
 // util import
 import { AnonymousName, AnonymousProfile } from "../anonymousTokens";
@@ -23,6 +25,7 @@ import { iconOptions } from "../../data/post_type_data";
 //auth
 
 import { useAuth } from '../../context/AuthContext';
+
 
 // memo on annoymous prevnet re-render
 const AnonymousPf = memo(AnonymousProfile);
@@ -87,21 +90,33 @@ export default function PreviewPost ({
     function QuesitionType () {  
     switch (questionTypeValue) {
         case "openend":
-            return <div>Answer</div>;
+            return <div className="question-preview-card">
+                        <div className="question-preview-header question-preview-header-open-end">
+                            <span className="question-badge openend-badge">
+                               <SignatureOutlined /> Write Your Answer
+                            </span>
+                            <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                          </div>
+                    </div>;
         case "closedend":
             return <div className="closed-preview-card question-preview-card">
                         <div className="question-preview-header">
                             <span className="question-badge yesno-badge">
-                              Yes / No
+                             <FontAwesomeIcon icon={faThumbsUp}/> Yes / No <FontAwesomeIcon icon={faThumbsDown}/>
+                            </span>
+                            <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
 
-                          <div className="question-preview-options two-grid">
-                            <div className="option-chip yes-chip">
+                          <div className="yesno-div">
+                            <div className="yes-chip">
                               Yes
                             </div>
 
-                            <div className="option-chip no-chip">
+                            <div className="no-chip">
                               No
                             </div>
                         </div>
@@ -115,21 +130,26 @@ export default function PreviewPost ({
                         </div> 
                     ))} */}
                         <div className="question-preview-header">
-                              <span className="question-badge">
-                                Pick One
-                              </span>
+                        <span className="question-badge single-badge"><FontAwesomeIcon icon={faHandPointer} /> Pick One</span>
+                        <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                        </div>
+
+                        <div className="question-preview-options two-grid">
+                        {singleChoices
+                        .slice(0, singleChoices.length > 4 ? 3 : 4)
+                        .map((c, i) => (
+                            <div key={i} className="option-chip">
+                            {c}
                             </div>
+                        ))}
 
-                            <div className="question-preview-options two-grid">
-
-                              {singleChoices.map((c, i) => (
-                                <div
-                                  key={i}
-                                  className="option-chip"
-                                >
-                                  {c}
-                                </div>
-                              ))}
+                        {singleChoices.length > 4 && (
+                        <div className="option-chip more-chip">
+                            +{singleChoices.length - 3} more
+                        </div>
+                        )}
 
                         </div>
                     </div>;
@@ -146,53 +166,83 @@ export default function PreviewPost ({
                             <label htmlFor="All above">All above</label>
                     </div>} */}
                         <div className="question-preview-header">
-                            <span className="question-badge multi-badge">
-                              Multiple Choice
+                            <span className="question-badge multiple-badge">
+                             <FontAwesomeIcon icon={faHandPeace} /> Pick Multiple
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
 
-                          <div className="question-preview-options two-grid">
-
-                            {multipleChoices.map((c, i) => (
-                              <div
-                                key={i}
-                                className="option-chip"
-                              >
+                         <div className="question-preview-options two-grid">
+                            {multipleChoices
+                            .slice(0, multipleChoices.length > 4 ? 3 : 4)
+                            .map((c, i) => (
+                                <div key={i} className="option-chip">
                                 {c}
-                              </div>
+                                </div>
                             ))}
+
+                            {multipleChoices.length > 4 && (
+                            <div className="option-chip more-chip">
+                                +{multipleChoices.length - 3} more
+                            </div>
+                            )}
 
                         </div>
                     </div>;
         case "range":
-            return <div className="question-preview-card range-card">
-                        <div className="question-preview-header">
-                            <span className="question-badge range-badge">
-                                  Range
-                            </span>
-                        </div>
-                        <div className="range-preview-bar">
-                            <div className="range-preview-fill" />
-                        </div>
+            return <div className= "question-preview-card">
 
-                        <div className="range-values">
-                            <span>{min}</span>
-                            <span>{max}</span>
-                        </div>
-                    {/* <div className='range-preview-option'>
-                        <label htmlFor={min}>{min}</label>
-                        <input type="range" value={rangeValue} name="range" step={step}/>
-                        <label htmlFor={max}>{max}</label>
-                        <label htmlFor={rangeValue}>{rangeValue}</label>
-                    </div> */}
-                    </div>;
+                <div className="question-preview-header">
+                            <span className="question-badge range-badge">
+                            <FontAwesomeIcon icon={faLocationCrosshairs} /> Range
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                          </div>
+                          <div className='range-preview-option'>
+                                  <label id="min-label">{min}</label>
+
+                <div className="range-wrapper">
+                    <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    value={rangeValue}
+                    onChange={(e) => setRangeValue(Number(e.target.value))}
+                    />
+                        <div
+                    className="custom-thumb"
+                    style={{
+                        left: `${((rangeValue - min) / (max - min)) * 100}%`
+                    }}
+                    >
+                    {rangeValue}
+                    </div>
+                </div>
+                <label id="max-label">{max}</label>
+                          </div>
+              
+
+                </div>
         case "rating":
-            return <div className='rating-preview-div'>
+            return  <div className="question-preview-card">
+                 <div className="question-preview-header">
+                            <span className="question-badge rating-badge">
+                              <FontAwesomeIcon icon={faStar} /> Rate
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
+                            </span>
+                          </div>
                 {Array.from({length:5}).map((_,i)=>(
                     <FontAwesomeIcon 
                     key={i}
                     icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
-                    style={{ fontSize: "24px", color: "#ff3434" }}
+                    style={{ fontSize: "24px", color: "grey" }}
                     />
                 ))}
             </div>;
@@ -206,26 +256,37 @@ export default function PreviewPost ({
                     ))}; */}
                     <div className="question-preview-header">
                             <span className="question-badge rank-badge">
-                              Rank Order
+                              <FontAwesomeIcon icon={faHand} /> Move the Rankings
+                            </span>
+                              <span className="case-unsolved">
+                                <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
 
                           <div className="question-preview-options two-grid">
+                                {rankingChoices
+                                    .slice(0, rankingChoices.length > 4 ? 3 : 4)
+                                    .map((item, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="option-chip rank-chip"
+                                    >
+                                        <span className="rank-number">
+                                        #{idx + 1}
+                                        </span>
 
-                            {rankingChoices.map((item, idx) => (
-                              <div
-                                key={idx}
-                                className="option-chip rank-chip"
-                              >
-                                <span className="rank-number">
-                                  #{idx + 1}
-                                </span>
+                                        <span className="rank-text">
+                                        {item}
+                                        </span>
+                                    </div>
+                                    ))}
 
-                                {item}
-                              </div>
-                            ))}
-
-                          </div>
+                                {rankingChoices.length > 4 && (
+                                    <div className="option-chip more-chip">
+                                    +{rankingChoices.length - 3} more
+                                    </div>
+                                )}
+                            </div>
                     </div>;
     default:
         return null;
@@ -260,16 +321,27 @@ export default function PreviewPost ({
                     titleValue === "" && postTagsValue.length === 0 ? <div className='post-skeleton-holder'>
                         <Skeleton active style={{marginTop:"10px"}}/></div> : (
                     <>
+                      <div className='post-body-text'>
+                            {questionTypeValue !== "" && QuesitionType()}
+                        </div>
                         <div className='post-caption'>
                             <p>{titleValue}</p>
                         </div>
-                        <div className='post-body-text'>
-                            <MarkdownPreview content={textBodyValue}/>
-                            {questionTypeValue !== "" && QuesitionType()}
-                        </div>
-                        <div className='post-tags'>
-                            <TagsPreview tagsValue={postTagsValue}/>
-                        </div>
+                        {
+                            textBodyValue && (
+                                <div className='post-body-text'>
+                                    <MarkdownPreview content={textBodyValue}/>
+                                </div>
+                            )
+                        }
+                       
+                       {
+                        postTagsValue.length !== 0 && (
+                            <div className='post-tags'>
+                                <TagsPreview tagsValue={postTagsValue}/>
+                            </div>
+                        )
+                       }
                     </>
                     )
                 }

@@ -64,7 +64,7 @@ export default function DailyNews() {
 
   const bgImages = {
     joke:
-      "https://img.freepik.com/premium-photo/distorted-happy-smiles-vector-seamless-pattern-design_776674-940491.jpg?semt=ais_hybrid&w=740&q=80",
+      null,
 
     didyouknow:
       "https://img.spoonflower.com/c/10853676/p/f/m/M79z86J1krFvf-vLS1wKbdDWol5wNp9lx34LjSG8WloxQVWjQ45w/10853676.png",
@@ -73,7 +73,7 @@ export default function DailyNews() {
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=560&fit=crop",
 
     question:
-      "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=400&h=560&fit=crop",
+      null,
   };
 
   /* =========================
@@ -214,6 +214,20 @@ export default function DailyNews() {
       fetcher: fetchWikipedia,
     },
     {
+      id: "joke",
+      title: "Joke",
+      icon: faLaughBeam,
+      fetcher: fetchJoke,
+      bg: bgImages.joke,
+    },
+    {
+      id: "question",
+      title: "Question",
+      icon: faQuestionCircle,
+      fetcher: fetchQuestion,
+      bg: bgImages.question,
+    },
+    {
       id: "didyouknow",
       title: "Did You Know",
       icon: faLightbulb,
@@ -228,20 +242,7 @@ export default function DailyNews() {
       fetcher: fetchAdvice,
       bg: bgImages.advice,
     },
-    {
-      id: "joke",
-      title: "Joke",
-      icon: faLaughBeam,
-      fetcher: fetchJoke,
-      bg: bgImages.joke,
-    },
-    {
-      id: "question",
-      title: "Question",
-      icon: faQuestionCircle,
-      fetcher: fetchQuestion,
-      bg: bgImages.question,
-    },
+    
 
     
   ];
@@ -330,13 +331,16 @@ export default function DailyNews() {
                 style={{ backgroundImage: `url(${cat.bg})`, backgroundOpacity: 0.5 }}
               />
 
-              <FontAwesomeIcon
-                className="card-icons"
-                icon={cat.icon}
-              />
-
-              <h4>{cat.title}</h4>
-
+              <div className='top-card-daily'>
+                   <FontAwesomeIcon
+                  className="card-icons"
+                  icon={cat.icon}
+                />
+         
+              </div>
+             
+              
+              {data.question}
             
 
 
@@ -344,9 +348,8 @@ export default function DailyNews() {
           }
           back={
             <div className="card-content">
-              {data.question}
-              <br/>
-              -- {data.correctAnswer} --
+        
+              {data.correctAnswer} 
             </div>
           }
         />
@@ -370,20 +373,21 @@ export default function DailyNews() {
                 style={{ backgroundImage: `url(${cat.bg})` }}
               />
 
-              <FontAwesomeIcon
+                <div className='top-card-daily'>
+                    <FontAwesomeIcon
                 className="card-icons"
                 icon={cat.icon}
               />
 
-              <h4>Joke</h4>
+                </div>
+              
+               {data.setup}
 
             </>
           }
           back={
             <div className="card-content">
-               {data.setup}
-               <br />
-              -- {data.delivery} --
+              {data.delivery} 
             </div>
           }
         />
@@ -415,15 +419,16 @@ export default function DailyNews() {
               />
 
 
-          
-
-                <FontAwesomeIcon
+                <div className='top-card-daily'>
+                     <FontAwesomeIcon
                   className="card-icons"
                   icon={cat.icon}
-                  style={{zIndex:'100', color: '#F1B9C4'}}
                 />
 
-                <h4 style={{zIndex:'100'}}>{cat.title}</h4>
+                </div>
+          
+
+               
 
     
 
@@ -455,12 +460,15 @@ export default function DailyNews() {
                 backgroundImage: `url(${cat.bg})`,
               }}
             />
-            <FontAwesomeIcon
+              <div className='top-card-daily'>
+                <FontAwesomeIcon
               className="card-icons"
               icon={cat.icon}
-              style={{zIndex:'100', color: cat.icon === faSeedling ? 'yellowgreen' : 'gold'}}
+              style={{zIndex:'100'}}
             />
-            <h4>{cat.title}</h4>
+
+              </div>
+            
           </>
         }
         back={

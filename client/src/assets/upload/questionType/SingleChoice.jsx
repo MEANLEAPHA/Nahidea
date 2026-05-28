@@ -1,3 +1,7 @@
+import "../../style/upload/questionType/singlechoice.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 export default function SingleChoice ({ value, onChange}) {
   const maxChoices = 10;
 
@@ -31,8 +35,56 @@ export default function SingleChoice ({ value, onChange}) {
   };
 
   return (
-    <div>
-      <div className="single-choice-parent">
+     <div className="question-type-wrapper">
+        <div className="single-choice-parent">
+  {value.map((choice, index) => (
+    <div key={index} className="single-choice-row">
+      <input
+        type="text"
+        className="single-choice-input"
+        placeholder={`Choice ${index + 1}`}
+        value={choice}
+        onChange={(e) => handleChange(index, e.target.value)}
+      />
+
+      {value.length > 3 && (
+        <button
+          type="button"
+          className="btn-delete-single-choice"
+          onClick={() => deleteChoice(index)}
+        >
+          <FontAwesomeIcon icon={faTrashCan} />
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
+<div className="single-choice-actions">
+  <button
+    onClick={addChoice}
+    disabled={value.length >= maxChoices}
+    type="button"
+    className="btn-single-choice"
+  >
+    <FontAwesomeIcon icon={faPlus} /> Add more
+  </button>
+
+  {value.length > 3 && (
+    <button
+      onClick={removeAll}
+      type="button"
+      className="btn-single-choice btn-remove-all"
+    >
+      Remove all
+    </button>
+  )}
+</div>
+    </div>
+  );
+};
+
+{/* <div className="single-choice-parent">
         {value.map((choice, index) => (
           <div key={index} style={{ display: "flex", marginBottom: "6px" }}>
             <input
@@ -61,7 +113,4 @@ export default function SingleChoice ({ value, onChange}) {
         {value.length > 3 && (
           <button onClick={removeAll} type='button'>Remove all</button>
         )}
-      </div>
-    </div>
-  );
-};
+      </div> */}

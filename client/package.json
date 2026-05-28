@@ -23,6 +23,7 @@
     "@fortawesome/react-fontawesome": "^3.3.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/material": "^7.3.9",
+    "@tanstack/react-router": "^1.170.8",
     "@tiptap/extension-link": "^3.22.3",
     "@tiptap/extension-placeholder": "^3.22.3",
     "@tiptap/extension-subscript": "^3.22.3",

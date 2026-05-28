@@ -35,6 +35,7 @@ import "../style/upload/tag.css";
 import "../style/upload/Content.css";
 import "../style/upload/Postpreview.css";
 
+
 // get token
 const token = localStorage.getItem("token");
 
@@ -42,15 +43,22 @@ const token = localStorage.getItem("token");
 // Content component start here
 export default function Content() {
 
+  // if(!token) {
+  //   window.location.href = "/"; 
+  //   // login form
+  // }
+
   const [loading, setLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
 
   const [title, setTitle] = useState("");
-  const [textBody, setTextBody] = useState("");
   const [selectType, setSelectType] = useState(null);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [tags, setTags] = useState([]);
   const [mediaFiles, setMediaFiles] = useState([]);
+
+  const [textBody, setTextBody] = useState("");
+
   const [isAnonymous, setIsAnonymous] = useState(false);
   const { tokens, countdown, consume } = useAnonymousTokens();
 
@@ -69,14 +77,30 @@ export default function Content() {
   // handle submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (loading) return;
+    setLoading(true);
 
     if (!title.trim()) {
-      toast.error("Title is required");
+      toast.warning("Please enter content title");
+      setLoading(false);
       return;
     }
-
-    setLoading(true);
+    if(!textBody.trim()) {
+      toast.warning("Please enter content body");
+      setLoading(false);
+      return;
+    }
+    if(tags.length === 0 ) {
+      toast.warning("Please add some #hashtags");
+      setLoading(false);
+      return;
+    }
+    if(selectType === null) {
+      toast.warning("Please select content type");
+      setLoading(false);
+      return;
+    }
 
     const formData = new FormData();
       formData.append("post_type", "content");
@@ -108,7 +132,11 @@ export default function Content() {
        
       }
       } catch (err) {
-        toast.error("Server error");
+        toast.error("Ops! Our server is Error. Please try again later.");
+        resetAll();
+      }
+      finally{
+        setLoading(false);
         resetAll();
       };
   };
@@ -116,12 +144,12 @@ export default function Content() {
   return (
 
     <div id="content-container">
-      <article id='tool-article'>
+      <article id='tool-article' >
         <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
         <form onSubmit={handleSubmit} id="content-form">
 
           <div className="toast-feedback">
-            <ToastContainer position="top-right" autoClose={2000} />
+            <ToastContainer position="top-center" autoClose={5000} />
           </div>
 
           <div id='form-header-label'>
@@ -137,7 +165,7 @@ export default function Content() {
             setSelectedIcon(option?.icon); // store icon string
           }}
           classNamePrefix="custom"
-          placeholder="Select Content Type"
+          placeholder="Select Content Topic"
           formatOptionLabel={(option) => (
             <div
               style={{

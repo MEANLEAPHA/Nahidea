@@ -105,10 +105,11 @@ const Login = () => {
        
         <form onSubmit={(e) => { e.preventDefault(); SubmitLogin(); }} >        
           <div className="form-center">
-
               <p className="p-page">
-                <span>Login </span> | 
-                <span onClick={() => navigate("/register")}>Sign up</span>
+                 Nahidea
+              </p>
+              <p className="p2-page">
+                Strength grows when we care beyond ourselves <br/>Help others the way you’d want to be helped
               </p>
               <br />
               <div className='container-input'>
@@ -159,7 +160,7 @@ const Login = () => {
                     cursor: !isValid || loading ? "not-allowed" : "pointer"
                   }}
                 >
-                  {loading ? "Logging in..." : "Login"}
+                  {loading ? "..." : "Login"}
                 </button>
                 <span onClick={() => navigate('/forgetpassword')}><u>Forget Password?</u></span>
               </div>
@@ -170,14 +171,7 @@ const Login = () => {
               </p>
           </div>
         </form>
-        <div className='container-image'>
-          <div className='container-image-center'>
-            <h1 className="not-mobile greeting">Design later</h1>
-            <img src={nahIdeaAuth} className="auth-img" />
-            <p className='logo-font'>Nahidea</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
-          </div>
-        </div>
+        
       </div>
   
   );

@@ -188,11 +188,13 @@ const Register = () => {
       <form onSubmit={(e) => { e.preventDefault(); submitRegister(); }}>
         <div className="form-center">
 
-          <p className="p-page">
-            <span>Signup</span> |{" "}
-            <span onClick={() => navigate("/login")}>Login</span>
-          </p>
-          <br />
+         <p className="p-page">
+                 Nahidea
+              </p>
+              <p className="p2-page">
+                Strength grows when we care beyond ourselves <br/>Help others the way you’d want to be helped
+              </p>
+              <br />
          <div className='container-input'>
           <label>Username</label>
           <div className="div-input">
@@ -298,7 +300,18 @@ const Register = () => {
               />
             </div>
             <div className="div-input div-submit">
-            <span style={{display:"flex", alignItems:"center"}}> <input type="checkbox" required style={{width:"20px"}}/><u onClick={() => navigate('/forgetpassword')} style={{color:"black"}}>Agree to Term & Condition</u></span>
+           <span style={{display:"flex", alignItems:"center"}}>
+              <input type="checkbox" required style={{width:"20px"}}/>
+              <a 
+                href="/userAgreement" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{color:"black", textDecoration:"underline"}}
+              >
+                Agree to Term & Condition
+              </a>
+            </span>
+
             <button
                 type="submit"
                 disabled={!isValid || loading}
@@ -307,7 +320,7 @@ const Register = () => {
                   cursor: !isValid || loading ? "not-allowed" : "pointer"
                 }}
               >
-              {loading ? "Creating..." : "Register"}
+              {loading ? "k..." : "Register"}
             </button>
           </div>
           </div>
@@ -317,14 +330,7 @@ const Register = () => {
               </p>
         </div>
       </form>
-      <div className='container-image'>
-        <div className='container-image-center'>
-          <h1 className="not-mobile greeting">Design later</h1>
-          <img src={nahIdeaAuth} className="auth-img" />
-          <p className='logo-font'>Nahidea</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia laudantium consectetur quidem porro expedita perferendis maxime aperiam? Iusto dolorem sunt dolorum rem cumque quisquam a nesciunt perspiciatis, neque, obcaecati itaque.</p>
-        </div>
-      </div>
+    
     </div>
 
   );
