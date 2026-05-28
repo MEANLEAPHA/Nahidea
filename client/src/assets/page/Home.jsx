@@ -34,7 +34,8 @@ import {MediaPreview} from "../util/mediaUploader";
 import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
-import ReportPostModal from './ReportPostModal'
+import ReportPostModal from './ReportPostModal';
+
 
 // style
 import "../style/page/Home.css";
@@ -46,6 +47,8 @@ import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import nahideaTran from "../img/nahidea-tran.png";
 import DailyNews from './DailyNews';
 
+// data
+import { iconOptions } from "../data/post_type_data";
 
 // token 
 const token = localStorage.getItem("token");
@@ -279,7 +282,8 @@ export default function Home() {
           <>
       
                  <div className="post-question-answer-preview">
-                    {data.question_type === "closedend" && (
+
+                      {data.question_type === "closedend" && (
 
                         <div className="closed-preview-card question-preview-card" onClick={
                               ()=>{
@@ -338,27 +342,27 @@ export default function Home() {
                             </span>
                           </div>
                           <div className='range-preview-option'>
-                                  <label id="min-label">{min}</label>
+                                  <label id="min-label">{data.range_min}</label>
 
                 <div className="range-wrapper">
                     <input
                     type="range"
-                    min={min}
-                    max={max}
-                    step={step}
-                    value={rangeValue}
+                    min={data.range_min}
+                    max={data.range_max}
+                    step={data.step}
+                    value={data.default_range_value}
                     onChange={(e) => setRangeValue(Number(e.target.value))}
                     />
                         <div
                     className="custom-thumb"
                     style={{
-                        left: `${((rangeValue - min) / (max - min)) * 100}%`
+                        left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
                     }}
                     >
-                    {rangeValue}
+                    {data.default_range_value}
                     </div>
                 </div>
-                <label id="max-label">{max}</label>
+                <label id="max-label">{data.range_max}</label>
                           </div>
               
 
@@ -395,17 +399,17 @@ export default function Home() {
                         </div>
 
                         <div className="question-preview-options two-grid">
-                        {singleChoices
-                        .slice(0, singleChoices.length > 4 ? 3 : 4)
+                        {data.choice
+                        .slice(0, data.choice.length > 4 ? 3 : 4)
                         .map((c, i) => (
                             <div key={i} className="option-chip">
-                            {c}
+                            {c.choice_text}
                             </div>
                         ))}
 
-                        {singleChoices.length > 4 && (
+                        {data.choice.length > 4 && (
                         <div className="option-chip more-chip">
-                            +{singleChoices.length - 3} more
+                            +{data.choice.length - 3} more
                         </div>
                         )}
 
@@ -445,17 +449,17 @@ export default function Home() {
                           </div>
 
                          <div className="question-preview-options two-grid">
-                            {multipleChoices
-                            .slice(0, multipleChoices.length > 4 ? 3 : 4)
+                            {data.choices
+                            .slice(0, data.choices.length > 4 ? 3 : 4)
                             .map((c, i) => (
                                 <div key={i} className="option-chip">
-                                {c}
+                                {c.choice_text}
                                 </div>
                             ))}
 
-                            {multipleChoices.length > 4 && (
+                            {data.choices.length > 4 && (
                             <div className="option-chip more-chip">
-                                +{multipleChoices.length - 3} more
+                                +{data.choices.length - 3} more
                             </div>
                             )}
 
@@ -467,7 +471,7 @@ export default function Home() {
                         <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
-                                      question_id : data.id,
+                                    question_id : data.id,
                                     title : data.title,
                                     items: 
                                       data.items?.map(c => ({
@@ -493,8 +497,8 @@ export default function Home() {
                           </div>
 
                           <div className="question-preview-options two-grid">
-                                {rankingChoices
-                                    .slice(0, rankingChoices.length > 4 ? 3 : 4)
+                                {data.items
+                                    .slice(0, data.items.length > 4 ? 3 : 4)
                                     .map((item, idx) => (
                                     <div
                                         key={idx}
@@ -505,14 +509,14 @@ export default function Home() {
                                         </span>
 
                                         <span className="rank-text">
-                                        {item}
+                                        {item.item_text}
                                         </span>
                                     </div>
                                     ))}
 
-                                {rankingChoices.length > 4 && (
+                                {data.items.length > 4 && (
                                     <div className="option-chip more-chip">
-                                    +{rankingChoices.length - 3} more
+                                    +{data.items.length - 3} more
                                     </div>
                                 )}
                             </div>
@@ -520,7 +524,6 @@ export default function Home() {
                       )}
 
                       {data.question_type === "rating" && (
-
 
                         <div className="question-preview-card" onClick={
                           ()=>{
@@ -542,21 +545,21 @@ export default function Home() {
                                 <FolderOpenOutlined /> Unsolved
                             </span>
                           </div>
-                {Array.from({length:5}).map((_,i)=>(
-                    <FontAwesomeIcon 
-                    key={i}
-                    icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
-                    style={{ fontSize: "24px", color: "grey" }}
-                    />
-                ))}
-            </div>
+                      {Array.from({length:5}).map((_,i)=>(
+                          <FontAwesomeIcon 
+                          key={i}
+                          icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
+                          style={{ fontSize: "24px", color: "grey" }}
+                          />
+                      ))}
+                  </div>
                       )}
 
                       {data.question_type === "openend" && (
                         <div className="question-preview-card" onClick={
                           ()=>{
                             const QaData = {
-                                      question_id : data.id,
+                                    question_id : data.id,
                                     title : data.title
                                   }
                             sessionStorage.setItem("QaStore", JSON.stringify(QaData));
