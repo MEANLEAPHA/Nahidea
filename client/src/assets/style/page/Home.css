@@ -144,7 +144,7 @@ p{
     margin-top: 15px;
     padding-top: 15px;
     padding-bottom: 5px;
-    overflow: hidden;
+  
 }
 .history-container-header{
     width: 90%;
@@ -172,11 +172,11 @@ p{
     flex-direction: column;
     gap: 10px;
     height: 100%;
-  
+    background-color: #fd7648;
     margin-top: 20px;
     overflow: scroll;
     padding:0;
-    overflow-y: auto;       /* only vertical scroll */
+  
   -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
       scrollbar-width: thin;
     scrollbar-color: grey var(--background-color);
