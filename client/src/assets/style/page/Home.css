@@ -142,8 +142,7 @@ p{
     color: var(--font-color);
     margin-top: 15px;
     padding-top: 15px;
-    padding-bottom: 5px;
-  
+    padding-bottom: 5px; 
 }
 .history-container-header{
     width: 90%;
@@ -152,12 +151,10 @@ p{
     justify-content: space-between;
     align-items: center;
     font-family: sans-serif;
-
 }
 .history-container-header label{
     color: var(--font-color);
     opacity: 0.7;
-
 }
 .history-container-header span{
     font-size: smaller;
@@ -171,7 +168,7 @@ p{
     flex-direction: column;
     gap: 10px;
     height: auto;
-    max-height: 45vh;
+    max-height: 40vh;
     margin-top: 20px;
     overflow-y: scroll;
     overflow-y: auto;
@@ -303,6 +300,102 @@ p{
     max-height: 100%;
 
 }
+
+
+/* friend  */
+.friend-container{
+    width: 100%;
+    height: auto;
+    color: var(--font-color);
+    margin-top: 15px;
+}
+.friend-header-card{
+       width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: sans-serif;
+}
+.friend-header-card label{
+     color: var(--font-color);
+    opacity: 0.7;
+}
+
+.friend-header-card span{
+     font-size: smaller;
+    opacity: 0.7;
+    cursor: pointer;
+}
+.friend-list-ul{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: auto;
+    max-height: 35vh;
+    margin-top: 10px;
+    padding:0;
+    margin: auto;
+    margin-top: 10px;
+    
+
+}
+.friend-card{
+    width:100%;
+    height: auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.5s ease;
+   
+}
+.friend-card:hover{
+background-color: var(--back-con);
+padding: 10px;
+border-radius: 10px;
+}
+.friend-pf-div{
+    position: relative;
+    border-radius: 50%;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.friend-pf{
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    background-color: var(--secondary-color);
+     border-radius: 50%;
+}
+.status-fri-dot{
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 100%;
+    border: 2px solid var(--background-color);
+}
+.online-dot{
+    background-color: yellowgreen;
+}
+.offline-dot{
+     background-color: grey;
+}
+.friend-info{
+ opacity: 0.8;
+}
+
+
+
+
+/* rule */
 .rule-absolute{
     width: 95%;
     margin: auto;

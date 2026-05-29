@@ -1096,7 +1096,7 @@ const handleFavorite = async (postId) => {
 
       <article id='his-article'>
         <RecentHistory />
-
+        <MutualFriend />
         <div className='rule-absolute'>   
           <p onClick={()=>{navigate('/nahidearule')}}>Nahidea Rule</p>     
           <p onClick={()=>{navigate('/privacypolicy')}}>Private Policy</p>
@@ -1361,6 +1361,72 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
     </div>
   );
 };
+
+
+const MutualFriend = () => {
+  return(
+    <div className='friend-container'> 
+      <div className='friend-header-card'>
+        <label>Friend</label>
+        <span>see all</span>
+      </div>
+      <div className='friend-list-ul'>
+        <div className='friend-card'>
+           <div className='friend-pf-div'>
+              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+              <div className='online-dot status-fri-dot'></div>
+              {/* <div className='offline-dot status-fri-dot'></div> */}
+           </div>
+           <div className='friend-info'>
+              <span>Kathya</span>
+           </div>
+        </div>
+         <div className='friend-card'>
+           <div className='friend-pf-div'>
+              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+              <div className='online-dot status-fri-dot'></div>
+              {/* <div className='offline-dot status-fri-dot'></div> */}
+           </div>
+           <div className='friend-info'>
+              <span>Kathya</span>
+           </div>
+        </div>
+         <div className='friend-card'>
+           <div className='friend-pf-div'>
+              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+              <div className='online-dot status-fri-dot'></div>
+              {/* <div className='offline-dot status-fri-dot'></div> */}
+           </div>
+           <div className='friend-info'>
+              <span>Kathya</span>
+           </div>
+        </div>
+         <div className='friend-card'>
+           <div className='friend-pf-div'>
+              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+              <div className='online-dot status-fri-dot'></div>
+              {/* <div className='offline-dot status-fri-dot'></div> */}
+           </div>
+           <div className='friend-info'>
+              <span>Kathya</span>
+           </div>
+        </div>
+         <div className='friend-card'>
+           <div className='friend-pf-div'>
+              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+              <div className='online-dot status-fri-dot'></div>
+              {/* <div className='offline-dot status-fri-dot'></div> */}
+           </div>
+           <div className='friend-info'>
+              <span>Kathya</span>
+           </div>
+        </div>
+        
+         
+      </div>
+    </div>
+  )
+}
 
 
  
