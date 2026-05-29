@@ -1367,28 +1367,33 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
 const MutualFriend = ({ onlineUsers }) => {
   const [friends, setFriends] = useState([]);
 
-  if(friends.length === 0) {
-    return null;
-  }
-
   useEffect(() => {
     const fetchMutualFriends = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
+        console.log("Fetching mutual friends…"); // 👀 start log
+        const res = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
+        console.log("API response:", res); // 👀 full response
+        console.log("Mutual friends data:", res.data.data); // 👀 extracted data
         setFriends(res.data.data);
       } catch (err) {
-        console.error("Failed to fetch mutual friends", err);
+        console.error("Failed to fetch mutual friends:", err); // 👀 error log
       }
     };
 
     fetchMutualFriends();
   }, []);
+
+  if (friends.length === 0) {
+    console.log("No mutual friends found."); // 👀 log empty state
+    return null;
+  }
 
   return (
     <div className="friend-container">
@@ -1397,7 +1402,7 @@ const MutualFriend = ({ onlineUsers }) => {
         <span>see all</span>
       </div>
       <div className="friend-list-ul">
-        {friends?.map((friend) => (
+        {friends.map((friend) => (
           <FriendCard
             key={friend.id}
             username={friend.username}
@@ -1409,6 +1414,7 @@ const MutualFriend = ({ onlineUsers }) => {
     </div>
   );
 };
+
 
 // FriendCard.jsx
 const FriendCard = ({ username, avatar_url, isOnline }) => {
