@@ -1404,10 +1404,10 @@ const MutualFriend = ({ onlineUsers }) => {
       <div className="friend-list-ul">
         {friends?.map((friend) => (
           <FriendCard
-            key={friend?.id}
-            username={friend?.username}
-            avatar_url={friend?.avatar_url}
-            isOnline={onlineUsers?.includes(String(friend.id))}
+            key={friend.id}
+            username={friend.username}
+            avatar_url={friend.avatar_url}
+            isOnline={onlineUsers.includes(String(friend.id))}
           />
         ))}
       </div>
@@ -1418,10 +1418,11 @@ const MutualFriend = ({ onlineUsers }) => {
 
 // FriendCard.jsx
 const FriendCard = ({ username, avatar_url, isOnline }) => {
+  console.log("Rendering FriendCard:", { username, avatar_url, isOnline });
   return (
     <div className="friend-card">
       <div className="friend-pf-div">
-        <img src={avatar_url} alt={username} className="friend-pf" />
+        <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
         {isOnline ? (
           <div className="online-dot status-fri-dot"></div>
         ) : (
