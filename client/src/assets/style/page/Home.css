@@ -27,15 +27,16 @@ p{
     padding: 0;
     margin: 0;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+
 }
 
 #feed-article{
-    width: 68%;
+    width: 66%;
     height: auto;
     margin: 0;
     padding: 0;
-   
+
     padding-top: 20px;
 }
 
@@ -132,6 +133,7 @@ p{
     top: 61px;
     padding: 0;
     margin: 0;
+   
    
 }
 .history-container{
