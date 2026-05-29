@@ -126,7 +126,7 @@ p{
 }
 
 #his-article{
-    width: 28%;
+    width: 30%;
     height: calc(100vh - 66px);
     position: sticky;
     top: 61px;
@@ -168,7 +168,7 @@ p{
     flex-direction: column;
     gap: 10px;
     height: auto;
-    max-height: 40vh;
+    max-height: 38vh;
     margin-top: 20px;
     overflow-y: scroll;
     overflow-y: auto;

@@ -1411,16 +1411,7 @@ const MutualFriend = () => {
               <span>Kathya</span>
            </div>
         </div>
-         <div className='friend-card'>
-           <div className='friend-pf-div'>
-              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-              <div className='online-dot status-fri-dot'></div>
-              {/* <div className='offline-dot status-fri-dot'></div> */}
-           </div>
-           <div className='friend-info'>
-              <span>Kathya</span>
-           </div>
-        </div>
+
         
          
       </div>
