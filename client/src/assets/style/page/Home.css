@@ -171,16 +171,19 @@ p{
     flex-direction: column;
     gap: 10px;
     height: auto;
-    max-height: calc(100vh - 200px);
+    max-height: 45vh;
     margin-top: 20px;
     overflow: scroll;
     overflow-y: auto;
     padding:0;
   
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
-      scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    overflow-x: none;
     scrollbar-color: grey var(--background-color);
 }
+
 .post-history-card{
     width: 100%;
     height: auto;
