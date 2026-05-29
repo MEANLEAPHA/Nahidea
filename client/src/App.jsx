@@ -386,6 +386,7 @@ const Layout = () => {
             context={{
               user,
               isOnline,
+              onlineUsers
             }}
           />
         </section>

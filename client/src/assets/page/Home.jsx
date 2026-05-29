@@ -56,6 +56,7 @@ const token = localStorage.getItem("token");
 export default function Home() {
 
   const navigate = useNavigate();
+  const { onlineUsers } = useOutletContext();
 
   // posts
   const [posts, setPosts] = useState([]);
@@ -1096,7 +1097,7 @@ const handleFavorite = async (postId) => {
 
       <article id='his-article'>
         <RecentHistory />
-        <MutualFriend />
+        <MutualFriend onlineUsers={onlineUsers} />
         <div className='rule-absolute'>   
           <p onClick={()=>{navigate('/nahidearule')}}>Nahidea Rule</p>     
           <p onClick={()=>{navigate('/privacypolicy')}}>Private Policy</p>
@@ -1123,11 +1124,11 @@ const Loader = () => {
 };
 
 const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }) => {
-  const { userId } = useOutletContext();
+  const { user } = useOutletContext();
   const navigate = useNavigate();
   const [openReport, setOpenReport] = useState(false);
 
-  const isOwner = Number(ownerId) === Number(userId);
+  const isOwner = Number(ownerId) === Number(user.id);
 
   const menuItemsForAll = [
     {
@@ -1363,64 +1364,131 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
 };
 
 
-const MutualFriend = () => {
-  return(
-    <div className='friend-container'> 
-      <div className='friend-header-card'>
+const MutualFriend = ({ onlineUsers }) => {
+  const [friends, setFriends] = useState([]);
+
+  if(friends.length === 0) {
+    return null;
+  }
+
+  useEffect(() => {
+    const fetchMutualFriends = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setFriends(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch mutual friends", err);
+      }
+    };
+
+    fetchMutualFriends();
+  }, []);
+
+  return (
+    <div className="friend-container">
+      <div className="friend-header-card">
         <label>Friend</label>
         <span>see all</span>
       </div>
-      <div className='friend-list-ul'>
-        <div className='friend-card'>
-           <div className='friend-pf-div'>
-              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-              <div className='online-dot status-fri-dot'></div>
-              {/* <div className='offline-dot status-fri-dot'></div> */}
-           </div>
-           <div className='friend-info'>
-              <span>Kathya</span>
-           </div>
-        </div>
-         <div className='friend-card'>
-           <div className='friend-pf-div'>
-              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-              <div className='online-dot status-fri-dot'></div>
-              {/* <div className='offline-dot status-fri-dot'></div> */}
-           </div>
-           <div className='friend-info'>
-              <span>Kathya</span>
-           </div>
-        </div>
-         <div className='friend-card'>
-           <div className='friend-pf-div'>
-              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-              <div className='online-dot status-fri-dot'></div>
-              {/* <div className='offline-dot status-fri-dot'></div> */}
-           </div>
-           <div className='friend-info'>
-              <span>Kathya</span>
-           </div>
-        </div>
-         <div className='friend-card'>
-           <div className='friend-pf-div'>
-              <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-              <div className='online-dot status-fri-dot'></div>
-              {/* <div className='offline-dot status-fri-dot'></div> */}
-           </div>
-           <div className='friend-info'>
-              <span>Kathya</span>
-           </div>
-        </div>
-
-        
-         
+      <div className="friend-list-ul">
+        {friends?.map((friend) => (
+          <FriendCard
+            key={friend.id}
+            username={friend.username}
+            avatar_url={friend.avatar_url}
+            isOnline={onlineUsers.includes(String(friend.id))}
+          />
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
+
+// FriendCard.jsx
+const FriendCard = ({ username, avatar_url, isOnline }) => {
+  return (
+    <div className="friend-card">
+      <div className="friend-pf-div">
+        <img src={avatar_url} alt={username} className="friend-pf" />
+        {isOnline ? (
+          <div className="online-dot status-fri-dot"></div>
+        ) : (
+          <div className="offline-dot status-fri-dot"></div>
+        )}
+      </div>
+      <div className="friend-info">
+        <span>{username}</span>
+      </div>
+    </div>
+  );
+};
+
 
 
  
+
+// const MutualFriend = () => {
+//   return(
+//     <div className='friend-container'> 
+//       <div className='friend-header-card'>
+//         <label>Friend</label>
+//         <span>see all</span>
+//       </div>
+//       <div className='friend-list-ul'>
+//         <div className='friend-card'>
+//            <div className='friend-pf-div'>
+//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+//               <div className='online-dot status-fri-dot'></div>
+//               {/* <div className='offline-dot status-fri-dot'></div> */}
+//            </div>
+//            <div className='friend-info'>
+//               <span>Kathya</span>
+//            </div>
+//         </div>
+//          <div className='friend-card'>
+//            <div className='friend-pf-div'>
+//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+//               <div className='online-dot status-fri-dot'></div>
+//               {/* <div className='offline-dot status-fri-dot'></div> */}
+//            </div>
+//            <div className='friend-info'>
+//               <span>Kathya</span>
+//            </div>
+//         </div>
+//          <div className='friend-card'>
+//            <div className='friend-pf-div'>
+//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+//               <div className='online-dot status-fri-dot'></div>
+//               {/* <div className='offline-dot status-fri-dot'></div> */}
+//            </div>
+//            <div className='friend-info'>
+//               <span>Kathya</span>
+//            </div>
+//         </div>
+//          <div className='friend-card'>
+//            <div className='friend-pf-div'>
+//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
+//               <div className='online-dot status-fri-dot'></div>
+//               {/* <div className='offline-dot status-fri-dot'></div> */}
+//            </div>
+//            <div className='friend-info'>
+//               <span>Kathya</span>
+//            </div>
+//         </div>
+
+        
+         
+//       </div>
+//     </div>
+//   )
+// }
+
 // const postHistoryCard = (item) => {
 //   const deletePostHistory = (postId) => {
 //     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
