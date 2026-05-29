@@ -1402,12 +1402,12 @@ const MutualFriend = ({ onlineUsers }) => {
         <span>see all</span>
       </div>
       <div className="friend-list-ul">
-        {friends.map((friend) => (
+        {friends?.map((friend) => (
           <FriendCard
-            key={friend.id}
-            username={friend.username}
-            avatar_url={friend.avatar_url}
-            isOnline={onlineUsers.includes(String(friend.id))}
+            key={friend?.id}
+            username={friend?.username}
+            avatar_url={friend?.avatar_url}
+            isOnline={onlineUsers?.includes(String(friend.id))}
           />
         ))}
       </div>
