@@ -20,7 +20,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
 
     const fetchMessages = async () => {
         try {
-            const res = await api.get(`/api/get-messages/${activeChat.id}`, 
+            const res = await api.get(`/api/get-message/${activeChat.id}`, 
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
