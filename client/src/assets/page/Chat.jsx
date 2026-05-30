@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
-import '../style/page/Chat.css';
+import '../style/page/chat.css';
 
 export default function Chat () {
     const [activeChat, setActiveChat] = useState(null);
