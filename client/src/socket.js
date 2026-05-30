@@ -15,7 +15,7 @@ import { io } from "socket.io-client";
 
 let socket = null;
 
-export const connectSocket = ({ token, userId }) => {
+export const connectSocket = ({ token, userId, username, avatar_url }) => {
 
   if (!token || !userId) {
     console.error("Invalid socket auth");
@@ -35,6 +35,8 @@ export const connectSocket = ({ token, userId }) => {
 
       query: {
         userId,
+        username,
+        avatar_url
       },
 
       transports: ["websocket"],

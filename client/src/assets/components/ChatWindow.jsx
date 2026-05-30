@@ -18,6 +18,16 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     const messagesEndRef = useRef(null);
     const [typingTimeout, setTypingTimeout] = useState(null);
 
+    // Debug: log socket status
+    useEffect(() => {
+        if (!socket) {
+        console.warn("⚠️ Socket not connected yet");
+        } else {
+        console.log("🔌 Socket available in ChatWindow", socket.id);
+        }
+    }, [socket]);
+
+
     const fetchMessages = async () => {
         try {
             const res = await api.get(`/api/get-message/${activeChat.id}`, 
