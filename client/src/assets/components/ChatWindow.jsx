@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Avatar, Typography, Button, Dropdown, Menu, message, Modal, Input } from 'antd';
-import { MoreOutlined, DeleteOutlined, FlagOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import {
+  MoreOutlined,
+  DeleteOutlined,
+  FlagOutlined,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import api from '../services/api';
@@ -8,7 +13,6 @@ import { getSocket } from '../../socket';
 import { useAuth } from '../context/AuthContext';
 
 const { Title } = Typography;
-const token = localStorage.getItem('token');
 
 const ChatWindow = ({ activeChat, setActiveChat }) => {
   const { user } = useAuth();
@@ -18,18 +22,18 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const messagesEndRef = useRef(null);
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-  
-  // For reply & edit
   const [replyTo, setReplyTo] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
 
   const fetchMessages = async () => {
     try {
+      const token = localStorage.getItem('token');
       const res = await api.get(`/api/get-message/${activeChat.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setConversationId(res.data.conversationId);
       setMessages(res.data.messages);
+      // Mark as seen
       if (socket && res.data.conversationId) {
         socket.emit('mark_seen', { conversationId: res.data.conversationId });
       }
@@ -38,10 +42,11 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     }
   };
 
-  // Join conversation room after we have conversationId
+  // Join conversation room after conversationId is set
   useEffect(() => {
     if (socket && conversationId) {
       socket.emit('join_conversation', { conversationId });
+      console.log(`Joined conv_${conversationId}`);
     }
   }, [conversationId, socket]);
 
@@ -51,7 +56,8 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
 
     const handleNewMessage = (msg) => {
       if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
-        setMessages(prev => [...prev, msg]);
+        setMessages((prev) => [...prev, msg]);
+        // Auto-mark seen if message is from other user
         if (msg.sender_id !== user.id && conversationId) {
           socket.emit('mark_seen', { conversationId });
         }
@@ -60,8 +66,8 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
 
     const handleMessagesSeen = ({ conversationId: seenConvId }) => {
       if (seenConvId === conversationId) {
-        setMessages(prev =>
-          prev.map(m =>
+        setMessages((prev) =>
+          prev.map((m) =>
             m.sender_id !== user.id ? { ...m, status: 'seen' } : m
           )
         );
@@ -69,19 +75,25 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     };
 
     const handleMessageEdited = (updatedMsg) => {
-      setMessages(prev => prev.map(m => (m.id === updatedMsg.id ? updatedMsg : m)));
+      setMessages((prev) =>
+        prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m))
+      );
     };
 
     const handleMessageDeleted = ({ messageId, updatedMessage, permanentlyDeleted }) => {
       if (permanentlyDeleted) {
-        setMessages(prev => prev.filter(m => m.id !== messageId));
+        setMessages((prev) => prev.filter((m) => m.id !== messageId));
       } else if (updatedMessage) {
-        setMessages(prev => prev.map(m => (m.id === messageId ? updatedMessage : m)));
+        setMessages((prev) =>
+          prev.map((m) => (m.id === messageId ? updatedMessage : m))
+        );
       }
     };
 
     const handleMessageStatusUpdated = ({ messageId, status }) => {
-      setMessages(prev => prev.map(m => (m.id === messageId ? { ...m, status } : m)));
+      setMessages((prev) =>
+        prev.map((m) => (m.id === messageId ? { ...m, status } : m))
+      );
     };
 
     const handleUserTyping = ({ userId: typingUserId, isTyping: typing }) => {
@@ -140,9 +152,11 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const handleDeleteConversation = () => {
     Modal.confirm({
       title: 'Delete chat',
-      content: 'This will delete the conversation for you. The other person can still see it unless they also delete.',
+      content:
+        'This will delete the conversation for you. The other person can still see it unless they also delete.',
       onOk: async () => {
         try {
+          const token = localStorage.getItem('token');
           await api.delete(`/api/delete-conversation/${activeChat.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -192,6 +206,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       onOk: async () => {
         const reason = document.getElementById('reportReason')?.value;
         try {
+          const token = localStorage.getItem('token');
           await api.post(
             '/api/report-message',
             { messageId: msgId, reason },
@@ -206,7 +221,14 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   };
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--background-color)' }}>
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'var(--background-color)',
+      }}
+    >
       <div
         style={{
           padding: '12px 20px',
