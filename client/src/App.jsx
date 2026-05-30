@@ -62,6 +62,7 @@ import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
 import ReportHistory from './assets/page/ReportHistory';
+import Chat from './assets/page/Chat';
 
 const App = () =>{
     return(
@@ -73,6 +74,7 @@ const App = () =>{
                     {/* Action Upload page */}
                     <Route index element={<Home/>} />
                     <Route path='/home' element={<Home/>}></Route>
+                    <Route path='/chat' element={<Chat/>}></Route>
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}></Route>
@@ -204,6 +206,8 @@ const Layout = () => {
     const socket = connectSocket({
       token,
       userId: user.id,
+      username: user.username,
+      avatar_url: user.avatar_url
     });
 
     socket.on("online-users", (users) => {
