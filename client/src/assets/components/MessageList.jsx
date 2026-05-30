@@ -1,148 +1,220 @@
-import React from 'react';
-import { Avatar, Typography, Button, Tooltip, Image, Space } from 'antd';
-import { FlagOutlined, CheckOutlined, CheckCircleOutlined, MessageOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+// import React from 'react';
+// import { Avatar, Typography, Button, Tooltip, Image, Space } from 'antd';
+// import { FlagOutlined, CheckOutlined, CheckCircleOutlined, MessageOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-const { Text } = Typography;
+// const { Text } = Typography;
+
+// const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, onDeleteMessage, onReportMessage }) => {
+//   const getStatusIcon = (status) => {
+//     if (status === 'sent') return <CheckOutlined style={{ fontSize: 12, color: '#aaa' }} />;
+//     if (status === 'delivered') return <CheckCircleOutlined style={{ fontSize: 12, color: '#aaa' }} />;
+//     if (status === 'seen') return <CheckCircleOutlined style={{ fontSize: 12, color: '#fd7648' }} />;
+//     return null;
+//   };
+
+//   return (
+//     <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+//       {messages.map((msg) => {
+//         const isMe = msg.sender_id === currentUserId;
+//         const isDeletedForMe =
+//           (msg.deleted_by_sender && isMe) || (msg.deleted_by_recipient && !isMe);
+//         const isDeletedForBoth = msg.deleted_by_sender && msg.deleted_by_recipient;
+
+//         if (isDeletedForBoth) return null; // permanently deleted, don't show
+
+//         return (
+//           <div
+//             key={msg.id}
+//             style={{
+//               display: 'flex',
+//               justifyContent: isMe ? 'flex-end' : 'flex-start',
+//               marginBottom: 12,
+//             }}
+//           >
+//             {!isMe && <Avatar src={msg.avatar} size={32} style={{ marginRight: 8 }} />}
+//             <div
+//               style={{
+//                 maxWidth: '70%',
+//                 background: isMe ? 'var(--primary-color)' : 'var(--secondary-color)',
+//                 padding: '8px 12px',
+//                 borderRadius: 12,
+//                 color: isMe ? '#fff' : 'var(--font-color)',
+//               }}
+//             >
+//               {!isMe && (
+//                 <Text strong style={{ fontSize: 12, display: 'block' }}>
+//                   {msg.username}
+//                 </Text>
+//               )}
+
+//               {/* Reply context */}
+//               {msg.reply_to_id && (
+//                 <div
+//                   style={{
+//                     fontSize: 12,
+//                     opacity: 0.7,
+//                     marginBottom: 4,
+//                     borderLeft: '2px solid #fd7648',
+//                     paddingLeft: 8,
+//                   }}
+//                 >
+//                   Replying to: {msg.reply_preview || 'a message'}
+//                 </div>
+//               )}
+
+//               {/* GIF */}
+//               {msg.gif_url && (
+//                 <Image
+//                   src={msg.gif_url}
+//                   width={200}
+//                   preview={false}
+//                   style={{ borderRadius: 8, marginBottom: 4 }}
+//                 />
+//               )}
+
+//               {/* Content or deleted placeholder */}
+//               {isDeletedForMe ? (
+//                 <Text italic style={{ color: 'inherit' }}>
+//                   {isMe ? 'You deleted this message' : 'This message was deleted'}
+//                 </Text>
+//               ) : (
+//                 <Text style={{ color: 'inherit' }}>{msg.content}</Text>
+//               )}
+
+//               {msg.is_edited && !isDeletedForMe && (
+//                 <Text style={{ fontSize: 10, marginLeft: 8 }}>(edited)</Text>
+//               )}
+
+//               <div
+//                 style={{
+//                   fontSize: 10,
+//                   marginTop: 4,
+//                   display: 'flex',
+//                   justifyContent: 'flex-end',
+//                   alignItems: 'center',
+//                   gap: 8,
+//                 }}
+//               >
+//                 <span>{new Date(msg.created_at).toLocaleTimeString()}</span>
+//                 {isMe && getStatusIcon(msg.status)}
+
+//                 <Space size={4}>
+//                   {!isMe && (
+//                     <Tooltip title="Reply">
+//                       <Button
+//                         type="text"
+//                         size="small"
+//                         icon={<MessageOutlined />}
+//                         onClick={() => onReplyMessage(msg)}
+//                         style={{ color: 'inherit' }}
+//                       />
+//                     </Tooltip>
+//                   )}
+//                   {isMe && (
+//                     <>
+//                       <Tooltip title="Edit">
+//                         <Button
+//                           type="text"
+//                           size="small"
+//                           icon={<EditOutlined />}
+//                           onClick={() => onEditMessage(msg)}
+//                         />
+//                       </Tooltip>
+//                       <Tooltip title="Delete">
+//                         <Button
+//                           type="text"
+//                           size="small"
+//                           icon={<DeleteOutlined />}
+//                           onClick={() => onDeleteMessage(msg.id)}
+//                           danger
+//                         />
+//                       </Tooltip>
+//                     </>
+//                   )}
+//                   {!isMe && (
+//                     <Tooltip title="Report">
+//                       <Button
+//                         type="text"
+//                         size="small"
+//                         icon={<FlagOutlined />}
+//                         onClick={() => onReportMessage(msg.id)}
+//                         style={{ color: '#ff4d4f' }}
+//                       />
+//                     </Tooltip>
+//                   )}
+//                 </Space>
+//               </div>
+//             </div>
+//           </div>
+//         );
+//       })}
+//     </div>
+//   );
+// };
+
+// export default MessageList;
+
+import React from 'react';
 
 const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, onDeleteMessage, onReportMessage }) => {
   const getStatusIcon = (status) => {
-    if (status === 'sent') return <CheckOutlined style={{ fontSize: 12, color: '#aaa' }} />;
-    if (status === 'delivered') return <CheckCircleOutlined style={{ fontSize: 12, color: '#aaa' }} />;
-    if (status === 'seen') return <CheckCircleOutlined style={{ fontSize: 12, color: '#fd7648' }} />;
-    return null;
+    if (status === 'sent') return '✓';
+    if (status === 'delivered') return '✓✓';
+    if (status === 'seen') return '✓✓';
+    return '';
+  };
+
+  const getStatusColor = (status) => {
+    if (status === 'seen') return '#fd7648';
+    return '#aaa';
   };
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+    <div className="message-list">
       {messages.map((msg) => {
         const isMe = msg.sender_id === currentUserId;
-        const isDeletedForMe =
-          (msg.deleted_by_sender && isMe) || (msg.deleted_by_recipient && !isMe);
+        const isDeletedForMe = (msg.deleted_by_sender && isMe) || (msg.deleted_by_recipient && !isMe);
         const isDeletedForBoth = msg.deleted_by_sender && msg.deleted_by_recipient;
-
-        if (isDeletedForBoth) return null; // permanently deleted, don't show
+        if (isDeletedForBoth) return null;
 
         return (
-          <div
-            key={msg.id}
-            style={{
-              display: 'flex',
-              justifyContent: isMe ? 'flex-end' : 'flex-start',
-              marginBottom: 12,
-            }}
-          >
-            {!isMe && <Avatar src={msg.avatar} size={32} style={{ marginRight: 8 }} />}
-            <div
-              style={{
-                maxWidth: '70%',
-                background: isMe ? 'var(--primary-color)' : 'var(--secondary-color)',
-                padding: '8px 12px',
-                borderRadius: 12,
-                color: isMe ? '#fff' : 'var(--font-color)',
-              }}
-            >
-              {!isMe && (
-                <Text strong style={{ fontSize: 12, display: 'block' }}>
-                  {msg.username}
-                </Text>
-              )}
-
-              {/* Reply context */}
+          <div key={msg.id} className={`message-item ${isMe ? 'message-me' : 'message-other'}`}>
+            {!isMe && <img src={msg.avatar} alt={msg.username} className="message-avatar" />}
+            <div className="message-bubble">
+              {!isMe && <div className="message-username">{msg.username}</div>}
               {msg.reply_to_id && (
-                <div
-                  style={{
-                    fontSize: 12,
-                    opacity: 0.7,
-                    marginBottom: 4,
-                    borderLeft: '2px solid #fd7648',
-                    paddingLeft: 8,
-                  }}
-                >
-                  Replying to: {msg.reply_preview || 'a message'}
+                <div className="message-reply-context">
+                  ↳ Replying to: {msg.reply_preview || 'a message'}
                 </div>
               )}
-
-              {/* GIF */}
-              {msg.gif_url && (
-                <Image
-                  src={msg.gif_url}
-                  width={200}
-                  preview={false}
-                  style={{ borderRadius: 8, marginBottom: 4 }}
-                />
-              )}
-
-              {/* Content or deleted placeholder */}
+              {msg.gif_url && <img src={msg.gif_url} alt="gif" className="message-gif" />}
               {isDeletedForMe ? (
-                <Text italic style={{ color: 'inherit' }}>
-                  {isMe ? 'You deleted this message' : 'This message was deleted'}
-                </Text>
+                <div className="message-deleted">{isMe ? 'You deleted this message' : 'This message was deleted'}</div>
               ) : (
-                <Text style={{ color: 'inherit' }}>{msg.content}</Text>
+                <div className="message-text">{msg.content}</div>
               )}
-
-              {msg.is_edited && !isDeletedForMe && (
-                <Text style={{ fontSize: 10, marginLeft: 8 }}>(edited)</Text>
-              )}
-
-              <div
-                style={{
-                  fontSize: 10,
-                  marginTop: 4,
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  gap: 8,
-                }}
-              >
-                <span>{new Date(msg.created_at).toLocaleTimeString()}</span>
-                {isMe && getStatusIcon(msg.status)}
-
-                <Space size={4}>
+              {msg.is_edited && !isDeletedForMe && <span className="message-edited">(edited)</span>}
+              <div className="message-footer">
+                <span className="message-time">{new Date(msg.created_at).toLocaleTimeString()}</span>
+                {isMe && (
+                  <span className="message-status" style={{ color: getStatusColor(msg.status) }}>
+                    {getStatusIcon(msg.status)}
+                  </span>
+                )}
+                <div className="message-actions">
                   {!isMe && (
-                    <Tooltip title="Reply">
-                      <Button
-                        type="text"
-                        size="small"
-                        icon={<MessageOutlined />}
-                        onClick={() => onReplyMessage(msg)}
-                        style={{ color: 'inherit' }}
-                      />
-                    </Tooltip>
+                    <button className="message-action-btn" onClick={() => onReplyMessage(msg)}>↩️</button>
                   )}
                   {isMe && (
                     <>
-                      <Tooltip title="Edit">
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={<EditOutlined />}
-                          onClick={() => onEditMessage(msg)}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={<DeleteOutlined />}
-                          onClick={() => onDeleteMessage(msg.id)}
-                          danger
-                        />
-                      </Tooltip>
+                      <button className="message-action-btn" onClick={() => onEditMessage(msg)}>✏️</button>
+                      <button className="message-action-btn" onClick={() => onDeleteMessage(msg.id)}>🗑️</button>
                     </>
                   )}
                   {!isMe && (
-                    <Tooltip title="Report">
-                      <Button
-                        type="text"
-                        size="small"
-                        icon={<FlagOutlined />}
-                        onClick={() => onReportMessage(msg.id)}
-                        style={{ color: '#ff4d4f' }}
-                      />
-                    </Tooltip>
+                    <button className="message-action-btn" onClick={() => onReportMessage(msg.id)}>🚩</button>
                   )}
-                </Space>
+                </div>
               </div>
             </div>
           </div>

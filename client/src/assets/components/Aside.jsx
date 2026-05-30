@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,GifOutlined,SignatureOutlined, FireOutlined, TeamOutlined,UserAddOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined, UserOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChildReaching} from "@fortawesome/free-solid-svg-icons";
-import {faBookmark, faNewspaper,faFaceGrinWink} from "@fortawesome/free-regular-svg-icons";
+import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/free-regular-svg-icons";
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
 
@@ -92,21 +92,24 @@ const MinInfo = [
     },
     {
         id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
+    },  
+    {
+        id:3, a: '/chat', icon: <FontAwesomeIcon icon={faComments} />
     },
     {
-        id:3, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(255, 32, 203)"}} className='sub-icon'/>
+        id:4, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(255, 32, 203)"}} className='sub-icon'/>
     },
     {
-        id:4, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
+        id:5, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
     },
     {
-        id:5, a: '/you', icon: <UserOutlined className='sub-icon'/>
+        id:6, a: '/you', icon: <UserOutlined className='sub-icon'/>
     },
     {
-        id:6, a: '/trending', icon:  <RiseOutlined  className='sub-icon'/>
+        id:7, a: '/trending', icon:  <RiseOutlined  className='sub-icon'/>
     },
     {
-        id:7, a: '/halloffame', icon: <FireOutlined className='sub-icon'/>
+        id:8, a: '/halloffame', icon: <FireOutlined className='sub-icon'/>
     },
 ]
 
@@ -154,8 +157,9 @@ const Card = ({a, icon, label, classNameBtn}) =>{
 
 
 const Mains= [
-    { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
-    { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> }
+    { id:0, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
+    { id:1, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
+    { id:2, a: '/chat', icon: <FontAwesomeIcon icon={faComments} />, label: <label>Gossip</label> }
 ];
 
 

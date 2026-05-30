@@ -72,7 +72,7 @@ aside{
 /* Show in Firefox on hover */
 .max-ul:hover{
     scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) var(--background-color);
+    scrollbar-color: var(--secondary-color) var(--background-color);
 }
 
 /* Hide by default */
