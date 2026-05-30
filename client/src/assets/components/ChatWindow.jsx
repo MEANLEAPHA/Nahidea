@@ -8,6 +8,7 @@ import { getSocket } from '../../socket';
 import { useAuth } from '../context/AuthContext';
 
 const { Title } = Typography;
+const token = localStorage.getItem('token');
 
 const ChatWindow = ({ activeChat, setActiveChat }) => {
     const { user } = useAuth();
@@ -19,7 +20,13 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
 
     const fetchMessages = async () => {
         try {
-            const res = await api.get(`/api/get-messages/${activeChat.id}`);
+            const res = await api.get(`/api/get-messages/${activeChat.id}`, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             setConversationId(res.data.conversationId);
             setMessages(res.data.messages);
             // Mark as seen via socket
@@ -81,7 +88,13 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
             content: 'This will delete the conversation for you. The other person can still see it unless they also delete.',
             onOk: async () => {
                 try {
-                    await api.delete(`/api/delete-conversation/${activeChat.id}`);
+                    await api.delete(`/api/delete-conversation/${activeChat.id}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
                     message.success('Conversation deleted');
                     setActiveChat(null);
                 } catch (err) {
@@ -134,7 +147,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
                     onOk: async () => {
                         const reason = document.getElementById('reportReason')?.value;
                         try {
-                            await api.post('/api/report-message', { messageId: msgId, reason });
+                            await api.post('/api/report-message', { messageId: msgId, reason }, { headers: { Authorization: `Bearer ${token}` } });
                             message.success('Message reported');
                         } catch (err) {
                             message.error('Failed to report');

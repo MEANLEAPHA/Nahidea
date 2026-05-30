@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { getSocket } from '../../socket';
 
 const { Text } = Typography;
+const token = localStorage.getItem('token');
 
 const Sidebar = ({ activeChat, setActiveChat, toggleTheme, themeMode }) => {
   const { user, logout } = useAuth();
@@ -13,9 +14,17 @@ const Sidebar = ({ activeChat, setActiveChat, toggleTheme, themeMode }) => {
   const [search, setSearch] = useState('');
   const socket = getSocket();
 
+
+
   const fetchChatUsers = async () => {
     try {
-      const res = await api.get('/api/get-chat-user');
+      const res = await api.get('/api/get-chat-user', 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setUsers(res.data);
     } catch (err) {
       message.error('Failed to load contacts');
