@@ -799,12 +799,12 @@ const handleFavorite = async (postId) => {
         <DailyNews/>
   
             {error ? (
-              <div class='error-container'>
+              <div className='error-container'>
                 <Loader />
                 <p>Opps! Failed to load</p>
               </div>
             ) : posts.length === 0 && !loading ? (
-               <div class='error-container'>
+               <div className='error-container'>
                 <Loader />
                 <p>No posts found</p>
               </div>

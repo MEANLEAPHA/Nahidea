@@ -154,7 +154,7 @@
 
 // export default MessageList;
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { EnterOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCheckDouble } from '@fortawesome/free-solid-svg-icons';
