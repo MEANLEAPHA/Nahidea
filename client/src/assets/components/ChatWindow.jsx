@@ -315,6 +315,16 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   const [replyTo, setReplyTo] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
 
+  const handleReply = (msg) => {
+    setEditMessage(null);  // clear edit mode
+    setReplyTo(msg);
+  };
+
+  const handleEdit = (msg) => {
+    setReplyTo(null);      // clear reply mode
+    setEditMessage(msg);
+  };
+
   // Fetch messages from API
   const fetchMessages = async () => {
     try {
@@ -418,6 +428,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
 
 
   const handleSend = (content, gif, replyToId = null) => {
@@ -548,11 +559,12 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 
       <MessageList
         messages={messages}
-         currentUserId={parseInt(user.id)}
-        onReplyMessage={setReplyTo}
-        onEditMessage={setEditMessage}
+        currentUserId={parseInt(user.id)}
+        onReplyMessage={handleReply}
+        onEditMessage={handleEdit}
         onDeleteMessage={handleDeleteMessage}
         onReportMessage={handleReportMessage}
+        scrollToBottomRef={messagesEndRef}
       />
 
       <MessageInput
@@ -564,7 +576,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
         setEditMessage={setEditMessage}
         onEditMessage={handleEditMessage}
       />
-      <div ref={messagesEndRef} />
+      {/* <div ref={messagesEndRef} /> */}
     </div>
   );
 };

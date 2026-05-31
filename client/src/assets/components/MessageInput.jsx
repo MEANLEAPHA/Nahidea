@@ -211,17 +211,19 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
 
   return (
     <div className="message-input-container">
-      {(replyTo || editMessage) && (
+     {(replyTo || editMessage) && (
         <div className="input-banner">
-          {replyTo && (
+          {replyTo && !editMessage && (
             <div className="reply-banner">
               <span><EnterOutlined style={{ transform: 'scaleX(-1)', color: 'var(--primary-color)', fontSize: 18 }} /></span>
               {replyTo.gif_url && <img src={replyTo.gif_url} alt="gif" width={50} />}
               <span>{replyTo.content?.substring(0, 50)}</span>
             </div>
           )}
-          {editMessage && <span><EditOutlined /> Editing message</span>}
-          <button onClick={() => { setReplyTo(null); setEditMessage(null); }} style={{ border: 'none', background: 'none', padding: '10px', color: 'var(--font-color)', cursor: 'pointer' }}>
+          {editMessage && !replyTo && (
+            <span><EditOutlined /> Editing message</span>
+          )}
+          <button onClick={() => { setReplyTo(null); setEditMessage(null); }}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
