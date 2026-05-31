@@ -292,15 +292,19 @@
 // };
 
 // export default ChatWindow;
+
 import React, { useState, useEffect, useRef } from 'react';
-import { message } from 'antd'; // only for notifications, you can replace with your own toast
+import { Button, Dropdown, Space, Popconfirm, message } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBarsStaggered, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import MessageList from './MessageList';
+import MessageInput from './MessageInput';
 import api from '../services/api';
 import { getSocket } from '../../socket';
 import { useAuth } from '../context/AuthContext';
-import MessageList from './MessageList';
-import MessageInput from './MessageInput';
 
-const ChatWindow = ({ activeChat, setActiveChat }) => {
+const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
@@ -311,6 +315,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const [replyTo, setReplyTo] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
 
+  // Fetch messages from API
   const fetchMessages = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -327,12 +332,14 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     }
   };
 
+  // Join conversation room when conversationId is known
   useEffect(() => {
     if (socket && conversationId) {
       socket.emit('join_conversation', { conversationId });
     }
   }, [conversationId, socket]);
 
+  // Socket event listeners
   useEffect(() => {
     if (!socket) return;
 
@@ -436,23 +443,37 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     socket.emit('delete_message', { messageId });
   };
 
-  const handleDeleteConversation = async () => {
-    if (window.confirm('Delete this conversation for you? The other person will still see it unless they also delete.')) {
-      try {
-        const token = localStorage.getItem('token');
-        await api.delete(`/api/delete-conversation/${activeChat.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        message.success('Conversation deleted');
-        setActiveChat(null);
-      } catch (err) {
-        message.error('Failed to delete');
-      }
+  const confirmDeleteConversation = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.delete(`/api/delete-conversation/${activeChat.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      message.success('Conversation deleted');
+      setActiveChat(null);
+    } catch (err) {
+      message.error('Failed to delete');
     }
   };
 
   const handleReportUser = () => {
-    message.info('Report user: Click the flag icon on any message to report it.');
+    message.info('Report user – please use the flag icon on individual messages.');
+  };
+
+  const handleReportMessage = async (msgId) => {
+    const reason = prompt('Reason for reporting this message (optional):');
+    if (reason === null) return;
+    try {
+      const token = localStorage.getItem('token');
+      await api.post(
+        '/api/report-message',
+        { messageId: msgId, reason },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      message.success('Message reported');
+    } catch (err) {
+      message.error('Failed to report');
+    }
   };
 
   const handleTyping = (isUserTyping) => {
@@ -467,24 +488,60 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     );
   };
 
+  const items = [
+    {
+      key: '1',
+      label: (
+        <Popconfirm
+          title="Delete Chat"
+          description="Are you sure you want to delete this chat?"
+          onConfirm={confirmDeleteConversation}
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          okText="Delete"
+          cancelText="No, Keep"
+          okButtonProps={{
+            style: { backgroundColor: 'red', borderColor: 'red', height: '30px', color: '#fff', borderRadius: '5px' },
+          }}
+          cancelButtonProps={{
+            style: { backgroundColor: 'skyblue', height: '30px', color: '#fff', borderRadius: '5px' },
+          }}
+        >
+          <DeleteOutlined /> Delete this Chat
+        </Popconfirm>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <span onClick={handleReportUser}>
+          <FlagOutlined /> Report this Chat
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div className="chat-window">
       <div className="chat-header">
         <div className="chat-header-left">
           {window.innerWidth <= 1000 && (
             <button className="back-button" onClick={() => setActiveChat(null)}>
-              ←
+              <FontAwesomeIcon icon={faAngleLeft} />
             </button>
           )}
-          <img src={activeChat.avatar} alt={activeChat.username} className="chat-avatar" />
+          <div className="chat-avatar-div">
+            <img src={activeChat.avatar} alt={activeChat.username} className="chat-avatar" />
+            <div className="online-status-chat"></div>
+          </div>
           <div className="chat-user-info">
             <span className="chat-username">{activeChat.username}</span>
             {isTyping && <div className="typing-indicator"><span></span><span></span><span></span></div>}
           </div>
         </div>
-        <div className="chat-header-right">
-          <button className="icon-button" onClick={handleDeleteConversation}>🗑️</button>
-          <button className="icon-button" onClick={handleReportUser}>🚩</button>
+        <div className="chat-header-right" style={{ cursor: "pointer" }}>
+          <Dropdown menu={{ items }} placement="bottom">
+            <FontAwesomeIcon icon={faBarsStaggered} className='back-button' />
+          </Dropdown>
         </div>
       </div>
 
@@ -494,14 +551,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         onReplyMessage={setReplyTo}
         onEditMessage={setEditMessage}
         onDeleteMessage={handleDeleteMessage}
-        onReportMessage={(msgId) => {
-          const reason = prompt('Reason for reporting this message (optional):');
-          if (reason !== null) {
-            api.post('/api/report-message', { messageId: msgId, reason }, {
-              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            }).then(() => message.success('Reported')).catch(() => message.error('Failed'));
-          }
-        }}
+        onReportMessage={handleReportMessage}
       />
 
       <MessageInput

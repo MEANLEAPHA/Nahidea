@@ -136,8 +136,13 @@
 // };
 
 // export default MessageInput;
-
 import React, { useState, useEffect } from 'react';
+import Masonry from 'react-masonry-css';
+import { SendOutlined, CheckOutlined, DeleteOutlined, RetweetOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFaceGrinWink, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { EnterOutlined, EditOutlined } from '@ant-design/icons';
 import api from '../services/api';
 
 const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setEditMessage, onEditMessage }) => {
@@ -157,14 +162,25 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
     }
   }, [editMessage]);
 
+  // Real GIF search from backend
   useEffect(() => {
-    if (gifSearch) {
-      api.get(`/api/gifs?q=${gifSearch}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      }).then(res => setGifs(res.data)).catch(console.error);
-    } else {
-      setGifs([]);
-    }
+    const fetchGifs = async () => {
+      if (!gifSearch.trim()) {
+        setGifs([]);
+        return;
+      }
+      try {
+        const token = localStorage.getItem('token');
+        const res = await api.get(`/api/gifs?q=${encodeURIComponent(gifSearch)}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setGifs(res.data);
+      } catch (err) {
+        console.error('GIF search failed', err);
+      }
+    };
+    const debounce = setTimeout(fetchGifs, 300);
+    return () => clearTimeout(debounce);
   }, [gifSearch]);
 
   const handleSend = () => {
@@ -197,19 +213,34 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
     <div className="message-input-container">
       {(replyTo || editMessage) && (
         <div className="input-banner">
-          {replyTo && <span>Replying to: {replyTo.content?.substring(0, 50)}</span>}
-          {editMessage && <span>Editing message</span>}
-          <button onClick={() => { setReplyTo(null); setEditMessage(null); }}>✖</button>
+          {replyTo && (
+            <div className="reply-banner">
+              <span><EnterOutlined style={{ transform: 'scaleX(-1)', color: 'var(--primary-color)', fontSize: 18 }} /></span>
+              {replyTo.gif_url && <img src={replyTo.gif_url} alt="gif" width={50} />}
+              <span>{replyTo.content?.substring(0, 50)}</span>
+            </div>
+          )}
+          {editMessage && <span><EditOutlined /> Editing message</span>}
+          <button onClick={() => { setReplyTo(null); setEditMessage(null); }} style={{ border: 'none', background: 'none', padding: '10px', color: 'var(--font-color)', cursor: 'pointer' }}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
         </div>
       )}
+
       {selectedGif && (
         <div className="selected-gif-preview">
-          <img src={selectedGif.gif_url} alt="gif" width="80" />
-          <button onClick={() => setSelectedGif(null)}>Remove</button>
+          <img src={selectedGif.gif_url} alt="gif" className='preview-gif-holder' />
+          <div className='preview-gif-holder-action'>
+            <button onClick={() => setSelectedGif(null)} className='preview-gif-btn'><DeleteOutlined /></button>
+            <button onClick={() => setShowGifPicker(!showGifPicker)} className='preview-gif-btn'><RetweetOutlined /></button>
+          </div>
         </div>
       )}
+
       <div className="input-row">
-        <button className="gif-button" onClick={() => setShowGifPicker(!showGifPicker)}>GIF</button>
+        <button className="gif-button" onClick={() => setShowGifPicker(!showGifPicker)}>
+          <FontAwesomeIcon icon={faFaceGrinWink} />
+        </button>
         <textarea
           className="message-textarea"
           rows={1}
@@ -219,9 +250,10 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
           placeholder={editMessage ? 'Edit your message...' : 'Type a message...'}
         />
         <button className="send-button" onClick={handleSend}>
-          {editMessage ? 'Update' : 'Send'}
+          {editMessage ? <CheckOutlined /> : <SendOutlined />}
         </button>
       </div>
+
       {showGifPicker && (
         <div className="gif-picker">
           <input
@@ -231,17 +263,21 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
             onChange={(e) => setGifSearch(e.target.value)}
             className="gif-search"
           />
-          <div className="gif-list">
+          <Masonry
+            breakpointCols={{ default: 3, 700: 2, 500: 2, 380: 1 }}
+            className="gif-masonry"
+            columnClassName="gif-masonry-column"
+          >
             {gifs.map(gif => (
               <img
                 key={gif.id}
                 src={gif.gif_url}
                 alt={gif.gif_label}
                 onClick={() => { setSelectedGif(gif); setShowGifPicker(false); }}
-                className="gif-thumb"
+                className="gif-masonry-item"
               />
             ))}
-          </div>
+          </Masonry>
         </div>
       )}
     </div>
