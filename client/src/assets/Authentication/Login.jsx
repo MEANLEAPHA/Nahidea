@@ -10,6 +10,10 @@ import "../style/Authentication/SignPage.css";
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import nahideaTren from "../img/nahidea-tran.png"
 
+import { useAuth } from "../context/AuthContext";
+
+const { setToken } = useAuth();
+
 const API_URL = import.meta.env.VITE_SERVER_URL;  
 
 const Login = () => {
@@ -64,9 +68,9 @@ const Login = () => {
         const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
         localStorage.setItem("tokenExpiry", expiry);
 
-        setTimeout(() => {
+        setToken(data.token);
           navigate("/home");
-        }, 1000);
+      
 
       } else {
         switch (res.status) {

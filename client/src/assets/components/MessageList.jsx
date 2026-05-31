@@ -193,10 +193,12 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
 
               {/* reply div */}
               {msg.reply_to_id && (
-                <div className="message-reply-context">
-                  <EnterOutlined style={{ transform: 'scaleX(-1)' }} />  {msg.reply_gif_preview && <img src={msg.reply_gif_preview} alt="gif" className='reply_gif_preview' />} {msg.reply_preview || 'a message'}
-                </div>
-              )}
+                  <div className="message-reply-context">
+                    <EnterOutlined style={{ transform: 'scaleX(-1)' }} />
+                    {msg.reply_gif_preview && <img src={msg.reply_gif_preview} alt="gif" className='reply_gif_preview' />}
+                    {msg.reply_preview || 'Reply to a message'}
+                  </div>
+                )}
 
               {/* gif */}
               {msg.gif_url && <img src={msg.gif_url} alt="gif" className="message-gif" />}

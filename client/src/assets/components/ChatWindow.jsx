@@ -419,16 +419,17 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+
   const handleSend = (content, gif, replyToId = null) => {
-    if (!content && !gif) return;
-    socket.emit('send_message', {
-      toUserId: activeChat.id,
-      content: content || null,
-      gifId: gif?.id || null,
-      gifUrl: gif?.gif_url || null,
-      replyToId,
-    });
-  };
+  if (!content && !gif) return;
+  socket.emit('send_message', {
+    toUserId: parseInt(activeChat.id),
+    content: content || null,
+    gifId: gif?.id || null,
+    gifUrl: gif?.gif_url || null,
+    replyToId,
+  });
+};
 
   const handleEditMessage = (messageId, newContent, newGif) => {
     socket.emit('edit_message', {
@@ -547,7 +548,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 
       <MessageList
         messages={messages}
-        currentUserId={user.id}
+         currentUserId={parseInt(user.id)}
         onReplyMessage={setReplyTo}
         onEditMessage={setEditMessage}
         onDeleteMessage={handleDeleteMessage}
