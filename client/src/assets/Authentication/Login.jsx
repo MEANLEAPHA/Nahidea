@@ -12,13 +12,14 @@ import nahideaTren from "../img/nahidea-tran.png"
 
 import { useAuth } from "../context/AuthContext";
 
-const { setToken } = useAuth();
+
 
 const API_URL = import.meta.env.VITE_SERVER_URL;  
 
 const Login = () => {
   const navigate = useNavigate();
 
+  const { setToken } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [viewPassword, setViewPassword] = useState("password");
