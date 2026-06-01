@@ -16,6 +16,8 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
   const [gifs, setGifs] = useState([]);
   const [showGifPicker, setShowGifPicker] = useState(false);
 
+  
+
   useEffect(() => {
     if (editMessage) {
       setText(editMessage.content || '');
@@ -51,20 +53,19 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
     }
   }, [showGifPicker]);
 
-  const handleSend = () => {
-    if (!text.trim() && !selectedGif) return;
-    if (editMessage) {
-      onEditMessage(editMessage.id, text, selectedGif);
-      setEditMessage(null);
-    } else {
-      onSend(text, selectedGif, replyTo?.id);
-      setReplyTo(null);
-    }
-    setText('');
-    setSelectedGif(null);
-    setShowGifPicker(false);
-  };
-
+const handleSend = () => {
+  if (!text.trim() && !selectedGif) return;
+  if (editMessage) {
+    onEditMessage(editMessage.id, text, selectedGif);
+    setEditMessage(null);
+  } else {
+    onSend(text, selectedGif, replyTo?.id);
+    setReplyTo(null);
+  }
+  setText('');
+  setSelectedGif(null);
+  setShowGifPicker(false);
+};
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();

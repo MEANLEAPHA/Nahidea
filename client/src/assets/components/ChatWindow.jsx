@@ -110,6 +110,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       setMessages((prev) => [...prev, msg]);
     };
 
+
     const handleMessagesSeen = ({ conversationId: seenConvId }) => {
       const currentConvId = Number(conversationId);
       const eventConvId = Number(seenConvId);
@@ -130,7 +131,17 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         );
       }
     };
-
+   const handleMessagesSeen = ({ conversationId: seenConvId }) => {
+  const eventConvId = Number(seenConvId);
+  setMessages((prev) =>
+    prev.map((msg) => {
+      if (msg.sender_id !== user.id && Number(msg.conversation_id) === eventConvId) {
+        return { ...msg, status: 'seen' };
+      }
+      return msg;
+    })
+  );
+};
     const handleMessageEdited = (updatedMsg) => {
       setMessages((prev) =>
         prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m))
@@ -161,6 +172,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     };
 
     const handleReplyPreviewUpdate = ({ replyMessageId, newReplyPreview, newReplyGifPreview, deleted }) => {
+      console.log('reply preview update', replyMessageId, newReplyPreview, newReplyGifPreview, deleted);
       setMessages((prev) =>
         prev.map((m) =>
           m.id === replyMessageId
