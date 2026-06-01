@@ -78,12 +78,12 @@ const App = () =>{
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}>
-                      <Route path='/all'></Route>
+                      {/* <Route path='/all'></Route>
                       <Route path='/post'></Route>
                       <Route path='/favorite'></Route>
                       <Route path='/likepost'></Route>
                       <Route path='/history'></Route>
-                      <Route path='/setup'></Route>
+                      <Route path='/setup'></Route> */}
                     </Route>
                     
                     {/* Upload posts */}
