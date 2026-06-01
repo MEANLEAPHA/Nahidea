@@ -111,26 +111,26 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     };
 
 
-    const handleMessagesSeen = ({ conversationId: seenConvId }) => {
-      const currentConvId = Number(conversationId);
-      const eventConvId = Number(seenConvId);
-      if (currentConvId === eventConvId && currentConvId) {
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.sender_id !== user.id ? { ...msg, status: 'seen' } : msg
-          )
-        );
-      } else {
-        // fallback: use the event's conversationId
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.sender_id !== user.id && Number(msg.conversation_id) === eventConvId
-              ? { ...msg, status: 'seen' }
-              : msg
-          )
-        );
-      }
-    };
+    // const handleMessagesSeen = ({ conversationId: seenConvId }) => {
+    //   const currentConvId = Number(conversationId);
+    //   const eventConvId = Number(seenConvId);
+    //   if (currentConvId === eventConvId && currentConvId) {
+    //     setMessages((prev) =>
+    //       prev.map((msg) =>
+    //         msg.sender_id !== user.id ? { ...msg, status: 'seen' } : msg
+    //       )
+    //     );
+    //   } else {
+    //     // fallback: use the event's conversationId
+    //     setMessages((prev) =>
+    //       prev.map((msg) =>
+    //         msg.sender_id !== user.id && Number(msg.conversation_id) === eventConvId
+    //           ? { ...msg, status: 'seen' }
+    //           : msg
+    //       )
+    //     );
+    //   }
+    // };
    const handleMessagesSeen = ({ conversationId: seenConvId }) => {
   const eventConvId = Number(seenConvId);
   setMessages((prev) =>
