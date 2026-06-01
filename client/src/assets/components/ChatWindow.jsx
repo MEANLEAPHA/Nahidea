@@ -394,9 +394,16 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     if (!socket) return;
 
     const handleNewMessage = (msg) => {
+      // Only add message if it belongs to this chat
       if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
         setMessages((prev) => [...prev, msg]);
+        
+        // If message is from OTHER user and we are in this chat
         if (msg.sender_id !== user.id && conversationId) {
+          // 1. Mark as delivered (triggers sender to see "delivered" check)
+          socket.emit('message_delivered', { messageId: msg.id });
+          
+          // 2. Mark as seen immediately (triggers sender to see "seen" double check)
           socket.emit('mark_seen', { conversationId });
         }
       }
@@ -467,25 +474,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     }
   }, [activeChat]);
 
-  // Auto scroll to bottom on new message (only if user was already at bottom)
-  const prevMessageCount = useRef(0);
-  useEffect(() => {
-    const container = document.querySelector('.message-list');
-    const wasNearBottom = container && 
-      container.scrollHeight - container.scrollTop - container.clientHeight < 100;
-    if (messages.length > prevMessageCount.current && wasNearBottom) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-    prevMessageCount.current = messages.length;
-  }, [messages]);
-
-  // Initial scroll to bottom after first load
-  useEffect(() => {
-    if (messages.length > 0) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-    }
-  }, [messages.length]);
-
+ 
   // Handlers same as before
   const handleSend = (content, gif, replyToId = null) => {
     if (!content && !gif) return;
@@ -628,7 +617,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
           onReportMessage={handleReportMessage}
           scrollToBottomRef={messagesEndRef}
         />
-        <div ref={messagesEndRef} />
+   
       </div>
 
       <MessageInput
