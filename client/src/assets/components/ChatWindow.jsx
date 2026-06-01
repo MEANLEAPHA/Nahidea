@@ -294,7 +294,7 @@
 // export default ChatWindow;
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Dropdown, Space, Popconfirm, message } from 'antd';
+import { Button, Dropdown, Popconfirm, message, Spin } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarsStaggered, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -308,32 +308,40 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [oldestMessageId, setOldestMessageId] = useState(null);
   const socket = getSocket();
   const messagesEndRef = useRef(null);
+  const messagesTopRef = useRef(null);
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
 
   const handleReply = (msg) => {
-    setEditMessage(null);  // clear edit mode
+    setEditMessage(null);
     setReplyTo(msg);
   };
 
   const handleEdit = (msg) => {
-    setReplyTo(null);      // clear reply mode
+    setReplyTo(null);
     setEditMessage(msg);
   };
 
-  // Fetch messages from API
+  // Fetch initial messages (most recent)
   const fetchMessages = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get(`/api/get-message/${activeChat.id}`, {
+      const res = await api.get(`/api/get-message/${activeChat.id}?limit=30`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setConversationId(res.data.conversationId);
       setMessages(res.data.messages);
+      setHasMore(res.data.hasMore || false);
+      if (res.data.messages.length > 0) {
+        setOldestMessageId(res.data.messages[0].id); // oldest of loaded batch
+      }
       if (socket && res.data.conversationId) {
         socket.emit('mark_seen', { conversationId: res.data.conversationId });
       }
@@ -342,14 +350,46 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     }
   };
 
-  // Join conversation room when conversationId is known
+  // Fetch older messages (before oldestMessageId)
+  const loadOlderMessages = async () => {
+    if (loadingOlder || !hasMore || !oldestMessageId) return;
+    setLoadingOlder(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await api.get(`/api/get-message/${activeChat.id}?limit=30&beforeId=${oldestMessageId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data.messages.length > 0) {
+        // Prepend older messages
+        setMessages(prev => [...res.data.messages, ...prev]);
+        setOldestMessageId(res.data.messages[0].id);
+        setHasMore(res.data.hasMore || false);
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      message.error('Failed to load older messages');
+    } finally {
+      setLoadingOlder(false);
+    }
+  };
+
+  // Detect scroll to top
+  const handleScroll = (e) => {
+    const container = e.target;
+    if (container.scrollTop === 0 && !loadingOlder && hasMore) {
+      loadOlderMessages();
+    }
+  };
+
+  // Join conversation room
   useEffect(() => {
     if (socket && conversationId) {
       socket.emit('join_conversation', { conversationId });
     }
   }, [conversationId, socket]);
 
-  // Socket event listeners
+  // Socket event listeners (same as before)
   useEffect(() => {
     if (!socket) return;
 
@@ -422,25 +462,41 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   }, [socket, activeChat, conversationId, user.id]);
 
   useEffect(() => {
-    if (activeChat) fetchMessages();
+    if (activeChat) {
+      fetchMessages();
+    }
   }, [activeChat]);
 
+  // Auto scroll to bottom on new message (only if user was already at bottom)
+  const prevMessageCount = useRef(0);
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = document.querySelector('.message-list');
+    const wasNearBottom = container && 
+      container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+    if (messages.length > prevMessageCount.current && wasNearBottom) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    prevMessageCount.current = messages.length;
   }, [messages]);
 
+  // Initial scroll to bottom after first load
+  useEffect(() => {
+    if (messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+    }
+  }, [messages.length]);
 
-
+  // Handlers same as before
   const handleSend = (content, gif, replyToId = null) => {
-  if (!content && !gif) return;
-  socket.emit('send_message', {
-    toUserId: parseInt(activeChat.id),
-    content: content || null,
-    gifId: gif?.id || null,
-    gifUrl: gif?.gif_url || null,
-    replyToId,
-  });
-};
+    if (!content && !gif) return;
+    socket.emit('send_message', {
+      toUserId: parseInt(activeChat.id),
+      content: content || null,
+      gifId: gif?.id || null,
+      gifUrl: gif?.gif_url || null,
+      replyToId,
+    });
+  };
 
   const handleEditMessage = (messageId, newContent, newGif) => {
     socket.emit('edit_message', {
@@ -542,7 +598,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
             </button>
           )}
           <div className="chat-avatar-div">
-            <img src={activeChat.avatar} alt={activeChat.username} className="chat-avatar" />
+            <img src={activeChat.avatar_url} alt={activeChat.username} className="chat-avatar" />
             <div className="online-status-chat"></div>
           </div>
           <div className="chat-user-info">
@@ -557,15 +613,23 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
         </div>
       </div>
 
-      <MessageList
-        messages={messages}
-        currentUserId={parseInt(user.id)}
-        onReplyMessage={handleReply}
-        onEditMessage={handleEdit}
-        onDeleteMessage={handleDeleteMessage}
-        onReportMessage={handleReportMessage}
-        scrollToBottomRef={messagesEndRef}
-      />
+      <div className="message-list" onScroll={handleScroll}>
+        {loadingOlder && (
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            <Spin size="small" />
+          </div>
+        )}
+        <MessageList
+          messages={messages}
+          currentUserId={parseInt(user.id)}
+          onReplyMessage={handleReply}
+          onEditMessage={handleEdit}
+          onDeleteMessage={handleDeleteMessage}
+          onReportMessage={handleReportMessage}
+          scrollToBottomRef={messagesEndRef}
+        />
+        <div ref={messagesEndRef} />
+      </div>
 
       <MessageInput
         onSend={handleSend}
@@ -576,7 +640,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
         setEditMessage={setEditMessage}
         onEditMessage={handleEditMessage}
       />
-      {/* <div ref={messagesEndRef} /> */}
     </div>
   );
 };

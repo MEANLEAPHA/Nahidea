@@ -13,29 +13,29 @@ import { useAuth } from './assets/context/AuthContext';
 
 // Import Page
 
-    // Component
-     
-    import Aside from './assets/components/Aside';
-    import Header from '../src/assets/components/Header'; 
-    // Home
-    import Home from './assets/page/Home';
+// Component
+  
+import Aside from './assets/components/Aside';
+import Header from '../src/assets/components/Header'; 
+// Home
+import Home from './assets/page/Home';
 
-    // Authentication
-    import Login  from './assets/Authentication/Login';
-    import Register from './assets/Authentication/Register';
-    import { VerifyEmail } from './assets/Authentication/VerifyEmail';
-    import { ForgetPassword } from './assets/Authentication/ForgetPassword';
-    import { VerifyEmailForgetPassword } from './assets/Authentication/VerifyEmailForgetPassword';
-    import { NewPassword } from './assets/Authentication/NewPassword';
+// Authentication
+import Login  from './assets/Authentication/Login';
+import Register from './assets/Authentication/Register';
+import { VerifyEmail } from './assets/Authentication/VerifyEmail';
+import { ForgetPassword } from './assets/Authentication/ForgetPassword';
+import { VerifyEmailForgetPassword } from './assets/Authentication/VerifyEmailForgetPassword';
+import { NewPassword } from './assets/Authentication/NewPassword';
 
-    // Action upload
-    import Question from './assets/upload/Question';
-    import Confession from './assets/upload/Confession';
-    import Content from './assets/upload/Content';
-    import EditContentBody from './assets/upload/EditContentBody';
+// Action upload
+import Question from './assets/upload/Question';
+import Confession from './assets/upload/Confession';
+import Content from './assets/upload/Content';
+import EditContentBody from './assets/upload/EditContentBody';
 
-    //util
-    import getToken from './assets/util/auth';
+//util
+import getToken from './assets/util/auth';
 
 // Style
 import './assets/style/App.css';
@@ -77,14 +77,19 @@ const App = () =>{
                     <Route path='/chat' element={<Chat/>}></Route>
 
                     {/* Account */}
-                    <Route path='/account' element={<Account/>}></Route>
+                    <Route path='/account' element={<Account/>}>
+                      <Route path='/all'></Route>
+                      <Route path='/post'></Route>
+                      <Route path='/favorite'></Route>
+                      <Route path='/likepost'></Route>
+                      <Route path='/history'></Route>
+                      <Route path='/setup'></Route>
+                    </Route>
                     
                     {/* Upload posts */}
                     <Route path='/create/question' element={<Question/>}></Route>
                     <Route path='/create/confession' element={<Confession/>}></Route>
                     <Route path='/create/content' element={<Content/>}></Route>
-
-
 
                     {/* post */}
                     <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>

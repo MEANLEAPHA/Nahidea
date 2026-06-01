@@ -171,7 +171,7 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
       }
       try {
         const token = localStorage.getItem('token');
-        const res = await api.get(`/api/gifs?q=${encodeURIComponent(gifSearch)}`, {
+         const res = await api.get(`/api/search-gif?q=${encodeURIComponent(gifSearch)}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setGifs(res.data);

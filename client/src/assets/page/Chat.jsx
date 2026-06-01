@@ -93,7 +93,7 @@ export default function Chat() {
 
   return (
     <div className="chat-container">
-      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} />
+   
       {activeChat ? (
         <ChatWindow activeChat={activeChat} setActiveChat={setActiveChat} />
       ) : (
@@ -102,6 +102,7 @@ export default function Chat() {
           Select a chat to start gossiping
         </div>
       )}
+         <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} />
     </div>
   );
 }

@@ -186,7 +186,7 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
 
         return (
           <div key={msg.id} className={`message-item ${isMe ? 'message-me' : 'message-other'}`}>
-            {!isMe && <img src={msg.avatar} alt={msg.username} className="message-avatar" />}
+            {!isMe && <img src={msg.avatar_url} alt={msg.username} className="message-avatar" />}
             {isMe && (
               <div className="message-actions">
                 <button className="message-action-btn" onClick={() => onEditMessage(msg)}>
