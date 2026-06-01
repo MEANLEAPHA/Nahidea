@@ -9,7 +9,7 @@ import api from '../services/api';
 import { getSocket } from '../../socket';
 import { useAuth } from '../context/AuthContext';
 
-const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
+const ChatWindow = ({ activeChat, setActiveChat }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
@@ -18,7 +18,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   const [oldestMessageId, setOldestMessageId] = useState(null);
   const socket = getSocket();
   const messagesEndRef = useRef(null);
-  const messagesTopRef = useRef(null);
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
@@ -34,28 +33,27 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     setEditMessage(msg);
   };
 
-  // Fetch initial messages (most recent)
   const fetchMessages = async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await api.get(`/api/get-message/${activeChat.id}?limit=30`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setConversationId(res.data.conversationId);
+      const convId = Number(res.data.conversationId);
+      setConversationId(convId);
       setMessages(res.data.messages);
       setHasMore(res.data.hasMore || false);
       if (res.data.messages.length > 0) {
-        setOldestMessageId(res.data.messages[0].id); // oldest of loaded batch
+        setOldestMessageId(res.data.messages[0].id);
       }
-      if (socket && res.data.conversationId) {
-        socket.emit('mark_seen', { conversationId: res.data.conversationId });
+      if (socket && convId) {
+        socket.emit('mark_seen', { conversationId: convId });
       }
     } catch (err) {
       message.error('Failed to load messages');
     }
   };
 
-  // Fetch older messages (before oldestMessageId)
   const loadOlderMessages = async () => {
     if (loadingOlder || !hasMore || !oldestMessageId) return;
     setLoadingOlder(true);
@@ -65,7 +63,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.messages.length > 0) {
-        // Prepend older messages
         setMessages(prev => [...res.data.messages, ...prev]);
         setOldestMessageId(res.data.messages[0].id);
         setHasMore(res.data.hasMore || false);
@@ -79,7 +76,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     }
   };
 
-  // Detect scroll to top
   const handleScroll = (e) => {
     const container = e.target;
     if (container.scrollTop === 0 && !loadingOlder && hasMore) {
@@ -87,67 +83,53 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     }
   };
 
-  // Join conversation room
   useEffect(() => {
     if (socket && conversationId) {
       socket.emit('join_conversation', { conversationId });
     }
   }, [conversationId, socket]);
 
-  // Socket event listeners (same as before)
   useEffect(() => {
     if (!socket) return;
 
     const handleNewMessage = (msg) => {
-  // Set conversationId if it's not already set (important!)
-  if (!conversationId && msg.conversation_id) {
-    setConversationId(Number(msg.conversation_id));
-  }
-  
-  if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
-    setMessages((prev) => [...prev, msg]);
-    if (msg.sender_id !== user.id && (conversationId || msg.conversation_id)) {
-      const convId = conversationId || msg.conversation_id;
-      socket.emit('message_delivered', { messageId: msg.id });
-      socket.emit('mark_seen', { conversationId: convId });
-    }
-  }
-};
+      if (!conversationId && msg.conversation_id) {
+        setConversationId(Number(msg.conversation_id));
+      }
+      if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
+        setMessages((prev) => [...prev, msg]);
+        if (msg.sender_id !== user.id && (conversationId || msg.conversation_id)) {
+          const convId = conversationId || msg.conversation_id;
+          socket.emit('message_delivered', { messageId: msg.id });
+          socket.emit('mark_seen', { conversationId: convId });
+        }
+      }
+    };
 
     const handleMessageSent = (msg) => {
       setMessages((prev) => [...prev, msg]);
     };
 
-    // const handleMessagesSeen = ({ conversationId: seenConvId }) => {
-    //   if (seenConvId === conversationId) {
-    //     setMessages((prev) =>
-    //       prev.map((m) =>
-    //         m.sender_id !== user.id ? { ...m, status: 'seen' } : m
-    //       )
-    //     );
-    //   }
-    // };
-   const handleMessagesSeen = ({ conversationId: seenConvId }) => {
-  console.log('📨 messages_seen event', { seenConvId, currentConvId: conversationId });
-  const currentConvId = Number(conversationId);
-  const eventConvId = Number(seenConvId);
-  if (currentConvId === eventConvId && currentConvId) {
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.sender_id !== user.id ? { ...msg, status: 'seen' } : msg
-      )
-    );
-  } else {
-    // fallback: update messages that belong to this conversation
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.sender_id !== user.id && msg.conversation_id === eventConvId
-          ? { ...msg, status: 'seen' }
-          : msg
-      )
-    );
-  }
-};
+    const handleMessagesSeen = ({ conversationId: seenConvId }) => {
+      const currentConvId = Number(conversationId);
+      const eventConvId = Number(seenConvId);
+      if (currentConvId === eventConvId && currentConvId) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.sender_id !== user.id ? { ...msg, status: 'seen' } : msg
+          )
+        );
+      } else {
+        // fallback: use the event's conversationId
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.sender_id !== user.id && Number(msg.conversation_id) === eventConvId
+              ? { ...msg, status: 'seen' }
+              : msg
+          )
+        );
+      }
+    };
 
     const handleMessageEdited = (updatedMsg) => {
       setMessages((prev) =>
@@ -171,12 +153,25 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
       );
     };
 
-      const handleUserTyping = ({ userId: typingUserId, isTyping: typing }) => {
-      console.log(`📥 Received user_typing: userId=${typingUserId}, isTyping=${typing}`);
-      const otherUserId = Number(activeChat.id);
-      if (typingUserId === otherUserId) {
+    const handleUserTyping = ({ userId: typingUserId, isTyping: typing }) => {
+      // Convert both to numbers for strict comparison
+      if (Number(typingUserId) === Number(activeChat.id)) {
         setIsTyping(typing);
       }
+    };
+
+    const handleReplyPreviewUpdate = ({ replyMessageId, newReplyPreview, newReplyGifPreview, deleted }) => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === replyMessageId
+            ? {
+                ...m,
+                reply_preview: deleted ? 'Original message deleted' : (newReplyPreview || m.reply_preview),
+                reply_gif_preview: deleted ? null : (newReplyGifPreview || m.reply_gif_preview),
+              }
+            : m
+        )
+      );
     };
 
     socket.on('new_message', handleNewMessage);
@@ -186,6 +181,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     socket.on('message_deleted', handleMessageDeleted);
     socket.on('message_status_updated', handleMessageStatusUpdated);
     socket.on('user_typing', handleUserTyping);
+    socket.on('reply_preview_update', handleReplyPreviewUpdate);
 
     return () => {
       socket.off('new_message', handleNewMessage);
@@ -195,21 +191,18 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
       socket.off('message_deleted', handleMessageDeleted);
       socket.off('message_status_updated', handleMessageStatusUpdated);
       socket.off('user_typing', handleUserTyping);
+      socket.off('reply_preview_update', handleReplyPreviewUpdate);
     };
   }, [socket, activeChat, conversationId, user.id]);
 
   useEffect(() => {
-    if (activeChat) {
-      fetchMessages();
-    }
+    if (activeChat) fetchMessages();
   }, [activeChat]);
 
- 
-  // Handlers same as before
   const handleSend = (content, gif, replyToId = null) => {
     if (!content && !gif) return;
     socket.emit('send_message', {
-      toUserId: parseInt(activeChat.id),
+      toUserId: Number(activeChat.id),
       content: content || null,
       gifId: gif?.id || null,
       gifUrl: gif?.gif_url || null,
@@ -265,14 +258,12 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 
   const handleTyping = (isUserTyping) => {
     if (!socket) return;
-     console.log(`📤 Emitting typing: toUserId=${activeChat.id}, isTyping=${isUserTyping}`);
-    const targetUserId = Number(activeChat.id);
-    socket.emit('typing', { toUserId: targetUserId, isTyping: isUserTyping });
+    socket.emit('typing', { toUserId: Number(activeChat.id), isTyping: isUserTyping });
     if (isUserTyping && typingTimeout) clearTimeout(typingTimeout);
     if (!isUserTyping) return;
     setTypingTimeout(
       setTimeout(() => {
-        socket.emit('typing', { toUserId: activeChat.id, isTyping: false });
+        socket.emit('typing', { toUserId: Number(activeChat.id), isTyping: false });
       }, 2000)
     );
   };
@@ -342,14 +333,13 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
         )}
         <MessageList
           messages={messages}
-          currentUserId={parseInt(user.id)}
+          currentUserId={Number(user.id)}
           onReplyMessage={handleReply}
           onEditMessage={handleEdit}
           onDeleteMessage={handleDeleteMessage}
           onReportMessage={handleReportMessage}
           scrollToBottomRef={messagesEndRef}
         />
-   
       </div>
 
       <MessageInput
