@@ -17,16 +17,23 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
   const [showGifPicker, setShowGifPicker] = useState(false);
 
   
+useEffect(() => {
+  if (editMessage) {
+    setText(editMessage.content || '');
 
-  useEffect(() => {
-    if (editMessage) {
-      setText(editMessage.content || '');
-      setSelectedGif(editMessage.gif_url ? editMessage : null);
+    if (editMessage.gif_url) {
+      setSelectedGif({
+        id: editMessage.gif_id,
+        gif_url: editMessage.gif_url,
+      });
     } else {
-      setText('');
       setSelectedGif(null);
     }
-  }, [editMessage]);
+  } else {
+    setText('');
+    setSelectedGif(null);
+  }
+}, [editMessage]);
 
   // Fetch GIFs (for both initial load and search)
   useEffect(() => {

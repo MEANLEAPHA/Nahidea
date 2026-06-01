@@ -146,11 +146,17 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     };
 
     const handleUserTyping = ({ userId: typingUserId, isTyping: typing }) => {
-      // Convert both to numbers for strict comparison
-      if (Number(typingUserId) === Number(activeChat.id)) {
-        setIsTyping(typing);
-      }
-    };
+  console.log(
+    "typing event",
+    typingUserId,
+    activeChat.id,
+    typing
+  );
+
+  if (Number(typingUserId) === Number(activeChat.id)) {
+    setIsTyping(typing);
+  }
+};
 
     const handleReplyPreviewUpdate = ({ replyMessageId, newReplyPreview, newReplyGifPreview, deleted }) => {
       console.log('reply preview update', replyMessageId, newReplyPreview, newReplyGifPreview, deleted);
@@ -257,10 +263,9 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     setTypingTimeout(
       setTimeout(() => {
         socket.emit('typing', { toUserId: Number(activeChat.id), isTyping: false });
-      }, 2000)
+      }, 4000)
     );
   };
-
   const items = [
     {
       key: '1',
