@@ -365,6 +365,7 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
 
   const handleTextChange = (e) => {
     setText(e.target.value);
+     console.log('✏️ User typing...');
     onTyping(true);
   };
 
@@ -425,7 +426,7 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
             className="gif-search"
           />
           <Masonry
-            breakpointCols={{ default: 3, 700: 2, 500: 2, 380: 1 }}
+            breakpointCols={{ default: 3, 700: 2, 500: 2, 350: 1 }}
             className="gif-masonry"
             columnClassName="gif-masonry-column"
           >

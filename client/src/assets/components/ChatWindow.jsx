@@ -394,30 +394,52 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     if (!socket) return;
 
     const handleNewMessage = (msg) => {
-      // Only add message if it belongs to this chat
-      if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
-        setMessages((prev) => [...prev, msg]);
-        
-        // If message is from OTHER user and we are in this chat
-        if (msg.sender_id !== user.id && conversationId) {
-          // 1. Mark as delivered (triggers sender to see "delivered" check)
-          socket.emit('message_delivered', { messageId: msg.id });
-          
-          // 2. Mark as seen immediately (triggers sender to see "seen" double check)
-          socket.emit('mark_seen', { conversationId });
-        }
-      }
-    };
+  // Set conversationId if it's not already set (important!)
+  if (!conversationId && msg.conversation_id) {
+    setConversationId(msg.conversation_id);
+  }
+  
+  if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
+    setMessages((prev) => [...prev, msg]);
+    if (msg.sender_id !== user.id && (conversationId || msg.conversation_id)) {
+      const convId = conversationId || msg.conversation_id;
+      socket.emit('message_delivered', { messageId: msg.id });
+      socket.emit('mark_seen', { conversationId: convId });
+    }
+  }
+};
 
     const handleMessageSent = (msg) => {
       setMessages((prev) => [...prev, msg]);
     };
 
+    // const handleMessagesSeen = ({ conversationId: seenConvId }) => {
+    //   if (seenConvId === conversationId) {
+    //     setMessages((prev) =>
+    //       prev.map((m) =>
+    //         m.sender_id !== user.id ? { ...m, status: 'seen' } : m
+    //       )
+    //     );
+    //   }
+    // };
     const handleMessagesSeen = ({ conversationId: seenConvId }) => {
-      if (seenConvId === conversationId) {
+      // Convert both to numbers for safe comparison
+      const currentConvId = Number(conversationId);
+      const eventConvId = Number(seenConvId);
+      
+      if (currentConvId === eventConvId && currentConvId) {
         setMessages((prev) =>
-          prev.map((m) =>
-            m.sender_id !== user.id ? { ...m, status: 'seen' } : m
+          prev.map((msg) =>
+            msg.sender_id !== user.id ? { ...msg, status: 'seen' } : msg
+          )
+        );
+      } else {
+        // Fallback: if conversationId not yet set, try to update anyway by matching conversation_id from messages
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.sender_id !== user.id && msg.conversation_id === eventConvId
+              ? { ...msg, status: 'seen' }
+              : msg
           )
         );
       }
@@ -446,6 +468,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     };
 
     const handleUserTyping = ({ userId: typingUserId, isTyping: typing }) => {
+      console.log(`📥 Received user_typing: userId=${typingUserId}, isTyping=${typing}`);
       if (typingUserId === activeChat.id) setIsTyping(typing);
     };
 
@@ -535,6 +558,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 
   const handleTyping = (isUserTyping) => {
     if (!socket) return;
+     console.log(`📤 Emitting typing: toUserId=${activeChat.id}, isTyping=${isUserTyping}`);
     socket.emit('typing', { toUserId: activeChat.id, isTyping: isUserTyping });
     if (isUserTyping && typingTimeout) clearTimeout(typingTimeout);
     if (!isUserTyping) return;
