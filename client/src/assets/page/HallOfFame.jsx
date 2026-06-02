@@ -139,7 +139,7 @@ export default function HallOfFame() {
                 {String(user.rank).padStart(2, "0")}
               </div>
               <img
-                src={user.avatar_url}
+                src={user.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
                 alt={user.username}
                 className="hof-row-avatar"
                 loading="lazy"

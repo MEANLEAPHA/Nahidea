@@ -52,7 +52,7 @@
   --hof-text-dim: rgba(255, 255, 255, 0.68);
   --hof-text-mute: rgba(255, 255, 255, 0.45);
 } */
-
+hof-row-avatar
 /* Layout */
 .hof-root {
   min-height: auto;
@@ -450,7 +450,7 @@
 
   object-fit: cover;
 
-  background: var(--hof-card);
+  background: var(--seacondary-color);
 
   outline: 1px solid var(--hof-border-strong);
   outline-offset: -1px;

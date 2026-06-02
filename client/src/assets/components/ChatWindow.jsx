@@ -11,6 +11,7 @@ import { getSocket } from '../../socket';
 import { useAuth } from '../context/AuthContext';
 
 const ChatWindow = ({ activeChat, setActiveChat }) => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
@@ -237,9 +238,8 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       message.error('Failed to delete');
     }
   };
-
-  const handleReportUser = () => {
-    message.info('Report user – please use the flag icon on individual messages.');
+   const handleReportConversation = () => {
+     navigate('/report-conversation', { state: { conversationId: activeChat.id } });
   };
 
   const handleReportMessage = async (msgId) => {
@@ -294,7 +294,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     {
       key: '2',
       label: (
-        <span onClick={handleReportUser}>
+        <span onClick={handleReportConversation}>
           <FlagOutlined /> Report this Chat
         </span>
       ),

@@ -63,6 +63,7 @@ import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
 import ReportHistory from './assets/page/ReportHistory';
 import Chat from './assets/page/Chat';
+import ReportConversation from './assets/page/ReportConversation';
 
 const App = () =>{
     return(
@@ -75,6 +76,10 @@ const App = () =>{
                     <Route index element={<Home/>} />
                     <Route path='/home' element={<Home/>}></Route>
                     <Route path='/chat' element={<Chat/>}></Route>
+
+                    {/* Report&FeedBack */}
+                    <Route path='/report-conversation' element={<ReportConversation/>}></Route>
+                    
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}>
