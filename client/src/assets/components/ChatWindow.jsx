@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Button, Dropdown, Popconfirm, message, Spin } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarsStaggered, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,8 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
+
+    const { onlineUsers } = useOutletContext();
 
   const handleReply = (msg) => {
     setEditMessage(null);
@@ -308,8 +311,12 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
             </button>
           )}
           <div className="chat-avatar-div">
-            <img src={activeChat.avatar_url} alt={activeChat.username} className="chat-avatar" />
-            <div className="online-status-chat"></div>
+            <img src={activeChat.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={activeChat.username} className="chat-avatar" />
+             {onlineUsers.includes(String(activeChat.id)) ? (
+                    <div className='online-status-chat'></div>
+                  ) : (
+                    <div className='offline-status-chat'></div>
+                  )}
           </div>
           <div className="chat-user-info">
             <span className="chat-username">{activeChat.username}</span>

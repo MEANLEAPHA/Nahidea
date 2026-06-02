@@ -132,6 +132,7 @@ padding: 0 !important;
   width: 100%;
   object-fit: cover;
   border-radius: 50%;
+  background-color: var(--secondary-color);
 }
 .online-status-chat{
   width: 10px;
@@ -139,6 +140,16 @@ padding: 0 !important;
   border-radius: 100%;
   border: 2px solid var(--background-color);
   background-color: yellowgreen;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.offline-status-chat{
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  border: 2px solid var(--background-color);
+  background-color: grey;
   position: absolute;
   bottom: 0;
   right: 0;
@@ -232,6 +243,7 @@ padding: 0 !important;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  background-color: var(--secondary-color);
 }
 .online-status-chat{
   width: 10px;
@@ -353,8 +365,8 @@ padding: 0 !important;
 .reply_gif_preview{
   width: 50px;
 }
-.message-gif {
-  max-width: 250px;
+.message-bubble .message-gif {
+  max-width: 100%;
   min-width: 100px;
   border-radius: 8px;
   margin-bottom: 4px;
