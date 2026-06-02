@@ -37,7 +37,7 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
                 <button className="message-action-btn" onClick={() => onEditMessage(msg)}>
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
-                  <Popconfirm
+                  {/* <Popconfirm
                     title="Delete Message"
                     description="Are you sure you want to delete this Message?"
                     onConfirm={onDeleteMessage(msg.id)}
@@ -54,10 +54,10 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
                     <button className="message-action-btn">
                       <FontAwesomeIcon icon={faTrashCan} />
                     </button>
-                  </Popconfirm>
-                {/* <button className="message-action-btn" onClick={() => onDeleteMessage(msg.id)}>
+                  </Popconfirm> */}
+                <button className="message-action-btn" onClick={() => onDeleteMessage(msg.id)}>
                   <FontAwesomeIcon icon={faTrashCan} />
-                </button> */}
+                </button>
               </div>
             )}
             <div className="message-bubble">
