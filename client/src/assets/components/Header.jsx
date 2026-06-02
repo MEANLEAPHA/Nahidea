@@ -583,7 +583,11 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
       key: "5" },
     {
       label: (
-        <li onClick={() => navigate("/logout")}>
+        <li onClick={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenExpiry");
+          navigate("/login");
+        }}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} /> <span>Logout</span>
         </li>
       ),

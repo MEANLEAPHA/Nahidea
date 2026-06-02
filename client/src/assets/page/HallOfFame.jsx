@@ -99,7 +99,7 @@ export default function HallOfFame() {
             Hall of <span className="hof-title-accent">Fame</span>
           </h1>
         </div>
-        <div className="hof-tabs">
+        {/* <div className="hof-tabs">
           <button
             className={`hof-tab ${season === "season" ? "is-active" : ""}`}
             onClick={() => setSeason("season")}
@@ -112,7 +112,7 @@ export default function HallOfFame() {
           >
             <FontAwesomeIcon icon={faClockRotateLeft} /> History
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Podium */}
@@ -156,7 +156,7 @@ export default function HallOfFame() {
           ))}
         </div>
 
-        <button className="hof-loadmore">Load Next 50 Leaders →</button>
+        {/* <button className="hof-loadmore">Load Next 50 Leaders →</button> */}
       </div>
     </div>
   );
@@ -194,7 +194,7 @@ function PodiumCard({ user, variant }) {
     <div className={`hof-podium-card hof-podium-${variant}`}>
       <div className="hof-podium-avatar-wrap">
         <img
-          src={user.avatar_url}
+          src={user.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
           alt={user.username}
           className={`hof-podium-avatar hof-podium-avatar-${variant}`}
         />
