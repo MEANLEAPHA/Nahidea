@@ -324,7 +324,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
               <div
                 key={item.id}
                 className="user-list-item"
-                onClick={() => handleSelectChat(item)}
                 style={{
                   cursor: 'pointer',
                   background: activeChat?.id === item.id ? 'var(--secondary-color)' : 'transparent',
