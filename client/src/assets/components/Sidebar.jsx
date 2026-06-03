@@ -12,6 +12,7 @@ import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
   import { faArrowRightFromBracket, } from "@fortawesome/free-solid-svg-icons";
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useChat } from "../context/ChatContext";
 import {
   connectSocket,
   disconnectSocket,
@@ -23,6 +24,8 @@ import gossiperlogo from "../img/gossiperlogo.png";
 const { Text } = Typography;
 
 const Sidebar = ({ activeChat, setActiveChat }) => {
+  const { setTotalUnreadCount } = useChat();
+
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useAuth();
 
@@ -44,9 +47,9 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
 
         const socket = connectSocket({
           token,
-          userId: user.id,
-          username: user.username,
-          avatar_url: user.avatar_url
+          userId: user?.id,
+          username: user?.username,
+          avatar_url: user?.avatar_url
         });
     
         socket.on("online-users", (users) => {
@@ -128,7 +131,8 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   useEffect(() => {
     if (!socket) return;
     const handleNewMessage = () => {
-      fetchChatUsers(); // refresh sidebar data
+      fetchChatUsers();
+      fetchChatUserSpam();
     };
     socket.on('new_message', handleNewMessage);
     return () => socket.off('new_message', handleNewMessage);
@@ -182,6 +186,22 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
     };
 
     
+    const friendUnreadCount = users.reduce(
+      (sum, user) => sum + Number(user.unread_count || 0),
+      0
+    );
+
+    const spamUnreadCount = userSpam.reduce(
+      (sum, user) => sum + Number(user.unread_count || 0),
+      0
+    );
+
+    const totalUnreadCount =
+      friendUnreadCount + spamUnreadCount;
+
+    useEffect(() => {
+      setTotalUnreadCount(totalUnreadCount);
+    }, [totalUnreadCount, setTotalUnreadCount]);
 
   return (
     <div id='side-bar-gossip'>
@@ -201,7 +221,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
         </div>
       </div>
 
-       <div  className='radio-button-div'>
+       <div  className='radio-button-div-chat'>
           {[{id: 1, label: "Friends"}, {id: 2, label: "Spam"}, {id: 3, label: `Archived`}].map((opt) => (
           <button
             key={opt.id}
@@ -210,16 +230,28 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
               borderBottom: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
               color: selected === opt.id ? "#fd7648" : "grey",
             }}
-            className='radio-button'
+            className='radio-button-chat'
           >
             {opt.label}
+
+            {opt.id === 1 && friendUnreadCount > 0 && (
+              <span className="chat-tab-badge">
+                {friendUnreadCount}
+              </span>
+            )}
+
+            {opt.id === 2 && spamUnreadCount > 0 && (
+              <span className="chat-tab-badge">
+                {spamUnreadCount}
+              </span>
+            )}
           </button>
         ))}
         </div>
 
         {
           selected === 1 && 
-            <div>
+            <div className='div-select-chat'>
           <Input placeholder="Search users..." prefix={<SearchOutlined />} value={search} onChange={(e) => setSearch(e.target.value)} id='search-chat' />
       
           <div className="user-chat-list">
@@ -267,7 +299,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
         }
         {
         selected === 2 && 
-          <div>
+          <div className='div-select-chat'>
         <Input placeholder="Search spam users..." prefix={<SearchOutlined />} value={searchSpam} onChange={(e) => setSearchSpam(e.target.value)} id='search-chat' />
     
         <div className="user-chat-list">
@@ -315,7 +347,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
       }
       {
         selected === 3 && 
-          <div>
+          <div className='div-select-chat'>
         <Input placeholder="Search archive users..." prefix={<SearchOutlined />} value={searchArchive} onChange={(e) => setSearchArchive(e.target.value)} id='search-chat' />
     
         <div className="user-chat-list">
@@ -345,7 +377,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
                     <div className="user-list-item-meta-title">
                       <div className='user-chat-name'>{item.username}</div>
                     </div>
-                    <button onClick={handleRestoreChat(item.id)}>Restore Chat</button>
+                    <button onClick={handleRestoreChat(item.id)} type='button' className='btn-restore-chat'>Restore Chat</button>
                   </div>
                 </div>
               </div>

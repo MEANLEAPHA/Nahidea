@@ -36,9 +36,9 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       if (!token) return;
       const socket = connectSocket({
         token,
-        userId: user.id,
-        username: user.username,
-        avatar_url: user.avatar_url
+        userId: user?.id,
+        username: user?.username,
+        avatar_url: user?.avatar_url
       });
   
       socket.on("online-users", (users) => {
@@ -261,6 +261,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       });
       message.success('Conversation deleted');
       setActiveChat(null);
+      window.location.reload
     } catch (err) {
       message.error('Failed to delete');
     }

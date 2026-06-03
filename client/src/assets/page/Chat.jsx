@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWineGlassEmpty } from '@fortawesome/free-solid-svg-icons';
+import { faComments} from '@fortawesome/free-regular-svg-icons';
 import '../style/page/chat.css';
 
 const useMediaQuery = (query) => {
@@ -36,16 +36,17 @@ export default function Chat() {
 
   return (
     <div className="chat-container">
-   
+      <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} />
       {activeChat ? (
         <ChatWindow activeChat={activeChat} setActiveChat={setActiveChat} />
       ) : (
         <div className="empty-div">
-          <FontAwesomeIcon icon={faWineGlassEmpty} id="empty-glass" />
+        
+          <FontAwesomeIcon icon={faComments}  id="empty-glass"/>
           Select a chat to start gossiping
         </div>
       )}
-         <Sidebar activeChat={activeChat} setActiveChat={setActiveChat} />
+         
     </div>
   );
 }

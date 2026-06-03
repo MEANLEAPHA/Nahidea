@@ -8,13 +8,13 @@ import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/f
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
 import gossiperlogo from "../img/gossiperlogo.png";
-
+import { useChat } from "../context/ChatContext";
 
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
 
 const Aside = (props) => {
-
+    const { totalUnreadCount } = useChat();
     // Mobile responsive on Aside
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -95,7 +95,7 @@ const MinInfo = [
         id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },  
     {
-        id:3, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>
+        id:3, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, 
     },
     {
         id:4, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce  className='sub-icon'/>
@@ -114,11 +114,16 @@ const MinInfo = [
     },
 ]
 
-const MinCard = ({a, icon}) => {
+const MinCard = ({a, icon, unreadCount}) => {
     const navigate = useNavigate();
     return(
         <li className="nav-item">
             <button onClick={() => navigate(a)}>
+                {unreadCount > 0 && (
+                    <span className="chat-aside-badge">
+                        {unreadCount}
+                    </span>
+                )}
                 {icon}
             </button>
         </li>
@@ -134,16 +139,32 @@ const AppendMinAside = () =>{
 };
 
 const MinAside = ({a, icon, classNameIcon})=> {
+    const { totalUnreadCount } = useChat();
     return(
-        <MinCard a={a} icon={icon} classNameIcon={classNameIcon}/>
+        <MinCard a={a} icon={icon} classNameIcon={classNameIcon} unreadCount={a === "/chat" ? totalUnreadCount : 0}/>
     )
 };
 
-const Card = ({a, icon, label, classNameBtn}) =>{
+    const Card = ({
+    a,
+    icon,
+    label,
+    classNameBtn,
+    unreadCount
+    }) => {
     const navigate = useNavigate();
     return(
         <li className="max-li">
-            <button onClick={() => navigate(a)} className={classNameBtn}>
+            <button
+                onClick={() => navigate(a)}
+                className={classNameBtn}
+                style={{ position: "relative" }}
+            >
+                {unreadCount > 0 && (
+                    <span className="chat-aside-badge">
+                    {unreadCount}
+                    </span>
+                )}
                 <div>
                     {icon} 
                 </div>
@@ -168,8 +189,24 @@ const AppendMain = () =>{
     return Mains.map(item => <Main key={item.id} {...item} />)
 };
 
-const Main = ({a, icon, label, classNameBtn})=> {
-    return <Card a={a} icon={icon} label={label} classNameBtn={classNameBtn}/>
+const Main = ({
+  a,
+  icon,
+  label,
+  classNameBtn
+}) => {
+
+  const { totalUnreadCount } = useChat();
+
+  return (
+    <Card
+      a={a}
+      icon={icon}
+      label={label}
+      classNameBtn={classNameBtn}
+      unreadCount={a === "/chat" ? totalUnreadCount : 0}
+    />
+  );
 };
 
 const UserTools= [

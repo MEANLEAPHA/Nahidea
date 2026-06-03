@@ -88,6 +88,50 @@
   font-size: 15px;
 }
 
+.radio-button-div-chat{
+  width: 95%;
+  display: flex;
+  margin: 0 auto;
+}
+
+.radio-button-chat {
+  background-color: none;
+  border: none;
+  background: none;
+  width: calc(100%/3);
+  position: relative;
+  padding: 10px;
+}
+
+.chat-tab-badge {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 5px;
+
+  border-radius: 999px;
+
+  background: #ff4d4f;
+  color: white;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+}
+.div-select-chat{
+  width: 95%;
+  margin: auto;
+  height: 100%;
+}
 /* ===== Search =====  */
 .ant-input-prefix{
   padding-left: 8px !important;
@@ -99,7 +143,7 @@
   outline: none !important;
   box-shadow: none !important;
   box-sizing: none !important;
-  width: 95% !important;
+  width: 100% !important;
   margin: auto !important;
   border: 1px solid var(--secondary-color) !important;
   border-radius: 8px !important;
@@ -128,10 +172,11 @@
 
 /* ===== list ===== */
 .user-chat-list{
-  width: 95% !important;
+  width: 100% !important;
   margin: auto;
   padding: 0 !important;
   overflow-y: auto;
+  
   flex: 1;
   scrollbar-width: thin;
     scrollbar-color: var(--secondary-color) var(--background-color);
@@ -232,7 +277,18 @@ padding: 0 !important;
   color: var(--font-color);
   opacity: 0.8;
 }
-
+.btn-restore-chat{
+  font-size: small;
+  background: grey;
+  width: 15%;
+  border-radius: 15px;
+  color: var(--font-color);
+  cursor: pointer;
+  opacity: 0.9;
+}
+.btn-restore-chat:hover{
+  opacity: 1;
+}
 
 
 /* ChatWindow */
@@ -240,7 +296,7 @@ padding: 0 !important;
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 50px);
+  height: 100vh;
 }
 
 .chat-header {
