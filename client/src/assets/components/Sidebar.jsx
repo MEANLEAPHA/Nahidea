@@ -81,10 +81,10 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   const fetchChatUserSpam = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get('/api/get-chat-user-spam', {
+      const res = await api.get('/api/get-chat-spam-user', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUsers(res.data);
+      setUserSpam(res.data);
     } catch (err) {
       message.error('Failed to load contacts');
     }
@@ -113,7 +113,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
       const res = await api.get('/api/get-chat-archived-user', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUsers(res.data);
+      setUserArchive(res.data);
     } catch (err) {
       message.error('Failed to load contacts');
     }
