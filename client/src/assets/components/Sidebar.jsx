@@ -345,7 +345,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
                     <div className="user-list-item-meta-title">
                       <div className='user-chat-name'>{item.username}</div>
                     </div>
-                    <button onClick={(item) => handleRestoreChat(item.id)}>Restore Chat</button>
+                    <button onClick={handleRestoreChat(item.id)}>Restore Chat</button>
                   </div>
                 </div>
               </div>
