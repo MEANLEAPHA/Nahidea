@@ -75,8 +75,7 @@ const App = () =>{
                     {/* Action Upload page */}
                     <Route index element={<Home/>} />
                     <Route path='/home' element={<Home/>}></Route>
-                    <Route path='/chat' element={<Chat/>}></Route>
-
+                   
                     {/* Report&FeedBack */}
                     <Route path='/report-conversation' element={<ReportConversation/>}></Route>
                     
@@ -125,6 +124,10 @@ const App = () =>{
                     <Route path='/avatarplayground' element={<AvatarPlayground/>}></Route>
 
                 </Route>
+
+                {/* gossiper */}
+                 <Route path='/chat' element={<Chat/>}></Route>
+
 
                 {/* User assistant */}
                 <Route path='/useragreement' element = {<UserAgreement/>} />

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&family=Schoolbell&display=swap');
 :root{
     /* --background-color:white; */
      --background-color: rgb(255, 255, 255);
@@ -189,6 +190,15 @@ aside{
      font-size: 18px;
       opacity: 0.9;
       
+}
+.sub-icon-logo{
+    width: 23px;
+    height: 23px;
+}
+#gossip-label{
+    font-family: "Schoolbell", cursive;
+    font-size: 15px;
+    font-weight: bold;
 }
  .nav-item{
     display:flex;

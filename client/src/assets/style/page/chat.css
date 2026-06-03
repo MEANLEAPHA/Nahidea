@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&family=Schoolbell&display=swap');
 .chat-container{
     width:100%;
     height: auto;
@@ -22,8 +23,8 @@
 
 /* =====side bar===== */
 #side-bar-gossip{
-  width: 30%;
-  height: calc(100vh - 50px);
+  width: 45%;
+  height: 100vh ;
   position: sticky;
   top: 50px;
   display: flex;
@@ -40,8 +41,44 @@
   border-bottom: 1px solid var(--secondary-color);
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: space-between;
   gap: 10px; 
+}
+.side-bar-header-child{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 50%;
+}
+.btn-out-gossiper{
+  cursor: pointer;
+  margin-right: 5px;
+}
+#gossip-label-chat{
+     font-family: "Schoolbell", cursive;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--font-color);
+}
+.side-bar-header-child-right{
+  display: flex;
+  justify-content: end;
+}
+#gossiper-logo{
+  width: 40px;
+  height: 40px;
+}
+
+.btn-theme{
+  border: none;
+  background: none;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+}
+.btn-theme:hover{
+   border: none;
+  background: none;
 }
 #gossip-icon{
   font-size: large;

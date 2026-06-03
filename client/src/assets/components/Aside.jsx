@@ -7,6 +7,7 @@ import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChi
 import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/free-regular-svg-icons";
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
+import gossiperlogo from "../img/gossiperlogo.png";
 
 
 import "../style/Aside.css";
@@ -94,10 +95,10 @@ const MinInfo = [
         id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },  
     {
-        id:3, a: '/chat', icon: <FontAwesomeIcon icon={faComments} />
+        id:3, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>
     },
     {
-        id:4, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(255, 32, 203)"}} className='sub-icon'/>
+        id:4, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce  className='sub-icon'/>
     },
     {
         id:5, a: '/following', icon: <UserAddOutlined className='sub-icon'/>
@@ -159,7 +160,7 @@ const Card = ({a, icon, label, classNameBtn}) =>{
 const Mains= [
     { id:0, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
     { id:1, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
-    { id:2, a: '/chat', icon: <FontAwesomeIcon icon={faComments} />, label: <label>Gossip</label> }
+    { id:2, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, label: <label id='gossip-label'>Gossiper</label> }
 ];
 
 
@@ -195,7 +196,7 @@ const UserTool = ({a, icon, label, classNameIcon})=> {
 };
 
 const Explores= [
-    { id:9, a:'/gif',  icon:<FontAwesomeIcon icon={faFaceGrinWink} bounce style={{color: "rgb(255, 32, 203)"}} className='icon-aside'/>, label: <label>Gif Reaction</label> },
+    { id:9, a:'/gif',  icon:<FontAwesomeIcon icon={faFaceGrinWink} bounce  className='icon-aside'/>, label: <label>Gif Reaction</label> },
     { id:10, a: '/trending',  icon: <RiseOutlined  className='icon-aside'/>, label: <label>Trending <span style={{color:"yellowgreen", }}>NOW</span></label> },
     { id:11, a: '/halloffame',  icon: <FireOutlined className='icon-aside'/>, label: <label>Hall of Fame</label>, classNameBtn: "btn-hall-of-fame" },
 ];

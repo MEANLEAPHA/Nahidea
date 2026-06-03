@@ -7,10 +7,15 @@ import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-desig
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import api from '../services/api';
-import { getSocket } from '../../socket';
+import {
+  connectSocket,
+  disconnectSocket,
+  getSocket
+} from "../../socket";
 import { useAuth } from '../context/AuthContext';
 
 const ChatWindow = ({ activeChat, setActiveChat }) => {
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const navigate = useNavigate();
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
@@ -25,7 +30,29 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const [replyTo, setReplyTo] = useState(null);
   const [editMessage, setEditMessage] = useState(null);
 
-    const { onlineUsers } = useOutletContext();
+  const token = localStorage.getItem('token');
+
+    useEffect(() => {
+      if (!token) return;
+      const socket = connectSocket({
+        token,
+        userId: user.id,
+        username: user.username,
+        avatar_url: user.avatar_url
+      });
+  
+      socket.on("online-users", (users) => {
+        setOnlineUsers(users);
+      });
+  
+      return () => {
+  
+        socket.off("online-users");
+  
+        disconnectSocket();
+      };
+  
+    }, []);
 
   const handleReply = (msg) => {
     setEditMessage(null);
