@@ -381,10 +381,19 @@ const Layout = () => {
     return <div>Loading...</div>;
   }
 
-  if (!token || !user) {
-    // return <Navigate to="/login" replace />;
-    alert("You are not logged in");
-  }
+  // if (!token || !user) {
+  //   // return <Navigate to="/login" replace />;
+  //   alert("You are not logged in");
+  // }
+if (!token || !user) {
+  alert(
+    `loading=${loading}
+token=${!!token}
+user=${!!user}
+localToken=${!!localStorage.getItem("token")}
+expiry=${localStorage.getItem("tokenExpiry")}`
+  );
+}
 
   // =========================================
   // ONLINE
