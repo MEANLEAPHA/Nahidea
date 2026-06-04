@@ -8,13 +8,45 @@ import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/f
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
 import gossiperlogo from "../img/gossiperlogo.png";
-import { useChat } from "../context/ChatContext";
+
 
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
 
 const Aside = (props) => {
-    const { totalUnreadCount } = useChat();
+   
+   
+    const [chatUnreadCount, setChatUnreadCount] = useState(0);
+     const fetchUnreadCount = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await api.get(
+            `${process.env.VITE_SERVER_URL}/api/chat/unread-count`,
+            {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                },
+            }
+            );
+
+            setChatUnreadCount(
+            res.data.unreadCount || 0
+            );
+        } catch (err) {
+            console.log(err);
+        }
+        };
+        useEffect(() => {
+        fetchUnreadCount();
+
+        const interval = setInterval(
+            fetchUnreadCount,
+            100000
+        );
+
+        return () => clearInterval(interval);
+        }, []);
     // Mobile responsive on Aside
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -46,7 +78,9 @@ const Aside = (props) => {
     const MaxAsideUl = () => {
         return(
             <ul className="max-ul">
-                <AppendMain />
+                <AppendMain
+                    chatUnreadCount={chatUnreadCount}
+                />
                 <AppendUserTool />
                 <AppendExplore />
                 <AppendMore />
@@ -56,14 +90,14 @@ const Aside = (props) => {
     }
 
     const SmallAsideUl = () => {
-        return(
-            <ul className='min-ul'>
-                    <AppendMinAside />
-            </ul>     
-                
-            
-        )
-    }
+    return (
+        <ul className="min-ul">
+        <AppendMinAside
+            chatUnreadCount={chatUnreadCount}
+        />
+        </ul>
+    );
+    };
     // ✅ MOBILE: only MaxAside (display block/none)
     if (isMobile) {
         return (
@@ -130,21 +164,35 @@ const MinCard = ({a, icon, unreadCount}) => {
     )
 }
 
-const AppendMinAside = () =>{
-    return(
-        MinInfo.map(item => (
-            <MinAside key={item.id} {...item} />
-        ))
-    )
-};
+    const AppendMinAside = ({
+    chatUnreadCount
+    }) => {
+    return MinInfo.map(item => (
+        <MinAside
+        key={item.id}
+        {...item}
+        unreadCount={
+            item.a === "/chat"
+            ? chatUnreadCount
+            : 0
+        }
+        />
+    ));
+    };
 
-const MinAside = ({a, icon, classNameIcon})=> {
-    const { totalUnreadCount } = useChat();
-    return(
-        <MinCard a={a} icon={icon} classNameIcon={classNameIcon} unreadCount={a === "/chat" ? totalUnreadCount : 0}/>
-    )
-};
-
+    const MinAside = ({
+    a,
+    icon,
+    unreadCount
+    }) => {
+    return (
+        <MinCard
+        a={a}
+        icon={icon}
+        unreadCount={unreadCount}
+        />
+    );
+    };
     const Card = ({
     a,
     icon,
@@ -185,26 +233,34 @@ const Mains= [
 ];
 
 
-const AppendMain = () =>{
-    return Mains.map(item => <Main key={item.id} {...item} />)
+const AppendMain = ({ chatUnreadCount }) => {
+  return Mains.map(item => (
+    <Main
+      key={item.id}
+      {...item}
+      unreadCount={
+        item.a === "/chat"
+          ? chatUnreadCount
+          : 0
+      }
+    />
+  ));
 };
 
 const Main = ({
   a,
   icon,
   label,
-  classNameBtn
+  classNameBtn,
+  unreadCount
 }) => {
-
-  const { totalUnreadCount } = useChat();
-
   return (
     <Card
       a={a}
       icon={icon}
       label={label}
       classNameBtn={classNameBtn}
-      unreadCount={a === "/chat" ? totalUnreadCount : 0}
+      unreadCount={unreadCount}
     />
   );
 };

@@ -12,7 +12,7 @@ import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
   import { faArrowRightFromBracket, } from "@fortawesome/free-solid-svg-icons";
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { useChat } from "../context/ChatContext";
+
 import {
   connectSocket,
   disconnectSocket,
@@ -24,7 +24,7 @@ import gossiperlogo from "../img/gossiperlogo.png";
 const { Text } = Typography;
 
 const Sidebar = ({ activeChat, setActiveChat }) => {
-  const { setTotalUnreadCount } = useChat();
+  
 
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useAuth();
@@ -196,12 +196,9 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
       0
     );
 
-    const totalUnreadCount =
-      friendUnreadCount + spamUnreadCount;
+   
 
-    useEffect(() => {
-      setTotalUnreadCount(totalUnreadCount);
-    }, [totalUnreadCount, setTotalUnreadCount]);
+   
 
   return (
     <div id='side-bar-gossip'>

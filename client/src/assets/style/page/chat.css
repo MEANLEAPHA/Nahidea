@@ -280,7 +280,7 @@ padding: 0 !important;
 .btn-restore-chat{
   font-size: small;
   background: grey;
-  width: 15%;
+  width: 35%;
   border-radius: 15px;
   color: var(--font-color);
   cursor: pointer;
