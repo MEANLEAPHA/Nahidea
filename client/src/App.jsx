@@ -64,6 +64,10 @@ import HallOfFame from './assets/page/HallOfFame';
 import ReportHistory from './assets/page/ReportHistory';
 import Chat from './assets/page/Chat';
 import ReportConversation from './assets/page/ReportConversation';
+import Accounts from './assets/page/Accounts';
+import All from './assets/page/accounts/All';
+import Posts from './assets/page/accounts/Posts';
+import SocialActivity from './assets/page/accounts/SocialActivity';
 
 const App = () =>{
     return(
@@ -82,12 +86,19 @@ const App = () =>{
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}>
+                    
                       {/* <Route path='/all'></Route>
                       <Route path='/post'></Route>
                       <Route path='/favorite'></Route>
                       <Route path='/likepost'></Route>
                       <Route path='/history'></Route>
                       <Route path='/setup'></Route> */}
+                    </Route>
+                    
+                    <Route path='/accounts' element={<Accounts/>}>
+                         <Route path="all" element={<All />} />
+                          <Route path="posts" element={<Posts />} />
+                          <Route path="socialactivity" element={<SocialActivity />} />
                     </Route>
                     
                     {/* Upload posts */}
@@ -370,9 +381,10 @@ const Layout = () => {
     return <div>Loading...</div>;
   }
 
-  // if (!token || !user) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!token || !user) {
+    // return <Navigate to="/login" replace />;
+    alert("You are not logged in");
+  }
 
   // =========================================
   // ONLINE

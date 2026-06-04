@@ -43,7 +43,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   const [selected, setSelected] = useState(1);
 
       useEffect(() => {
-        if (!token) return;
+        if (!token|| !user) return;
 
         const socket = connectSocket({
           token,

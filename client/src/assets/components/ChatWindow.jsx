@@ -33,7 +33,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const token = localStorage.getItem('token');
 
     useEffect(() => {
-      if (!token) return;
+      if (!token || !user) return;
       const socket = connectSocket({
         token,
         userId: user?.id,

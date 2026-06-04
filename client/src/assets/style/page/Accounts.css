@@ -1,0 +1,255 @@
+:root{
+    --background-color: rgb(255, 255, 255);
+    --primary-color:#fd7648;
+    --secondary-color: rgba(107, 107, 107, 0.318);
+    --font-color:rgb(0, 0, 0);
+    --back-con:rgb(245, 245, 245);
+    --primary-font:monospace;
+}
+.dark-theme{
+    --background-color:rgb(32, 32, 32);
+    --primary-color:#fd7648;
+    --secondary-color: rgba(220, 220, 220, 0.318);
+    --font-color:rgb(255, 255, 255);
+     --back-con:rgb(40, 40, 40);
+}
+
+.accounts-page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: auto;
+}
+.accounts-header{
+    width: 100%;
+    height: 300px;
+    position: relative;
+}
+#acc-banner{
+    width: 100%;
+    height: 75%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+#acc-banner::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--preview-url-banner) center/cover no-repeat;
+    object-fit: contain;
+    filter: blur(8px);
+    transform: scale(1.1);
+    opacity: 0.6;
+  
+    padding: 0;
+}
+#img-banner{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 2;
+}
+#btn-edit-pf{
+    border: none;
+    width: 90px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.8;
+    padding: 10px;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+}
+#btn-edit-pf-span{
+    font-size: x-small;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#acc-pf-info{
+    width: 100%;
+    height:auto;
+    position: absolute;
+    bottom: 0;
+    z-index: 5;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* background-color: antiquewhite; */
+}
+#acc-pf-div{
+    height: 115px;
+    width: 115px;
+    border-radius: 50%;
+    position: relative;
+}
+#acc-pf{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative;
+      
+}
+.status-pf-online{
+    width: 15%;
+    height: 15%;
+    border-radius: 50%;
+    border:3px var(--background-color) solid;
+    background-color: greenyellow;
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+    z-index: 1;
+}
+.acc-pf-info-child {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+#user-pf-iden{
+    padding: 0;
+    margin-top: 35px;
+  
+}
+#username-pf{
+    margin: 5px;
+    color: var(--font-color);
+    font-weight: bold;
+}
+#user-profession-pf{
+      margin: 5px;
+      color: var(--font-color);
+      opacity: 0.8;
+}
+
+.acc-pf-info-child-right{
+     gap: 8px;
+}
+.pf-act-btn{
+    cursor: pointer;
+    margin-top: 35px;
+    padding: 8px 15px;
+    border: none;
+    background: var(--back-con);
+    color: var(--font-color);
+    border-radius: 8px; 
+}
+.accounts-body{
+    width: 95%;
+    height: auto;
+    margin: auto;
+    display: flex;
+}
+
+#data-outlet{
+    width: 65%;
+    order: 1;
+    height: auto;
+}
+#outlet-link-dev{
+    width: 95%;
+    display: flex;
+    
+    margin: auto;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+.btn-outlet-link{
+    border: none;
+    background: none;
+    color: var(--font-color);
+    font-weight: 400;
+    cursor: pointer;
+}
+#data-full-info{
+    background: var(--back-con);
+    border-radius: 10px;
+    width: 35%;
+    max-height: calc(100vh - 80px);
+    position: sticky;
+    top: 65px;
+    order: 2;
+    height: auto;
+    padding: 10px;
+    color:var(--font-color);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-color) var(--background-color);
+}
+#data-full-info p {
+    color: var(--font-color);
+    margin: 0;
+}
+@media screen and (max-width: 900px){
+    .accounts-header{
+    height: 280px;
+}
+    #acc-banner{
+        height: 65%;  
+    }
+    #acc-pf-info{
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        gap:0px;
+    }
+    #acc-pf-div{
+    height: 75px;
+    width: 75px;
+    }
+    .status-pf-online{
+        right: 15px;
+    }
+    #user-pf-iden{
+  
+    margin-top: 25px;
+    }   
+    .acc-pf-info-child-right{
+        width: 100%;
+        justify-content: space-between;
+    }
+    .pf-act-btn{
+        margin-top: 15px; 
+    }#username-pf{
+    font-size: 14px;
+    }
+    #user-profession-pf{
+           font-size: 12px;
+    }
+
+    .accounts-body{
+    width: 98%;
+    height: auto;
+    margin: auto;
+    flex-direction: column;
+}
+
+    #data-outlet{
+        width: 100%;
+        height: auto;
+
+        order: 2;
+    }
+
+    #data-full-info{
+    background: none;
+    border-radius: 0px;
+    width: 100%;
+    max-height: auto;
+    position: relative;
+    top:0px;
+    order: 1;
+    margin-top: 5px;
+    height: auto;
+}
+}
