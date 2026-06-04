@@ -492,8 +492,8 @@ const CreateDropDownMin = () =>{
 const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
    
   const navigate = useNavigate();
-  
- const {user} = useAuth();
+
+ const {user, logout} = useAuth();
 
   const userId = user?.id;
   const username = user?.username;
@@ -583,11 +583,12 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
       key: "5" },
     {
       label: (
-        <li onClick={() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("tokenExpiry");
-          navigate("/login");
-        }}>
+       <li
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+          >
           <FontAwesomeIcon icon={faArrowRightFromBracket} /> <span>Logout</span>
         </li>
       ),
