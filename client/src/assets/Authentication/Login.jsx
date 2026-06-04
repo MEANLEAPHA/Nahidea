@@ -19,7 +19,7 @@ const API_URL = import.meta.env.VITE_SERVER_URL;
 const Login = () => {
   const navigate = useNavigate();
 
-  const { setToken } = useAuth();
+const { setToken, setUser } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [viewPassword, setViewPassword] = useState("password");
@@ -61,19 +61,34 @@ const Login = () => {
 
       if (res.ok) {
 
-        res.status === 200 && toast.success(data.message);
         localStorage.setItem("token", data.token);
-        
-        
 
         const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
         localStorage.setItem("tokenExpiry", expiry);
 
-        setToken(data.token);
-          navigate("/home");
-      
+        // fetch current user
+        const meRes = await fetch(`${API_URL}/api/me`, {
+          headers: {
+            Authorization: `Bearer ${data.token}`
+          }
+        });
 
-      } else {
+        const meData = await meRes.json();
+
+        setUser({
+          id: meData.userData.id,
+          username: meData.userData.username,
+          avatar_url: meData.userData.avatar_url,
+          profession: meData.userData.profession,
+          work_location: meData.userData.work_place,
+          bio: meData.userData.bio,
+          nickname: meData.userData.nickname,
+        });
+
+        setToken(data.token);
+
+        navigate("/home");
+      }else {
         switch (res.status) {
                   case 400:
                     toast.warning(data.message);
