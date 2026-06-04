@@ -75,15 +75,25 @@ export const AuthProvider = ({ children }) => {
 
     } catch (err) {
 
-      console.error(err);
+  alert(
+    `ME FAILED
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
+status: ${err?.response?.status}
+message: ${err?.message}
+url: ${import.meta.env.VITE_SERVER_URL}/api/me
+token: ${!!token}
+`
+  );
 
-      setToken(null);
-      setUser(null);
+  console.error(err);
 
-    } finally {
+  localStorage.removeItem("token");
+  localStorage.removeItem("tokenExpiry");
+
+  setToken(null);
+  setUser(null);
+
+}finally {
 
       setLoading(false);
 
