@@ -180,37 +180,37 @@ const Layout = () => {
   // =========================================
   // AXIOS INTERCEPTOR
   // =========================================
-  useEffect(() => {
+  // useEffect(() => {
 
-    const interceptor = axios.interceptors.response.use(
+  //   const interceptor = axios.interceptors.response.use(
 
-      (response) => response,
+  //     (response) => response,
 
-      (error) => {
+  //     (error) => {
 
-        if (error.response?.status === 401) {
+  //       if (error.response?.status === 401) {
 
-          localStorage.removeItem("token");
-          localStorage.removeItem("tokenExpiry");
+  //         localStorage.removeItem("token");
+  //         localStorage.removeItem("tokenExpiry");
 
-          disconnectSocket();
+  //         disconnectSocket();
 
-          logout?.();
+  //         logout?.();
 
-          navigate("/login", {
-            replace: true
-          });
-        }
+  //         navigate("/login", {
+  //           replace: true
+  //         });
+  //       }
 
-        return Promise.reject(error);
-      }
-    );
+  //       return Promise.reject(error);
+  //     }
+  //   );
 
-    return () => {
-      axios.interceptors.response.eject(interceptor);
-    };
+  //   return () => {
+  //     axios.interceptors.response.eject(interceptor);
+  //   };
 
-  }, [navigate, logout]);
+  // }, [navigate, logout]);
 
   // =========================================
   // SOCKET
