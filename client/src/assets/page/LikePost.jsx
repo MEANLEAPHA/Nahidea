@@ -1,57 +1,50 @@
 import React, { useState, useEffect } from "react";
 import "../style/page/History.css";
 import { Input } from 'antd';
-import { SearchOutlined, ClearOutlined, DeleteOutlined, ClockCircleOutlined, HeartOutlined  } from '@ant-design/icons';
+import { SearchOutlined, HeartOutlined } from '@ant-design/icons';
+
+const token = localStorage.getItem('token');
 
 const LikePost = () => {
-  const [searchHisory, setSearchHistory] = useState('');
+  const [searchHistory, setSearchHistory] = useState('');
   const [recentDataHis, setRecentDataHis] = useState([]);
 
   // Filter by search
   const filteredHistory = recentDataHis.filter(u =>
-    u.title.toLowerCase().includes(searchHisory.toLowerCase())
+    u.title?.toLowerCase().includes(searchHistory.toLowerCase())
   );
 
-  // Load from localStorage on mount
+  // Fetch liked posts from backend
   useEffect(() => {
-    const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-    setRecentDataHis(postData);
+    const fetchLikedPosts = async () => {
+      try {
+        const res = await fetch("/api/posts/likes", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const json = await res.json();
+        if (json.data) {
+          setRecentDataHis(json.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch liked posts", err);
+      }
+    };
+    fetchLikedPosts();
   }, []);
-
-  // Delete single post
-  const deletePostHistory = (postId) => {
-    const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-    const update = postData.filter((item) => item.id !== postId);
-    localStorage.setItem("recentPostHis", JSON.stringify(update));
-    setRecentDataHis(update);
-  };
-
-  // Clear all posts
-  const clearAllHistory = () => {
-    localStorage.setItem("recentPostHis", JSON.stringify([]));
-    setRecentDataHis([]);
-  };
 
   return (
     <div className="history-page">
       <div className='history-header'>
         <h3 className='history-title'><HeartOutlined /> Like Post</h3>
         <div className='history-sub-div'>
-          <p className='history-subtitle'>Recent History based on your browser data</p>
-          <button
-            type='button'
-            className='clear-all-history-btn'
-            onClick={clearAllHistory}
-          >
-            <ClearOutlined /> Clear All
-          </button>
+          <p className='history-subtitle'>You have {recentDataHis.length} liked posts</p>
         </div>
       </div>
 
       <Input
         placeholder="Search History......"
         prefix={<SearchOutlined />}
-        value={searchHisory}
+        value={searchHistory}
         onChange={(e) => setSearchHistory(e.target.value)}
         id='search-chat'
       />
@@ -61,7 +54,6 @@ const LikePost = () => {
           <PostHistoryCard
             key={item.id}
             item={item}
-            deletePostHistory={deletePostHistory}
           />
         ))}
       </div>
@@ -69,7 +61,7 @@ const LikePost = () => {
   );
 };
 
-const PostHistoryCard = ({ item, deletePostHistory }) => {
+const PostHistoryCard = ({ item }) => {
   let safeImg = null;
   try {
     if (typeof item.mediaSrc === "string") {
@@ -119,12 +111,6 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
         <div id="title-divs">
           <p id="titles">{item.title}</p>
         </div>
-        <button
-          id="history-card-deletes"
-          onClick={() => deletePostHistory(item.id)}
-        >
-          <DeleteOutlined />
-        </button>
       </div>
     </div>
   );

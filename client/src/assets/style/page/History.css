@@ -148,7 +148,7 @@
     height: auto;
     margin: auto;
     max-height: 100%;
-
+    z-index: 1;
 }
 #history-card-deletes{
     background: none;
