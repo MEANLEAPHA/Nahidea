@@ -68,6 +68,9 @@ import Accounts from './assets/page/Accounts';
 import All from './assets/page/accounts/All';
 import Posts from './assets/page/accounts/Posts';
 import SocialActivity from './assets/page/accounts/SocialActivity';
+import History from './assets/page/History';
+import Favorite from './assets/page/Favorite';
+import LikePost from './assets/page/LikePost';
 
 const App = () =>{
     return(
@@ -82,7 +85,12 @@ const App = () =>{
                    
                     {/* Report&FeedBack */}
                     <Route path='/report-conversation' element={<ReportConversation/>}></Route>
-                    
+
+
+                    {/*Storage data*/}
+                    <Route path='/history' element={<History/>}></Route>
+                    <Route path='/favorite' element={<Favorite/>}></Route>
+                    <Route path='/likepost' element={<LikePost/>}></Route>
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}>
@@ -96,9 +104,9 @@ const App = () =>{
                     </Route>
                     
                     <Route path='/accounts' element={<Accounts/>}>
-                         <Route path="all" element={<All />} />
-                          <Route path="posts" element={<Posts />} />
-                          <Route path="socialactivity" element={<SocialActivity />} />
+                        <Route path="all" element={<All />} />
+                        <Route path="posts" element={<Posts />} />
+                        <Route path="socialactivity" element={<SocialActivity />} />
                     </Route>
                     
                     {/* Upload posts */}
@@ -177,40 +185,37 @@ const Layout = () => {
 
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  // =========================================
-  // AXIOS INTERCEPTOR
-  // =========================================
-  // useEffect(() => {
+// =========================================
+// AXIOS INTERCEPTOR (final update)
+// =========================================
+useEffect(() => {
+  const interceptor = axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        const token = localStorage.getItem("token");
+        const expiry = localStorage.getItem("tokenExpiry");
 
-  //   const interceptor = axios.interceptors.response.use(
+        // Only force logout if token is gone or expired
+        if (!token || (expiry && Date.now() > Number(expiry))) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenExpiry");
 
-  //     (response) => response,
+          disconnectSocket();
+          logout?.();
 
-  //     (error) => {
+          navigate("/login", { replace: true });
+        }
+      }
 
-  //       if (error.response?.status === 401) {
+      return Promise.reject(error);
+    }
+  );
 
-  //         localStorage.removeItem("token");
-  //         localStorage.removeItem("tokenExpiry");
-
-  //         disconnectSocket();
-
-  //         logout?.();
-
-  //         navigate("/login", {
-  //           replace: true
-  //         });
-  //       }
-
-  //       return Promise.reject(error);
-  //     }
-  //   );
-
-  //   return () => {
-  //     axios.interceptors.response.eject(interceptor);
-  //   };
-
-  // }, [navigate, logout]);
+  return () => {
+    axios.interceptors.response.eject(interceptor);
+  };
+}, [navigate, logout]);
 
   // =========================================
   // SOCKET
@@ -382,18 +387,8 @@ const Layout = () => {
   }
 
   // if (!token || !user) {
-  //   // return <Navigate to="/login" replace />;
-  //   alert("You are not logged in");
+  //   return <Navigate to="/login" replace />;
   // }
-if (!token || !user) {
-  alert(
-    `loading=${loading}
-token=${!!token}
-user=${!!user}
-localToken=${!!localStorage.getItem("token")}
-expiry=${localStorage.getItem("tokenExpiry")}`
-  );
-}
 
   // =========================================
   // ONLINE

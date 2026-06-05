@@ -7,10 +7,18 @@ import {MenuOutlined} from '@ant-design/icons';
 export default function Accounts() {
     const location = useLocation();   
     const navigate = useNavigate();
- 
+    const [showButterfly, setShowButterfly] = useState(false);
+    const triggerButterflies = () => {
+      setShowButterfly(true);
+      setTimeout(() => setShowButterfly(false), 10000); // remove after 4s
+    };
   
   return (
     <div className="accounts-page">
+        {showButterfly && (
+                      <div className="butterfly-overlay">
+                      </div>
+                    )}
       <div className="accounts-header">  
         <div id='acc-banner' style={{ "--preview-url-banner": `url(https://media.newyorker.com/photos/665f65409ad64d9e7a494208/16:9/w_1280,c_limit/Chayka-screenshot-06-05-24.jpg)` }}>
             <img src='https://media.newyorker.com/photos/665f65409ad64d9e7a494208/16:9/w_1280,c_limit/Chayka-screenshot-06-05-24.jpg' id="img-banner"/>
@@ -33,8 +41,8 @@ export default function Accounts() {
             <div className='acc-pf-info-child acc-pf-info-child-right'>
                 <div style={{display:'flex', gap:'8px'}}>
                      <button className='pf-act-btn' type="button" >Follow</button>
-                    <button className='pf-act-btn' type="button">Message</button>
-                    <button className='pf-act-btn' type="button">Poked</button>
+                    <button className='pf-act-btn' type="button" style={{backgroundColor:'#38b6ff', color: 'white'}}>Message</button>
+                    <button className='pf-act-btn' type="button" onClick={triggerButterflies}>🦋 Send Butterfly</button>
                 </div>
                 <button className='pf-act-btn' type="button"><MenuOutlined /></button>
             </div>

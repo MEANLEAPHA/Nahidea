@@ -190,6 +190,46 @@
     color: var(--font-color);
     margin: 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* animation */
+.butterfly-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url("https://media.tenor.com/f0wBEby1q3gAAAAi/borboletas-butterflies.gif") center/cover;
+  width: 100%;
+  height: 100vh;
+  z-index: 1000;
+  pointer-events: none; /* don’t block clicks */
+  overflow: hidden;
+}
+
+
+
 @media screen and (max-width: 900px){
     .accounts-header{
     height: 280px;
