@@ -18,7 +18,7 @@ const LikePost = () => {
   useEffect(() => {
     const fetchLikedPosts = async () => {
       try {
-        const res = await fetch("/api/posts/likes", {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/likes`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const json = await res.json();
