@@ -71,6 +71,7 @@ import SocialActivity from './assets/page/accounts/SocialActivity';
 import History from './assets/page/History';
 import Favorite from './assets/page/Favorite';
 import LikePost from './assets/page/LikePost';
+import YourPosts from './assets/page/YourPosts';
 
 const App = () =>{
     return(
@@ -91,6 +92,7 @@ const App = () =>{
                     <Route path='/history' element={<History/>}></Route>
                     <Route path='/favorite' element={<Favorite/>}></Route>
                     <Route path='/likepost' element={<LikePost/>}></Route>
+                    <Route path='/yourpost' element={<YourPosts/>}></Route>
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}>

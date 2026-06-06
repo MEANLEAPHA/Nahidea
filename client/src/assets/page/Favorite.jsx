@@ -148,6 +148,7 @@ const Favorite = () => {
             onChange={(e) => setSearchHistory(e.target.value)}
             id='search-chat'
           />
+          <br/>
           <div className='masonry'>
             {filteredGifs.map((gif) => (
               <GifHistoryCard key={gif.gif_id} gif={gif} />
