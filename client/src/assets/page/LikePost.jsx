@@ -62,7 +62,7 @@ const LikePost = () => {
       <div className='history-header'>
         <h3 className='history-title'><HeartOutlined /> Like Post</h3>
         <div className='history-sub-div'>
-          <p className='history-subtitle'>You have {recentDataHis.length} liked posts</p>
+          <p className='history-subtitle'>Your liked posts</p>
         </div>
       </div>
 
