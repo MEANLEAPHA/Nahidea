@@ -32,7 +32,7 @@ const Favorite = () => {
     if (loading || !hasMorePosts) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/likes?page=${nextPage}`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/favorites?page=${nextPage}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -53,7 +53,7 @@ const Favorite = () => {
     if (loading || !hasMoreGifs) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/favorites/feed?page=${nextPage}`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/gifs/posts/favorites/feed?page=${nextPage}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -160,23 +160,67 @@ const Favorite = () => {
   );
 };
 
-const PostHistoryCard = ({ item }) => (
-  <div className="post-history-cards">
-    <div className="post-history-card-infos">
-      <p id="titles">{item.title}</p>
-      <p id="author-names">{item.author}</p>
+const PostHistoryCard = ({ item }) => {
+  let safeImg = null;
+  try {
+    if (typeof item.mediaSrc === "string") {
+      if (item.mediaSrc.trim().startsWith("[")) {
+        const arr = JSON.parse(item.mediaSrc);
+        if (Array.isArray(arr) && arr.length > 0) {
+          safeImg = arr[0];
+        }
+      } else {
+        safeImg = item.mediaSrc;
+      }
+    }
+  } catch (err) {
+    console.warn("Invalid mediaSrc format", err);
+  }
+
+  return (
+    <div className="post-history-cards">
+      {safeImg && (
+        <div
+          className="media-holders"
+          style={{ "--preview-url-history-post": `url(${safeImg})` }}
+        >
+          <img src={safeImg} alt="post-media" />
+        </div>
+      )}
+      <div className="post-history-card-infos">
+        <div id="author-infos">
+          <div
+            id="author-pf-divs"
+            style={{
+              backgroundColor: item.isAnonymous === 1 ? item.anonymousBg : "",
+            }}
+          >
+            <img
+              src={
+                item.isAnonymous === 1
+                  ? "https://api.dicebear.com/9.x/adventurer/svg?seed=Anon"
+                  : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
+              }
+              alt="user-profile"
+              id="author-pfs"
+            />
+          </div>
+          <p id="author-names">{item.author}</p>
+        </div>
+        <div id="title-divs">
+          <p id="titles">{item.title}</p>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const GifHistoryCard = ({ gif }) => (
-  <div className="post-history-cards">
-    <div className="media-holders" style={{ "--preview-url-history-post": `url(${gif.gif_url})` }}>
+  <div className="gif-card">
       <img src={gif.gif_url} alt={gif.gif_name} />
-    </div>
-    <div className="post-history-card-infos">
-      <p id="titles">{gif.gif_name}</p>
-    </div>
+     <div className="gif-overlay">
+              <span className="gif-name">{gif.gif_name}</span>
+            </div>
   </div>
 );
 
