@@ -8,30 +8,54 @@ const token = localStorage.getItem('token');
 const LikePost = () => {
   const [searchHistory, setSearchHistory] = useState('');
   const [recentDataHis, setRecentDataHis] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Filter by search
   const filteredHistory = recentDataHis.filter(u =>
     u.title?.toLowerCase().includes(searchHistory.toLowerCase())
   );
 
-  // Fetch liked posts from backend
+  const fetchLikedPosts = async (nextPage = 1) => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/likes?page=${nextPage}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (json.data) {
+        setRecentDataHis(prev => [...prev, ...json.data]);
+        setPage(nextPage);
+        setHasMore(json.data.length === 25); // if less than 25, no more pages
+      }
+    } catch (err) {
+      console.error("Failed to fetch liked posts", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // initial load
   useEffect(() => {
-    const fetchLikedPosts = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/likes`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const json = await res.json();
-        if (json.data) {
-          localStorage.setItem("recentPostHis", JSON.stringify(json.data));
-          setRecentDataHis(json.data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch liked posts", err);
+    fetchLikedPosts(1);
+  }, []);
+
+  // scroll listener
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+        !loading &&
+        hasMore
+      ) {
+        fetchLikedPosts(page + 1);
       }
     };
-    fetchLikedPosts();
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, hasMore, page]);
 
   return (
     <div className="history-page">
@@ -52,11 +76,9 @@ const LikePost = () => {
 
       <div className='history-body'>
         {filteredHistory.map((item) => (
-          <PostHistoryCard
-            key={item.id}
-            item={item}
-          />
+          <PostHistoryCard key={item.id} item={item} />
         ))}
+        {loading && <p>Loading...</p>}
       </div>
     </div>
   );
