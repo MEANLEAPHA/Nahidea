@@ -53,7 +53,7 @@ const Favorite = () => {
     if (loading || !hasMoreGifs) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/gifs/posts/favorites/feed?page=${nextPage}`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/feed?page=${nextPage}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
