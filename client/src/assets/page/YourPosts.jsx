@@ -331,6 +331,9 @@ export default function YourPosts() {
                   >
                     <button
                       className="delete-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
                     >
                       <DeleteOutlined />
                       Delete
