@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../style/page/History.css";
 import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
@@ -149,6 +150,7 @@ const Favorite = () => {
             id='search-chat'
           />
           <br/>
+          <br/>
           <div className='masonry'>
             {filteredGifs.map((gif) => (
               <GifHistoryCard key={gif.gif_id} gif={gif} />
@@ -162,6 +164,7 @@ const Favorite = () => {
 };
 
 const PostHistoryCard = ({ item }) => {
+  const navigate = useNavigate();
   let safeImg = null;
   try {
     if (typeof item.mediaSrc === "string") {
@@ -179,7 +182,7 @@ const PostHistoryCard = ({ item }) => {
   }
 
   return (
-    <div className="post-history-cards">
+    <div className="post-history-cards" onClick={() => navigate(`/aboutpost/${item.id}`)}>
       {safeImg && (
         <div
           className="media-holders"

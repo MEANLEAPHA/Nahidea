@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../style/page/History.css";
 import { Input } from 'antd';
 import { SearchOutlined, ClearOutlined, DeleteOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const History = () => {
+
   const [searchHisory, setSearchHistory] = useState('');
   const [recentDataHis, setRecentDataHis] = useState([]);
 
@@ -70,6 +72,7 @@ const History = () => {
 };
 
 const PostHistoryCard = ({ item, deletePostHistory }) => {
+  const navigate = useNavigate();
   let safeImg = null;
   try {
     if (typeof item.mediaSrc === "string") {
@@ -87,7 +90,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
   }
 
   return (
-    <div className="post-history-cards">
+    <div className="post-history-cards" onClick={() => navigate(`/aboutpost/${item.id}`)}>
       {safeImg && (
         <div
           className="media-holders"
@@ -121,7 +124,10 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
         </div>
         <button
           id="history-card-deletes"
-          onClick={() => deletePostHistory(item.id)}
+          onClick={(e) => {
+            e.stopPropagation(); 
+            deletePostHistory(item.id)
+          }}
         >
           <DeleteOutlined />
         </button>

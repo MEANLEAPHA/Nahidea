@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,GifOutlined,SignatureOutlined, FireOutlined, TeamOutlined,UserAddOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined, UserOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChildReaching} from "@fortawesome/free-solid-svg-icons";
+import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChildReaching, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/free-regular-svg-icons";
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
@@ -123,13 +123,16 @@ const Aside = (props) => {
 
 const MinInfo = [
     {
-        id:1, a: '/', icon: <HomeOutlined className='sub-icon'/>
+        id:0, a: '/', icon: <HomeOutlined className='sub-icon'/>
     },
     {
-        id:2, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
+        id:1, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
     },  
     {
-        id:3, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, 
+        id:2, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, 
+    },
+    {
+        id:3, a: '/spammy', icon: <FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/>, 
     },
     {
         id:4, a: '/gif', icon: <FontAwesomeIcon icon={faFaceGrinWink} bounce  className='sub-icon'/>
@@ -227,9 +230,10 @@ const MinCard = ({a, icon, unreadCount}) => {
 
 
 const Mains= [
-    { id:0, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
-    { id:1, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
-    { id:2, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, label: <label id='gossip-label'>Gossiper</label> }
+    { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
+    { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
+    { id:3, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, label: <label id='gossip-label'>Gossiper</label> },
+    { id:4, a: '/spammy', icon: <FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='icon-aside'/>, label: <label>Spammy</label> },
 ];
 
 
@@ -266,7 +270,6 @@ const Main = ({
 };
 
 const UserTools= [
-    { id:4, a: '/socialactivity',  icon: <BarChartOutlined  />, label: <label>Social Activity</label> },
     { id:5, a: '/history',  icon: <ClockCircleOutlined className='icon-aside'/>, label: <label>History</label> },
     { id:6, a: '/favorite',  icon: <FontAwesomeIcon icon={faBookmark} className='icon-aside icon-awesome'/>, label: <label>Favorite</label> },
     { id:7, a: '/likepost',  icon: <HeartOutlined className='icon-aside'/>, label: <label>Like Post</label> },

@@ -8,7 +8,9 @@
 .history-title{
     font-size: 1.7rem;
     margin: 0;
-    color:grey;
+    
+     color: var(--font-color);
+    opacity: 0.8;
 }
 .history-sub-div{
     display: flex;
@@ -17,8 +19,7 @@
     margin-bottom: 15px;
 }
 .history-subtitle{
-    color: var(--font-color);
-    opacity: 0.8;
+    color:grey;
 }
 .clear-all-history-btn{
     border: none;
@@ -148,6 +149,7 @@
     height: auto;
     margin: auto;
     max-height: 100%;
+     object-fit: contain;
     z-index: 1;
 }
 #history-card-deletes{

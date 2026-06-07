@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Input, Popconfirm, Tag, Empty, Spin } from "antd";
 import {
@@ -8,15 +9,21 @@ import {
   CheckCircleOutlined,
   EyeOutlined,
   HeartOutlined,
-  MessageOutlined
+  MessageOutlined,
+  FormOutlined,
+  QuestionCircleOutlined,
+  SoundOutlined
 } from "@ant-design/icons";
-
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faNewspaper, faMessage} from '@fortawesome/free-regular-svg-icons'
 import "../style/page/YourPosts.css";
 
 const token = localStorage.getItem("token");
 export default function YourPosts() {
 
   const [posts, setPosts] = useState([]);
+
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
 
   const [loading, setLoading] = useState(false);
@@ -86,25 +93,6 @@ export default function YourPosts() {
 
   }, [loading, hasMore]);
 
-  const handleDelete = async (postId) => {
-
-    try {
-
-      await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}`,
-        {
-          withCredentials: true
-        }
-      );
-
-      setPosts(prev =>
-        prev.filter(post => post.id !== postId)
-      );
-
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleSolved = async (postId) => {
 
@@ -114,7 +102,9 @@ export default function YourPosts() {
         `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/solve`,
         {},
         {
-          withCredentials: true
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       );
 
@@ -133,6 +123,16 @@ export default function YourPosts() {
       console.error(err);
     }
   };
+  const handleDeletePost = async (postId) => {
+  try {
+    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`,
+       { headers: { Authorization: `Bearer ${token}` } });
+    message.success("Post deleted successfully");
+  } catch (err) {
+    console.error(err);
+    message.error("Failed to delete post");
+  }
+};
 
   const filteredPosts = posts.filter(post =>
     post.title?.toLowerCase()
@@ -140,17 +140,13 @@ export default function YourPosts() {
   );
 
   return (
-    <div className="your-posts-page">
+    <div className="history-page" onClick={() => navigate(`/aboutpost/${item.id}`)}>
 
-      <div className="posts-header">
-
-        <div>
-          <h1>Your Posts</h1>
-          <p>
-            Manage all published content
-          </p>
-        </div>
-
+      <div className="history-header">
+          <h3 className='history-title'><FontAwesomeIcon icon={faNewspaper} /> Your Posts</h3>
+           <div className='history-sub-div'>
+                <p className='history-subtitle'> Manage all published content</p>
+           </div>
       </div>
 
       <Input
@@ -158,9 +154,10 @@ export default function YourPosts() {
         onChange={(e) => setSearch(e.target.value)}
         prefix={<SearchOutlined />}
         placeholder="Search posts..."
-        className="post-search"
+        id="search-chat"
       />
-
+    <br/>
+    <br/>
       {filteredPosts.length === 0 ? (
         <Empty description="No posts found" />
       ) : (
@@ -169,22 +166,64 @@ export default function YourPosts() {
 
           {filteredPosts.map(post => {
 
-            let preview = null;
 
+            let safeImg = null;
             try {
+                if (typeof post.media_url === "string") {
+                if (post.media_url.trim().startsWith("[")) {
+                    const arr = JSON.parse(post.media_url);
+                    if (Array.isArray(arr) && arr.length > 0) {
+                    safeImg = arr[0];
+                    }
+                } else {
+                    safeImg = post.media_url;
+                }
+                }
+            } catch (err) {
+                console.warn("Invalid mediaSrc format", err);
+            }
 
-              if (post.media_url) {
 
-                const parsed = JSON.parse(
-                  post.media_url
-                );
 
-                preview = parsed?.[0];
+            let created_at = null;
+            try{
+               // get the time now in ms
+              const getTimeNow =  Date.now();
 
+              // find the gap from post created_at in ms
+              const DiffMs = getTimeNow - new Date(post.created_at).getTime();
+
+              const seconds = Math.floor(DiffMs/1000);
+              const minutes = Math.floor(seconds/60);
+              const hours = Math.floor(minutes/60);
+              const days = Math.floor(hours/24);
+              const weeks   = Math.floor(days / 7);
+              const months  = Math.floor(days / 30); 
+              const years   = Math.floor(days / 365);
+
+              if(seconds < 60){
+                created_at = `${seconds} second${seconds > 1 ? "s" : ""} ago`;
               }
-
-            } catch {
-              preview = post.media_url;
+              else if(minutes < 60){
+                created_at = `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+              }
+              else if(hours < 24){
+                created_at = `${hours} hour${hours > 1 ? "s" : ""} ago`;
+              }
+              else if(days < 7){
+                created_at = `${days} day${days > 1 ? "s" : ""} ago`;
+              }
+              else if(weeks < 4){
+                created_at = `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+              }
+              else if(months < 12){
+                created_at = `${months} month${months > 1 ? "s" : ""} ago`;
+              }
+              else{
+                created_at = `${years} year${years > 1 ? "s" : ""} ago`;
+              }
+            }catch(err){
+              console.warn("Invalid Time", err);
             }
 
             return (
@@ -192,22 +231,20 @@ export default function YourPosts() {
               <div
                 className="post-row"
                 key={post.id}
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/aboutpost/${post.id}`)} 
               >
 
-                <div className="post-preview">
+                  {safeImg && (
+                        <div
+                        className="media-holders"
+                        style={{ "--preview-url-history-post": `url(${safeImg})` }}
+                        >
+                        <img src={safeImg} alt="post-media" />
+                        </div>
+                    )}
 
-                  {preview ? (
-                    <img
-                      src={preview}
-                      alt=""
-                    />
-                  ) : (
-                    <div className="no-image">
-                      No Media
-                    </div>
-                  )}
-
-                </div>
+                
 
                 <div className="post-main">
 
@@ -215,34 +252,14 @@ export default function YourPosts() {
 
                     <h3>{post.title}</h3>
 
-                    <div className="post-tags">
-
-                      <Tag>
-                        {post.post_type}
-                      </Tag>
-
-                      {post.post_type ===
-                        "question" && (
-
-                        <Tag
-                          color={
-                            post.question_status ===
-                            "solved"
-                              ? "green"
-                              : "orange"
-                          }
-                        >
-                          {post.question_status}
-                        </Tag>
-
-                      )}
-
-                    </div>
-
                   </div>
+                  <p className="post-date">{created_at}</p>
 
                   <div className="stats-row">
-
+                    <Tag style={{alignItems : "center"}}>
+                      {post.post_type === "content" ? <FormOutlined /> : post.post_type === "question" ? <QuestionCircleOutlined /> : <SoundOutlined />}
+                      {post.post_type}
+                    </Tag>
                     <span>
                       <EyeOutlined />
                       {post.views_count}
@@ -254,7 +271,8 @@ export default function YourPosts() {
                     </span>
 
                     <span>
-                      <MessageOutlined />
+                    
+                      <FontAwesomeIcon icon={faMessage} />
                       {post.comments_count}
                     </span>
 
@@ -268,31 +286,47 @@ export default function YourPosts() {
                     "content" && (
                     <button
                       className="edit-btn"
+                       onClick={(e) => {
+                        e.stopPropagation();
+                        navigate("/edit/content", {
+                          state: { postId: post.id},
+                        });
+                      }}
                     >
                       <EditOutlined />
-                      Edit
+                      Edit Text Body
                     </button>
                   )}
 
-                  {post.post_type ===
-                    "question" &&
-                    post.question_status ===
-                      "open" && (
+                    {post.post_type === "question" && (
                       <button
-                        className="solve-btn"
-                        onClick={() =>
-                          handleSolved(post.id)
+                        className={
+                          post.question_status === "solved"
+                            ? "solve-btn solved-btn"
+                            : "solve-btn"
                         }
+                        disabled={post.question_status === "solved"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (post.question_status !== "solved") {
+                            handleSolved(post.id);
+                          }
+                        }}
                       >
                         <CheckCircleOutlined />
-                        Solved
+
+                        {post.question_status === "solved"
+                          ? "Solved"
+                          : "Mark Solved"}
                       </button>
                     )}
 
                   <Popconfirm
                     title="Delete post?"
-                    onConfirm={() =>
-                      handleDelete(post.id)
+                    onConfirm={(e) => {
+                        e.stopPropagation();
+                        handleDeletePost(post.id)
+                      }
                     }
                   >
                     <button
