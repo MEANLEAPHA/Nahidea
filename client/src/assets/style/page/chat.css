@@ -426,13 +426,13 @@ padding: 0 !important;
   max-width: 70%;
   padding: 8px 12px;
   border-radius: 8px;
-  background: var(--back-con);
-  color: var(--font-color);
+  background: #ff66c4;
+  color: white;
   position: relative;
 }
 
 .message-me .message-bubble {
-  background: rgb(78, 89, 251);
+  background:#38b6ff;
   color: white;
 }
 

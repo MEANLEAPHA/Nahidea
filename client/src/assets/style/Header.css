@@ -69,6 +69,7 @@ header{
     width:100%;
     height:100%;
     object-fit: cover;
+   
      user-select: none; /* Prevent text/image selection */
       pointer-events: auto; /* Still allow clicks if needed */
       -webkit-user-drag: none; /* Prevent dragging in WebKit browsers */
@@ -228,16 +229,15 @@ cursor: pointer;
 }
 .button-bar-icon-pf{
      padding: 0px;
-     margin-left: 10px;
+     margin-left: 0px;
      position: relative;
+      background-color: var(--secondary-color);
 }
 
 .button-bar-icon:hover{
     background: var(--secondary-color);
 }
-.button-bar-icon-pf:hover{
- background:none;
-}
+
 .bar-icon{
     color: var(--font-color);
     font-size: 20px;
@@ -589,9 +589,6 @@ display: flex;
         
     }
     
-    .button-bar-icon-pf{
-           background: #fd7648;
-    }
     .button-create-icon-min{
         background-color: transparent;
         border: none;

@@ -144,7 +144,7 @@ export default function Content() {
   return (
 
     <div id="content-container">
-      <article id='tool-article' >
+      <article id='tool-article' className={openPreview ? "hidden" : "flex-container"}>
         <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
         <form onSubmit={handleSubmit} id="content-form">
 

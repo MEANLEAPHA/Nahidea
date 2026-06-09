@@ -42,8 +42,8 @@ import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeft
 
 // style 
 import "../style/upload/tag.css";
-import "../style/upload/Content.css";
 import "../style/upload/Postpreview.css";
+import "../style/upload/Content.css";
 
 // get token
 const token = localStorage.getItem("token");
@@ -69,8 +69,6 @@ export default function Questiion(){
   // tag state
   const [tags, setTags] = useState([]);
 
-  const [questionFile, setQuestionFile] = useState(null);
-  const refFile = useRef(null);
 
   // question type state
   const [questionType, setQuestionType] = useState('openend');
@@ -102,7 +100,7 @@ export default function Questiion(){
   // preview toggle
   const [openPreview, setOpenPreview] = useState(false);
 
-  const resetMain = () => {setAnonymousName(null),setSelectType(null), setSelectIcon(null), setQuestionType(null), setTitle(""), setTags([]), setQuestionFile(null), (refFile.current ? refFile.current.value = "" : null) };
+  const resetMain = () => {setAnonymousName(null),setSelectType(null), setSelectIcon(null), setQuestionType(null), setTitle(""), setTags([])};
   const resetRange = () => { setMin(0); setMax(100); setStep(1); setRangeValue(0); };
   const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
   const resetMultipleChoice = () => { setMultipleChoices(["","",""]); setIncludeAllAbove(false); };
@@ -201,9 +199,6 @@ export default function Questiion(){
     formData.append("question_related_to_icon", selectedIcon);
     formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
     if(anonymousName) formData.append("anonymousName", anonymousName);
-    if(questionFile){
-      formData.append("questionFile", questionFile);
-    }
     formData.append("question_title", title);
 
     switch(questionType?.value){
@@ -280,7 +275,7 @@ export default function Questiion(){
 
   return (
     <div id="content-container">
-      <article id='tool-article'>
+      <article id='tool-article' className={openPreview ? "hidden" : "flex-container"}>
 
         <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
 
@@ -356,8 +351,6 @@ export default function Questiion(){
             isAnonymous={isAnonymous}
             setIsAnonymous={setIsAnonymous}
             tokens={tokens}
-            conAndQuesFileValue={questionFile}
-            setConAndQuesFileValue={setQuestionFile}
           />
 
           <div id="form-footer">
@@ -374,7 +367,8 @@ export default function Questiion(){
 
       <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
             <PreviewRadio
-              title={title} filesMedia={questionFile} postTag={tags} selectType={selectType?.value}
+              title={title} 
+              postTag={tags} selectType={selectType?.value}
               isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} selectTypeIcon={selectedIcon}
               post_type='question'
 

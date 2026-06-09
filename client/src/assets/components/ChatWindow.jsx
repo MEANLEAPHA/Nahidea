@@ -261,7 +261,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       });
       message.success('Conversation deleted');
       setActiveChat(null);
-      window.location.reload
+      window.location.reload();
     } catch (err) {
       message.error('Failed to delete');
     }
@@ -334,7 +334,10 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       <div className="chat-header">
         <div className="chat-header-left">
           {window.innerWidth <= 1000 && (
-            <button className="back-button" onClick={() => setActiveChat(null)}>
+            <button className="back-button" onClick={() => {
+              navigate(-1);
+              setActiveChat(null)}
+              }>
               <FontAwesomeIcon icon={faAngleLeft} />
             </button>
           )}

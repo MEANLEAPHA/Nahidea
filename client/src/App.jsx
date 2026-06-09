@@ -72,6 +72,7 @@ import History from './assets/page/History';
 import Favorite from './assets/page/Favorite';
 import LikePost from './assets/page/LikePost';
 import YourPosts from './assets/page/YourPosts';
+import FeedbackForm from './assets/page/FeedbackForm';
 
 const App = () =>{
     return(
@@ -139,6 +140,7 @@ const App = () =>{
 
                     {/* feedback */}
                     <Route path='/reporthistory' element={<ReportHistory/>}></Route> 
+                    <Route path='/feedback' element={<FeedbackForm/>}></Route> 
 
                     {/* tool */}
                     <Route path='/search' element={<Search />}></Route>

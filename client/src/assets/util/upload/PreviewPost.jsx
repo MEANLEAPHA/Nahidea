@@ -9,7 +9,7 @@ import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 // fontAwesome import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faHeart, faMessage} from "@fortawesome/free-regular-svg-icons";
-import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
+import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar, faRankingStar} from "@fortawesome/free-solid-svg-icons";
 
 // util import
 import { AnonymousName, AnonymousProfile } from "../anonymousTokens";
@@ -96,7 +96,7 @@ export default function PreviewPost ({
                                <SignatureOutlined /> Write Your Answer
                             </span>
                             <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                           </div>
                     </div>;
@@ -107,7 +107,7 @@ export default function PreviewPost ({
                              <FontAwesomeIcon icon={faThumbsUp}/> Yes / No <FontAwesomeIcon icon={faThumbsDown}/>
                             </span>
                             <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                           </div>
 
@@ -132,7 +132,7 @@ export default function PreviewPost ({
                         <div className="question-preview-header">
                         <span className="question-badge single-badge"><FontAwesomeIcon icon={faHandPointer} /> Pick One</span>
                         <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                         </div>
 
@@ -170,7 +170,7 @@ export default function PreviewPost ({
                              <FontAwesomeIcon icon={faHandPeace} /> Pick Multiple
                             </span>
                               <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                           </div>
 
@@ -199,7 +199,7 @@ export default function PreviewPost ({
                             <FontAwesomeIcon icon={faLocationCrosshairs} /> Range
                             </span>
                               <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                           </div>
                           <div className='range-preview-option'>
@@ -235,7 +235,7 @@ export default function PreviewPost ({
                               <FontAwesomeIcon icon={faStar} /> Rate
                             </span>
                               <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                           </div>
                 {Array.from({length:5}).map((_,i)=>(
@@ -256,10 +256,10 @@ export default function PreviewPost ({
                     ))}; */}
                     <div className="question-preview-header">
                             <span className="question-badge rank-badge">
-                              <FontAwesomeIcon icon={faHand} /> Move the Rankings
+                              <FontAwesomeIcon icon={faRankingStar} /> Move the Rankings
                             </span>
                               <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
+                                <FolderOpenOutlined /> Open
                             </span>
                           </div>
 
@@ -335,13 +335,13 @@ export default function PreviewPost ({
                             )
                         }
                        
-                       {
+                       {/* {
                         postTagsValue.length !== 0 && (
                             <div className='post-tags'>
                                 <TagsPreview tagsValue={postTagsValue}/>
                             </div>
                         )
-                       }
+                       } */}
                     </>
                     )
                 }

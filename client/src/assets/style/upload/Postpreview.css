@@ -93,6 +93,7 @@
     height: 35px;
     border-radius: 50%;
     cursor: pointer;
+    background-color: var(--secondary-color);
 }
 .user-post-info{
     margin: 0;
@@ -683,69 +684,6 @@ BUTTON STATES
     rgba(245,179,1,.08);
 }
 
-/* 
-question answer preview */
-/* 
-.post-question-answer-preview{
-    width: 95%;
-    margin: auto;
-    padding: 0;
-    height: auto;
-    color: var(--font-color);
-    cursor: pointer;
-}
-
-
-#closend-preview{
-    display: flex;
-    padding: 0;
-    margin: 0;
-    width: 20%;
-    height: auto;
-    background-color: var(--back-con);
-    border-radius: 10px;
-    border: 1px solid var(--secondary-color);
-    font-family: sans-serif;
-    justify-content: space-around;
-    cursor: pointer;
-}
-#closend-preview-yes{
-    color: yellowgreen;
-    padding: 10px 0px 10px 0px;
-    width: 50%;
-      text-align: center;
-    border-right: 1px solid var(--secondary-color);
-}
-#closend-preview-no{
-    color: tomato;
-    width: 50%;
-    text-align: center;
-      padding: 10px 0px 10px 0px;
-}
-
-
-.singlechoice-preview-div{
-    width: 50%;
-
-    display: flex;
-    flex-wrap: wrap;
-   justify-content: start;
-    padding: 0;
- overflow: hidden;
-  
-    height: auto;
-    color: var(--font-color);
-    cursor: pointer;
-}
-.singlechoice-preview-option{
-    color: var(--font-color);
-
-}
-.singlechoice-preview-option label{
-    color: var(--font-color);
-} */
-
-
 #tutorial-div{
     width: 80%;
     height: auto;
@@ -826,7 +764,7 @@ padding:6px 12px;
   font-weight:600;
   background:rgba(255,255,255,.06);
   color:white;
- background-color: rgb(234, 38, 38);
+ background-color: #ff9800;
  opacity: 0.9;
 }
 

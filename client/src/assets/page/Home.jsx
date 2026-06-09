@@ -35,6 +35,8 @@ import{TagsPreview} from "../util/tagInput";
 import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
 import ReportPostModal from './ReportPostModal';
+import MutualFriend from "../util/mutualFriend";
+import RecentHistory from "../util/recentHistory";
 
 
 // style
@@ -1165,7 +1167,7 @@ const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }
             });
           }}
         >
-          <EditOutlined /> Edit Body
+          <EditOutlined /> Edit Text Body
         </li>
       ),
       key: "0",
@@ -1260,744 +1262,178 @@ const parseJSON = (val) => {
 
 
 
-const RecentHistory = () => {
-  const [recentDataHis, setRecentDataHis] = useState([]);
+// const RecentHistory = () => {
+//   const [recentDataHis, setRecentDataHis] = useState([]);
 
-  useEffect(() => {
-    const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-    setRecentDataHis(postData);
-  }, []);
+//   useEffect(() => {
+//     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+//     setRecentDataHis(postData);
+//   }, []);
 
-  if (recentDataHis.length === 0) {
-    return null;
-  }
+//   if (recentDataHis.length === 0) {
+//     return null;
+//   }
 
-  const handleClearPostHistory = () => {
-    localStorage.setItem("recentPostHis", JSON.stringify([]));
-    setRecentDataHis([]);
-  };
+//   const handleClearPostHistory = () => {
+//     localStorage.setItem("recentPostHis", JSON.stringify([]));
+//     setRecentDataHis([]);
+//   };
 
-  const deletePostHistory = (postId) => {
-    const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-    const update = postData.filter((item) => item.id !== postId);
-    localStorage.setItem("recentPostHis", JSON.stringify(update));
-    setRecentDataHis(update);
-  };
-
-  return (
-    <div className="history-container">
-      <div className="history-container-header">
-        <label>Recent History</label>
-        <span onClick={handleClearPostHistory}>Clear All</span>
-      </div>
-
-      <div className="history-list-ul">
-        {recentDataHis.map((item) => (
-          <PostHistoryCard
-            key={item.id}
-            item={item}
-            deletePostHistory={deletePostHistory}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const PostHistoryCard = ({ item, deletePostHistory }) => {
-  // Safe image renderer
-  let safeImg = null;
-  try {
-    if (typeof item.mediaSrc === "string") {
-      if (item.mediaSrc.trim().startsWith("[")) {
-        const arr = JSON.parse(item.mediaSrc);
-        if (Array.isArray(arr) && arr.length > 0) {
-          safeImg = arr[0];
-        }
-      } else {
-        safeImg = item.mediaSrc;
-      }
-    }
-  } catch (err) {
-    console.warn("Invalid mediaSrc format", err);
-  }
-
-  return (
-    <div className="post-history-card">
-      <div className="post-history-card-info">
-        <div id="author-info">
-          <div
-            id="author-pf-div"
-            style={{
-              backgroundColor: item.isAnonymous === 1 ? item.anonymousBg : "",
-            }}
-          >
-            <img
-              src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
-              alt="user-profile"
-              id="author-pf"
-            />
-          </div>
-          <p id="author-name">{item.author}</p>
-        </div>
-        <div id="title-div">
-          <p id="title">{item.title}</p>
-        </div>
-        {/* <button
-          id="history-card-delete"
-          onClick={() => deletePostHistory(item.id)}
-        >
-          Delete
-        </button> */}
-      </div>
-
-      {safeImg && (
-        <div
-          className="media-holder"
-          style={{ "--preview-url-history-post": `url(${safeImg})` }}
-        >
-          <img src={safeImg} alt="post-media" />
-        </div>
-      )}
-    </div>
-  );
-};
-
-
-const MutualFriend = ({ onlineUsers }) => {
-  const [friends, setFriends] = useState([]);
-
-  useEffect(() => {
-    const fetchMutualFriends = async () => {
-      try {
-        console.log("Fetching mutual friends…"); // 👀 start log
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("API response:", res); // 👀 full response
-        console.log("Mutual friends data:", res.data.data); // 👀 extracted data
-        setFriends(res.data.data);
-      } catch (err) {
-        console.error("Failed to fetch mutual friends:", err); // 👀 error log
-      }
-    };
-
-    fetchMutualFriends();
-  }, []);
-
-  if (friends.length === 0) {
-    console.log("No mutual friends found."); // 👀 log empty state
-    return null;
-  }
-
-  return (
-    <div className="friend-container">
-      <div className="friend-header-card">
-        <label>Friend</label>
-        <span>see all</span>
-      </div>
-      <div className="friend-list-ul">
-        {friends?.map((friend) => (
-          <FriendCard
-            key={friend.id}
-            username={friend.username}
-            avatar_url={friend.avatar_url}
-            isOnline={onlineUsers.includes(String(friend.id))}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-
-// FriendCard.jsx
-const FriendCard = ({ username, avatar_url, isOnline }) => {
-  console.log("Rendering FriendCard:", { username, avatar_url, isOnline });
-  return (
-    <div className="friend-card">
-      <div className="friend-pf-div">
-        <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
-        {isOnline ? (
-          <div className="online-dot status-fri-dot"></div>
-        ) : (
-          <div className="offline-dot status-fri-dot"></div>
-        )}
-      </div>
-      <div className="friend-info">
-        <span>{username}</span>
-      </div>
-    </div>
-  );
-};
-
-
-
- 
-
-// const MutualFriend = () => {
-//   return(
-//     <div className='friend-container'> 
-//       <div className='friend-header-card'>
-//         <label>Friend</label>
-//         <span>see all</span>
-//       </div>
-//       <div className='friend-list-ul'>
-//         <div className='friend-card'>
-//            <div className='friend-pf-div'>
-//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-//               <div className='online-dot status-fri-dot'></div>
-//               {/* <div className='offline-dot status-fri-dot'></div> */}
-//            </div>
-//            <div className='friend-info'>
-//               <span>Kathya</span>
-//            </div>
-//         </div>
-//          <div className='friend-card'>
-//            <div className='friend-pf-div'>
-//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-//               <div className='online-dot status-fri-dot'></div>
-//               {/* <div className='offline-dot status-fri-dot'></div> */}
-//            </div>
-//            <div className='friend-info'>
-//               <span>Kathya</span>
-//            </div>
-//         </div>
-//          <div className='friend-card'>
-//            <div className='friend-pf-div'>
-//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-//               <div className='online-dot status-fri-dot'></div>
-//               {/* <div className='offline-dot status-fri-dot'></div> */}
-//            </div>
-//            <div className='friend-info'>
-//               <span>Kathya</span>
-//            </div>
-//         </div>
-//          <div className='friend-card'>
-//            <div className='friend-pf-div'>
-//               <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Felix" alt="" className='friend-pf'/>
-//               <div className='online-dot status-fri-dot'></div>
-//               {/* <div className='offline-dot status-fri-dot'></div> */}
-//            </div>
-//            <div className='friend-info'>
-//               <span>Kathya</span>
-//            </div>
-//         </div>
-
-        
-         
-//       </div>
-//     </div>
-//   )
-// }
-
-// const postHistoryCard = (item) => {
 //   const deletePostHistory = (postId) => {
 //     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-//     const update = postData.filter((item) => item.postId !== postId);
+//     const update = postData.filter((item) => item.id !== postId);
 //     localStorage.setItem("recentPostHis", JSON.stringify(update));
 //     setRecentDataHis(update);
-//   }
+//   };
+
 //   return (
-//       <div className="post-history-card" key={item.postId}>
-//         <div className='post-history-card-info'>
-//             <div id="author-info">
-//               <div id="author-pf-div" style={{backgroundColor : item.isAnonymous === 1 ? item.anonymousBg : ""}}>
-//                     <img src={item.isAnonymous === 1 ? nahIdeaAuth : item.authorPf} alt="user-profile" id="author-pf"/>
-//               </div>
-//               <p id="author-name">{item.author}</p>
-//             </div>
-//             <div id="title-div">
-//               <p id="title">
-//                 {item.title}
-//               </p>
-//             </div>
-//             <button id="history-card-delete" onClick={() => {deletePostHistory(item.postId)}}>Delete</button>
-//           </div>
-//           {item.imgSrc && (
-//             <div className="media-holder" style={{ "--preview-url-history-post": `url(${item.imgSrc})` }}>
-//               <img src={item.imgSrc}/> 
-//             </div>
-//           )}
+//     <div className="history-container">
+//       <div className="history-container-header">
+//         <label>Recent History</label>
+//         <span onClick={handleClearPostHistory}>Clear All</span>
 //       </div>
-//   )
-// }
 
-
-
-
-
-
-// const parseJSON = (val) => {
-//   try {
-//     return typeof val === "string" ? JSON.parse(val) : val;
-//   } catch {
-//     return [];
-//   }
+//       <div className="history-list-ul">
+//         {recentDataHis.map((item) => (
+//           <PostHistoryCard
+//             key={item.id}
+//             item={item}
+//             deletePostHistory={deletePostHistory}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
 // };
 
-
-  // <div class="ant-list ant-list-split css-ch9ese css-var-root">
-  //         <div class="ant-spin css-ch9ese css-var-root" aria-live="polite" aria-busy="false">
-  //           <div class="ant-spin-container">
-  //             <ul class="ant-list-items ant-list-container css-var-root">
-  //               <li className="ant-list-item">
-  //               <div className="posts">
-  //                 <div className="post-header">
-  //                   <div className="post-user-profile">
-  //                     <img
-  //                       className="user-profile"
-  //                       alt="profile"
-  //                       src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif"
-  //                     />
-  //                     <div className="user-post-info">
-  //                       <p className="post-username">
-  //                         meanleapha <div className='dot'></div> <div className='category-post-div'><span className="post-type-label">post a content</span> <AnimatedIcon src="https://cdn.lordicon.com/hbvgknxo.json" /></div>
-  //                       </p>
-  //                       <p className="post-at">2 days ago</p>
-  //                     </div>
-  //                   </div>
-  //                   <div className="ant-dropdown-trigger post-header-right">
-  //                     <svg
-  //                       data-prefix="fas"
-  //                       data-icon="ellipsis-vertical"
-  //                       className="svg-inline--fa fa-ellipsis-vertical icon-formore"
-  //                       role="img"
-  //                       viewBox="0 0 128 512"
-  //                       aria-hidden="true"
-  //                     >
-  //                       <path
-  //                         fill="currentColor"
-  //                         d="M64 144a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0 224c30.9 0 56 25.1 56 56s-25.1 56-56 56-56-25.1-56-56 25.1-56 56-56zm56-112c0 30.9-25.1 56-56 56s-56-25.1-56-56 25.1-56 56-56 56 25.1 56 56z"
-  //                       ></path>
-  //                     </svg>
-  //                   </div>
-  //                 </div>
-  //                 <div className="post-body">
-  //                   <div>
-  //                     <div className="post-caption">
-  //                       <p>
-  //                         Roommate MIA(LITERALLY NO WHERE TO BE SEEN) for almost 3 years, pays rent 95% of
-  //                         the time, cant get a hold of them, what are my options?
-  //                       </p>
-  //                     </div>
-  //                   </div>
-  //                   <div className="post-thumbnail">
-  //                     <div className="ant-carousel css-ch9ese css-var-root">
-  //                       <div className="slick-slider media-preview-carousel slick-initialized">
-  //                         <div className="slick-list">
-  //                           <div
-  //                             className="slick-track"
-  //                             style={{
-  //                               opacity: 1,
-  //                               transform: "translate3d(0px, 0px, 0px)",
-  //                               width: "375px",
-  //                             }}
-  //                           >
-  //                             <div
-  //                               data-index="0"
-  //                               className="slick-slide slick-active slick-current"
-  //                               tabIndex="-1"
-  //                               aria-hidden="false"
-  //                               style={{ outline: "none", width: "375px" }}
-  //                             >
-  //                               <div>
-  //                                 <div
-  //                                   className="carousel-slide"
-  //                                   tabIndex="-1"
-  //                                   style={{ width: "100%", display: "inline-block" }}
-  //                                 >
-  //                                   <div
-  //                                     className="preview-wrapper"
-  //                                     style={{
-  //                                       "--preview-url":
-  //                                         "url(https://nahidea.picocolor.site/img/content/1777366039374-Screenshot-2026-03-17-142905.webp)",
-  //                                     }}
-  //                                   >
-  //                                     <img
-  //                                       alt="preview-0"
-  //                                       className="preview-image"
-  //                                       src="https://nahidea.picocolor.site/img/content/1777366039374-Screenshot-2026-03-17-142905.webp"
-  //                                     />
-  //                                   </div>
-  //                                 </div>
-  //                               </div>
-  //                             </div>
-  //                           </div>
-  //                         </div>
-  //                       </div>
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //                 <div className="post-footer">
-  //                   <div className="post-footer-left">
-  //                     <button className="button-action-footer">
-  //                       <svg
-  //                         data-prefix="far"
-  //                         data-icon="heart"
-  //                         className="svg-inline--fa fa-heart button-action-footer-icon"
-  //                         role="img"
-  //                         viewBox="0 0 512 512"
-  //                         aria-hidden="true"
-  //                       >
-  //                         <path
-  //                           fill="currentColor"
-  //                           d="M378.9 80c-27.3 0-53 13.1-69 35.2l-34.4 47.6c-4.5 6.2-11.7 9.9-19.4 9.9s-14.9-3.7-19.4-9.9l-34.4-47.6c-16-22.1-41.7-35.2-69-35.2-47 0-85.1 38.1-85.1 85.1 0 49.9 32 98.4 68.1 142.3 41.1 50 91.4 94 125.9 120.3 3.2 2.4 7.9 4.2 14 4.2s10.8-1.8 14-4.2c34.5-26.3 84.8-70.4 125.9-120.3 36.2-43.9 68.1-92.4 68.1-142.3 0-47-38.1-85.1-85.1-85.1zM271 87.1c25-34.6 65.2-55.1 107.9-55.1 73.5 0 133.1 59.6 133.1 133.1 0 68.6-42.9 128.9-79.1 172.8-44.1 53.6-97.3 100.1-133.8 127.9-12.3 9.4-27.5 14.1-43.1 14.1s-30.8-4.7-43.1-14.1C176.4 438 123.2 391.5 79.1 338 42.9 294.1 0 233.7 0 165.1 0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1l15 20.7 15-20.7z"
-  //                         ></path>
-  //                       </svg>
-  //                       <p>
-  //                         <span>0</span>
-  //                         <span className="count-label"> Like</span>
-  //                       </p>
-  //                     </button>
-  //                     <button className="button-action-footer">
-  //                       <svg
-  //                         data-prefix="far"
-  //                         data-icon="message"
-  //                         className="svg-inline--fa fa-message button-action-footer-icon"
-  //                         role="img"
-  //                         viewBox="0 0 512 512"
-  //                         aria-hidden="true"
-  //                       >
-  //                         <path
-  //                           fill="currentColor"
-  //                           d="M203.7 512.9s0 0 0 0l-37.8 26.7c-7.3 5.2-16.9 5.8-24.9 1.7S128 529 128 520l0-72-32 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l320 0c53 0 96 43 96 96l0 224c0 53-43 96-96 96l-120.4 0-91.9 64.9zm64.3-104.1c8.1-5.7 17.8-8.8 27.7-8.8L416 400c26.5 0 48-21.5 48-48l0-224c0-26.5-21.5-48-48-48L96 80c-26.5 0-48 21.5-48 48l0 224c0 26.5 21.5 48 48 48l56 0c10.4 0 19.3 6.6 22.6 15.9 .9 2.5 1.4 5.2 1.4 8.1l0 49.7c32.7-23.1 63.3-44.7 91.9-64.9z"
-  //                         ></path>
-  //                       </svg>
-  //                       <p>
-  //                         <span>0</span>
-  //                         <span className="count-label"> Comment</span>
-  //                       </p>
-  //                     </button>
-  //                   </div>
-  //                   <div className="post-footer-right">
-  //                     <div className='button-action-footer button-action-footer-last post-type' style={{background: 'violet'}}>Confession</div>
-  //                     <button className="button-action-footer button-action-footer-last">
-  //                       <svg
-  //                         data-prefix="far"
-  //                         data-icon="bookmark"
-  //                         className="svg-inline--fa fa-bookmark" role="img" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M0 64C0 28.7 28.7 0 64 0L320 0c35.3 0 64 28.7 64 64l0 417.1c0 25.6-28.5 40.8-49.8 26.6L192 412.8 49.8 507.7C28.5 521.9 0 506.6 0 481.1L0 64zM64 48c-8.8 0-16 7.2-16 16l0 387.2 117.4-78.2c16.1-10.7 37.1-10.7 53.2 0L336 451.2 336 64c0-8.8-7.2-16-16-16L64 48z">
-  //                         </path>
-  //                         </svg>
-  //                         </button>
-  //                         </div>
-  //                         </div>
-  //                         </div>
-  //                 </li>
-  //               <li class="ant-list-item">
-  //                 <div class="posts">
-  //                   <div class="post-header">
-  //                     <div class="post-user-profile">
-  //                       <img class="user-profile" alt="profile"
-  //                           src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif"/>
-  //                       <div class="user-post-info">
-  //                         <p class="post-username">
-  //                           meanleapha <span class="post-type-label">post a question</span>
-  //                         </p>
-  //                         <p class="post-at">17 hours ago</p>
-  //                       </div>
-  //                     </div>
-  //                     <div class="ant-dropdown-trigger post-header-right">
-                      
-  //                     </div>
-  //                   </div>
-  //                   <div class="post-body">
-  //                     <div class="post-caption">
-  //                       <p>saca</p>
-  //                     </div>
-  //                     <div class="post-thumbnail">
-  //                       <img alt="Confession" class="post-image"
-  //                           src="https://nahidea.picocolor.site/img/question/1777019798059-Screenshot 2025-12-02 140744.webp"/>
-  //                     </div>
-  //                   </div>
-  //                   <div class="post-footer">
-  //                     <div class="post-footer-left">
-                        
-  //                     </div>
-  //                     <div class="post-footer-right">
-                      
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </li>
-  //               <li class="ant-list-item">
-  //       <div class="posts">
-  //         <div class="post-header">
-  //           <div class="post-user-profile">
-  //             <img class="user-profile" alt="profile"
-  //                 src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" />
-  //             <div class="user-post-info">
-  //               <p class="post-username">
-  //                 meanleapha <span class="post-type-label">post a question</span>
-  //               </p>
-  //               <p class="post-at">17 hours ago</p>
-  //             </div>
-  //           </div>
-  //           <div class="ant-dropdown-trigger post-header-right">
-  //             <svg data-prefix="fas" data-icon="ellipsis-vertical"
-  //                 class="svg-inline--fa fa-ellipsis-vertical icon-formore"
-  //                 role="img" viewBox="0 0 128 512" aria-hidden="true">
-  //               <path fill="currentColor"
-  //                     d="M64 144a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0 224c30.9 0 56 25.1 56 56s-25.1 56-56 56-56-25.1-56-56 25.1-56 56-56zm56-112c0 30.9-25.1 56-56 56s-56-25.1-56-56 25.1-56 56-56 56 25.1 56 56z">
-  //               </path>
-  //             </svg>
-  //           </div>
-  //         </div>
-
-  //         <div class="post-body">
-  //           <div>
-  //             <div class="post-caption">
-  //               <p>saca</p>
-  //             </div>
-  //             <div class="post-question-answer-preview"></div>
-  //           </div>
-  //           <div class="post-thumbnail">
-  //             <div class='preview-wrapper' >
-  //                   <img alt="Confession" class="preview-image"
-  //                 src="https://nahidea.picocolor.site/img/question/1777019798059-Screenshot 2025-12-02 140744.webp" />
-  //             </div>
-            
-  //           </div>
-  //         </div>
-
-  //         <div class="post-footer">
-  //           <div class="post-footer-left">
-  //             <button class="button-action-footer">
-  //               <svg data-prefix="far" data-icon="heart"
-  //                   class="svg-inline--fa fa-heart button-action-footer-icon"
-  //                   role="img" viewBox="0 0 512 512" aria-hidden="true">
-  //                 <path fill="currentColor"
-  //                       d="M378.9 80c-27.3 0-53 13.1-69 35.2l-34.4 47.6c-4.5 6.2-11.7 9.9-19.4 9.9s-14.9-3.7-19.4-9.9l-34.4-47.6c-16-22.1-41.7-35.2-69-35.2-47 0-85.1 38.1-85.1 85.1 0 49.9 32 98.4 68.1 142.3 41.1 50 91.4 94 125.9 120.3 3.2 2.4 7.9 4.2 14 4.2s10.8-1.8 14-4.2c34.5-26.3 84.8-70.4 125.9-120.3 36.2-43.9 68.1-92.4 68.1-142.3 0-47-38.1-85.1-85.1-85.1zM271 87.1c25-34.6 65.2-55.1 107.9-55.1 73.5 0 133.1 59.6 133.1 133.1 0 68.6-42.9 128.9-79.1 172.8-44.1 53.6-97.3 100.1-133.8 127.9-12.3 9.4-27.5 14.1-43.1 14.1s-30.8-4.7-43.1-14.1C176.4 438 123.2 391.5 79.1 338 42.9 294.1 0 233.7 0 165.1 0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1l15 20.7 15-20.7z">
-  //                 </path>
-  //               </svg>
-  //               <p><span>0</span><span class="count-label"> Like</span></p>
-  //             </button>
-
-  //             <button class="button-action-footer">
-  //               <svg data-prefix="far" data-icon="message"
-  //                   class="svg-inline--fa fa-message button-action-footer-icon"
-  //                   role="img" viewBox="0 0 512 512" aria-hidden="true">
-  //                 <path fill="currentColor"
-  //                       d="M203.7 512.9s0 0 0 0l-37.8 26.7c-7.3 5.2-16.9 5.8-24.9 1.7S128 529 128 520l0-72-32 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l320 0c53 0 96 43 96 96l0 224c0 53-43 96-96 96l-120.4 0-91.9 64.9zm64.3-104.1c8.1-5.7 17.8-8.8 27.7-8.8L416 400c26.5 0 48-21.5 48-48l0-224c0-26.5-21.5-48-48-48L96 80c-26.5 0-48 21.5-48 48l0 224c0 26.5 21.5 48 48 48l56 0c10.4 0 19.3 6.6 22.6 15.9 .9 2.5 1.4 5.2 1.4 8.1l0 49.7c32.7-23.1 63.3-44.7 91.9-64.9z">
-  //                 </path>
-  //               </svg>
-  //               <p><span>0</span><span class="count-label"> Comment</span></p>
-  //             </button>
-  //           </div>
-
-  //           <div class="post-footer-right">
-  //             <button class="button-action-footer button-action-footer-last">
-  //               <svg data-prefix="far" data-icon="bookmark"
-  //                   class="svg-inline--fa fa-bookmark"
-  //                   role="img" viewBox="0 0 384 512" aria-hidden="true">
-  //                 <path fill="currentColor"
-  //                       d="M0 64C0 28.7 28.7 0 64 0L320 0c35.3 0 64 28.7 64 64l0 417.1c0 25.6-28.5 40.8-49.8 26.6L192 412.8 49.8 507.7C28.5 521.9 0 506.6 0 481.1L0 64zM64 48c-8.8 0-16 7.2-16 16l0 387.2 117.4-78.2c16.1-10.7 37.1-10.7 53.2 0L336 451.2 336 64c0-8.8-7.2-16-16-16L64 48z">
-  //                 </path>
-  //               </svg>
-  //             </button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //               </li>
-  //               <li class="ant-list-item">
-  //                 <div class="posts">
-  //                   <div class="post-header">
-  //                     <div class="post-user-profile">
-  //                       <img class="user-profile" alt="profile"
-  //                           src="https://media1.tenor.com/m/3TrUXi0fv0EAAAAd/kanye-staring-kanye-licking.gif" />
-  //                       <div class="user-post-info">
-  //                         <p class="post-username">
-  //                           meanleapha <span class="post-type-label">post a question</span>
-  //                         </p>
-  //                         <p class="post-at">1 day ago</p>
-  //                       </div>
-  //                     </div>
-  //                     <div class="ant-dropdown-trigger post-header-right">
-  //                       <svg data-prefix="fas" data-icon="ellipsis-vertical"
-  //                           class="svg-inline--fa fa-ellipsis-vertical icon-formore"
-  //                           role="img" viewBox="0 0 128 512" aria-hidden="true">
-  //                         <path fill="currentColor"
-  //                               d="M64 144a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0 224c30.9 0 56 25.1 56 56s-25.1 56-56 56-56-25.1-56-56 25.1-56 56-56zm56-112c0 30.9-25.1 56-56 56s-56-25.1-56-56 25.1-56 56-56 56 25.1 56 56z">
-  //                         </path>
-  //                       </svg>
-  //                     </div>
-  //                   </div>
-
-  //                   <div class="post-body">
-  //                     <div>
-  //                       <div class="post-caption">
-  //                         <p>openend</p>
-  //                       </div>
-  //                       <div class="post-question-answer-preview"></div>
-  //                     </div>
-  //                     <div class="post-thumbnail">
-  //                       <div class='preview-wrapper'>
-  //                               <img alt="Confession" class="preview-image "
-  //                           src="https://nahidea.picocolor.site/img/question/1776954811499-Screenshot 2025-12-11 105456.webp" />
-  //                       </div>
-                  
-  //                     </div>
-  //                   </div>
-
-  //                   <div class="post-footer">
-  //                     <div class="post-footer-left">
-  //                       <button class="button-action-footer">
-  //                         <svg data-prefix="far" data-icon="heart"
-  //                             class="svg-inline--fa fa-heart button-action-footer-icon"
-  //                             role="img" viewBox="0 0 512 512" aria-hidden="true">
-  //                           <path fill="currentColor"
-  //                                 d="M378.9 80c-27.3 0-53 13.1-69 35.2l-34.4 47.6c-4.5 6.2-11.7 9.9-19.4 9.9s-14.9-3.7-19.4-9.9l-34.4-47.6c-16-22.1-41.7-35.2-69-35.2-47 0-85.1 38.1-85.1 85.1 0 49.9 32 98.4 68.1 142.3 41.1 50 91.4 94 125.9 120.3 3.2 2.4 7.9 4.2 14 4.2s10.8-1.8 14-4.2c34.5-26.3 84.8-70.4 125.9-120.3 36.2-43.9 68.1-92.4 68.1-142.3 0-47-38.1-85.1-85.1-85.1zM271 87.1c25-34.6 65.2-55.1 107.9-55.1 73.5 0 133.1 59.6 133.1 133.1 0 68.6-42.9 128.9-79.1 172.8-44.1 53.6-97.3 100.1-133.8 127.9-12.3 9.4-27.5 14.1-43.1 14.1s-30.8-4.7-43.1-14.1C176.4 438 123.2 391.5 79.1 338 42.9 294.1 0 233.7 0 165.1 0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1l15 20.7 15-20.7z">
-  //                           </path>
-  //                         </svg>
-  //                         <p><span>0</span><span class="count-label"> Like</span></p>
-  //                       </button>
-
-  //                       <button class="button-action-footer">
-  //                         <svg data-prefix="far" data-icon="message"
-  //                             class="svg-inline--fa fa-message button-action-footer-icon"
-  //                             role="img" viewBox="0 0 512 512" aria-hidden="true">
-  //                           <path fill="currentColor"
-  //                                 d="M203.7 512.9s0 0 0 0l-37.8 26.7c-7.3 5.2-16.9 5.8-24.9 1.7S128 529 128 520l0-72-32 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l320 0c53 0 96 43 96 96l0 224c0 53-43 96-96 96l-120.4 0-91.9 64.9zm64.3-104.1c8.1-5.7 17.8-8.8 27.7-8.8L416 400c26.5 0 48-21.5 48-48l0-224c0-26.5-21.5-48-48-48L96 80c-26.5 0-48 21.5-48 48l0 224c0 26.5 21.5 48 48 48l56 0c10.4 0 19.3 6.6 22.6 15.9 .9 2.5 1.4 5.2 1.4 8.1l0 49.7c32.7-23.1 63.3-44.7 91.9-64.9z">
-  //                           </path>
-  //                         </svg>
-  //                         <p><span>0</span><span class="count-label"> Comment</span></p>
-  //                       </button>
-  //                     </div>
-
-  //                     <div class="post-footer-right">
-  //                       <button class="button-action-footer button-action-footer-last">
-  //                         <svg data-prefix="far" data-icon="bookmark"
-  //                             class="svg-inline--fa fa-bookmark"
-  //                             role="img" viewBox="0 0 384 512" aria-hidden="true">
-  //                           <path fill="currentColor"
-  //                                 d="M0 64C0 28.7 28.7 0 64 0L320 0c35.3 0 64 28.7 64 64l0 417.1c0 25.6-28.5 40.8-49.8 26.6L192 412.8 49.8 507.7C28.5 521.9 0 506.6 0 481.1L0 64zM64 48c-8.8 0-16 7.2-16 16l0 387.2 117.4-78.2c16.1-10.7 37.1-10.7 53.2 0L336 451.2 336 64c0-8.8-7.2-16-16-16L64 48z">
-  //                           </path>
-  //                         </svg>
-  //                       </button>
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </li>
-  //             </ul>
-  //           </div>
-  //         </div>
-  //       </div>
-
-
-
-
-
-
-
-
-
-
-//   const DotDropDown = ({ownerId, post_type, post_id, page, text_body, contentId}) => {
-
-  
-//   const { userId } = useOutletContext();
-//   const navigate = useNavigate();
-
-//   const [openReport, setOpenReport] = useState(false);
-
-//   const isOwner = Number(ownerId) === Number(userId);
-
-//   const menuItemsForAll = [
-//     {
-//       label: (
-//         <li onClick={() => handleCopyLink(post_id)}>
-//           <LinkOutlined /> Copy link
-//         </li>
-//       ),
-//       key: "0",
-//     },
-//     {
-//       label: (
-//          <li onClick={() => setOpenReport(true)}>
-//           <FlagOutlined /> Report Post
-//           <ReportPostModal
-//             open={openReport}
-//             setOpen={setOpenReport}
-//             postId={post_id}
-//           />
-//         </li>
-//       ),
-//       key: "1",
+// const PostHistoryCard = ({ item, deletePostHistory }) => {
+//   // Safe image renderer
+//   let safeImg = null;
+//   try {
+//     if (typeof item.mediaSrc === "string") {
+//       if (item.mediaSrc.trim().startsWith("[")) {
+//         const arr = JSON.parse(item.mediaSrc);
+//         if (Array.isArray(arr) && arr.length > 0) {
+//           safeImg = arr[0];
+//         }
+//       } else {
+//         safeImg = item.mediaSrc;
+//       }
 //     }
-//   ];
-  
-//   const menuItemsForOwner = [
-//     {
-//       label : (
-//        post_type === "content" ? (
-//         <li onClick={(e)=>
-//                       {
-//                         e.stopPropagation();
-//                         navigate(`/edit/content`, 
-//                           {
-//                           state: {
-//                             postId: post_id,
-//                             contentId: contentId,
-//                             bodyText: text_body,
-//                             page: page,
-//                             mode: "edit"
-//                           }
-//                         }
-//                         );
-//                       }
-//                       }>
-//          <EditOutlined />  Edit Content Body
-//         </li>
-//        ) : (
-//         null
-//        )
-//       ),
-//       key: "0"
-//     },
-//     {
-//       label: (
-//         <li onClick={() => handleDeletePost(post_id)}>
-//           <DeleteOutlined /> Delete
-//         </li>
-//       ),
-//       key: "1",
-//     },
-//     {
-//       label: (
-//         <li onClick={() => handleCopyLink(post_id)}>
-//           <LinkOutlined /> Copy link
-//         </li>
-//       ),
-//       key: "2",
-//     },
-//     {
-//       label: (
-//         <li onClick={() => setOpenReport(true)}>
-//          <FlagOutlined /> Report Post
-//          <ReportPostModal
-//           open={openReport}
-//           setOpen={setOpenReport}
-//           postId={post_id}
-//         />
-//         </li>
-//       ),
-//       key: "3",
-//     },
-//   ];
+//   } catch (err) {
+//     console.warn("Invalid mediaSrc format", err);
+//   }
 
 //   return (
-//     <Dropdown menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
-//       <div className='post-header-right'>
-//       <FontAwesomeIcon icon={faEllipsisVertical} className='icon-formore'/>
+//     <div className="post-history-card">
+//       <div className="post-history-card-info">
+//         <div id="author-info">
+//           <div
+//             id="author-pf-div"
+//             style={{
+//               backgroundColor: item.isAnonymous === 1 ? item.anonymousBg : "",
+//             }}
+//           >
+//             <img
+//               src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+//               alt="user-profile"
+//               id="author-pf"
+//             />
+//           </div>
+//           <p id="author-name">{item.author}</p>
+//         </div>
+//         <div id="title-div">
+//           <p id="title">{item.title}</p>
+//         </div>
+//         {/* <button
+//           id="history-card-delete"
+//           onClick={() => deletePostHistory(item.id)}
+//         >
+//           Delete
+//         </button> */}
 //       </div>
-//     </Dropdown>
+
+//       {safeImg && (
+//         <div
+//           className="media-holder"
+//           style={{ "--preview-url-history-post": `url(${safeImg})` }}
+//         >
+//           <img src={safeImg} alt="post-media" />
+//         </div>
+//       )}
+//     </div>
 //   );
 // };
 
 
-// just add for testing
+// const MutualFriend = ({ onlineUsers }) => {
+//   const [friends, setFriends] = useState([]);
+
+//   useEffect(() => {
+//     const fetchMutualFriends = async () => {
+//       try {
+//         console.log("Fetching mutual friends…"); // 👀 start log
+//         const res = await axios.get(
+//           `${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           }
+//         );
+//         console.log("API response:", res); // 👀 full response
+//         console.log("Mutual friends data:", res.data.data); // 👀 extracted data
+//         setFriends(res.data.data);
+//       } catch (err) {
+//         console.error("Failed to fetch mutual friends:", err); // 👀 error log
+//       }
+//     };
+
+//     fetchMutualFriends();
+//   }, []);
+
+//   if (friends.length === 0) {
+//     console.log("No mutual friends found."); // 👀 log empty state
+//     return null;
+//   }
+
+//   return (
+//     <div className="friend-container">
+//       <div className="friend-header-card">
+//         <label>Friend</label>
+//         <span>see all</span>
+//       </div>
+//       <div className="friend-list-ul">
+//         {friends?.map((friend) => (
+//           <FriendCard
+//             key={friend.id}
+//             username={friend.username}
+//             avatar_url={friend.avatar_url}
+//             isOnline={onlineUsers.includes(String(friend.id))}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+
+// // FriendCard.jsx
+// const FriendCard = ({ username, avatar_url, isOnline }) => {
+//   console.log("Rendering FriendCard:", { username, avatar_url, isOnline });
+//   return (
+//     <div className="friend-card">
+//       <div className="friend-pf-div">
+//         <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
+//         {isOnline ? (
+//           <div className="online-dot status-fri-dot"></div>
+//         ) : (
+//           <div className="offline-dot status-fri-dot"></div>
+//         )}
+//       </div>
+//       <div className="friend-info">
+//         <span>{username}</span>
+//       </div>
+//     </div>
+//   );
+// };
