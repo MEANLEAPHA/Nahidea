@@ -199,7 +199,7 @@ export default function GifFeed() {
         placeholder="Search GIFs on Nahidea..."
         allowClear
         onClear={handleClear}
-        className="gif-search"
+        className="gif-searchs"
       />
 
       
