@@ -36,7 +36,7 @@ import RecentHistory from "../util/recentHistory";
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import nahideaTran from "../img/nahidea-tran.png";
-import DailyNews from './DailyNews';
+
 
 // data
 import { iconOptions } from "../data/post_type_data";
