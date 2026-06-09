@@ -8,8 +8,7 @@ import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/f
 import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
 import gossiperlogo from "../img/gossiperlogo.png";
-
-
+import axios from "axios";
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
 
@@ -21,7 +20,7 @@ const Aside = (props) => {
         try {
             const token = localStorage.getItem("token");
 
-            const res = await api.get(
+            const res = await axios.get(
             `${process.env.VITE_SERVER_URL}/api/chat/unread-count`,
             {
                 headers: {

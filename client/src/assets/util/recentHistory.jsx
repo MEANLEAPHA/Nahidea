@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const token = localStorage.getItem("token");
-
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
 const RecentHistory = () => {
     const navigate = useNavigate();
   const [recentDataHis, setRecentDataHis] = useState([]);
