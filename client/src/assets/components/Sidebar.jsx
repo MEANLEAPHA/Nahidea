@@ -279,7 +279,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
                     <div className="user-list-item-meta-content">
                       <div className="user-list-item-meta-title">
                         <div className='user-chat-name'>{item.username}</div>
-                        <div className='user-chat-message'>{item.last_message || 'No messages yet'}</div>
+                        <div className='user-chat-message'>{item.last_message || ''}</div>
                       </div>
                       {item.unread_count > 0 && (
                         <Badge
