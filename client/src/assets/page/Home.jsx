@@ -75,13 +75,6 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  // ex
-  const [isAnonymous, setIsAnonymous] = useState(1);
-  const [anonymousName, setAnonymousName] = useState("Anony972mous");
-  const [anonymousBg, setAnonymousBg] = useState("yellowgreen");
-  const [username, setUsername] = useState("Meanleap");
-
-
   // INITIAL LOAD
   useEffect(() => {
     fetchPosts(1);
@@ -150,13 +143,13 @@ export default function Home() {
   };
 
   // REFRESH
-  const handleRefresh = () => {
-    setPosts([]);
-    setPage(1);
-    setHasMore(true);
-    setError(null);
-    fetchPosts(1);
-  };
+  // const handleRefresh = () => {
+  //   setPosts([]);
+  //   setPage(1);
+  //   setHasMore(true);
+  //   setError(null);
+  //   fetchPosts(1);
+  // };
 
   // Render post style
   const renderPostContent = (post) => {
@@ -1259,181 +1252,3 @@ const parseJSON = (val) => {
     return [val];
   }
 };
-
-
-
-// const RecentHistory = () => {
-//   const [recentDataHis, setRecentDataHis] = useState([]);
-
-//   useEffect(() => {
-//     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-//     setRecentDataHis(postData);
-//   }, []);
-
-//   if (recentDataHis.length === 0) {
-//     return null;
-//   }
-
-//   const handleClearPostHistory = () => {
-//     localStorage.setItem("recentPostHis", JSON.stringify([]));
-//     setRecentDataHis([]);
-//   };
-
-//   const deletePostHistory = (postId) => {
-//     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-//     const update = postData.filter((item) => item.id !== postId);
-//     localStorage.setItem("recentPostHis", JSON.stringify(update));
-//     setRecentDataHis(update);
-//   };
-
-//   return (
-//     <div className="history-container">
-//       <div className="history-container-header">
-//         <label>Recent History</label>
-//         <span onClick={handleClearPostHistory}>Clear All</span>
-//       </div>
-
-//       <div className="history-list-ul">
-//         {recentDataHis.map((item) => (
-//           <PostHistoryCard
-//             key={item.id}
-//             item={item}
-//             deletePostHistory={deletePostHistory}
-//           />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// const PostHistoryCard = ({ item, deletePostHistory }) => {
-//   // Safe image renderer
-//   let safeImg = null;
-//   try {
-//     if (typeof item.mediaSrc === "string") {
-//       if (item.mediaSrc.trim().startsWith("[")) {
-//         const arr = JSON.parse(item.mediaSrc);
-//         if (Array.isArray(arr) && arr.length > 0) {
-//           safeImg = arr[0];
-//         }
-//       } else {
-//         safeImg = item.mediaSrc;
-//       }
-//     }
-//   } catch (err) {
-//     console.warn("Invalid mediaSrc format", err);
-//   }
-
-//   return (
-//     <div className="post-history-card">
-//       <div className="post-history-card-info">
-//         <div id="author-info">
-//           <div
-//             id="author-pf-div"
-//             style={{
-//               backgroundColor: item.isAnonymous === 1 ? item.anonymousBg : "",
-//             }}
-//           >
-//             <img
-//               src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
-//               alt="user-profile"
-//               id="author-pf"
-//             />
-//           </div>
-//           <p id="author-name">{item.author}</p>
-//         </div>
-//         <div id="title-div">
-//           <p id="title">{item.title}</p>
-//         </div>
-//         {/* <button
-//           id="history-card-delete"
-//           onClick={() => deletePostHistory(item.id)}
-//         >
-//           Delete
-//         </button> */}
-//       </div>
-
-//       {safeImg && (
-//         <div
-//           className="media-holder"
-//           style={{ "--preview-url-history-post": `url(${safeImg})` }}
-//         >
-//           <img src={safeImg} alt="post-media" />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-
-// const MutualFriend = ({ onlineUsers }) => {
-//   const [friends, setFriends] = useState([]);
-
-//   useEffect(() => {
-//     const fetchMutualFriends = async () => {
-//       try {
-//         console.log("Fetching mutual friends…"); // 👀 start log
-//         const res = await axios.get(
-//           `${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
-//           {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           }
-//         );
-//         console.log("API response:", res); // 👀 full response
-//         console.log("Mutual friends data:", res.data.data); // 👀 extracted data
-//         setFriends(res.data.data);
-//       } catch (err) {
-//         console.error("Failed to fetch mutual friends:", err); // 👀 error log
-//       }
-//     };
-
-//     fetchMutualFriends();
-//   }, []);
-
-//   if (friends.length === 0) {
-//     console.log("No mutual friends found."); // 👀 log empty state
-//     return null;
-//   }
-
-//   return (
-//     <div className="friend-container">
-//       <div className="friend-header-card">
-//         <label>Friend</label>
-//         <span>see all</span>
-//       </div>
-//       <div className="friend-list-ul">
-//         {friends?.map((friend) => (
-//           <FriendCard
-//             key={friend.id}
-//             username={friend.username}
-//             avatar_url={friend.avatar_url}
-//             isOnline={onlineUsers.includes(String(friend.id))}
-//           />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-
-// // FriendCard.jsx
-// const FriendCard = ({ username, avatar_url, isOnline }) => {
-//   console.log("Rendering FriendCard:", { username, avatar_url, isOnline });
-//   return (
-//     <div className="friend-card">
-//       <div className="friend-pf-div">
-//         <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
-//         {isOnline ? (
-//           <div className="online-dot status-fri-dot"></div>
-//         ) : (
-//           <div className="offline-dot status-fri-dot"></div>
-//         )}
-//       </div>
-//       <div className="friend-info">
-//         <span>{username}</span>
-//       </div>
-//     </div>
-//   );
-// };

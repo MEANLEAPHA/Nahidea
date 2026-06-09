@@ -73,6 +73,7 @@ import Favorite from './assets/page/Favorite';
 import LikePost from './assets/page/LikePost';
 import YourPosts from './assets/page/YourPosts';
 import FeedbackForm from './assets/page/FeedbackForm';
+import Trending from './assets/page/Trending';
 
 const App = () =>{
     return(
@@ -124,6 +125,8 @@ const App = () =>{
                     <Route path ='/report' element={<ReportComment/>}></Route>
                     <Route path='/edit/content' element={<EditContentBody/>}></Route>
 
+                    <Route path='/trending' element={<Trending/>}></Route>
+                    
                     {/* Hall of fame */}
                     <Route path='/halloffame' element={<HallOfFame/>}></Route>
 
