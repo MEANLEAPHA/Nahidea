@@ -17,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 const ChatWindow = ({ activeChat, setActiveChat }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const navigate = useNavigate();
+  const loadingHistoryRef = useRef(false);
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
@@ -86,6 +87,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   };
 
   const loadOlderMessages = async () => {
+    loadingHistoryRef.current = true;
     if (loadingOlder || !hasMore || !oldestMessageId) return;
     setLoadingOlder(true);
     try {
@@ -97,6 +99,9 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         setMessages(prev => [...res.data.messages, ...prev]);
         setOldestMessageId(res.data.messages[0].id);
         setHasMore(res.data.hasMore || false);
+        setTimeout(() => {
+          loadingHistoryRef.current = false;
+        }, 100);
       } else {
         setHasMore(false);
       }
@@ -177,13 +182,6 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     };
 
     const handleUserTyping = ({ userId: typingUserId, isTyping: typing }) => {
-  console.log(
-    "typing event",
-    typingUserId,
-    activeChat.id,
-    typing
-  );
-
   if (Number(typingUserId) === Number(activeChat.id)) {
     setIsTyping(typing);
   }
@@ -335,7 +333,6 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         <div className="chat-header-left">
           {window.innerWidth <= 1000 && (
             <button className="back-button" onClick={() => {
-              navigate(-1);
               setActiveChat(null)}
               }>
               <FontAwesomeIcon icon={faAngleLeft} />
@@ -375,6 +372,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
           onDeleteMessage={handleDeleteMessage}
           onReportMessage={handleReportMessage}
           scrollToBottomRef={messagesEndRef}
+          loadingHistoryRef={loadingHistoryRef}
         />
       </div>
 

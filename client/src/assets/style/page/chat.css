@@ -147,6 +147,7 @@
   margin: auto !important;
   border: 1px solid var(--secondary-color) !important;
   border-radius: 8px !important;
+    margin-bottom: 20px !important;
 }
 .ant-input-affix-wrapper:focus{
   outline: none !important;
@@ -158,6 +159,7 @@
 #search-chat{
   background-color: none !important;
   color: var(--font-color) !important;
+
 }
 #search-chat::placeholder{
   color: var(--font-color) !important;
@@ -176,7 +178,6 @@
   margin: auto;
   padding: 0 !important;
   overflow-y: auto;
-  
   flex: 1;
   scrollbar-width: thin;
     scrollbar-color: var(--secondary-color) var(--background-color);
@@ -279,11 +280,12 @@ padding: 0 !important;
 }
 .btn-restore-chat{
   font-size: small;
-  background: grey;
-  width: 35%;
-  border-radius: 15px;
+  background:var(--back-con);
+   padding: 5px 10px;
+  border-radius: 8px;
   color: var(--font-color);
   cursor: pointer;
+  border: none;
   opacity: 0.9;
 }
 .btn-restore-chat:hover{
@@ -357,7 +359,6 @@ padding: 0 !important;
   font-weight: bold;
   color: var(--font-color);
 }
-
 .typing-indicator {
   display: inline-flex;
   gap: 4px;

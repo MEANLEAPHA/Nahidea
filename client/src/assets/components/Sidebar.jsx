@@ -25,6 +25,7 @@ const { Text } = Typography;
 
 const Sidebar = ({ activeChat, setActiveChat }) => {
   
+  const navigate = useNavigate();
 
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useAuth();
@@ -204,7 +205,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
     <div id='side-bar-gossip'>
       <div id='side-bar-header'>
         <div className='side-bar-header-child'>
-          <LeftOutlined className="btn-out-gossiper"/>
+          <LeftOutlined className="btn-out-gossiper" onClick={()=> navigate(-1)}/>
           <img src={gossiperlogo} id='gossiper-logo'/>
           <p id='gossip-label-chat'>Gossiper</p>
         </div>

@@ -54,7 +54,7 @@
  .btn-upload-gif{
 
   background: var(--back-con);
-  color: white;
+  color: var(--font-color);
   padding: 8px ;
   border-radius: 5px;
   border: 1px solid var(--secondary-color);
@@ -71,27 +71,56 @@
 /* 🔍 Search */
 .gif-search {
   margin-bottom: 16px;
+  background: none!important;
+  border: none !important;
+  padding: 0 !important;
+ color: var(--font-color) !important;
 }
 
 /* remove Ant padding bloat */
-.ant-input,
-.ant-input-affix-wrapper {
+.gif-search .ant-input,
+.gif-search .ant-input-affix-wrapper {
   border-radius: 0px !important;
   padding:0px 15px 0px 5px !important;
+  color: var(--font-color) !important;
 }
 
-.ant-input-affix-wrapper{
+.gif-search .ant-input-affix-wrapper{
   border-top-left-radius: 8px !important;
   border-bottom-left-radius: 8px !important;
-}
-.ant-input-affix-wrapper:focus {
-  box-shadow: none !important;
-  border: 1px solid var(--primary-color) !important;
-  box-shadow: none !important;
-  outline: #fd7648 !important;
+   color: var(--font-color) !important;
 
 }
+.gif-search .ant-input::-webkit-input-placeholder {
 
+  color: grey !important;
+}
+.gif-search .ant-input:focus {
+  box-shadow: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+
+}
+.gif-search .ant-input-affix-wrapper:focus {
+  box-shadow: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+
+}
+.ant-input-clear-icon {
+  color: grey !important;
+  font-size: 16px;
+}
+.ant-input-clear-icon:hover{
+  color: tomato !important;
+}
+.ant-input-search-btn {
+  background-color: transparent !important;
+  border-color: var(--secondary-color) !important;
+  color: var(--font-color) !important;
+}
 /* 🧱 Masonry layout */
 .masonry {
   column-count: 4;

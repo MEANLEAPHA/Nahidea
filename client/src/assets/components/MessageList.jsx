@@ -8,7 +8,7 @@ import { Button, Dropdown, Popconfirm, message, Spin } from 'antd';
 import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { faPenToSquare, faTrashCan, faShareFromSquare } from '@fortawesome/free-regular-svg-icons';
 
-const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, onDeleteMessage, onReportMessage, scrollToBottomRef }) => {
+const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, onDeleteMessage, onReportMessage, scrollToBottomRef, loadingHistoryRef }) => {
   const getStatusIcon = (status) => {
     if (status === 'sent') return <FontAwesomeIcon icon={faCheck} />;
     if (status === 'delivered') return 'Delivered';
@@ -19,8 +19,20 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
 
   // Auto‑scroll to bottom when new messages arrive
   useEffect(() => {
-    scrollToBottomRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [messages, scrollToBottomRef]);
+
+  if (loadingHistoryRef?.current) {
+    return;
+  }
+
+  scrollToBottomRef?.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "end"
+  });
+
+}, [messages]);
+  // useEffect(() => {
+  //   scrollToBottomRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  // }, [messages, scrollToBottomRef]);
 
   return (
     <>
@@ -37,24 +49,6 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
                 <button className="message-action-btn" onClick={() => onEditMessage(msg)}>
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
-                  {/* <Popconfirm
-                    title="Delete Message"
-                    description="Are you sure you want to delete this Message?"
-                    onConfirm={onDeleteMessage(msg.id)}
-                    icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                    okText="Delete"
-                    cancelText="No, Keep"
-                    okButtonProps={{
-                      style: { backgroundColor: 'red', borderColor: 'red', height: '30px', color: '#fff', borderRadius: '5px' },
-                    }}
-                    cancelButtonProps={{
-                      style: { backgroundColor: 'skyblue', height: '30px', color: '#fff', borderRadius: '5px' },
-                    }}
-                  >
-                    <button className="message-action-btn">
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </button>
-                  </Popconfirm> */}
                 <button className="message-action-btn" onClick={() => onDeleteMessage(msg.id)}>
                   <FontAwesomeIcon icon={faTrashCan} />
                 </button>
