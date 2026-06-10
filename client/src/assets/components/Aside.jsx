@@ -125,7 +125,7 @@ const MinInfo = [
         id:0, a: '/', icon: <HomeOutlined className='sub-icon'/>
     },
     {
-        id:1, a: '/answerqa', icon: <SignatureOutlined className='sub-icon'/>
+        id:1, a: '/unslovedqa', icon: <SignatureOutlined className='sub-icon'/>
     },  
     {
         id:2, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, 
@@ -230,7 +230,7 @@ const MinCard = ({a, icon, unreadCount}) => {
 
 const Mains= [
     { id:1, a: '/', icon: <HomeOutlined className='icon-aside'/>, label: <label>Home</label>, classNameBtn: "btn-home" },
-    { id:2, a: '/answerqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
+    { id:2, a: '/unslovedqa',  icon: <SignatureOutlined className='icon-aside'/>, label: <label>Answer <span style={{color:"red",}}>QA</span></label> },
     { id:3, a: '/chat', icon: <img src={gossiperlogo} className='sub-icon sub-icon-logo'/>, label: <label id='gossip-label'>Gossiper</label> },
     { id:4, a: '/spammy', icon: <FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='icon-aside'/>, label: <label>Spammy</label> },
 ];

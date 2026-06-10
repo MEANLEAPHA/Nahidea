@@ -74,6 +74,7 @@ import LikePost from './assets/page/LikePost';
 import YourPosts from './assets/page/YourPosts';
 import FeedbackForm from './assets/page/FeedbackForm';
 import Trending from './assets/page/Trending';
+import UnsolvedQA from './assets/page/UnsolvedQA';
 
 const App = () =>{
     return(
@@ -126,6 +127,7 @@ const App = () =>{
                     <Route path='/edit/content' element={<EditContentBody/>}></Route>
 
                     <Route path='/trending' element={<Trending/>}></Route>
+                    <Route path='/unslovedqa' element={<UnsolvedQA/>}></Route>
                     
                     {/* Hall of fame */}
                     <Route path='/halloffame' element={<HallOfFame/>}></Route>

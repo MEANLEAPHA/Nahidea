@@ -728,6 +728,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
             <article id="feed-article">
                 <div className='feed-header'>
                     <p className='feed-title'>Trending Posts</p>
+                    <p className='feed-subtitle'>Most popular posts of the day</p>
                 </div>
                 <br/>
                 {error ?
