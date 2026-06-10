@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&family=Schoolbell&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Irish+Grover&family=Schoolbell&display=swap');
 .chat-container{
     width:100%;
     height: auto;
@@ -21,7 +21,7 @@
 }
 
 
-/* =====side bar===== */
+
 #side-bar-gossip{
   width: 45%;
   height: 100vh ;
@@ -33,7 +33,7 @@
   background-color:var(--back-con);
 }
 
-/* sidebar header */
+
 #side-bar-header{
   padding: 0px 16px;
   height: 50px;
@@ -132,7 +132,7 @@
   margin: auto;
   height: 100%;
 }
-/* ===== Search =====  */
+
 .ant-input-prefix{
   padding-left: 8px !important;
   padding-right: 8px !important;
@@ -172,7 +172,6 @@
   border: none !important;
 }
 
-/* ===== list ===== */
 .user-chat-list{
   width: 100% !important;
   margin: auto;
@@ -292,8 +291,6 @@ padding: 0 !important;
   opacity: 1;
 }
 
-
-/* ChatWindow */
 .chat-window {
   flex: 1;
   display: flex;
@@ -392,7 +389,7 @@ padding: 0 !important;
   border-radius: 4px;
 }
 
-/* MessageList */
+
 .message-list {
   flex: 1;
   overflow-y: auto;
@@ -522,7 +519,7 @@ padding: 0 !important;
   background: var(--back-con);
 }
 
-/* MessageInput */
+
 .message-input-container {
   padding: 12px 20px;
   border-top: 1px solid var(--back-con);
@@ -668,4 +665,4 @@ padding: 0 !important;
   }
 }
 
-
+ */
