@@ -729,6 +729,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
                 <div className='feed-header'>
                     <p className='feed-title'>Trending Posts</p>
                 </div>
+                <br/>
                 {error ?
                     (  
                         <div className='error-container'>

@@ -472,7 +472,7 @@
 }
 
 /* 6. Image itself: centered and not stretched disproportionately */
-.preview-image {
+.preview-images {
   display: block;
   max-width: 100%;
   max-height: 380px;
@@ -1133,7 +1133,7 @@ RESPONSIVE
     max-height: 280px;
     }
 
-    .preview-image {
+    .preview-images {
     max-height: 280px;
     }
 
@@ -1210,7 +1210,7 @@ RESPONSIVE
     }
 
     /* main image */
-    .preview-image {
+    .preview-images {
     max-height: 250px;
     }
 
@@ -1289,7 +1289,7 @@ RESPONSIVE
 
 
     /* main image */
-    .preview-image {
+    .preview-images {
     max-height: 280px;
     }
 

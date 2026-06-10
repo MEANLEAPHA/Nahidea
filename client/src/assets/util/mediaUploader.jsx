@@ -188,7 +188,7 @@ export function MediaPreview({ files = [] }) {
                 <img
                   src={mediaFileUrl(file)}
                   alt={file?.name || `preview-${idx}`}
-                  className="preview-image"
+                  className="preview-images"
                 />
               </div>
             ) : (
