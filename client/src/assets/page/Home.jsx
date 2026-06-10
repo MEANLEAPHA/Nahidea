@@ -31,8 +31,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
-import{TagsPreview} from "../util/tagInput";
-import {MoreFields, MarkdownPreview} from "../util/moreFlieds";
 import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
 import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";

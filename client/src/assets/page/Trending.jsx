@@ -30,6 +30,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 
 // util
+import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
+import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
 
@@ -1003,4 +1005,138 @@ const Loader = () => {
           <img src={nahideaTran} alt="Loading..." className="loader-img"/>
     </div>
   )
+};
+const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }) => {
+  const { user } = useOutletContext();
+  const navigate = useNavigate();
+  const [openReport, setOpenReport] = useState(false);
+
+  const isOwner = Number(ownerId) === Number(user.id);
+
+  const menuItemsForAll = [
+    {
+      label: (
+        <li onClick={() => handleCopyLink(post_id)}>
+          <LinkOutlined /> Copy link
+        </li>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <li onClick={() => setOpenReport(true)}>
+          <FlagOutlined /> Report Post
+          <ReportPostModal
+            open={openReport}
+            setOpen={setOpenReport}
+            postId={post_id}
+          />
+        </li>
+      ),
+      key: "1",
+    },
+  ];
+
+  const menuItemsForOwner = [
+    post_type === "content" && {
+      label: (
+        <li
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/edit/content", {
+              state: { postId: post_id, contentId, bodyText: text_body, page, mode: "edit" },
+            });
+          }}
+        >
+          <EditOutlined /> Edit Text Body
+        </li>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <li onClick={() => handleDeletePost(post_id)}>
+          <DeleteOutlined /> Delete
+        </li>
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <li onClick={() => handleCopyLink(post_id)}>
+          <LinkOutlined /> Copy link
+        </li>
+      ),
+      key: "2",
+    },
+    {
+      label: (
+        <li onClick={() => setOpenReport(true)}>
+          <FlagOutlined /> Report Post
+          <ReportPostModal
+            open={openReport}
+            setOpen={setOpenReport}
+            postId={post_id}
+          />
+        </li>
+      ),
+      key: "3",
+    },
+  ].filter(Boolean);
+
+  return (
+    <Dropdown
+      menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }}
+      trigger={["click"]}
+      classNames={{ root: "profile-dropdown" }}
+    >
+      <div className="post-header-right">
+        <FontAwesomeIcon icon={faEllipsisVertical} className="icon-formore" />
+      </div>
+    </Dropdown>
+  );
+};
+
+
+const handleDeletePost = async (postId) => {
+  try {
+    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`,
+       { headers: { Authorization: `Bearer ${token}` } });
+    message.success("Post deleted successfully");
+  } catch (err) {
+    console.error(err);
+    message.error("Failed to delete post");
+  }
+};
+// copy fun
+const handleCopyLink = async (postId) => {
+  try {
+
+    const postUrl = `https://nahidea.onrender.com/aboutpost/${postId}`;
+
+    await navigator.clipboard.writeText(postUrl);
+
+    message.success("Link copied successfully");
+
+  } catch (err) {
+
+    console.error(err);
+
+    message.error("Failed to copy link");
+  }
+};
+
+// Function covert string to array
+const parseJSON = (val) => {
+  try {
+    if (typeof val === "string") {
+      const parsed = JSON.parse(val);
+      return Array.isArray(parsed) ? parsed : [parsed];
+    }
+    // if it's already an array, keep it; if it's a single value, wrap it
+    return Array.isArray(val) ? val : [val];
+  } catch {
+    // if JSON.parse fails, just wrap the raw string
+    return [val];
+  }
 };
