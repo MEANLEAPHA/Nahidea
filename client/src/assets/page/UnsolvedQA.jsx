@@ -37,7 +37,7 @@ const UnsolvedQA = () => {
 
       const token = localStorage.getItem("token"); // Adjust based on your auth storage
       const response = await axios.get(
-        `/api/questions/unsolved?page=${pageNum}&limit=20`,
+        `${import.meta.env.VITE_SERVER_URL}/api/questions/unsolved?page=${pageNum}&limit=20`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
