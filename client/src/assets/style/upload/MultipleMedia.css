@@ -75,18 +75,6 @@ width: 100%;
   overflow: hidden;
 }
 
-/* main image */
-.preview-image {
-  height: auto;
-  max-width: 100%;
-  margin: auto;
-  max-height: 380px;
-  object-fit: cover; 
-  position: relative;
-  padding: 0;
-  z-index: 1;
-  display: block;
-}
 
 /* blurred background behind image */
 .preview-wrapper::before {
