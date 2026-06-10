@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { iconOptions } from "../data/post_type_data";
@@ -12,12 +12,68 @@ import {
   faLocationCrosshairs,
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
-import { SignatureOutlined, HeartFilled } from "@ant-design/icons";
+import { SignatureOutlined, HeartFilled, LoadingOutlined } from "@ant-design/icons";
 import "../style/page/UnsolvedQA.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const UnsolvedQA = ({ data = [] }) => {
+const UnsolvedQA = () => {
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  // Fetch unsolved questions from API
+  const fetchUnsolvedQuestions = async (pageNum = 1, isLoadMore = false) => {
+    try {
+      if (isLoadMore) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
+      const token = localStorage.getItem("token"); // Adjust based on your auth storage
+      const response = await axios.get(
+        `/api/questions/unsolved?page=${pageNum}&limit=20`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data && response.data.data) {
+        if (isLoadMore) {
+          setQuestions(prev => [...prev, ...response.data.data]);
+          setHasMore(response.data.data.length === 20);
+        } else {
+          setQuestions(response.data.data);
+          setHasMore(response.data.data.length === 20);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching unsolved questions:", err);
+      setError(err.response?.data?.message || "Failed to load questions");
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUnsolvedQuestions(1, false);
+  }, []);
+
+  const loadMore = () => {
+    if (!loadingMore && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchUnsolvedQuestions(nextPage, true);
+    }
+  };
 
   const renderQuestionPreview = (post) => {
     const { question_type, data: qData } = post;
@@ -184,14 +240,12 @@ const UnsolvedQA = ({ data = [] }) => {
   };
 
   const handleCardClick = (post) => {
-    // Navigate to answer page with proper data structure
     const QaData = {
       question_id: post.data?.id || post.question_id,
       title: post.title,
       question_type: post.question_type,
     };
     
-    // Add type-specific data
     if (post.question_type === "range") {
       QaData.range_min = post.data?.range_min;
       QaData.range_max = post.data?.range_max;
@@ -220,6 +274,24 @@ const UnsolvedQA = ({ data = [] }) => {
     navigate(`/answer/${post.id}/${post.data?.id || post.question_id}/${post.question_type}`);
   };
 
+  if (loading) {
+    return (
+      <div className="unsolved-loading">
+        <LoadingOutlined style={{ fontSize: 48 }} />
+        <p>Loading unsolved questions...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="unsolved-error">
+        <p>{error}</p>
+        <button onClick={() => fetchUnsolvedQuestions(1, false)}>Retry</button>
+      </div>
+    );
+  }
+
   return (
     <div className="unsolved-questions-container">
       <div id='qa-header'>
@@ -233,47 +305,66 @@ const UnsolvedQA = ({ data = [] }) => {
       </div>
 
       <div className="questions-grid">
-        {data.map((post) => (
-          <div
-            key={post.id}
-            className="question-card"
-            onClick={() => handleCardClick(post)}
-          >
-            {renderQuestionPreview(post)}
-            
-            <div className="question-title">
-              <p>{post.title || post.data?.question_text}</p>
-            </div>
-            
-            <div className="tags">
-              <div className="user-info">
-                <div
-                  id="author-pf-div"
-                  style={{
-                    backgroundColor: post.is_anonymous === 1 ? post.anonymous_bg_color : "",
-                  }}
-                >
-                  <img
-                    src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
-                    alt="user-profile"
-                    id="author-pf"
-                  />
-                </div>
-                <div id='user-info-p'>
-                  <span className="username">
-                    {post.is_anonymous ? "Anonymous" : post.username}
-                  </span>
-                  <span className="created-at">{post.created_at}</span>
-                </div>
-              </div>
-              <div className="stats">
-                <span><HeartFilled /> {post.likes_count || 0}</span>
-                <span><FontAwesomeIcon icon={faMessage} /> {post.comments_count || 0}</span>
-              </div>
-            </div>
+        {questions.length === 0 ? (
+          <div className="no-questions">
+            <p>No unsolved questions found.</p>
+            <button onClick={() => navigate('/create/question')}>Be the first to ask!</button>
           </div>
-        ))}
+        ) : (
+          questions.map((post) => (
+            <div
+              key={post.id}
+              className="question-card"
+              onClick={() => handleCardClick(post)}
+            >
+              {renderQuestionPreview(post)}
+              
+              <div className="question-title">
+                <p>{post.title || post.data?.question_text}</p>
+              </div>
+              
+              <div className="tags">
+                <div className="user-info">
+                  <div
+                    id="author-pf-div"
+                    style={{
+                      backgroundColor: post.is_anonymous === 1 ? post.anonymous_bg_color : "",
+                    }}
+                  >
+                    <img
+                      src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+                      alt="user-profile"
+                      id="author-pf"
+                    />
+                  </div>
+                  <div id='user-info-p'>
+                    <span className="username">
+                      {post.is_anonymous ? "Anonymous" : post.username}
+                    </span>
+                    <span className="created-at">{post.created_at}</span>
+                  </div>
+                </div>
+                <div className="stats">
+                  <span><HeartFilled /> {post.likes_count || 0}</span>
+                  <span><FontAwesomeIcon icon={faMessage} /> {post.comments_count || 0}</span>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
+
+      {hasMore && questions.length > 0 && (
+        <div className="load-more-container">
+          <button 
+            onClick={loadMore} 
+            disabled={loadingMore}
+            className="load-more-btn"
+          >
+            {loadingMore ? <LoadingOutlined /> : "Load More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -348,3 +348,74 @@
 .dark-theme .option-chip {
   background: rgba(255, 255, 255, 0.06);
 }
+/* Add these to your existing CSS */
+
+.unsolved-loading,
+.unsolved-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+  color: var(--font-color);
+}
+
+.unsolved-error button,
+.no-questions button {
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.unsolved-error button:hover,
+.no-questions button:hover {
+  opacity: 0.9;
+}
+
+.no-questions {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--font-color);
+}
+
+.no-questions p {
+  margin-bottom: 20px;
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  padding: 20px;
+}
+
+.load-more-btn {
+  padding: 12px 32px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.load-more-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
