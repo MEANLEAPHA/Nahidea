@@ -30,7 +30,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 
 // util
-import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
+// import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
 import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
@@ -1140,3 +1140,37 @@ const parseJSON = (val) => {
     return [val];
   }
 };
+
+function DisplayAnimatedIcon({ src }) {
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    if (!src) return;
+
+    // Load Lordicon script once
+    const script = document.createElement("script");
+    script.src = "https://cdn.lordicon.com/lordicon.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    // Validate JSON before rendering
+    fetch(src)
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid JSON");
+        return res.json();
+      })
+      .then(() => setIsValid(true))
+      .catch(() => setIsValid(false));
+  }, [src]);
+
+  if (!src || !isValid) return null; // fallback to nothing
+
+  return (
+    <lord-icon
+      src={src}
+      trigger="loop"
+      delay="3000"
+      style={{ width: "20px", height: "20px" }}
+    ></lord-icon>
+  );
+}
