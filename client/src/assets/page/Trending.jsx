@@ -771,7 +771,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
 
                                             <DotDropDown 
                                                 ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
-                                                page={page || 1} text_body={post?.data?.text_body || ""} contentId={post?.data?.id || 1}
+                                                text_body={post?.data?.text_body || ""} contentId={post?.data?.id || 1}
                                             />
                                         </div>
 
@@ -1006,7 +1006,7 @@ const Loader = () => {
     </div>
   )
 };
-const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }) => {
+const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
   const { user } = useOutletContext();
   const navigate = useNavigate();
   const [openReport, setOpenReport] = useState(false);
@@ -1044,7 +1044,7 @@ const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }
           onClick={(e) => {
             e.stopPropagation();
             navigate("/edit/content", {
-              state: { postId: post_id, contentId, bodyText: text_body, page, mode: "edit" },
+              state: { postId: post_id, contentId, bodyText: text_body, mode: "edit" },
             });
           }}
         >
@@ -1174,3 +1174,4 @@ function DisplayAnimatedIcon({ src }) {
     ></lord-icon>
   );
 }
+page
