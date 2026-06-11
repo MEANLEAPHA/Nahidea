@@ -981,8 +981,7 @@ export default function Accounts() {
                   {
                     !isOwnProfile && (
                       <button className='pf-act-btn' type="button" 
-                       onClick={() => navigate('/chat', 
-                       state = { selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: state?.userId} })}
+                       onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: state?.userId}}})}
                        >
                       <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
                     )
