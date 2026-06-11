@@ -3,7 +3,7 @@ import {useLocation, Outlet, useNavigate, useOutletContext} from 'react-router-d
 import axios from "axios";
 const token = localStorage.getItem("token");
 import "../style/page/Accounts.css";
-
+import gossiperlogo from "../img/gossiperlogo.png";
 // antd
 import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown, message} from "antd";
 const { Title, Text } = Typography;
@@ -11,11 +11,14 @@ import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,Search
           FormOutlined, MenuOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, 
           SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,FlagOutlined,LinkOutlined,DeleteOutlined,
           EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
+          ToolOutlined,
+          CalendarOutlined,
       } from '@ant-design/icons';
 import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuoteLeft, faQuoteRight, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
@@ -51,7 +54,11 @@ import { iconOptions } from "../data/post_type_data";
 export default function Accounts() {
     const { state } = useLocation(); 
     const navigate = useNavigate();
-    const { onlineUsers } = useOutletContext();
+
+    const { user,onlineUsers } = useOutletContext();
+
+    // follow
+    const [followState, setFollowState] =useState("follow");
 
     // loading
     const [loading, setLoading] = useState(false); 
@@ -68,46 +75,71 @@ export default function Accounts() {
     const [likingPosts, setLikingPosts] = useState(new Set());
     const [favoritingPosts, setFavoritingPosts] = useState(new Set());
 
-    const [showButterfly, setShowButterfly] = useState(false);
 
+    // data render
+    const [usernames, setUsernames] = useState("");
+    const [nicknames, setNicknames] = useState("");
+    const [avatar, setAvatar] = useState("");
+    const [workplace, setWorkplace] = useState("");
+    const [bios, setBios] = useState("");
+    const [professions, setProfessions] = useState("");
+    const [followings, setFollowings] = useState(0);
+    const [followers, setFollowers] = useState(0);
+    const [postCount, setPostCount] = useState(0);
+    const [joinAt, setJoinAt] = useState("");
 
-    const username = "Meanleap Ha";
-    const bio = "Give me 3 months to finish a project, i spend 2 months watching The Walking Dead";
-    const profession = "Software Engineer";
-    const work_place = "Google";
+    const [isOwnProfile, setIsOwnProfile] = useState(false);
 
-    const triggerButterflies = () => {
-      setShowButterfly(true);
-      setTimeout(() => setShowButterfly(false), 10000); // remove after 4s
+    useEffect(() => {
+        setIsOwnProfile(String(state?.userId) === String(user?.id));
+        fetchPosts(1, Number(state?.userId || user?.id));
+        setPage(1);
+        fetchFollowStatus();
+        handleFetchProfile();
+    }, [state?.userId]);
+
+    const handleFetchProfile = async () => {
+      try{
+        const res = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/api/get-user-info/${state?.userId}`
+        )
+        const data = res.data.userData;
+        setUsernames(data.username);
+        setNicknames(data.nickname);
+        setAvatar(data.avatar_url);
+        setWorkplace(data.work_location);
+        setBios(data.bio);
+        setProfessions(data.profession);
+        setFollowings(data.following_count);
+        setFollowers(data.followers_count);
+        setPostCount(data.post_count || 0); 
+        setJoinAt(data.created_at);
+      }
+      catch (err) {
+        console.error(err);
+      }
     };
 
-      // INITIAL LOAD
     useEffect(() => {
-        fetchPosts(1, state?.userId);
-        setPage(1);
-    }, [state]);
-
-     // SCROLL LISTENER
-      useEffect(() => {
-        const handleScroll = () => {
-          if (
-            window.innerHeight + window.scrollY >=
-              document.body.offsetHeight - 200 &&
-            !loading &&
-            !fetching &&
-            hasMore
-          ){
-            setPage((prev) => {
-              const next = prev + 1;
-              fetchPosts(next);
-              return next;
-            });
-          }
-        };
-    
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-      }, [loading, fetching, hasMore]);
+      const handleScroll = () => {
+        if (
+          window.innerHeight + window.scrollY >=
+            document.body.offsetHeight - 200 &&
+          !loading &&
+          !fetching &&
+          hasMore
+        ){
+          setPage((prev) => {
+            const next = prev + 1;
+            fetchPosts(next);
+            return next;
+          });
+        }
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, [loading, fetching, hasMore]);
 
     const fetchPosts = async (nextPage = 1, userId) => {
         if (fetching) return;
@@ -144,11 +176,12 @@ export default function Accounts() {
             setFetching(false);
         }
     };
+
     const renderPostContent = (post) => {
 
     const data = post.data;
 
-    if (!data) return <Text type="secondary">No content</Text>;
+    if (!data) return <Text type="secondary">No Post yet</Text>;
 
     switch (post.post_type) {
       case "content":
@@ -659,6 +692,7 @@ export default function Accounts() {
         return null;
     }
     };
+
     const handleLike = async (postId, ownerId) => {
       if (likingPosts.has(postId)) return;
       setLikingPosts(prev => new Set(prev).add(postId));
@@ -717,7 +751,8 @@ export default function Accounts() {
           return next;
         });
       }
-    }
+    };
+
     const handleFavorite = async (postId) => {
 
     if (favoritingPosts.has(postId)) return;
@@ -779,39 +814,188 @@ export default function Accounts() {
         });
     }
     };
+
+    const handleFollow = async () => {
+      if ( followState === "loading" ) {
+        return;
+      }
+      try {
+        setFollowState("loading");
+
+        if (
+          followState === "follow" ||
+          followState === "follows_you"
+        ) {
+
+          const res = await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${state?.userId}`,
+            {},
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`,
+              },
+            }
+          );
+
+          /*
+          MUTUAL FOLLOW
+          */
+
+          if (res.data.mutual) {
+
+            setFollowState("mutual");
+
+          } else {
+
+            setFollowState("following");
+
+          }
+
+          return;
+        }
+
+
+        if (
+          followState === "following" ||
+          followState === "mutual"
+        ) {
+
+          await axios.delete(
+            `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${state?.userId}`,
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`,
+              },
+            }
+          );
+
+          const res = await axios.get(
+            `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${state?.userId}`,
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`,
+              },
+            }
+          );
+
+          setFollowState(
+            res.data.state
+          );
+
+        }
+
+      } catch (err) {
+        console.log(err);
+        setFollowState("follow");
+      }
+    };
+
+    const fetchFollowStatus = async () => {
+
+        try {
+
+          const res = await axios.get(
+            `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`,
+              },
+            }
+          );
+
+          setFollowState(
+            res.data.state
+          );
+
+        } catch (err) {
+
+          console.log(err);
+
+        }
+    };
+
+    const Unfollow = () => {
+      const handleUnfollow = async () => {
+        try{
+          const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/unfollow/${state?.userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          const data = response.data;
+          if(data.mutual === false){
+            setFollowState("follow");
+          }
+
+        }
+        catch(err){
+          console.log(err);
+        }
+      }
+      return(
+        <button className="pf-act-btn" onClick={()=>{handleUnfollow()}}>
+          Unfollow
+        </button>
+      )
+    };
   
   return (
     <div className="accounts-page">
-        {showButterfly && (
-                      <div className="butterfly-overlay">
-                      </div>
-                    )}
       <div className="accounts-header">  
-        <div id='acc-banner' style={{ "--preview-url-banner": `url(https://media.newyorker.com/photos/665f65409ad64d9e7a494208/16:9/w_1280,c_limit/Chayka-screenshot-06-05-24.jpg)` }}>
-            <img src='https://media.newyorker.com/photos/665f65409ad64d9e7a494208/16:9/w_1280,c_limit/Chayka-screenshot-06-05-24.jpg' id="img-banner"/>
-            <button type="button" id='btn-edit-pf'><span id='btn-edit-pf-span'>Edit Profile</span></button>
+        <div id='acc-banner' style={{ "--preview-url-banner": `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTar_ouGael5ODlrC1kbFbKLpEPSJtTQqdaIg&s)` }}>
+            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTar_ouGael5ODlrC1kbFbKLpEPSJtTQqdaIg&s' id="img-banner"/>
         </div>
         <div id='acc-pf-info'>
             <div className='acc-pf-info-child acc-pf-info-child-left'>
                 <div id='acc-pf-div'>
                      <div className="status-pf-online"></div>
-                    <img src='https://media.tenor.com/ZlZZTd366EYAAAAe/we-have-no-sappers-dog-accepting-fate.png' id='acc-pf'/>
+                    <img src={avatar || user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} id='acc-pf'/>
                    
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
-                        {username}
+                        {usernames || user?.username || "N/A"}
                     </p>
-                    <p id='user-profession-pf'>{profession} at {work_place}</p>
+                    <p id='user-profession-pf'>{professions || user?.profession || "N/A"} at {workplace || user?.work_location || "N/A"}</p>
                 </div>
             </div>
             <div className='acc-pf-info-child acc-pf-info-child-right'>
                 <div style={{display:'flex', gap:'8px'}}>
-                     <button className='pf-act-btn' type="button" >Follow</button>
-                    <button className='pf-act-btn' type="button" style={{backgroundColor:'#38b6ff', color: 'white'}}>Message</button>
-                    <button className='pf-act-btn' type="button" onClick={triggerButterflies}>🦋 Send Butterfly</button>
+
+                  {
+                    !isOwnProfile && (
+                      <button className="pf-act-btn" type="button" onClick={()=> handleFollow()} >
+                      { followState === "loading" && "Following..." }
+                      { followState === "follow" && "Follow" }
+                      { followState === "following" && ( <> <span>Following</span> <Unfollow/> </> )}
+                      { followState === "follows_you" && "Follow Back" }
+                      { followState === "mutual" && ( <> <span>Friends</span><Unfollow/> </>)}
+                    </button>
+                    )
+                  }
+                  {
+                    !isOwnProfile && (
+                      <button className='pf-act-btn' type="button" ><img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
+                    )
+                  }
+                  {
+                    !isOwnProfile && (
+                      <button className='pf-act-btn' type="button" onClick={() => navigate('/spammy')}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> Send Spammy</button>
+                    )
+                  }
+                  {
+                      isOwnProfile && (
+                         <button className='pf-act-btn' type="button" onClick={()=>navigate('/editaccount')}><ToolOutlined /> Edit Profile</button>
+                      )
+                   }
+                   
                 </div>
-                <button className='pf-act-btn' type="button"><MenuOutlined /></button>
+                <MenuDropDown />
             </div>
             
         </div>
@@ -1071,57 +1255,190 @@ export default function Accounts() {
 
         </div>
 
+        
         <div id='data-full-info'>
-          <label id='about'>About {username ||"Leap"}</label>
-          <p id='bio'>{bio}</p>
 
-          <p>
-            <label id='follow'>Followers</label>
-            <label id='following'>Following</label>
-            <label id='posts'>Posts</label>
-            <label id='point'>Points</label>
-          </p>
-
-          <p>MeanLeap Ha's Friend</p>
+          
+          <h3 className='fri-list-label'>About {usernames || user?.username || "N/A"}</h3>
+          <div id='user-bio'>
+           
+             <div id='stats-data'>
+            <div className='stats-data-items'>
+              <span className='data-render-stats'>{followers}</span>
+                <span className='label-render-stats'>Followers</span>
+                
+            </div>
+            <div className='stats-data-items'>
+              <span className='data-render-stats'>{followings}</span>
+                <span className='label-render-stats'>Following</span>
+              
+            </div>
+            <div className='stats-data-items'>
+              <span className='data-render-stats'>{postCount}</span>
+                <span className='label-render-stats'>Posts</span>
+                
+            </div>
+          </div>
+             
+            <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
+            <p id='join-at'><CalendarOutlined /> Join at: {joinAt || "N/A"}</p>
+          </div>
+          <FriendList />
 
         </div>
-        
-
       </div>
     </div>
   );
 }
 
-function DisplayAnimatedIcon({ src }) {
-  const [isValid, setIsValid] = useState(false);
+  function DisplayAnimatedIcon({ src }) {
+    const [isValid, setIsValid] = useState(false);
+
+    useEffect(() => {
+      if (!src) return;
+
+      // Load Lordicon script once
+      const script = document.createElement("script");
+      script.src = "https://cdn.lordicon.com/lordicon.js";
+      script.async = true;
+      document.body.appendChild(script);
+
+      // Validate JSON before rendering
+      fetch(src)
+        .then((res) => {
+          if (!res.ok) throw new Error("Invalid JSON");
+          return res.json();
+        })
+        .then(() => setIsValid(true))
+        .catch(() => setIsValid(false));
+    }, [src]);
+
+    if (!src || !isValid) return null; // fallback to nothing
+
+    return (
+      <lord-icon
+        src={src}
+        trigger="loop"
+        delay="3000"
+        style={{ width: "20px", height: "20px" }}
+      ></lord-icon>
+    );
+  }
+
+
+  const MenuDropDown = () =>{
+    const navigate = useNavigate();
+    const upload_items = [
+      {
+        label: (
+          <li onClick={()=>navigate('/create/content')}>
+            <FlagOutlined /> <span>Report User</span>
+          </li>
+        ),
+        key: '0',
+      },
+      {
+        label: (
+          <li onClick={()=>navigate('/create/confession')}>
+            <LinkOutlined /> <span>Copy Link</span>
+          </li>
+        ),
+        key: '1',
+      }
+      ];
+    return(
+      <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
+        <button className='pf-act-btn menu-btn' type="button"><MenuOutlined /></button>
+    </Dropdown>
+    )
+  }
+
+
+const FriendList = () => {
+  const [friendList, setFriendList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { user } = useOutletContext();
+
+  const fetchFriendList = async () => {
+    try {
+      setLoading(true);
+      const targetUserId = state?.userId || user?.id;
+      
+      if (!targetUserId) {
+        console.error("No user ID available");
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/get-friends-by-id/${targetUserId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      
+      if (res.data.success) {
+        setFriendList(res.data.data || []);
+      }
+    } catch (err) {
+      console.error("Error fetching friends:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!src) return;
+    fetchFriendList();
+  }, [state?.userId, user?.id]); // Fixed dependencies
 
-    // Load Lordicon script once
-    const script = document.createElement("script");
-    script.src = "https://cdn.lordicon.com/lordicon.js";
-    script.async = true;
-    document.body.appendChild(script);
+  if (loading) {
+    return (
+      <div className='friend-list'>
+        <div className='friend-list-header'>
+          <h3 className='fri-list-label'>Friend List</h3>
+        </div>
+        <div className='friend-list-body'>
+          <div className="loading-friends">Loading friends...</div>
+        </div>
+      </div>
+    );
+  }
 
-    // Validate JSON before rendering
-    fetch(src)
-      .then((res) => {
-        if (!res.ok) throw new Error("Invalid JSON");
-        return res.json();
-      })
-      .then(() => setIsValid(true))
-      .catch(() => setIsValid(false));
-  }, [src]);
-
-  if (!src || !isValid) return null; // fallback to nothing
+  if (!friendList.length) {
+    return null;
+  }
 
   return (
-    <lord-icon
-      src={src}
-      trigger="loop"
-      delay="3000"
-      style={{ width: "20px", height: "20px" }}
-    ></lord-icon>
+    <div className='friend-list'>
+      <div className='friend-list-header'>
+        <h3 className='fri-list-label'>Friend List</h3>
+        <button onClick={() => navigate('/accounts/friends')} id='view-allfri-btn'>
+          <span>View All</span>
+        </button>
+      </div>
+      <div className='friend-list-body'>
+        {friendList.map((friend, index) => (
+          <div 
+            className='friend-list-items' 
+            key={friend.id || index}
+            onClick={() => navigate(`/profile/${friend.id}`)}
+            style={{ cursor: 'pointer' }}
+          >
+            <img 
+              src={friend.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} 
+              alt={friend.username}  
+              className="fri-img" 
+            />
+            <div className='fri-name'>
+              {friend.username}
+            </div>              
+          </div>
+        ))}
+      </div>
+    </div>
   );
-}
+};

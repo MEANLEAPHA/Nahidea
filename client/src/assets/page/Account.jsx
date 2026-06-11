@@ -263,31 +263,31 @@ useEffect(() => {
   //   }
   // };
   const fetchFollowStatus =
-async () => {
+    async () => {
 
-  try {
+      try {
 
-    const res = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
-      {
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
+        const res = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`,
+            },
+          }
+        );
+
+        setFollowState(
+          res.data.state
+        );
+
+      } catch (err) {
+
+        console.log(err);
+
       }
-    );
 
-    setFollowState(
-      res.data.state
-    );
-
-  } catch (err) {
-
-    console.log(err);
-
-  }
-
-};
+    };
   // const fetchFollowStatus = async () => {
   //   try {
 
@@ -453,9 +453,9 @@ async () => {
 
         
           <button
-  className="nahideaProfileFollowBtn"
-  onClick={handleFollow}
->
+            className="nahideaProfileFollowBtn"
+            onClick={handleFollow}
+          >
 
 {
   followState === "loading"
@@ -496,7 +496,7 @@ async () => {
   )
 }
 
-</button>
+          </button>
 
           <button className="nahideaProfileMessageBtn">
             Message
