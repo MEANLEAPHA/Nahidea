@@ -934,7 +934,8 @@ export default function Accounts() {
 
         }
         catch(err){
-          console.log(err);
+          console.error('Full error:', err.response?.data); // This will show server error details
+          console.error('Status:', err.response?.status);
         }
       }
       return(
