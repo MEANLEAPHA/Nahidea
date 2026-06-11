@@ -30,27 +30,27 @@ const AnswerQa = () => {
     const [rankingOrderInput, setRankingOrderInput] = useState([]);   
     const [rankingOrderValue, setRankingOrderValue] = useState([]);   
     
-    // useEffect(() => {
-    //     const QaStoreRaw = sessionStorage.getItem('QaStore');
+    useEffect(() => {
+        const QaStoreRaw = sessionStorage.getItem('QaStore');
   
 
-    //     if (!QaStoreRaw) {
-    //         // handleFetchQa();
-    //          setQaData({});
-    //         return;
-    //     }
+        if (!QaStoreRaw) {
+            handleFetchQa();
+             setQaData({});
+            return;
+        }
 
-    //     const QaStore = JSON.parse(QaStoreRaw);
+        const QaStore = JSON.parse(QaStoreRaw);
 
 
-    //     if (String(QaStore.question_id) === String(questionId)) {
-    //         setQaData(QaStore);
-    //     } else {
-    //         // handleFetchQa();
-    //          setQaData({});
-    //     }
+        if (String(QaStore.question_id) === String(questionId)) {
+            setQaData(QaStore);
+        } else {
+            handleFetchQa();
+             setQaData({});
+        }
 
-    // }, [questionId]);
+    }, [questionId]);
 
     const handleFetchQa = async () => {
         try{

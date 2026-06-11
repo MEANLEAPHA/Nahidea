@@ -35,6 +35,9 @@ import {MediaPreview} from "../util/mediaUploader";
 import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
+import parseJSON from './util/parseJson';
+import DotDropDown from "./util/dotDropDown";
+import Loader from "./util/loader";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
@@ -43,6 +46,7 @@ import nahideaTran from "../img/nahidea-tran.png";
 
 // data
 import { iconOptions } from "../data/post_type_data";
+import Rule from "./util/rule";
 
 const Trending = () => {
     const navigate = useNavigate();
@@ -603,63 +607,63 @@ const Trending = () => {
     }
     };
     const handleLike = async (postId, ownerId) => {
-if (likingPosts.has(postId)) return;
-setLikingPosts(prev => new Set(prev).add(postId));
-  // optimistic update
-  setPosts(prev =>
-    prev.map(post => {
+      if (likingPosts.has(postId)) return;
+      setLikingPosts(prev => new Set(prev).add(postId));
+        // optimistic update
+        setPosts(prev =>
+          prev.map(post => {
 
-      if (post.id !== postId) return post;
+            if (post.id !== postId) return post;
 
-      return {
-        ...post,
-        is_liked: !post.is_liked,
-        likes_count: post.is_liked
-          ? post.likes_count - 1
-          : post.likes_count + 1
-      };
-    })
-  );
+            return {
+              ...post,
+              is_liked: !post.is_liked,
+              likes_count: post.is_liked
+                ? post.likes_count - 1
+                : post.likes_count + 1
+            };
+          })
+        );
 
-  try {
+        try {
 
-    await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+          await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+
+        } catch (err) {
+
+          // rollback on fail
+          setPosts(prev =>
+            prev.map(post => {
+
+              if (post.id !== postId) return post;
+
+              return {
+                ...post,
+                is_liked: !post.is_liked,
+                likes_count: post.is_liked
+                  ? post.likes_count - 1
+                  : post.likes_count + 1
+              };
+            })
+          );
+
+          console.log(err);
         }
+        finally {
+        setLikingPosts(prev => {
+          const next = new Set(prev);
+          next.delete(postId);
+          return next;
+        });
       }
-    );
-
-  } catch (err) {
-
-    // rollback on fail
-    setPosts(prev =>
-      prev.map(post => {
-
-        if (post.id !== postId) return post;
-
-        return {
-          ...post,
-          is_liked: !post.is_liked,
-          likes_count: post.is_liked
-            ? post.likes_count - 1
-            : post.likes_count + 1
-        };
-      })
-    );
-
-    console.log(err);
-  }
-  finally {
-  setLikingPosts(prev => {
-    const next = new Set(prev);
-    next.delete(postId);
-    return next;
-  });
-}
     }
     const handleFavorite = async (postId) => {
 
@@ -985,164 +989,13 @@ setLikingPosts(prev => new Set(prev).add(postId));
             <article id='his-article'>
                 <RecentHistory />
                 <MutualFriend onlineUsers={onlineUsers} />
-                <div className='rule-absolute'>   
-                    <p onClick={()=>{navigate('/nahidearule')}}>Nahidea Rule</p>     
-                    <p onClick={()=>{navigate('/privacypolicy')}}>Private Policy</p>
-                    <p onClick={()=>{navigate('/useragreement')}}>User Agreement</p>
-                    <p onClick={()=>{navigate('/accessibility')}}>Accessibility</p>
-                    <div>
-                        <p>Nahidea. © 2026. All rights reserved </p>
-                    </div>
-                </div>
-                    
+                <Rule />    
             </article>
         </div>
     );
 };
 
 export default Trending;
-
-const Loader = () => {
-  return(
-     <div className="loader-container">
-          <img src={nahideaTran} alt="Loading..." className="loader-img"/>
-    </div>
-  )
-};
-const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
-  const { user } = useOutletContext();
-  const navigate = useNavigate();
-  const [openReport, setOpenReport] = useState(false);
-
-  const isOwner = Number(ownerId) === Number(user.id);
-
-  const menuItemsForAll = [
-    {
-      label: (
-        <li onClick={() => handleCopyLink(post_id)}>
-          <LinkOutlined /> Copy link
-        </li>
-      ),
-      key: "0",
-    },
-    {
-      label: (
-        <li onClick={() => setOpenReport(true)}>
-          <FlagOutlined /> Report Post
-          <ReportPostModal
-            open={openReport}
-            setOpen={setOpenReport}
-            postId={post_id}
-          />
-        </li>
-      ),
-      key: "1",
-    },
-  ];
-
-  const menuItemsForOwner = [
-    post_type === "content" && {
-      label: (
-        <li
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate("/edit/content", {
-              state: { postId: post_id, contentId, bodyText: text_body, mode: "edit" },
-            });
-          }}
-        >
-          <EditOutlined /> Edit Text Body
-        </li>
-      ),
-      key: "0",
-    },
-    {
-      label: (
-        <li onClick={() => handleDeletePost(post_id)}>
-          <DeleteOutlined /> Delete
-        </li>
-      ),
-      key: "1",
-    },
-    {
-      label: (
-        <li onClick={() => handleCopyLink(post_id)}>
-          <LinkOutlined /> Copy link
-        </li>
-      ),
-      key: "2",
-    },
-    {
-      label: (
-        <li onClick={() => setOpenReport(true)}>
-          <FlagOutlined /> Report Post
-          <ReportPostModal
-            open={openReport}
-            setOpen={setOpenReport}
-            postId={post_id}
-          />
-        </li>
-      ),
-      key: "3",
-    },
-  ].filter(Boolean);
-
-  return (
-    <Dropdown
-      menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }}
-      trigger={["click"]}
-      classNames={{ root: "profile-dropdown" }}
-    >
-      <div className="post-header-right">
-        <FontAwesomeIcon icon={faEllipsisVertical} className="icon-formore" />
-      </div>
-    </Dropdown>
-  );
-};
-
-
-const handleDeletePost = async (postId) => {
-  try {
-    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`,
-       { headers: { Authorization: `Bearer ${token}` } });
-    message.success("Post deleted successfully");
-  } catch (err) {
-    console.error(err);
-    message.error("Failed to delete post");
-  }
-};
-// copy fun
-const handleCopyLink = async (postId) => {
-  try {
-
-    const postUrl = `https://nahidea.onrender.com/aboutpost/${postId}`;
-
-    await navigator.clipboard.writeText(postUrl);
-
-    message.success("Link copied successfully");
-
-  } catch (err) {
-
-    console.error(err);
-
-    message.error("Failed to copy link");
-  }
-};
-
-// Function covert string to array
-const parseJSON = (val) => {
-  try {
-    if (typeof val === "string") {
-      const parsed = JSON.parse(val);
-      return Array.isArray(parsed) ? parsed : [parsed];
-    }
-    // if it's already an array, keep it; if it's a single value, wrap it
-    return Array.isArray(val) ? val : [val];
-  } catch {
-    // if JSON.parse fails, just wrap the raw string
-    return [val];
-  }
-};
 
 function DisplayAnimatedIcon({ src }) {
   const [isValid, setIsValid] = useState(false);

@@ -521,21 +521,15 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
   const menuItems = [
     {
       label: (
-        <li onClick={() => navigate("/account", {
+        <li onClick={() => navigate("/accounts", {
           state: {
             userId: userId,
-            username: username,
-            nickname: nickname,
-            avatar_url: avatar,
-            work_location: work_location,
-            bio: bio,
-            profession: profession
           }
         })}>
           <UserOutlined /> View Account
         </li>
       ),
-      key: "0",
+      key: "1",
     },
     {
       label: (
@@ -549,23 +543,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
           {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
         </li>
       ),
-      key: "1",
-    },
-    {
-      label: (
-        <li onClick={() => navigate("/help")}>
-          <SettingOutlined /> <span>Setting</span>
-        </li>
-      ),
       key: "2",
-    },
-    {
-      label: (
-        <li onClick={() => navigate("/help")}>
-          <QuestionCircleOutlined /> <span>Help</span>
-        </li>
-      ),
-      key: "3",
     },
     {
       label: (
@@ -573,14 +551,14 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
           <ExceptionOutlined /> <span>Feedback</span>
         </li>
       ),
-      key: "4",
+      key: "3",
     },
     {  label: (
      
          <hr />
      
       ),
-      key: "5" },
+      key: "4" },
     {
       label: (
        <li
@@ -589,10 +567,10 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
               navigate("/login");
             }}
           >
-          <FontAwesomeIcon icon={faArrowRightFromBracket} /> <span>Logout</span>
+          <LogoutOutlined /> <span>Logout</span>
         </li>
       ),
-      key: "6",
+      key: "5",
     },
   ];
 

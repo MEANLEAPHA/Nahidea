@@ -194,7 +194,7 @@ const AboutPost = () => {
       handleFetchPost();
     }
     handleView();
-     handleHistory();
+    handleHistory();
     
     if (stored && String(stored.id) === String(id)) {
       setPost(stored);

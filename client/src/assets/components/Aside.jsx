@@ -313,9 +313,9 @@ const Explore = ({a, icon, label, classNameBtn})=> {
 };
 
 const Mores= [
-    { id:12, a: '/help', icon: <QuestionCircleOutlined className='icon-aside'/>, label: <label>Help</label> },
-    { id:13, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
-    { id:14, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
+
+    { id:12, a: '/Feedback',  icon: <ExceptionOutlined className='icon-aside'/>, label: <label>Feedback </label>},
+    { id:13, a: '/Reporthistory',  icon: <FlagOutlined className='icon-aside'/>, label: <label>Report History</label> }
 ];
 
 const AppendMore = () =>{
@@ -334,10 +334,10 @@ const More = ({a, icon, label, classNameIcon})=> {
 };
 
 const Rules= [
-    { id:15, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
-    { id:16, a: '/privacypolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
-    { id:17, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
-    { id:18, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
+    { id:14, a: '/nahidearule', icon: <ReadOutlined className='icon-aside'/>, label: <label>Nahidea Rule</label> },
+    { id:15, a: '/privacypolicy',  icon: <FileProtectOutlined className='icon-aside'/>, label: <label>Private Policy</label> },
+    { id:16, a: '/useragreement',  icon: <FileDoneOutlined className='icon-aside'/>, label: <label>User Agreement</label> },
+    { id:17, a: '/accessibility',  icon: <FontAwesomeIcon icon={faChildReaching} className='icon-aside'/>, label: <label>Accessibility</label> },
 ];
 
 
