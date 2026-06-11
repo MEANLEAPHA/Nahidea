@@ -1281,7 +1281,7 @@ export default function Accounts() {
           </div>
              
             <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
-            <p id='join-at'><CalendarOutlined /> Join at: {joinAt || "N/A"}</p>
+            <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
           <FriendList />
 
@@ -1290,7 +1290,16 @@ export default function Accounts() {
     </div>
   );
 }
-
+const formatJoinDate = (dateString) => {
+  if (!dateString) return "N/A";
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+};
   function DisplayAnimatedIcon({ src }) {
     const [isValid, setIsValid] = useState(false);
 
@@ -1425,7 +1434,7 @@ const FriendList = () => {
           <div 
             className='friend-list-items' 
             key={friend.id || index}
-            onClick={() => navigate(`/profile/${friend.id}`)}
+            onClick={() => navigate(`/accounts`, { state: { userId: friend.id } })}
             style={{ cursor: 'pointer' }}
           >
             <img 
