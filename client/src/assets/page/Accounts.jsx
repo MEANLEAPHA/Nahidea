@@ -898,7 +898,7 @@ export default function Accounts() {
         try {
 
           const res = await axios.get(
-            `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${id}`,
+            `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${state?.userId}`,
             {
               headers: {
                 Authorization:
@@ -980,7 +980,11 @@ export default function Accounts() {
                   }
                   {
                     !isOwnProfile && (
-                      <button className='pf-act-btn' type="button" ><img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
+                      <button className='pf-act-btn' type="button" 
+                       onClick={() => navigate('/chat', 
+                       state = { selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: state?.userId} })}
+                       >
+                      <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
                     )
                   }
                   {

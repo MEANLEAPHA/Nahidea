@@ -292,7 +292,7 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: start;
     flex-direction: row;
 }
 .friend-list-items{

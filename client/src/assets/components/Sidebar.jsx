@@ -26,6 +26,7 @@ const { Text } = Typography;
 const Sidebar = ({ activeChat, setActiveChat }) => {
   
   const navigate = useNavigate();
+  const {state} = useLocation();
 
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useAuth();
@@ -77,6 +78,34 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
       message.error('Failed to load contacts');
     }
   };
+
+    useEffect(() => {
+    const initChat = async () => {
+      if (state?.selected === 2 && state?.activeChat) {
+        // Call backend to get or create conversation
+        const response = await fetch('/api/conversations/get-or-create', {
+          method: 'POST',
+          body: JSON.stringify({ otherUserId: state.activeChat.id })
+        });
+        const conversation = await response.json();
+        
+        setActiveChat({
+          id: conversation.user_id || state.activeChat.id,
+          username: state.activeChat.username,
+          avatar: state.activeChat.avatar_url,
+          conversation_id: conversation.id
+        });
+        setSelected(2);
+      } 
+      else if (state?.selected === 1 && state?.activeChat) {
+        // Friend mode - conversation already exists
+        setActiveChat(state.activeChat);
+        setSelected(1);
+      }
+    };
+    
+    initChat();
+  }, [state?.selected, state?.userId]);
 
   useEffect(() => {
     fetchChatUsers();
