@@ -75,6 +75,7 @@ import YourPosts from './assets/page/YourPosts';
 import FeedbackForm from './assets/page/FeedbackForm';
 import Trending from './assets/page/Trending';
 import UnsolvedQA from './assets/page/UnsolvedQA';
+import AllFriends from './assets/page/AllFriends';
 
 const App = () =>{
     return(
@@ -99,21 +100,11 @@ const App = () =>{
 
                     {/* Account */}
                     <Route path='/account' element={<Account/>}>
-                    
-                      {/* <Route path='/all'></Route>
-                      <Route path='/post'></Route>
-                      <Route path='/favorite'></Route>
-                      <Route path='/likepost'></Route>
-                      <Route path='/history'></Route>
-                      <Route path='/setup'></Route> */}
                     </Route>
                     
-                    <Route path='/accounts' element={<Accounts/>}>
-                        <Route path="all" element={<All />} />
-                        <Route path="posts" element={<Posts />} />
-                        <Route path="socialactivity" element={<SocialActivity />} />
-                    </Route>
-                    
+                    <Route path='/accounts' element={<Accounts/>}></Route>
+                    <Route path='/friends' element={<AllFriends/>}></Route>
+
                     {/* Upload posts */}
                     <Route path='/create/question' element={<Question/>}></Route>
                     <Route path='/create/confession' element={<Confession/>}></Route>

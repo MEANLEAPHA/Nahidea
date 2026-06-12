@@ -1287,7 +1287,7 @@ export default function Accounts() {
             <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
             <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
-          <FriendList />
+          <FriendList targetUsername={usernames} tagetUserId={state?.userId || user?.id}/>
 
         </div>
       </div>
@@ -1367,7 +1367,7 @@ const formatJoinDate = (dateString) => {
   }
 
 
-const FriendList = () => {
+const FriendList = ({targetUsername, tagetUserId}) => {
   const [friendList, setFriendList] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -1429,7 +1429,7 @@ const FriendList = () => {
     <div className='friend-list'>
       <div className='friend-list-header'>
         <h3 className='fri-list-label'>Friend List</h3>
-        <button onClick={() => navigate('/accounts/friends')} id='view-allfri-btn'>
+        <button onClick={() => navigate('/friends', {state: {userId: tagetUserId || user?.id, username: targetUsername || user?.username}})} id='view-allfri-btn'>
           <span>View All</span>
         </button>
       </div>
