@@ -31,7 +31,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
-import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
+// import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
 import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
@@ -780,6 +780,7 @@ const handleFavorite = async (postId) => {
     });
   }
 };
+const [hoveredPostId, setHoveredPostId] = useState(null);
   return (
     <div className='home-container'>
       <article id="feed-article">
@@ -801,7 +802,7 @@ const handleFavorite = async (postId) => {
                   dataSource={posts}
                   renderItem={(post) => (
                     <List.Item key={post.id}>
-                      <div className="posts">
+                      <div className="posts"  onMouseEnter={() => setHoveredPostId(post.id)} onMouseLeave={() => setHoveredPostId(null)}>
 
                         <div className='post-header'>
 
@@ -817,9 +818,15 @@ const handleFavorite = async (postId) => {
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
-                                  {post?.data?.cate_icon && (
+                                  {/* {post?.data?.cate_icon && (
                                     <DisplayAnimatedIcon src={post?.data?.cate_icon || 'https://cdn.lordicon.com/ulnswmkk.json'} />
-                                  )}
+                                  )} */}
+                                   {post?.data?.cate_icon && (
+                                      <DisplayAnimatedIcon 
+                                        src={post?.data?.cate_icon}
+                                        isHovered={hoveredPostId === post.id}
+                                      />
+                                    )}
                                 </div>
                               </p>
                               <p className='post-at'>{post.created_at}</p>
@@ -1097,3 +1104,58 @@ const handleFavorite = async (postId) => {
 
 
 
+
+
+
+let scriptLoaded = false;
+
+function DisplayAnimatedIcon({ src, isHovered }) {
+  const [isValid, setIsValid] = useState(false);
+  const [iconLoaded, setIconLoaded] = useState(false);
+
+  // Load Lordicon script once globally
+  useEffect(() => {
+    if (!scriptLoaded && typeof window !== 'undefined') {
+      const script = document.createElement("script");
+      script.src = "https://cdn.lordicon.com/lordicon.js";
+      script.async = true;
+      document.body.appendChild(script);
+      scriptLoaded = true;
+    }
+  }, []);
+
+  // Load and validate icon JSON only when needed (on hover)
+  useEffect(() => {
+    if (!src || !isHovered || iconLoaded) return;
+
+    let isMounted = true;
+    
+    fetch(src)
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid JSON");
+        return res.json();
+      })
+      .then(() => {
+        if (isMounted) {
+          setIsValid(true);
+          setIconLoaded(true);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setIsValid(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [src, isHovered, iconLoaded]);
+
+  // Don't render anything until hovered AND validated
+  if (!isHovered || !isValid) return null;
+
+  return (
+    <lord-icon
+      src={src}
+      trigger="hover"
+      style={{ width: "20px", height: "20px" }}
+    />
+  );
+}
