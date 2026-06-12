@@ -7,7 +7,7 @@ const token = localStorage.getItem("token");
 const username = sessionStorage.getItem("username");
 const Comment = () => {
   const { state } = useLocation();
-  const {username} = useOutletContext();
+  const {user} = useOutletContext();
   
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ const Comment = () => {
       content,
       username_mention: state?.username_mention || null,
       user_id_mention: state?.user_id_mention || null,
-      username: username,
+      username: user.username,
       gif_url: gif,
       is_anonymous: isAnon ? 1 : 0,
       comment_id: state?.comment_id || null

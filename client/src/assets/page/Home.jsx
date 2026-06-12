@@ -155,23 +155,6 @@ export default function Home() {
         return (
           <>
                 <div className='post-caption' onClick={ () => {
-                  const newPost = 
-                    { id: post.id,
-                      post_type: post.post_type,
-                      is_anonymous: post.is_anonymous || 0, anonymous_name: post.anonymous_name, anonymous_bg_color: post.anonymous_bg_color,
-                      likes_count: post.likes_count || 0,comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                      created_at:post.created_at,
-                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      tags:post.tags,
-                      data:{
-                        type:data.type,
-                        title:data.title,
-                        text_body:data.text_body,
-                        media_url:data.media_url
-                      }
-                    };
-
-                    sessionStorage.setItem("post", JSON.stringify(newPost));
 
                     const HisData = {
                       id: post.id,
@@ -209,22 +192,6 @@ export default function Home() {
           <>
            
                    <div className='post-caption' onClick={()=>{
-                      const newPost = 
-                        { id: post.id,
-                          post_type: post.post_type,
-                          anonymous_name: post.anonymous_name, is_anonymous: post.is_anonymous || 0,anonymous_bg_color: post.anonymous_bg_color,
-                          likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                          created_at: post.created_at,
-                          username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                          tags: post.tags,
-                          data:{
-                            type:data.type,
-                            title:data.title,
-                            media_url:data.media_url,
-                          }
-                        };
-                      sessionStorage.setItem("post", JSON.stringify(newPost));
-
                         const HisData = {
                           id: post.id,
                           title: data.title,
@@ -259,7 +226,6 @@ export default function Home() {
                     className="preview-image"
                   />
                 </div>
-                {/* <MediaPreview files={parseJSON(data.media_url)}/> */}
               </div>
 
           </>
