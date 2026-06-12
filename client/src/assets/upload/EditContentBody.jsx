@@ -311,15 +311,15 @@ const EditContentBody = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const [textBodyValue, setTextBodyValue] = useState('');
-    const [page, setPage] = useState(1);
+   
 
     useEffect(() => {
         if (state?.bodyText) {
           setTextBodyValue(state.bodyText);
-          setPage(state.page);
+          
         } else {
           setTextBodyValue(""); 
-          setPage(1);
+      
         }
     },[state]);
  

@@ -15,7 +15,7 @@ import ReportPostModal from '../ReportPostModal';
 import handleDeletePost from './deletePost';
 import handleCopyLink from './copyLink';
 
-const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }) => {
+const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
   const { user } = useOutletContext();
   const navigate = useNavigate();
   const [openReport, setOpenReport] = useState(false);
@@ -53,7 +53,7 @@ const DotDropDown = ({ ownerId, post_type, post_id, page, text_body, contentId }
           onClick={(e) => {
             e.stopPropagation();
             navigate("/edit/content", {
-              state: { postId: post_id, contentId, bodyText: text_body, page, mode: "edit" },
+              state: { postId: post_id, contentId, bodyText: text_body, mode: "edit" },
             });
           }}
         >

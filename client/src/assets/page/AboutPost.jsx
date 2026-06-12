@@ -20,6 +20,7 @@ import { MediaPreview } from "../util/mediaUploader";
 
 // util
 import MoreDropDown from "../util/upload/MoreDropDown";
+import DisplayAnimatedIcon from "../util/upload/AnimatedIcon";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
@@ -29,6 +30,7 @@ import {
   Typography,
   Space,
 } from "antd";
+import DotDropDown from './util/dotDropDown';
 
 const { Text } = Typography;
 
@@ -657,15 +659,29 @@ const AboutPost = () => {
         <div className="about-posts">
           <div className='post-header'>
             <div className='post-user-profile'>
-              <div id="author-pf-div" style={{ backgroundColor: post.is_anonymous === 1 ? post.anonymous_bg_color : "" }}>
-                <img src={post.is_anonymous === 1 ? nahIdeaAuth : userProfilePic} alt="" id="author-pf" />
+              <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
+                  <img src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url} id="author-pf"/>
               </div>
               <div className='user-post-info'>
-                <p id="author-name">{post.username}</p>
+                <p className='post-username'>
+                  {post.username} 
+                  <div className='dot'></div>
+                  <div className='category-post-div'>
+                    <span className="post-type-label">{post?.data?.type}</span> 
+                      {post?.data?.cate_icon && (
+                        <DisplayAnimatedIcon
+                          src={post?.data?.cate_icon}
+                        />
+                      )}
+                  </div>
+                </p>
                 <p className='post-at'>{post.created_at}</p>
-              </div>
+              </div> 
             </div>
-            <MoreDropDown />
+            {/* <MoreDropDown /> */}
+            <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
+                         text_body={post?.data?.text_body || ""} contentId={post?.data?.id || 1}
+            />
           </div>
 
           <div className='post-body'>
