@@ -4,6 +4,13 @@ import { useParams, useOutletContext, useNavigate, useLocation } from "react-rou
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
+// lucide
+import {
+  Heart,
+  HeartOff,
+  Bookmark,
+  LoaderCircle
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 // style
 import "../style/page/Aboutpost.css";
