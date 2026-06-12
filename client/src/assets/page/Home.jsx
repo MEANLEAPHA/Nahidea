@@ -1155,6 +1155,7 @@ function DisplayAnimatedIcon({ src, isHovered }) {
     <lord-icon
       src={src}
       trigger="hover"
+      delay="3000"
       style={{ width: "20px", height: "20px" }}
     />
   );
