@@ -48,7 +48,7 @@ const parseJSON = (val) => {
 const AboutPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { username, userId} = useOutletContext();
+  const { user} = useOutletContext();
   const {id} = useParams(); 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -188,18 +188,9 @@ const AboutPost = () => {
 
   // initial load
   useEffect(() => {
-    const stored = JSON.parse(sessionStorage.getItem("post") || "{}");
-
-    if (!stored || String(stored.id) !== String(id)) {
-      handleFetchPost();
-    }
+    handleFetchPost();
     handleView();
     handleHistory();
-    
-    if (stored && String(stored.id) === String(id)) {
-      setPost(stored);
-    }
-
     fetchComments(1);
   }, [id]);
 
@@ -245,7 +236,7 @@ const AboutPost = () => {
   const handleFetchPost = async () => {
      try{
         const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-post/${id}`
+          `${import.meta.env.VITE_SERVER_URL}/api/get-posts/${id}`
         )
         const data = res.data;
         setPost(data);
@@ -407,7 +398,7 @@ const AboutPost = () => {
             )
           }
 
-        {(c && String(c.user_id) === String(userId) && c.is_deleted === 0) && (
+        {(c && String(c.user_id) === String(user?.id) && c.is_deleted === 0) && (
           <>
             <span onClick={() => {
                         navigate("/comment", {

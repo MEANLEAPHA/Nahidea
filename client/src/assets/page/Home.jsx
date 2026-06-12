@@ -564,65 +564,65 @@ export default function Home() {
                   
               </div>
                 <div className='post-caption' onClick={ () => {
-                  const newPost = 
-                    { id: post.id,
-                      post_type: post.post_type,
-                      is_anonymous: post.is_anonymous || 0, anonymous_bg_color: post.anonymous_bg_color,
-                      likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                      created_at: post.created_at,
-                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      tags: post.tags,
-                      data:{
-                        question_id:data.id,
-                        question_type:data.question_type,
-                        question_related_to:data.question_related_to,
-                        title:data.title,
-                        media_url:data.media_url,
+                  // const newPost = 
+                  //   { id: post.id,
+                  //     post_type: post.post_type,
+                  //     is_anonymous: post.is_anonymous || 0, anonymous_bg_color: post.anonymous_bg_color,
+                  //     likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
+                  //     created_at: post.created_at,
+                  //     username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                  //     tags: post.tags,
+                  //     data:{
+                  //       question_id:data.id,
+                  //       question_type:data.question_type,
+                  //       question_related_to:data.question_related_to,
+                  //       title:data.title,
+                  //       media_url:data.media_url,
 
-                        // rating
-                        rating_icon_id:data.rating_icon_id || null,
+                  //       // rating
+                  //       rating_icon_id:data.rating_icon_id || null,
 
-                        // range
-                        range_min:data.range_min || null,
-                        range_max:data.range_max || null,
-                        default_range_value: data.default_range_value || null,
-                        step: data.step || null,
+                  //       // range
+                  //       range_min:data.range_min || null,
+                  //       range_max:data.range_max || null,
+                  //       default_range_value: data.default_range_value || null,
+                  //       step: data.step || null,
 
-                        // munltiple choice
-                        choices: 
-                          data.choices?.map(c => ({
-                            choice_text: c.choice_text,
-                            multiplechoice_id: c.multiplechoice_id,
-                            id: c.id,
-                            question_id: c.question_id
-                          }))
-                        || [],
+                  //       // munltiple choice
+                  //       choices: 
+                  //         data.choices?.map(c => ({
+                  //           choice_text: c.choice_text,
+                  //           multiplechoice_id: c.multiplechoice_id,
+                  //           id: c.id,
+                  //           question_id: c.question_id
+                  //         }))
+                  //       || [],
 
-                        // ranking
-                        items: 
-                          data.items?.map(c => ({
-                            item_text: c.item_text,
-                            position: c.position,
-                            id: c.id,
-                            ranking_id: c.ranking_id,
-                            question_id: c.question_id
-                          }))
-                         || [],
+                  //       // ranking
+                  //       items: 
+                  //         data.items?.map(c => ({
+                  //           item_text: c.item_text,
+                  //           position: c.position,
+                  //           id: c.id,
+                  //           ranking_id: c.ranking_id,
+                  //           question_id: c.question_id
+                  //         }))
+                  //        || [],
 
-                        // single choice
-                        choice: 
-                          data.choice?.map(c => ({
-                            choice_text: c.choice_text,
-                            singlechoice_id: c.singlechoice_id,
-                            id: c.id,
-                            question_id: c.question_id
-                          }))
-                        || [],
-                      }
-                    };
-                    sessionStorage.setItem("post", JSON.stringify(newPost));
+                  //       // single choice
+                  //       choice: 
+                  //         data.choice?.map(c => ({
+                  //           choice_text: c.choice_text,
+                  //           singlechoice_id: c.singlechoice_id,
+                  //           id: c.id,
+                  //           question_id: c.question_id
+                  //         }))
+                  //       || [],
+                  //     }
+                  //   };
+                  //   sessionStorage.setItem("post", JSON.stringify(newPost));
 
-                       const HisData = {
+                    const HisData = {
                       id: post.id,
                       title: data.title,
                       mediaSrc : data.media_url,
@@ -802,7 +802,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                   dataSource={posts}
                   renderItem={(post) => (
                     <List.Item key={post.id}>
-                      <div className="posts"  onMouseEnter={() => setHoveredPostId(post.id)} onMouseLeave={() => setHoveredPostId(null)}>
+                      <div className="posts" onMouseEnter={() => setHoveredPostId(post.id)} onMouseLeave={() => setHoveredPostId(null)}>
 
                         <div className='post-header'>
 
@@ -818,9 +818,6 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
-                                  {/* {post?.data?.cate_icon && (
-                                    <DisplayAnimatedIcon src={post?.data?.cate_icon || 'https://cdn.lordicon.com/ulnswmkk.json'} />
-                                  )} */}
                                    {post?.data?.cate_icon && (
                                       <DisplayAnimatedIcon 
                                         src={post?.data?.cate_icon}
@@ -1154,7 +1151,7 @@ function DisplayAnimatedIcon({ src, isHovered }) {
   return (
     <lord-icon
       src={src}
-      trigger="hover"
+      trigger="loop"
       delay="3000"
       style={{ width: "20px", height: "20px" }}
     />
