@@ -254,6 +254,7 @@ const AboutPost = () => {
           }
         )
         const data = res.data;
+        console.log(data);
         setPost(data);
       }
       catch (err) {
@@ -617,7 +618,7 @@ const handleLike = async (postId, ownerId) => {
 if (likingPosts.has(postId)) return;
 setLikingPosts(prev => new Set(prev).add(postId));
   // optimistic update
-  setPosts(prev =>
+  setPost(prev =>
     prev.map(post => {
 
       if (post.id !== postId) return post;
@@ -647,7 +648,7 @@ setLikingPosts(prev => new Set(prev).add(postId));
   } catch (err) {
 
     // rollback on fail
-    setPosts(prev =>
+    setPost(prev =>
       prev.map(post => {
 
         if (post.id !== postId) return post;
@@ -679,7 +680,7 @@ const handleFavorite = async (postId) => {
   setFavoritingPosts(prev => new Set(prev).add(postId));
 
   // optimistic update
-  setPosts(prev =>
+  setPost(prev =>
     prev.map(post => {
 
       if (post.id !== postId) return post;
@@ -706,7 +707,7 @@ const handleFavorite = async (postId) => {
   } catch (err) {
 
     // rollback
-    setPosts(prev =>
+    setPost(prev =>
       prev.map(post => {
 
         if (post.id !== postId) return post;
