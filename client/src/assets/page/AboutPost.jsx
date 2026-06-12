@@ -4,7 +4,7 @@ import { useParams, useOutletContext, useNavigate, useLocation } from "react-rou
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
-
+import { motion, AnimatePresence } from "framer-motion";
 // style
 import "../style/page/Aboutpost.css";
 import "../style/page/Home.css";
@@ -51,6 +51,9 @@ const AboutPost = () => {
   const { user} = useOutletContext();
   const {id} = useParams(); 
   const [post, setPost] = useState(null);
+  const [likingPosts, setLikingPosts] = useState(new Set());
+  const [favoritingPosts, setFavoritingPosts] = useState(new Set());
+  
   const [comments, setComments] = useState([]);
   const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
@@ -67,7 +70,7 @@ const AboutPost = () => {
   const targetCommentId = useRef(null);
   const hasScrolledToHash = useRef(false);
 
- 
+  
   // use Location to get comment hash
   useEffect(() => {
     if (location.hash) {
@@ -236,7 +239,12 @@ const AboutPost = () => {
   const handleFetchPost = async () => {
      try{
         const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-posts/${id}`
+          `${import.meta.env.VITE_SERVER_URL}/api/get-posts/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         )
         const data = res.data;
         setPost(data);
@@ -598,6 +606,126 @@ const renderPostContent = (post) => {
       return null;
   }
 };
+const handleLike = async (postId, ownerId) => {
+if (likingPosts.has(postId)) return;
+setLikingPosts(prev => new Set(prev).add(postId));
+  // optimistic update
+  setPosts(prev =>
+    prev.map(post => {
+
+      if (post.id !== postId) return post;
+
+      return {
+        ...post,
+        is_liked: !post.is_liked,
+        likes_count: post.is_liked
+          ? post.likes_count - 1
+          : post.likes_count + 1
+      };
+    })
+  );
+
+  try {
+
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+  } catch (err) {
+
+    // rollback on fail
+    setPosts(prev =>
+      prev.map(post => {
+
+        if (post.id !== postId) return post;
+
+        return {
+          ...post,
+          is_liked: !post.is_liked,
+          likes_count: post.is_liked
+            ? post.likes_count - 1
+            : post.likes_count + 1
+        };
+      })
+    );
+
+    console.log(err);
+  }
+  finally {
+  setLikingPosts(prev => {
+    const next = new Set(prev);
+    next.delete(postId);
+    return next;
+  });
+}
+}
+const handleFavorite = async (postId) => {
+
+  if (favoritingPosts.has(postId)) return;
+
+  setFavoritingPosts(prev => new Set(prev).add(postId));
+
+  // optimistic update
+  setPosts(prev =>
+    prev.map(post => {
+
+      if (post.id !== postId) return post;
+
+      return {
+        ...post,
+        is_favorited: !post.is_favorited
+      };
+    })
+  );
+
+  try {
+
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+  } catch (err) {
+
+    // rollback
+    setPosts(prev =>
+      prev.map(post => {
+
+        if (post.id !== postId) return post;
+
+        return {
+          ...post,
+          is_favorited: !post.is_favorited
+        };
+      })
+    );
+
+    console.log(err);
+
+  } finally {
+
+    setFavoritingPosts(prev => {
+
+      const next = new Set(prev);
+
+      next.delete(postId);
+
+      return next;
+
+    });
+  }
+};
   return (
     <div className='home-container'>
       <article id="feed-article">
@@ -622,11 +750,195 @@ const renderPostContent = (post) => {
           
           <div className='post-footer'>
             <div className='post-footer-left'>
-              <button className='button-action-footer'><FontAwesomeIcon icon={faHeart}  className='button-action-footer-icon'/> <p><span>{post.likes_count}</span><span className='count-label'> Like</span></p></button>
+              <button
+                                      className={`button-action-footer like-button ${
+                                        post.is_liked ? "liked" : ""
+                                      }`}
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleLike(post.id, post.user_id);
+                                      }}
+                                    >
+                                      <motion.div
+                                        className="action-icon-wrapper"
+                                        whileTap={{ scale: 0.75 }}
+                                        animate={
+                                          likingPosts.has(post.id)
+                                            ? {
+                                                scale: [1, 1.35, 1],
+                                                rotate: [0, -15, 15, 0]
+                                              }
+                                            : {}
+                                        }
+                                        transition={{
+                                          duration: 0.45,
+                                          ease: "easeInOut"
+                                        }}
+                                      >
+                                        <AnimatePresence mode="wait">
+
+                                          {post.is_liked ? (
+
+                                            <motion.div
+                                              key="liked"
+                                              initial={{
+                                                scale: 0.4,
+                                                opacity: 0,
+                                                rotate: -25
+                                              }}
+                                              animate={{
+                                                scale: 1,
+                                                opacity: 1,
+                                                rotate: 0
+                                              }}
+                                              exit={{
+                                                scale: 0.4,
+                                                opacity: 0,
+                                                rotate: 25
+                                              }}
+                                              transition={{
+                                                type: "spring",
+                                                stiffness: 500,
+                                                damping: 22
+                                              }}
+                                            >
+                                              <Heart
+                                                size={19}
+                                                className="button-action-footer-icon liked-heart"
+                                                fill="currentColor"
+                                              />
+                                            </motion.div>
+
+                                          ) : (
+
+                                            <motion.div
+                                              key="unliked"
+                                              initial={{
+                                                scale: 0.4,
+                                                opacity: 0
+                                              }}
+                                              animate={{
+                                                scale: 1,
+                                                opacity: 1
+                                              }}
+                                              exit={{
+                                                scale: 0.4,
+                                                opacity: 0
+                                              }}
+                                              transition={{
+                                                duration: 0.2
+                                              }}
+                                            >
+                                              <Heart
+                                                size={19}
+                                                className="button-action-footer-icon"
+                                              />
+                                            </motion.div>
+
+                                          )}
+
+                                        </AnimatePresence>
+                                      </motion.div>
+
+                                      <p>
+                                        <span>{post.likes_count}</span>
+                                        <span className="count-label"> Like</span>
+                                      </p>
+              </button>
               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
             </div>
             <div className='post-footer-right'>
-              <button className='button-action-footer button-action-footer-last'><FontAwesomeIcon icon={faBookmark} /></button>
+                             <button
+  className={`button-action-footer button-action-footer-last favorite-button ${
+    post.is_favorited ? "favorited" : ""
+  }`}
+  onClick={(e) => {
+    e.preventDefault();
+    handleFavorite(post.id);
+  }}
+>
+  <motion.div
+    className="action-icon-wrapper"
+    whileTap={{ scale: 0.75 }}
+    animate={
+      favoritingPosts.has(post.id)
+        ? {
+            scale: [1, 1.25, 1],
+            y: [0, -5, 0]
+          }
+        : {}
+    }
+    transition={{
+      duration: 0.4,
+      ease: "easeInOut"
+    }}
+  >
+    <AnimatePresence mode="wait">
+
+      {post.is_favorited ? (
+
+        <motion.div
+          key="favorited"
+          initial={{
+            scale: 0.4,
+            opacity: 0,
+            y: 10
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1,
+            y: 0
+          }}
+          exit={{
+            scale: 0.4,
+            opacity: 0,
+            y: 10
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 22
+          }}
+        >
+          <Bookmark
+            size={18}
+            className="button-action-footer-icon favorited-bookmark"
+            fill="currentColor"
+          />
+        </motion.div>
+
+      ) : (
+
+        <motion.div
+          key="unfavorited"
+          initial={{
+            scale: 0.4,
+            opacity: 0
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1
+          }}
+          exit={{
+            scale: 0.4,
+            opacity: 0
+          }}
+          transition={{
+            duration: 0.2
+          }}
+        >
+          <Bookmark
+            size={18}
+            className="button-action-footer-icon"
+          />
+        </motion.div>
+
+      )}
+
+    </AnimatePresence>
+  </motion.div>
+</button>
             </div> 
           </div>
         </div>

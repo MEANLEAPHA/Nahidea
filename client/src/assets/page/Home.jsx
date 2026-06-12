@@ -937,7 +937,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                         <span>{post.likes_count}</span>
                                         <span className="count-label"> Like</span>
                                       </p>
-                                    </button>
+                            </button>
                             
                        
                               <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
