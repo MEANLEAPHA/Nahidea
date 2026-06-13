@@ -78,6 +78,7 @@ const AboutPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [likingPosts, setLikingPosts] = useState(false);
+  const [likingCommentId, setLikingCommentId] = useState(null);
   const [favoritingPosts, setFavoritingPosts] = useState(false);
 
   const [comments, setComments] = useState([]);
@@ -282,42 +283,81 @@ const AboutPost = () => {
     }
   };
 
-  const toggleLikeComment = async (commentId) => {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  // const toggleLikeComment = async (commentId) => {
+  //   try {
+  //     await axios.post(
+  //       `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
+  //       {},
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
 
-      setComments(prev =>
-        prev.map(c => {
-          if (c.id === commentId) {
-            return {
-              ...c,
-              is_liked: !c.is_liked,
-              likes_count: c.is_liked ? c.likes_count - 1 : c.likes_count + 1
-            };
-          }
-          return {
-            ...c,
-            replies: c.replies?.map(r =>
-              r.id === commentId
-                ? {
-                    ...r,
-                    is_liked: !r.is_liked,
-                    likes_count: r.is_liked ? r.likes_count - 1 : r.likes_count + 1
-                  }
-                : r
-            )
-          };
-        })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  //     setComments(prev =>
+  //       prev.map(c => {
+  //         if (c.id === commentId) {
+  //           return {
+  //             ...c,
+  //             is_liked: !c.is_liked,
+  //             likes_count: c.is_liked ? c.likes_count - 1 : c.likes_count + 1
+  //           };
+  //         }
+  //         return {
+  //           ...c,
+  //           replies: c.replies?.map(r =>
+  //             r.id === commentId
+  //               ? {
+  //                   ...r,
+  //                   is_liked: !r.is_liked,
+  //                   likes_count: r.is_liked ? r.likes_count - 1 : r.likes_count + 1
+  //                 }
+  //               : r
+  //           )
+  //         };
+  //       })
+  //     );
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+const toggleLikeComment = async (commentId) => {
+  if (likingCommentId === commentId) return;
+  
+  setLikingCommentId(commentId);
 
+  // Optimistic update - same pattern as Home component
+  setComments(prevComments => {
+    const updateComment = (comment) => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          is_liked: !comment.is_liked,
+          likes_count: comment.is_liked ? comment.likes_count - 1 : comment.likes_count + 1
+        };
+      }
+      if (comment.replies) {
+        return {
+          ...comment,
+          replies: comment.replies.map(reply => updateComment(reply))
+        };
+      }
+      return comment;
+    };
+    return prevComments.map(comment => updateComment(comment));
+  });
+
+  try {
+    await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } catch (err) {
+    // Rollback - refetch to get correct state
+    fetchComments(1);
+    console.error(err);
+  } finally {
+    setLikingCommentId(null);
+  }
+};
   const renderName = (c) => {
     if (c.is_deleted === 1) return '[deleted]';
     return c.is_anonymous === 1 ? c.anonymous_name : (c.display_name || c.username);
@@ -385,46 +425,46 @@ const AboutPost = () => {
           <div className="comment-actions-left">
             {c.is_deleted === 0 && (
               <>
-               <button
-                  className={`comment-like-button ${c.is_liked ? "liked" : ""}`}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleLikeComment(c.id);
-                  }}
-                >
-                  <motion.div
-                    className="action-icon-wrapper"
-                    whileTap={{ scale: 0.75 }}
-                    animate={likingCommentId === c.id ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
-                    transition={{ duration: 0.45, ease: "easeInOut" }}
-                  >
-                    <AnimatePresence mode="wait">
-                      {c.is_liked ? (
-                        <motion.div
-                          key="liked"
-                          initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
-                          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                          exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
-                        >
-                          <Heart size={16} className="comment-like-icon liked-heart" fill="currentColor" />
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="unliked"
-                          initial={{ scale: 0.4, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0.4, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Heart size={16} className="comment-like-icon" />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                  <span>{c.likes_count}</span>
-                </button>
+          <button
+  className={`comment-like-button ${c.is_liked ? "liked" : ""}`}
+  type="button"
+  onClick={(e) => {
+    e.preventDefault();
+    toggleLikeComment(c.id);
+  }}
+>
+  <motion.div
+    className="action-icon-wrapper"
+    whileTap={{ scale: 0.75 }}
+    animate={likingCommentId === c.id ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
+    transition={{ duration: 0.45, ease: "easeInOut" }}
+  >
+    <AnimatePresence mode="wait">
+      {c.is_liked ? (
+        <motion.div
+          key="liked"
+          initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
+          animate={{ scale: 1, opacity: 1, rotate: 0 }}
+          exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
+          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+        >
+          <Heart size={16} className="comment-like-icon liked-heart" fill="currentColor" />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="unliked"
+          initial={{ scale: 0.4, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.4, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Heart size={16} className="comment-like-icon" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.div>
+  <span>{c.likes_count}</span>
+</button>
 
                 <span
                   onClick={() =>
@@ -712,13 +752,7 @@ const AboutPost = () => {
                   <span className="count-label"> Like</span>
                 </p>
               </button>
-              {/* <button className='button-action-footer'>
-                <FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' />
-                <p>
-                  <span>{post?.comments_count}</span>
-                  <span className='count-label'> Comment</span>
-                </p>
-              </button> */}
+     
             </div>
             <div className='post-footer-right'>
               <button
