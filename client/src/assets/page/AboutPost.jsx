@@ -38,6 +38,364 @@ const { Text } = Typography;
 
 const token = localStorage.getItem("token");
 
+// const mockComments = [
+//   {
+//     id: 1,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 1,
+//     content: "Thanks everyone for the feedback! Glad you found these tips helpful. 🔥",
+//     gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 24,
+//     reply_count: 2,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T10:30:00Z",
+//     updated_at: "2026-06-13T10:30:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//     display_name: "JohnDoe",
+//     username: "JohnDoe",
+//     is_liked: true,
+//     replies: [
+//       {
+//         id: 101,
+//         post_id: 123,
+//         parent_id: 1,
+//         user_id: 10,
+//         content: "Great article John! When is part 2 coming?",
+//         gif_url: null,
+//         username_mention: "JohnDoe",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 8,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T10:35:00Z",
+//         updated_at: "2026-06-13T10:35:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/10.jpg",
+//         display_name: "TechGuru",
+//         username: "TechGuru",
+//         is_liked: false
+//       },
+//       {
+//         id: 102,
+//         post_id: 123,
+//         parent_id: 1,
+//         user_id: 1,
+//         content: "Working on it! Should be out next week. Stay tuned! 🚀",
+//         gif_url: "https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif",
+//         username_mention: "TechGuru",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 12,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T10:40:00Z",
+//         updated_at: "2026-06-13T10:40:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 2,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 12,
+//     content: "The useCallback tip saved me from so many re-renders. Thanks for sharing! 🙏",
+//     gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 1,
+//     anonymous_name: "🐧 Penguin",
+//     anonymous_bg_color: "#4A90E2",
+//     likes_count: 8,
+//     reply_count: 1,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T08:00:00Z",
+//     updated_at: "2026-06-13T08:00:00Z",
+//     avatar_url: null,
+//     display_name: "🐧 Penguin",
+//     username: null,
+//     is_liked: false,
+//     replies: [
+//       {
+//         id: 103,
+//         post_id: 123,
+//         parent_id: 2,
+//         user_id: 1,
+//         content: "Glad it helped you! useCallback is definitely a game-changer when used correctly.",
+//         gif_url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+//         username_mention: null,
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 5,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 1,
+//         created_at: "2026-06-13T09:00:00Z",
+//         updated_at: "2026-06-13T09:05:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: false
+//       }
+//     ]
+//   },
+//   {
+//     id: 3,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 13,
+//     content: "What about using SWR or React Query for data fetching optimization?",
+//     gif_url: null,
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 12,
+//     reply_count: 3,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T07:00:00Z",
+//     updated_at: "2026-06-13T07:00:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/women/4.jpg",
+//     display_name: "CodeNewbie2024",
+//     username: "CodeNewbie2024",
+//     is_liked: true,
+//     replies: [
+//       {
+//         id: 104,
+//         post_id: 123,
+//         parent_id: 3,
+//         user_id: 1,
+//         content: "Great question! Both are excellent. React Query is my personal favorite for automatic caching and background refetching.",
+//         gif_url: "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif",
+//         username_mention: "CodeNewbie2024",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 15,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T08:00:00Z",
+//         updated_at: "2026-06-13T08:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       },
+//       {
+//         id: 105,
+//         post_id: 123,
+//         parent_id: 3,
+//         user_id: 14,
+//         content: "SWR is also great but React Query has more features IMO",
+//         gif_url: null,
+//         username_mention: null,
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 3,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T09:00:00Z",
+//         updated_at: "2026-06-13T09:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/6.jpg",
+//         display_name: "ReactMaster",
+//         username: "ReactMaster",
+//         is_liked: false
+//       },
+//       {
+//         id: 106,
+//         post_id: 123,
+//         parent_id: 3,
+//         user_id: 1,
+//         content: "Agreed! TanStack Query has better dev tools too!",
+//         gif_url: "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
+//         username_mention: "ReactMaster",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 7,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 1,
+//         created_at: "2026-06-13T09:45:00Z",
+//         updated_at: "2026-06-13T09:50:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 4,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 15,
+//     content: "Love the code examples! Very clear and easy to understand.",
+//     gif_url: "https://media.giphy.com/media/l0MYt5jH6gkTWp8Gg/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 6,
+//     reply_count: 0,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T06:00:00Z",
+//     updated_at: "2026-06-13T06:00:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/women/5.jpg",
+//     display_name: "DesignLover",
+//     username: "DesignLover",
+//     is_liked: false,
+//     replies: []
+//   },
+//   {
+//     id: 5,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 1,
+//     content: "For those asking about production examples, check the link in my bio! I've open-sourced a boilerplate with all these optimizations applied.",
+//     gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 34,
+//     reply_count: 2,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T05:00:00Z",
+//     updated_at: "2026-06-13T05:00:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//     display_name: "JohnDoe",
+//     username: "JohnDoe",
+//     is_liked: true,
+//     replies: [
+//       {
+//         id: 107,
+//         post_id: 123,
+//         parent_id: 5,
+//         user_id: 16,
+//         content: "Just starred it! Great work on the CI/CD setup too.",
+//         gif_url: "https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif",
+//         username_mention: "JohnDoe",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 4,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T07:00:00Z",
+//         updated_at: "2026-06-13T07:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/7.jpg",
+//         display_name: "DevOpsGuy",
+//         username: "DevOpsGuy",
+//         is_liked: false
+//       },
+//       {
+//         id: 108,
+//         post_id: 123,
+//         parent_id: 5,
+//         user_id: 1,
+//         content: "Appreciate it! The GitHub Actions workflow was a pain to set up but worth it 😅",
+//         gif_url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+//         username_mention: "DevOpsGuy",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 9,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T08:00:00Z",
+//         updated_at: "2026-06-13T08:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 6,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 17,
+//     content: "Any tips for optimizing Next.js apps specifically?",
+//     gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 1,
+//     anonymous_name: "🌙 Night Owl",
+//     anonymous_bg_color: "#6C5CE7",
+//     likes_count: 3,
+//     reply_count: 1,
+//     is_deleted: 0,
+//     is_edited: 1,
+//     created_at: "2026-06-13T04:00:00Z",
+//     updated_at: "2026-06-13T04:00:00Z",
+//     avatar_url: null,
+//     display_name: "🌙 Night Owl",
+//     username: null,
+//     is_liked: false,
+//     replies: [
+//       {
+//         id: 109,
+//         post_id: 123,
+//         parent_id: 6,
+//         user_id: 1,
+//         content: "For Next.js specifically: use next/dynamic for lazy loading, Image component for optimization, and ISR for static pages.",
+//         gif_url: "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif",
+//         username_mention: null,
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 11,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 1,
+//         created_at: "2026-06-13T06:00:00Z",
+//         updated_at: "2026-06-13T06:10:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   }
+// ];
+
+
+// const mockPagination = {
+//   page: 1,
+//   limit: 10,
+//   total: 6,
+//   total_pages: 1,
+//   has_more: false
+// };
+
+// const mockCommentsResponse = {
+//   comments: mockComments,
+//   pagination: mockPagination
+// };
+
 const parseJSON = (val) => {
   try {
     return typeof val === "string" ? JSON.parse(val) : val;
@@ -132,7 +490,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
       id={c.id}
     >
       <div className="avatar" style={{ background: renderColorFn(c) }}>
-        <img src={renderAvatarFn(c)} alt="avatar" />
+        <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
       </div>
 
       <div className="comment-body">
@@ -157,7 +515,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
           <span className='comm-content'>{c.content}
             {c.is_edited === 1 && !c.is_deleted && (
               <span className="edited-badge">
-                <FontAwesomeIcon icon={faPen} /> Edited*
+                 Edited*
               </span>
             )}
           </span>
@@ -170,9 +528,9 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
         )}
 
         <div className="comment-actions">
-          <div className="comment-actions-left">
+         
             {c.is_deleted === 0 && (
-              <>
+               <div className="comment-actions-left">
                 <CommentLikeButton
                   isLiked={c.is_liked}
                   likesCount={c.likes_count}
@@ -185,9 +543,9 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
                 <span onClick={() => onReplyClick(c)}>
                   Reply
                 </span>
-              </>
+              </div>
             )}
-          </div>
+          
           <div className="comment-actions-right">
             <span className="comment-time">
               {c.is_edited === 1 ? timeAgoFn(c.updated_at) : timeAgoFn(c.created_at)}
@@ -428,6 +786,17 @@ const AboutPost = () => {
     }
   };
 
+//   const fetchComments = async (pageNum = 1) => {
+//   setLoadingComments(true);
+  
+//   // Simulate API delay
+//   setTimeout(() => {
+//     setComments(pageNum === 1 ? mockComments : [...comments, ...mockComments]);
+//     setHasMore(false);
+//     setPage(pageNum);
+//     setLoadingComments(false);
+//   }, 500);
+// };
   const toggleReplies = (commentId) => {
     setExpandedReplies(prev => ({
       ...prev,

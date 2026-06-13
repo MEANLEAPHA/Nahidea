@@ -1,9 +1,8 @@
-
 .comment-box {
-  
   width: 100%;
   padding: 10px;
 }
+
 #label-com-count{
   opacity: 0.9;
   font-size: large;
@@ -47,11 +46,16 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  color: white;
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-weight: bold;
+  overflow: hidden;
+}
+.avatar-image{
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondary-color);
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .comment-body {
@@ -62,8 +66,23 @@
  display: flex;
  justify-content: space-between;
 }
+.comment-name{
+  color: var(--font-color);
+  margin: 0;
+  opacity: 0.9;
+}
+.icon-formore-comm{
+  opacity: 0.8;
+}
+
 .comment-text{
-  margin-top: 5px;
+  margin-top: 2px;
+}
+.edited-badge{
+ font-size: x-small;
+ font-style: italic;
+ margin-left: 5px;
+ color: rgb(98, 98, 244);
 }
 .comm-content{
   font-size: medium;
@@ -71,7 +90,7 @@
 }
 
 .comment-gif{
-  margin-top: 10px;
+  margin-top: 5px;
   overflow: hidden;
 }
 .gif-com{
@@ -82,10 +101,30 @@
 }
 .comment-actions {
   display: flex;
-  gap: 15px;
+  justify-content: space-between;
   font-size: 12px;
-  color: gray;
-  cursor: pointer;
+  align-items: center;
+  color: var(--font-color);
+  opacity: 0.8;
+ 
+}
+.comment-actions-left{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.comment-like-button{
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color:var(--font-color);
+  
+  gap: 2px;
+}
+.arrow-reply{
+  color:var(--primary-color);
+  opacity: 0.9;
 }
 @media screen and (max-width:768px){
 .avatar {
