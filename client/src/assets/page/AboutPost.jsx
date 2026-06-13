@@ -81,7 +81,7 @@ const AboutPost = () => {
   const [favoritingPosts, setFavoritingPosts] = useState(false);
 
   const [comments, setComments] = useState([]);
-
+  const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -331,7 +331,7 @@ const AboutPost = () => {
   const renderAvatar = (c) => {
     if (c.is_deleted === 1) return null;
     if (c.is_anonymous === 1) return nahIdeaAuth;
-    return c.avatar_url;
+    return c.avatar_url || userProfilePic;
   };
 
   const CommentCard = ({ c, isReply }) => (
@@ -385,7 +385,7 @@ const AboutPost = () => {
           <div className="comment-actions-left">
             {c.is_deleted === 0 && (
               <>
-                 <button
+               <button
                   className={`comment-like-button ${c.is_liked ? "liked" : ""}`}
                   type="button"
                   onClick={(e) => {
@@ -425,6 +425,7 @@ const AboutPost = () => {
                   </motion.div>
                   <span>{c.likes_count}</span>
                 </button>
+
                 <span
                   onClick={() =>
                     navigate("/comment", {
