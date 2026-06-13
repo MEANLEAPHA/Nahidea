@@ -20,17 +20,21 @@ import { MediaPreview } from "../util/mediaUploader";
 
 // util
 import MoreDropDown from "../util/upload/MoreDropDown";
-import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
+import { DisplayAnimatedIcon } from "../util/upload/AnimatedIcon";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faMessage, faPen, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import {
   Typography,
   Space,
+  Dropdown,
 } from "antd";
 import DotDropDown from './util/dotDropDown';
+import { faAngleDown, faAngleUp, faMartiniGlassEmpty } from '@fortawesome/free-solid-svg-icons';
+import { DeleteOutlined, EditOutlined, FlagOutlined, LinkOutlined } from '@ant-design/icons';
+import ReportPostModal from './ReportPostModal';
 
 const { Text } = Typography;
 
@@ -42,6 +46,29 @@ const parseJSON = (val) => {
   } catch {
     return [];
   }
+};
+
+// Helper: Convert timestamp to human readable
+const timeAgo = (timestamp) => {
+  if (!timestamp) return 'just now';
+  
+  const now = new Date();
+  const past = new Date(timestamp);
+  const seconds = Math.floor((now - past) / 1000);
+  
+  if (seconds < 60) return `${seconds} seconds ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 4) return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months} month${months > 1 ? 's' : ''} ago`;
+  const years = Math.floor(days / 365);
+  return `${years} year${years > 1 ? 's' : ''} ago`;
 };
 
 const AboutPost = () => {
@@ -113,16 +140,12 @@ const AboutPost = () => {
     let found = false;
 
     comments.forEach(comment => {
-      // top-level comment
       if (String(comment.id) === targetId) {
         found = true;
       }
-
-      // replies
       comment.replies?.forEach(reply => {
         if (String(reply.id) === targetId) {
           found = true;
-          // auto expand replies
           setExpandedReplies(prev => ({
             ...prev,
             [comment.id]: true
@@ -141,7 +164,6 @@ const AboutPost = () => {
           });
           hasScrolledToHash.current = true;
           setHighlightedId(targetId);
-
           setTimeout(() => {
             setHighlightedId(null);
           }, 4000);
@@ -154,19 +176,13 @@ const AboutPost = () => {
   useEffect(() => {
     if (hasScrolledToHash.current) return;
     const targetId = targetCommentId.current;
-
     if (!targetId || !hasMore || loadingComments) return;
 
     const found = comments.some(comment => {
-      if (String(comment.id) === String(targetId)) {
-        return true;
-      }
-      return comment.replies?.some(
-        r => String(r.id) === String(targetId)
-      );
+      if (String(comment.id) === String(targetId)) return true;
+      return comment.replies?.some(r => String(r.id) === String(targetId));
     });
 
-    // not found -> load next page
     if (!found && hasMore) {
       fetchComments(page + 1);
     }
@@ -187,16 +203,12 @@ const AboutPost = () => {
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/record-view-post/${id}`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   const handleHistory = async () => {
     if (!token) return;
@@ -204,41 +216,30 @@ const AboutPost = () => {
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   // fetch post
   const handleFetchPost = async () => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/get-posts/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      const data = res.data.data; // Fixed: extracted data from response
-      console.log(data);
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = res.data.data;
       setPost(data);
-      // Set user profile pic if not anonymous
       if (data && data.is_anonymous !== 1 && data.avatar_url) {
         setUserProfilePic(data.avatar_url);
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
       setPost(null);
     }
-  }
+  };
 
   // fetch comments/reply
   const fetchComments = async (pageNum = 1) => {
@@ -246,27 +247,15 @@ const AboutPost = () => {
 
     try {
       setLoadingComments(true);
-
       const res = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/posts/${id}/comments?page=${pageNum}&limit=10`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const newComments = res.data.comments;
-
-      setComments(prev =>
-        pageNum === 1
-          ? newComments
-          : [...prev, ...newComments]
-      );
-
+      setComments(prev => pageNum === 1 ? newComments : [...prev, ...newComments]);
       setHasMore(res.data.pagination.has_more);
       setPage(pageNum);
-
     } catch (err) {
       console.error(err);
     } finally {
@@ -274,7 +263,6 @@ const AboutPost = () => {
     }
   };
 
-  // toggle replies
   const toggleReplies = (commentId) => {
     setExpandedReplies(prev => ({
       ...prev,
@@ -282,8 +270,7 @@ const AboutPost = () => {
     }));
   };
 
-  // delete comment
-  const handleDelete = async (commentId, postId) => {
+  const handleDeleteComment = async (commentId, postId) => {
     try {
       await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/${postId}`,
@@ -295,8 +282,7 @@ const AboutPost = () => {
     }
   };
 
-  // like comment
-  const toggleLike = async (commentId) => {
+  const toggleLikeComment = async (commentId) => {
     try {
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
@@ -318,10 +304,10 @@ const AboutPost = () => {
             replies: c.replies?.map(r =>
               r.id === commentId
                 ? {
-                  ...r,
-                  is_liked: !r.is_liked,
-                  likes_count: r.is_liked ? r.likes_count - 1 : r.likes_count + 1
-                }
+                    ...r,
+                    is_liked: !r.is_liked,
+                    likes_count: r.is_liked ? r.likes_count - 1 : r.likes_count + 1
+                  }
                 : r
             )
           };
@@ -332,50 +318,75 @@ const AboutPost = () => {
     }
   };
 
-  // render name
-  const renderName = (c) =>
-    c.is_anonymous === 1 ? c.anonymous_name : c.username;
+  const renderName = (c) => {
+    if (c.is_deleted === 1) return '[deleted]';
+    return c.is_anonymous === 1 ? c.anonymous_name : (c.display_name || c.username);
+  };
 
-  // render bg color for anonymous
-  const renderColor = (c) =>
-    c.is_anonymous === 1 ? c.anonymous_bg_color : "#999";
+  const renderColor = (c) => {
+    if (c.is_deleted === 1) return '#999';
+    return c.is_anonymous === 1 ? c.anonymous_bg_color : '#999';
+  };
 
-  // comment card
+  const renderAvatar = (c) => {
+    if (c.is_deleted === 1) return null;
+    if (c.is_anonymous === 1) return nahIdeaAuth;
+    return c.avatar_url || userProfilePic;
+  };
+
   const CommentCard = ({ c, isReply }) => (
     <div
       className={`
         comment
         ${isReply ? "reply" : ""}
-        ${String(highlightedId) === String(c.id)
-          ? "highlight-comment"
-          : ""}
+        ${String(highlightedId) === String(c.id) ? "highlight-comment" : ""}
       `}
       id={c.id}
     >
-      <div
-        className="avatar"
-        style={{ background: renderColor(c) }}
-      >
+      <div className="avatar" style={{ background: renderColor(c) }}>
         {renderName(c)?.slice(0, 2)}
       </div>
 
       <div className="comment-body">
         <div className="comment-header">
-          <b>{renderName(c)}</b>
+          <div className="comment-name-wrapper">
+            <b className="comment-name">{renderName(c)}</b>
+            {c.is_edited === 1 && !c.is_deleted && (
+              <span className="edited-badge">
+                <FontAwesomeIcon icon={faPen} size="xs" /> edited
+              </span>
+            )}
+          </div>
+          <CommentDropDown 
+            ownerId={c.user_id} 
+            comm_id={c.id} 
+            comm_text={c.content} 
+            comm_gif={c.gif_url} 
+            post_id={id}
+            onDelete={() => handleDeleteComment(c.id, id)}
+          />
         </div>
 
         <div className="comment-text">
-          <span style={{ color: 'skyblue' }}>@{c.username_mention}</span>
-          {c.content}
+          {c.username_mention && (
+            <span style={{ color: 'skyblue' }} className='comm-mention-name'>@{c.username_mention}</span>
+          )}
+          <span className='comm-content'>{c.content}</span>
         </div>
 
+        {c.gif_url && (
+          <div className="comment-gif">
+            <img src={c.gif_url} alt="gif" className="gif-com" />
+          </div>
+        )}
+
         <div className="comment-actions">
-          {
-            (c && c.is_deleted === 0) && (
+          <div className="comment-actions-left">
+            {c.is_deleted === 0 && (
               <>
                 <span onClick={(e) => {
                   e.preventDefault();
-                  toggleLike(c.id);
+                  toggleLikeComment(c.id);
                 }}>
                   ❤️ {c.likes_count}
                 </span>
@@ -385,7 +396,7 @@ const AboutPost = () => {
                       state: {
                         postId: id,
                         comment_id: c.id,
-                        user_id_mention: c && Number(c.user_id) || null,
+                        user_id_mention: c.user_id || null,
                         username_mention: renderName(c),
                         mode: "reply"
                       }
@@ -395,52 +406,30 @@ const AboutPost = () => {
                   Reply
                 </span>
               </>
-            )
-          }
-
-          {(c && String(c.user_id) === String(user?.id) && c.is_deleted === 0) && (
-            <>
-              <span onClick={() => {
-                navigate("/comment", {
-                  state: {
-                    postId: id,
-                    commentId: c.id,
-                    content: c.content,
-                    mode: "edit"
-                  }
-                });
-              }}>Edit</span>
-              <span onClick={() => handleDelete(c.id, id)}>Delete</span>
-            </>
-          )}
-
-          <span
-            onClick={() =>
-              navigate("/report", {
-                state: { commentId: c.id }
-              })
-            }
-          >
-            Report
-          </span>
+            )}
+          </div>
+          <div className="comment-actions-right">
+            <span className="comment-time">{timeAgo(c.created_at)}</span>
+          </div>
         </div>
 
         {c.replies?.length > 0 && (
           <div className="reply-section">
-            <button
-              className="reply-toggle"
-              onClick={() => toggleReplies(c.id)}
-            >
-              {expandedReplies[c.id]
-                ? `▲ Hide replies`
-                : `▼ View ${c.replies.length} replies`}
+            <button className="reply-toggle" onClick={() => toggleReplies(c.id)}>
+              {expandedReplies[c.id] ? (
+                <span className="hide-replies arrow-reply">
+                  <FontAwesomeIcon icon={faAngleUp} /> Hide replies
+                </span>
+              ) : (
+                <span className="show-replies arrow-reply">
+                  <FontAwesomeIcon icon={faAngleDown} /> View {c.replies.length} replies
+                </span>
+              )}
             </button>
 
-            {expandedReplies[c.id] &&
-              c.replies.map(r => (
-                <CommentCard key={r.id} c={r} isReply />
-              ))
-            }
+            {expandedReplies[c.id] && c.replies.map(r => (
+              <CommentCard key={r.id} c={r} isReply />
+            ))}
           </div>
         )}
       </div>
@@ -468,8 +457,7 @@ const AboutPost = () => {
   }
 
   const renderPostContent = (post) => {
-    const data = post.data;
-
+    const data = post?.data;
     if (!data) return <Text type="secondary">No content</Text>;
 
     switch (post.post_type) {
@@ -480,7 +468,6 @@ const AboutPost = () => {
               <div className='post-caption'>
                 <p>{data.title}</p>
               </div>
-
               <div className='post-content-type'>
                 <span className='content-type'>{data.type}</span>
               </div>
@@ -490,14 +477,9 @@ const AboutPost = () => {
                 </ReactMarkdown>
               </div>
               <div className='post-tags'>
-                {post.tags && (
-                  <div>
-                    {tagSplitter(post.tags)}
-                  </div>
-                )}
+                {post.tags && <div>{tagSplitter(post.tags)}</div>}
               </div>
             </div>
-
             <div className='post-thumbnail'>
               <MediaPreview files={parseJSON(data.media_url)} />
             </div>
@@ -512,14 +494,9 @@ const AboutPost = () => {
                 <p>{data.title}</p>
               </div>
             </div>
-
             <div className="post-thumbnail">
               <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
-                <img
-                  src={data.media_url}
-                  className="preview-image"
-                  alt="confession"
-                />
+                <img src={data.media_url} className="preview-image" alt="confession" />
               </div>
             </div>
           </>
@@ -539,37 +516,18 @@ const AboutPost = () => {
                     <Text>No: {data.no_title}</Text>
                   </Space>
                 )}
-
                 {data.question_type === "range" && (
-                  <Text>
-                    Range: {data.range_min} - {data.range_max}
-                  </Text>
+                  <Text>Range: {data.range_min} - {data.range_max}</Text>
                 )}
-
                 {data.question_type === "singlechoice" && (
-                  <ul>
-                    {data.choices?.map((c, i) => (
-                      <li key={i}>{c.choice_text}</li>
-                    ))}
-                  </ul>
+                  <ul>{data.choices?.map((c, i) => <li key={i}>{c.choice_text}</li>)}</ul>
                 )}
-
                 {data.question_type === "multiplechoice" && (
-                  <ul>
-                    {data.choices?.map((c, i) => (
-                      <li key={i}>{c.choice_text}</li>
-                    ))}
-                  </ul>
+                  <ul>{data.choices?.map((c, i) => <li key={i}>{c.choice_text}</li>)}</ul>
                 )}
-
                 {data.question_type === "rankingorder" && (
-                  <ol>
-                    {data.items?.map((i, idx) => (
-                      <li key={idx}>{i.item_text}</li>
-                    ))}
-                  </ol>
+                  <ol>{data.items?.map((i, idx) => <li key={idx}>{i.item_text}</li>)}</ol>
                 )}
-
                 {data.question_type === "rating" && (
                   <Text>Rating icon: {data.rating_icon_id}</Text>
                 )}
@@ -577,11 +535,7 @@ const AboutPost = () => {
             </div>
             <div className="post-thumbnail">
               <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
-                <img
-                  src={data.media_url}
-                  className="preview-image"
-                  alt="question"
-                />
+                <img src={data.media_url} className="preview-image" alt="question" />
               </div>
             </div>
           </>
@@ -596,7 +550,6 @@ const AboutPost = () => {
     if (likingPosts) return;
     setLikingPosts(true);
 
-    // optimistic update
     const previousPost = { ...post };
     setPost({
       ...post,
@@ -608,26 +561,20 @@ const AboutPost = () => {
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
-      // rollback on fail
       setPost(previousPost);
       console.log(err);
     } finally {
       setLikingPosts(false);
     }
-  }
+  };
 
   const handleFavorite = async (postId) => {
     if (favoritingPosts) return;
     setFavoritingPosts(true);
 
-    // optimistic update
     const previousPost = { ...post };
     setPost({
       ...post,
@@ -638,20 +585,15 @@ const AboutPost = () => {
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
-      // rollback
       setPost(previousPost);
       console.log(err);
     } finally {
       setFavoritingPosts(false);
     }
-  }
+  };
 
   return (
     <div className='home-container'>
@@ -659,28 +601,29 @@ const AboutPost = () => {
         <div className="about-posts">
           <div className='post-header'>
             <div className='post-user-profile'>
-              <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
-                  <img src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url} id="author-pf"/>
+              <div id="author-pf-div" style={{ backgroundColor: post?.is_anonymous === 1 ? post.anonymous_bg_color : "" }}>
+                <img src={post?.is_anonymous === 1 ? nahIdeaAuth : (post?.avatar_url || userProfilePic)} id="author-pf" alt="avatar" />
               </div>
               <div className='user-post-info'>
                 <p className='post-username'>
-                  {post.username} 
+                  {post?.username} 
                   <div className='dot'></div>
                   <div className='category-post-div'>
                     <span className="post-type-label">{post?.data?.type}</span> 
-                      {post?.data?.cate_icon && (
-                        <DisplayAnimatedIcon
-                          src={post?.data?.cate_icon}
-                        />
-                      )}
+                    {post?.data?.cate_icon && (
+                      <DisplayAnimatedIcon src={post?.data?.cate_icon} />
+                    )}
                   </div>
                 </p>
-                <p className='post-at'>{post.created_at}</p>
+                <p className='post-at'>{timeAgo(post?.created_at)}</p>
               </div> 
             </div>
-            {/* <MoreDropDown /> */}
-            <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
-                         text_body={post?.data?.text_body || ""} contentId={post?.data?.id || 1}
+            <DotDropDown 
+              ownerId={post?.user_id} 
+              post_type={post?.post_type} 
+              post_id={post?.id}
+              text_body={post?.data?.text_body || ""} 
+              contentId={post?.data?.id || 1}
             />
           </div>
 
@@ -691,179 +634,90 @@ const AboutPost = () => {
           <div className='post-footer'>
             <div className='post-footer-left'>
               <button
-                className={`button-action-footer like-button ${post.is_liked ? "liked" : ""}`}
+                className={`button-action-footer like-button ${post?.is_liked ? "liked" : ""}`}
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleLike(post.id, post.user_id);
+                  handleLike(post?.id, post?.user_id);
                 }}
               >
                 <motion.div
                   className="action-icon-wrapper"
                   whileTap={{ scale: 0.75 }}
-                  animate={
-                    likingPosts
-                      ? {
-                        scale: [1, 1.35, 1],
-                        rotate: [0, -15, 15, 0]
-                      }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.45,
-                    ease: "easeInOut"
-                  }}
+                  animate={likingPosts ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
+                  transition={{ duration: 0.45, ease: "easeInOut" }}
                 >
                   <AnimatePresence mode="wait">
-                    {post.is_liked ? (
+                    {post?.is_liked ? (
                       <motion.div
                         key="liked"
-                        initial={{
-                          scale: 0.4,
-                          opacity: 0,
-                          rotate: -25
-                        }}
-                        animate={{
-                          scale: 1,
-                          opacity: 1,
-                          rotate: 0
-                        }}
-                        exit={{
-                          scale: 0.4,
-                          opacity: 0,
-                          rotate: 25
-                        }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 22
-                        }}
+                        initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
+                        animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                        exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 22 }}
                       >
-                        <Heart
-                          size={19}
-                          className="button-action-footer-icon liked-heart"
-                          fill="currentColor"
-                        />
+                        <Heart size={19} className="button-action-footer-icon liked-heart" fill="currentColor" />
                       </motion.div>
                     ) : (
                       <motion.div
                         key="unliked"
-                        initial={{
-                          scale: 0.4,
-                          opacity: 0
-                        }}
-                        animate={{
-                          scale: 1,
-                          opacity: 1
-                        }}
-                        exit={{
-                          scale: 0.4,
-                          opacity: 0
-                        }}
-                        transition={{
-                          duration: 0.2
-                        }}
+                        initial={{ scale: 0.4, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.4, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        <Heart
-                          size={19}
-                          className="button-action-footer-icon"
-                        />
+                        <Heart size={19} className="button-action-footer-icon" />
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </motion.div>
                 <p>
-                  <span>{post.likes_count}</span>
+                  <span>{post?.likes_count}</span>
                   <span className="count-label"> Like</span>
                 </p>
               </button>
               <button className='button-action-footer'>
                 <FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' />
                 <p>
-                  <span>{post.comments_count}</span>
+                  <span>{post?.comments_count}</span>
                   <span className='count-label'> Comment</span>
                 </p>
               </button>
             </div>
             <div className='post-footer-right'>
               <button
-                className={`button-action-footer button-action-footer-last favorite-button ${post.is_favorited ? "favorited" : ""
-                  }`}
+                className={`button-action-footer button-action-footer-last favorite-button ${post?.is_favorited ? "favorited" : ""}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleFavorite(post.id);
+                  handleFavorite(post?.id);
                 }}
               >
                 <motion.div
                   className="action-icon-wrapper"
                   whileTap={{ scale: 0.75 }}
-                  animate={
-                    favoritingPosts
-                      ? {
-                        scale: [1, 1.25, 1],
-                        y: [0, -5, 0]
-                      }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.4,
-                    ease: "easeInOut"
-                  }}
+                  animate={favoritingPosts ? { scale: [1, 1.25, 1], y: [0, -5, 0] } : {}}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
                   <AnimatePresence mode="wait">
-                    {post.is_favorited ? (
+                    {post?.is_favorited ? (
                       <motion.div
                         key="favorited"
-                        initial={{
-                          scale: 0.4,
-                          opacity: 0,
-                          y: 10
-                        }}
-                        animate={{
-                          scale: 1,
-                          opacity: 1,
-                          y: 0
-                        }}
-                        exit={{
-                          scale: 0.4,
-                          opacity: 0,
-                          y: 10
-                        }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 22
-                        }}
+                        initial={{ scale: 0.4, opacity: 0, y: 10 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.4, opacity: 0, y: 10 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 22 }}
                       >
-                        <Bookmark
-                          size={18}
-                          className="button-action-footer-icon favorited-bookmark"
-                          fill="currentColor"
-                        />
+                        <Bookmark size={18} className="button-action-footer-icon favorited-bookmark" fill="currentColor" />
                       </motion.div>
                     ) : (
                       <motion.div
                         key="unfavorited"
-                        initial={{
-                          scale: 0.4,
-                          opacity: 0
-                        }}
-                        animate={{
-                          scale: 1,
-                          opacity: 1
-                        }}
-                        exit={{
-                          scale: 0.4,
-                          opacity: 0
-                        }}
-                        transition={{
-                          duration: 0.2
-                        }}
+                        initial={{ scale: 0.4, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.4, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        <Bookmark
-                          size={18}
-                          className="button-action-footer-icon"
-                        />
+                        <Bookmark size={18} className="button-action-footer-icon" />
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -872,7 +726,9 @@ const AboutPost = () => {
             </div>
           </div>
         </div>
+
         <div className="comment-box">
+          <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
           <button
             onClick={() => navigate(`/comment`, { state: { postId: id } })}
             className="comment-btn"
@@ -883,9 +739,15 @@ const AboutPost = () => {
           {comments.map(c => (
             <CommentCard key={c.id} c={c} />
           ))}
+          
+          {comments.length === 0 && (
+            <div id='no-com-div'>
+              <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
+              <p className='no-com-p'>Be the first to comment</p>
+            </div>
+          )}
 
           <div ref={observerRef} style={{ height: "20px" }} />
-
           {loadingComments && <p>Loading comments...</p>}
         </div>
       </article>
@@ -902,6 +764,101 @@ const AboutPost = () => {
         </div>
       </article>
     </div>
+  );
+};
+
+// Comment Dropdown Component
+const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDelete }) => {
+  const { user } = useOutletContext();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/api/comments/${comm_id}/${post_id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (onDelete) onDelete();
+      window.location.reload(); // Refresh to update comments
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCopyLink = () => {
+    const url = `${window.location.origin}${window.location.pathname}#${comm_id}`;
+    navigator.clipboard.writeText(url);
+  };
+
+  const isOwner = Number(ownerId) === Number(user?.id);
+
+  const menuItemsForAll = [
+    {
+      label: <li onClick={handleCopyLink}><LinkOutlined /> Copy link</li>,
+      key: "0",
+    },
+    {
+      label: (
+        <li onClick={() => navigate('/report', { state: { commentId: comm_id } })}>
+          <FlagOutlined /> Report
+        </li>
+      ),
+      key: "1",
+    },
+  ];
+
+  const menuItemsForOwner = [
+    {
+      label: (
+        <li onClick={() => {
+          navigate("/comment", {
+            state: { 
+              postId: post_id, 
+              commentId: comm_id, 
+              content: comm_text, 
+              gif_url: comm_gif, 
+              mode: "edit" 
+            },
+          });
+        }}>
+          <EditOutlined /> Edit
+        </li>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <li onClick={handleDelete}>
+          <DeleteOutlined /> Delete
+        </li>
+      ),
+      key: "1",
+    },
+    {
+      label: <li onClick={handleCopyLink}><LinkOutlined /> Copy link</li>,
+      key: "2",
+    },
+    {
+      label: (
+        <li onClick={() => navigate('/report', { state: { commentId: comm_id } })}>
+          <FlagOutlined /> Report
+        </li>
+      ),
+      key: "3",
+    },
+  ];
+
+  return (
+    <Dropdown
+      menu={{ items: isOwner ? menuItemsForOwner : menuItemsForAll }}
+      trigger={["click"]}
+      classNames={{ root: "profile-dropdown" }}
+    >
+      <div className="comm-header-right">
+        <FontAwesomeIcon icon={faEllipsis} className="icon-formore-comm" />
+      </div>
+    </Dropdown>
   );
 };
 

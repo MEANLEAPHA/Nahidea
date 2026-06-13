@@ -20,7 +20,7 @@ const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
   const navigate = useNavigate();
   const [openReport, setOpenReport] = useState(false);
 
-  const isOwner = Number(ownerId) === Number(user.id);
+  const isOwner = Number(ownerId) === Number(user?.id);
 
   const menuItemsForAll = [
     {
