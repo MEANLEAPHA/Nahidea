@@ -81,7 +81,7 @@ const AboutPost = () => {
   const [favoritingPosts, setFavoritingPosts] = useState(false);
 
   const [comments, setComments] = useState([]);
-  const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
+
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -331,7 +331,7 @@ const AboutPost = () => {
   const renderAvatar = (c) => {
     if (c.is_deleted === 1) return null;
     if (c.is_anonymous === 1) return nahIdeaAuth;
-    return c.avatar_url || userProfilePic;
+    return c.avatar_url;
   };
 
   const CommentCard = ({ c, isReply }) => (
@@ -344,18 +344,13 @@ const AboutPost = () => {
       id={c.id}
     >
       <div className="avatar" style={{ background: renderColor(c) }}>
-        {renderName(c)?.slice(0, 2)}
+        <img src={renderAvatar(c)} alt="avatar" />
       </div>
 
       <div className="comment-body">
         <div className="comment-header">
           <div className="comment-name-wrapper">
             <b className="comment-name">{renderName(c)}</b>
-            {c.is_edited === 1 && !c.is_deleted && (
-              <span className="edited-badge">
-                <FontAwesomeIcon icon={faPen} size="xs" /> edited
-              </span>
-            )}
           </div>
           <CommentDropDown 
             ownerId={c.user_id} 
@@ -371,7 +366,13 @@ const AboutPost = () => {
           {c.username_mention && (
             <span style={{ color: 'skyblue' }} className='comm-mention-name'>@{c.username_mention}</span>
           )}
-          <span className='comm-content'>{c.content}</span>
+          <span className='comm-content'>{c.content}
+            {c.is_edited === 1 && !c.is_deleted && (
+              <span className="edited-badge">
+                <FontAwesomeIcon icon={faPen} /> Edited*
+              </span>
+            )}
+          </span>
         </div>
 
         {c.gif_url && (
@@ -384,12 +385,46 @@ const AboutPost = () => {
           <div className="comment-actions-left">
             {c.is_deleted === 0 && (
               <>
-                <span onClick={(e) => {
-                  e.preventDefault();
-                  toggleLikeComment(c.id);
-                }}>
-                  ❤️ {c.likes_count}
-                </span>
+                 <button
+                  className={`comment-like-button ${c.is_liked ? "liked" : ""}`}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleLikeComment(c.id);
+                  }}
+                >
+                  <motion.div
+                    className="action-icon-wrapper"
+                    whileTap={{ scale: 0.75 }}
+                    animate={likingCommentId === c.id ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
+                    transition={{ duration: 0.45, ease: "easeInOut" }}
+                  >
+                    <AnimatePresence mode="wait">
+                      {c.is_liked ? (
+                        <motion.div
+                          key="liked"
+                          initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
+                          animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                          exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                        >
+                          <Heart size={16} className="comment-like-icon liked-heart" fill="currentColor" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="unliked"
+                          initial={{ scale: 0.4, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.4, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Heart size={16} className="comment-like-icon" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                  <span>{c.likes_count}</span>
+                </button>
                 <span
                   onClick={() =>
                     navigate("/comment", {
@@ -615,7 +650,7 @@ const AboutPost = () => {
                     )}
                   </div>
                 </p>
-                <p className='post-at'>{timeAgo(post?.created_at)}</p>
+              <p className='post-at'>{post?.created_at}</p>
               </div> 
             </div>
             <DotDropDown 
@@ -676,13 +711,13 @@ const AboutPost = () => {
                   <span className="count-label"> Like</span>
                 </p>
               </button>
-              <button className='button-action-footer'>
+              {/* <button className='button-action-footer'>
                 <FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' />
                 <p>
                   <span>{post?.comments_count}</span>
                   <span className='count-label'> Comment</span>
                 </p>
-              </button>
+              </button> */}
             </div>
             <div className='post-footer-right'>
               <button
