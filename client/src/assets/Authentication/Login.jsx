@@ -85,12 +85,10 @@ const { setToken, setUser } = useAuth();
           nickname: meData.userData.nickname,
         });
 
-         alert(
-          `saved token=${!!localStorage.getItem("token")}`
-        );
+   
 
         setToken(data.token);
-        alert("setToken called");
+       
        
         navigate("/home");
       }else {
