@@ -1169,7 +1169,13 @@ const AboutPost = () => {
         </div>
 
         <div className="comment-box">
-          <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
+          {post?.type === "question" ? (
+            <h1>q</h1>
+          )
+          :
+          (
+            <>
+            <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
           <button
             onClick={() => navigate(`/comment`, { state: { postId: id } })}
             className="comment-btn"
@@ -1205,7 +1211,10 @@ const AboutPost = () => {
           )}
 
           <div ref={observerRef} style={{ height: "20px" }} />
-          {loadingComments && <p>Loading comments...</p>}
+         </>
+          )
+        }
+         {loadingComments && <p>Loading comments...</p>}
         </div>
       </article>
 

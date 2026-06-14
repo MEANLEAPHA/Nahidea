@@ -76,6 +76,7 @@ import FeedbackForm from './assets/page/FeedbackForm';
 import Trending from './assets/page/Trending';
 import UnsolvedQA from './assets/page/UnsolvedQA';
 import AllFriends from './assets/page/AllFriends';
+import Notifications from './assets/page/Notifications';
 
 const App = () =>{
     return(
@@ -133,7 +134,7 @@ const App = () =>{
                    
                     {/* User Dashboard */}
                     <Route path='/notification' element={<Notification/>}></Route>
-
+                    <Route path='/notifications' element={<Notifications/>}></Route>
                     {/* feedback */}
                     <Route path='/reporthistory' element={<ReportHistory/>}></Route> 
                     <Route path='/feedback' element={<FeedbackForm/>}></Route> 
