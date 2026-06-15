@@ -1,0 +1,197 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "../style/page/Spammy.css";
+
+export default function Spammy() {
+  const [inbox, setInbox] = useState([]);
+  const [activeSpam, setActiveSpam] = useState(null);
+
+  const [receiverId, setReceiverId] = useState("");
+  const [spamType, setSpamType] = useState("poke");
+
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  useEffect(() => {
+    fetchInbox();
+    fetchUnreadCount();
+  }, []);
+
+  const fetchInbox = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/spam/inbox`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setInbox(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchUnreadCount = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/spam/unread-count`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setUnreadCount(res.data.unread);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const sendSpam = async () => {
+    if (!receiverId) return;
+
+    try {
+      await axios.post("/api/spam/send", {
+        receiver_id: receiverId,
+        spam_type: spamType,
+      });
+
+      alert("Spam sent 🚀");
+
+      setReceiverId("");
+    } catch (err) {
+      alert(err?.response?.data?.message || "Failed");
+    }
+  };
+
+  const openSpam = async (spam) => {
+    try {
+      await axios.put(`${import.meta.env.VITE_SERVER_URL}/api/spam/view/${spam.spam_id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setActiveSpam(spam);
+
+      setUnreadCount((prev) => Math.max(prev - 1, 0));
+
+      setShowCelebration(true);
+
+      setTimeout(() => {
+        setShowCelebration(false);
+      }, 10000);
+
+      fetchInbox();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getSpamAsset = (type) => {
+    switch (type) {
+      case "poke":
+        return "/spam/poke.gif";
+
+      case "goodnight":
+        return "/spam/goodnight.gif";
+
+      case "sendlove":
+        return "/spam/sendlove.gif";
+
+      default:
+        return "/spam/default.gif";
+    }
+  };
+
+  return (
+    <div className="spam-dashboard">
+      <div className="spam-header">
+        <h1>Spammy</h1>
+
+        <div className="spam-badge">
+          {unreadCount} unread
+        </div>
+      </div>
+
+      <div className="spam-grid">
+        {/* SEND PANEL */}
+
+        <div className="send-panel">
+          <h2>Send Spam</h2>
+
+          <input
+            type="number"
+            placeholder="Receiver User ID"
+            value={receiverId}
+            onChange={(e) => setReceiverId(e.target.value)}
+          />
+
+          <select
+            value={spamType}
+            onChange={(e) => setSpamType(e.target.value)}
+          >
+            <option value="poke">Poke</option>
+            <option value="goodnight">Good Night</option>
+            <option value="sendlove">Send Love</option>
+          </select>
+
+          <button onClick={sendSpam}>
+            Send
+          </button>
+        </div>
+
+        {/* INBOX */}
+
+        <div className="inbox-panel">
+          <h2>Inbox</h2>
+
+          {inbox.length === 0 && (
+            <div className="empty-state">
+              No spam received
+            </div>
+          )}
+
+          {inbox.map((spam) => (
+            <div
+              key={spam.spam_id}
+              className={`spam-card ${
+                spam.is_viewed ? "" : "unread"
+              }`}
+              onClick={() => openSpam(spam)}
+            >
+              <div>
+                <h3>{spam.spam_type}</h3>
+
+                <p>
+                  From User #{spam.sender_id}
+                </p>
+              </div>
+
+              {!spam.is_viewed && (
+                <div className="unread-dot"></div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {showCelebration && (
+        <div className="celebration-overlay"></div>
+      )}
+
+      {activeSpam && (
+        <div className="spam-overlay">
+          <button
+            className="close-overlay"
+            onClick={() => setActiveSpam(null)}
+          >
+            ✕
+          </button>
+
+          <img
+            src={getSpamAsset(activeSpam.spam_type)}
+            alt=""
+          />
+        </div>
+      )}
+    </div>
+  );
+}

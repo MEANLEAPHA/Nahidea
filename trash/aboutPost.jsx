@@ -1,5 +1,5 @@
 // React State
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { useParams, useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -19,7 +19,6 @@ import "../style/upload/Postpreview.css";
 import { MediaPreview } from "../util/mediaUploader";
 
 // util
-import MoreDropDown from "../util/upload/MoreDropDown";
 import { DisplayAnimatedIcon } from "../util/upload/AnimatedIcon";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,11 +33,368 @@ import {
 import DotDropDown from './util/dotDropDown';
 import { faAngleDown, faAngleUp, faMartiniGlassEmpty } from '@fortawesome/free-solid-svg-icons';
 import { DeleteOutlined, EditOutlined, FlagOutlined, LinkOutlined } from '@ant-design/icons';
-import ReportPostModal from './ReportPostModal';
 
 const { Text } = Typography;
 
 const token = localStorage.getItem("token");
+
+// const mockComments = [
+//   {
+//     id: 1,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 1,
+//     content: "Thanks everyone for the feedback! Glad you found these tips helpful. 🔥",
+//     gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 24,
+//     reply_count: 2,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T10:30:00Z",
+//     updated_at: "2026-06-13T10:30:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//     display_name: "JohnDoe",
+//     username: "JohnDoe",
+//     is_liked: true,
+//     replies: [
+//       {
+//         id: 101,
+//         post_id: 123,
+//         parent_id: 1,
+//         user_id: 10,
+//         content: "Great article John! When is part 2 coming?",
+//         gif_url: null,
+//         username_mention: "JohnDoe",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 8,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T10:35:00Z",
+//         updated_at: "2026-06-13T10:35:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/10.jpg",
+//         display_name: "TechGuru",
+//         username: "TechGuru",
+//         is_liked: false
+//       },
+//       {
+//         id: 102,
+//         post_id: 123,
+//         parent_id: 1,
+//         user_id: 1,
+//         content: "Working on it! Should be out next week. Stay tuned! 🚀",
+//         gif_url: "https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif",
+//         username_mention: "TechGuru",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 12,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T10:40:00Z",
+//         updated_at: "2026-06-13T10:40:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 2,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 12,
+//     content: "The useCallback tip saved me from so many re-renders. Thanks for sharing! 🙏",
+//     gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 1,
+//     anonymous_name: "🐧 Penguin",
+//     anonymous_bg_color: "#4A90E2",
+//     likes_count: 8,
+//     reply_count: 1,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T08:00:00Z",
+//     updated_at: "2026-06-13T08:00:00Z",
+//     avatar_url: null,
+//     display_name: "🐧 Penguin",
+//     username: null,
+//     is_liked: false,
+//     replies: [
+//       {
+//         id: 103,
+//         post_id: 123,
+//         parent_id: 2,
+//         user_id: 1,
+//         content: "Glad it helped you! useCallback is definitely a game-changer when used correctly.",
+//         gif_url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+//         username_mention: null,
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 5,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 1,
+//         created_at: "2026-06-13T09:00:00Z",
+//         updated_at: "2026-06-13T09:05:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: false
+//       }
+//     ]
+//   },
+//   {
+//     id: 3,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 13,
+//     content: "What about using SWR or React Query for data fetching optimization?",
+//     gif_url: null,
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 12,
+//     reply_count: 3,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T07:00:00Z",
+//     updated_at: "2026-06-13T07:00:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/women/4.jpg",
+//     display_name: "CodeNewbie2024",
+//     username: "CodeNewbie2024",
+//     is_liked: true,
+//     replies: [
+//       {
+//         id: 104,
+//         post_id: 123,
+//         parent_id: 3,
+//         user_id: 1,
+//         content: "Great question! Both are excellent. React Query is my personal favorite for automatic caching and background refetching.",
+//         gif_url: "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif",
+//         username_mention: "CodeNewbie2024",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 15,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T08:00:00Z",
+//         updated_at: "2026-06-13T08:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       },
+//       {
+//         id: 105,
+//         post_id: 123,
+//         parent_id: 3,
+//         user_id: 14,
+//         content: "SWR is also great but React Query has more features IMO",
+//         gif_url: null,
+//         username_mention: null,
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 3,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T09:00:00Z",
+//         updated_at: "2026-06-13T09:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/6.jpg",
+//         display_name: "ReactMaster",
+//         username: "ReactMaster",
+//         is_liked: false
+//       },
+//       {
+//         id: 106,
+//         post_id: 123,
+//         parent_id: 3,
+//         user_id: 1,
+//         content: "Agreed! TanStack Query has better dev tools too!",
+//         gif_url: "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
+//         username_mention: "ReactMaster",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 7,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 1,
+//         created_at: "2026-06-13T09:45:00Z",
+//         updated_at: "2026-06-13T09:50:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 4,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 15,
+//     content: "Love the code examples! Very clear and easy to understand.",
+//     gif_url: "https://media.giphy.com/media/l0MYt5jH6gkTWp8Gg/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 6,
+//     reply_count: 0,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T06:00:00Z",
+//     updated_at: "2026-06-13T06:00:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/women/5.jpg",
+//     display_name: "DesignLover",
+//     username: "DesignLover",
+//     is_liked: false,
+//     replies: []
+//   },
+//   {
+//     id: 5,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 1,
+//     content: "For those asking about production examples, check the link in my bio! I've open-sourced a boilerplate with all these optimizations applied.",
+//     gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 0,
+//     anonymous_name: null,
+//     anonymous_bg_color: null,
+//     likes_count: 34,
+//     reply_count: 2,
+//     is_deleted: 0,
+//     is_edited: 0,
+//     created_at: "2026-06-13T05:00:00Z",
+//     updated_at: "2026-06-13T05:00:00Z",
+//     avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//     display_name: "JohnDoe",
+//     username: "JohnDoe",
+//     is_liked: true,
+//     replies: [
+//       {
+//         id: 107,
+//         post_id: 123,
+//         parent_id: 5,
+//         user_id: 16,
+//         content: "Just starred it! Great work on the CI/CD setup too.",
+//         gif_url: "https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif",
+//         username_mention: "JohnDoe",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 4,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T07:00:00Z",
+//         updated_at: "2026-06-13T07:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/7.jpg",
+//         display_name: "DevOpsGuy",
+//         username: "DevOpsGuy",
+//         is_liked: false
+//       },
+//       {
+//         id: 108,
+//         post_id: 123,
+//         parent_id: 5,
+//         user_id: 1,
+//         content: "Appreciate it! The GitHub Actions workflow was a pain to set up but worth it 😅",
+//         gif_url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+//         username_mention: "DevOpsGuy",
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 9,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 0,
+//         created_at: "2026-06-13T08:00:00Z",
+//         updated_at: "2026-06-13T08:00:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   },
+//   {
+//     id: 6,
+//     post_id: 123,
+//     parent_id: null,
+//     user_id: 17,
+//     content: "Any tips for optimizing Next.js apps specifically?",
+//     gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
+//     username_mention: null,
+//     is_anonymous: 1,
+//     anonymous_name: "🌙 Night Owl",
+//     anonymous_bg_color: "#6C5CE7",
+//     likes_count: 3,
+//     reply_count: 1,
+//     is_deleted: 0,
+//     is_edited: 1,
+//     created_at: "2026-06-13T04:00:00Z",
+//     updated_at: "2026-06-13T04:00:00Z",
+//     avatar_url: null,
+//     display_name: "🌙 Night Owl",
+//     username: null,
+//     is_liked: false,
+//     replies: [
+//       {
+//         id: 109,
+//         post_id: 123,
+//         parent_id: 6,
+//         user_id: 1,
+//         content: "For Next.js specifically: use next/dynamic for lazy loading, Image component for optimization, and ISR for static pages.",
+//         gif_url: "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif",
+//         username_mention: null,
+//         is_anonymous: 0,
+//         anonymous_name: null,
+//         anonymous_bg_color: null,
+//         likes_count: 11,
+//         reply_count: 0,
+//         is_deleted: 0,
+//         is_edited: 1,
+//         created_at: "2026-06-13T06:00:00Z",
+//         updated_at: "2026-06-13T06:10:00Z",
+//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         display_name: "JohnDoe",
+//         username: "JohnDoe",
+//         is_liked: true
+//       }
+//     ]
+//   }
+// ];
+
+
+// const mockPagination = {
+//   page: 1,
+//   limit: 10,
+//   total: 6,
+//   total_pages: 1,
+//   has_more: false
+// };
+
+// const mockCommentsResponse = {
+//   comments: mockComments,
+//   pagination: mockPagination
+// };
 
 const parseJSON = (val) => {
   try {
@@ -70,6 +426,172 @@ const timeAgo = (timestamp) => {
   const years = Math.floor(days / 365);
   return `${years} year${years > 1 ? 's' : ''} ago`;
 };
+
+// Memoized Comment Like Button Component
+const CommentLikeButton = memo((({ isLiked, likesCount, onLike, isAnimating }) => {
+  return (
+    <button
+      className={`comment-like-button ${isLiked ? "liked" : ""}`}
+      type="button"
+      onClick={onLike}
+    >
+      <motion.div
+        className="action-icon-wrapper"
+        whileTap={{ scale: 0.75 }}
+        animate={isAnimating ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
+        transition={{ duration: 0.45, ease: "easeInOut" }}
+      >
+        <AnimatePresence mode="wait">
+          {isLiked ? (
+            <motion.div
+              key="liked"
+              initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
+              animate={{ scale: 1, opacity: 1, rotate: 0 }}
+              exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
+              transition={{ type: "spring", stiffness: 500, damping: 22 }}
+            >
+              <Heart size={16} className="comment-like-icon liked-heart" fill="currentColor" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="unliked"
+              initial={{ scale: 0.4, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.4, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Heart size={16} className="comment-like-icon" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+      <span>{likesCount}</span>
+    </button>
+  );
+}), (prevProps, nextProps) => {
+  return (
+    prevProps.isLiked === nextProps.isLiked &&
+    prevProps.likesCount === nextProps.likesCount &&
+    prevProps.isAnimating === nextProps.isAnimating
+  );
+});
+
+// Memoized Comment Card Component
+const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
+  const isExpanded = expandedReplies[c.id];
+  
+  return (
+    <div
+      className={`
+        comment
+        ${isReply ? "reply" : ""}
+        ${String(highlightedId) === String(c.id) ? "highlight-comment" : ""}
+      `}
+      id={c.id}
+    >
+      <div className="avatar" style={{ background: renderColorFn(c) }}>
+        <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
+      </div>
+
+      <div className="comment-body">
+        <div className="comment-header">
+          <div className="comment-name-wrapper">
+            <b className="comment-name">{renderNameFn(c)}</b>
+          </div>
+          <CommentDropDown 
+            ownerId={c.user_id} 
+            comm_id={c.id} 
+            comm_text={c.content} 
+            comm_gif={c.gif_url} 
+            post_id={postId}
+            onDelete={() => onDeleteComment(c.id, postId)}
+          />
+        </div>
+
+        <div className="comment-text">
+          {c.username_mention && (
+            <span style={{ color: 'skyblue' }} className='comm-mention-name'>@{c.username_mention}</span>
+          )}
+          <span className='comm-content'>{c.content}
+            {c.is_edited === 1 && !c.is_deleted && (
+              <span className="edited-badge">
+                 Edited*
+              </span>
+            )}
+          </span>
+        </div>
+
+        {c.gif_url && (
+          <div className="comment-gif">
+            <img src={c.gif_url} alt="gif" className="gif-com" />
+          </div>
+        )}
+
+        <div className="comment-actions">
+         
+            {c.is_deleted === 0 && (
+               <div className="comment-actions-left">
+                <CommentLikeButton
+                  isLiked={c.is_liked}
+                  likesCount={c.likes_count}
+                  onLike={(e) => {
+                    e.preventDefault();
+                    onLikeComment(c.id);
+                  }}
+                  isAnimating={likingCommentId === c.id}
+                />
+                <span onClick={() => onReplyClick(c)}>
+                  Reply
+                </span>
+              </div>
+            )}
+          
+          <div className="comment-actions-right">
+            <span className="comment-time">
+              {c.is_edited === 1 ? timeAgoFn(c.updated_at) : timeAgoFn(c.created_at)}
+              </span>
+          </div>
+        </div>
+
+        {c.replies?.length > 0 && (
+          <div className="reply-section">
+            <button className="reply-toggle" onClick={() => onToggleReplies(c.id)}>
+              {isExpanded ? (
+                <span className="hide-replies arrow-reply">
+                  <FontAwesomeIcon icon={faAngleUp} /> Hide replies
+                </span>
+              ) : (
+                <span className="show-replies arrow-reply">
+                  <FontAwesomeIcon icon={faAngleDown} /> View {c.replies.length} replies
+                </span>
+              )}
+            </button>
+
+            {isExpanded && c.replies.map(r => (
+              <CommentCard 
+                key={r.id} 
+                c={r} 
+                isReply={true}
+                postId={postId}
+                expandedReplies={expandedReplies}
+                onToggleReplies={onToggleReplies}
+                onLikeComment={onLikeComment}
+                onReplyClick={onReplyClick}
+                highlightedId={highlightedId}
+                timeAgoFn={timeAgoFn}
+                renderNameFn={renderNameFn}
+                renderColorFn={renderColorFn}
+                renderAvatarFn={renderAvatarFn}
+                likingCommentId={likingCommentId}
+                onDeleteComment={onDeleteComment}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
 
 const AboutPost = () => {
   const navigate = useNavigate();
@@ -104,6 +626,8 @@ const AboutPost = () => {
     }
   }, [location]);
 
+  const [select, setSelect] = useState(1);
+  
   // Infinite Scroll Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -264,6 +788,17 @@ const AboutPost = () => {
     }
   };
 
+//   const fetchComments = async (pageNum = 1) => {
+//   setLoadingComments(true);
+  
+//   // Simulate API delay
+//   setTimeout(() => {
+//     setComments(pageNum === 1 ? mockComments : [...comments, ...mockComments]);
+//     setHasMore(false);
+//     setPage(pageNum);
+//     setLoadingComments(false);
+//   }, 500);
+// };
   const toggleReplies = (commentId) => {
     setExpandedReplies(prev => ({
       ...prev,
@@ -283,81 +818,57 @@ const AboutPost = () => {
     }
   };
 
-  // const toggleLikeComment = async (commentId) => {
-  //   try {
-  //     await axios.post(
-  //       `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
-  //       {},
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
+  const toggleLikeComment = async (commentId) => {
+    if (likingCommentId === commentId) return;
+    
+    setLikingCommentId(commentId);
 
-  //     setComments(prev =>
-  //       prev.map(c => {
-  //         if (c.id === commentId) {
-  //           return {
-  //             ...c,
-  //             is_liked: !c.is_liked,
-  //             likes_count: c.is_liked ? c.likes_count - 1 : c.likes_count + 1
-  //           };
-  //         }
-  //         return {
-  //           ...c,
-  //           replies: c.replies?.map(r =>
-  //             r.id === commentId
-  //               ? {
-  //                   ...r,
-  //                   is_liked: !r.is_liked,
-  //                   likes_count: r.is_liked ? r.likes_count - 1 : r.likes_count + 1
-  //                 }
-  //               : r
-  //           )
-  //         };
-  //       })
-  //     );
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-const toggleLikeComment = async (commentId) => {
-  if (likingCommentId === commentId) return;
-  
-  setLikingCommentId(commentId);
+    setComments(prevComments => {
+      const updateComment = (comment) => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            is_liked: !comment.is_liked,
+            likes_count: comment.is_liked ? comment.likes_count - 1 : comment.likes_count + 1
+          };
+        }
+        if (comment.replies) {
+          return {
+            ...comment,
+            replies: comment.replies.map(reply => updateComment(reply))
+          };
+        }
+        return comment;
+      };
+      return prevComments.map(comment => updateComment(comment));
+    });
 
-  // Optimistic update - same pattern as Home component
-  setComments(prevComments => {
-    const updateComment = (comment) => {
-      if (comment.id === commentId) {
-        return {
-          ...comment,
-          is_liked: !comment.is_liked,
-          likes_count: comment.is_liked ? comment.likes_count - 1 : comment.likes_count + 1
-        };
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      fetchComments(1);
+      console.error(err);
+    } finally {
+      setLikingCommentId(null);
+    }
+  };
+
+  const handleReplyClick = (c) => {
+    navigate("/comment", {
+      state: {
+        postId: id,
+        comment_id: c.id,
+        user_id_mention: c.user_id || null,
+        username_mention: renderName(c),
+        mode: "reply"
       }
-      if (comment.replies) {
-        return {
-          ...comment,
-          replies: comment.replies.map(reply => updateComment(reply))
-        };
-      }
-      return comment;
-    };
-    return prevComments.map(comment => updateComment(comment));
-  });
+    });
+  };
 
-  try {
-    await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-  } catch (err) {
-    // Rollback - refetch to get correct state
-    fetchComments(1);
-    console.error(err);
-  } finally {
-    setLikingCommentId(null);
-  }
-};
   const renderName = (c) => {
     if (c.is_deleted === 1) return '[deleted]';
     return c.is_anonymous === 1 ? c.anonymous_name : (c.display_name || c.username);
@@ -373,144 +884,6 @@ const toggleLikeComment = async (commentId) => {
     if (c.is_anonymous === 1) return nahIdeaAuth;
     return c.avatar_url || userProfilePic;
   };
-
-  const CommentCard = ({ c, isReply }) => (
-    <div
-      className={`
-        comment
-        ${isReply ? "reply" : ""}
-        ${String(highlightedId) === String(c.id) ? "highlight-comment" : ""}
-      `}
-      id={c.id}
-    >
-      <div className="avatar" style={{ background: renderColor(c) }}>
-        <img src={renderAvatar(c)} alt="avatar" />
-      </div>
-
-      <div className="comment-body">
-        <div className="comment-header">
-          <div className="comment-name-wrapper">
-            <b className="comment-name">{renderName(c)}</b>
-          </div>
-          <CommentDropDown 
-            ownerId={c.user_id} 
-            comm_id={c.id} 
-            comm_text={c.content} 
-            comm_gif={c.gif_url} 
-            post_id={id}
-            onDelete={() => handleDeleteComment(c.id, id)}
-          />
-        </div>
-
-        <div className="comment-text">
-          {c.username_mention && (
-            <span style={{ color: 'skyblue' }} className='comm-mention-name'>@{c.username_mention}</span>
-          )}
-          <span className='comm-content'>{c.content}
-            {c.is_edited === 1 && !c.is_deleted && (
-              <span className="edited-badge">
-                <FontAwesomeIcon icon={faPen} /> Edited*
-              </span>
-            )}
-          </span>
-        </div>
-
-        {c.gif_url && (
-          <div className="comment-gif">
-            <img src={c.gif_url} alt="gif" className="gif-com" />
-          </div>
-        )}
-
-        <div className="comment-actions">
-          <div className="comment-actions-left">
-            {c.is_deleted === 0 && (
-              <>
-          <button
-  className={`comment-like-button ${c.is_liked ? "liked" : ""}`}
-  type="button"
-  onClick={(e) => {
-    e.preventDefault();
-    toggleLikeComment(c.id);
-  }}
->
-  <motion.div
-    className="action-icon-wrapper"
-    whileTap={{ scale: 0.75 }}
-    animate={likingCommentId === c.id ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
-    transition={{ duration: 0.45, ease: "easeInOut" }}
-  >
-    <AnimatePresence mode="wait">
-      {c.is_liked ? (
-        <motion.div
-          key="liked"
-          initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
-          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
-          transition={{ type: "spring", stiffness: 500, damping: 22 }}
-        >
-          <Heart size={16} className="comment-like-icon liked-heart" fill="currentColor" />
-        </motion.div>
-      ) : (
-        <motion.div
-          key="unliked"
-          initial={{ scale: 0.4, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.4, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <Heart size={16} className="comment-like-icon" />
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </motion.div>
-  <span>{c.likes_count}</span>
-</button>
-
-                <span
-                  onClick={() =>
-                    navigate("/comment", {
-                      state: {
-                        postId: id,
-                        comment_id: c.id,
-                        user_id_mention: c.user_id || null,
-                        username_mention: renderName(c),
-                        mode: "reply"
-                      }
-                    })
-                  }
-                >
-                  Reply
-                </span>
-              </>
-            )}
-          </div>
-          <div className="comment-actions-right">
-            <span className="comment-time">{timeAgo(c.created_at)}</span>
-          </div>
-        </div>
-
-        {c.replies?.length > 0 && (
-          <div className="reply-section">
-            <button className="reply-toggle" onClick={() => toggleReplies(c.id)}>
-              {expandedReplies[c.id] ? (
-                <span className="hide-replies arrow-reply">
-                  <FontAwesomeIcon icon={faAngleUp} /> Hide replies
-                </span>
-              ) : (
-                <span className="show-replies arrow-reply">
-                  <FontAwesomeIcon icon={faAngleDown} /> View {c.replies.length} replies
-                </span>
-              )}
-            </button>
-
-            {expandedReplies[c.id] && c.replies.map(r => (
-              <CommentCard key={r.id} c={r} isReply />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
 
   if (!post) {
     return (
@@ -798,27 +1171,130 @@ const toggleLikeComment = async (commentId) => {
         </div>
 
         <div className="comment-box">
-          <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
-          <button
-            onClick={() => navigate(`/comment`, { state: { postId: id } })}
-            className="comment-btn"
-          >
-            Write a comment
-          </button>
+          {post?.type === "question" ? (
+            <>
+              <div className='radio-button-div-chat'>
+                {[
+                  { id: 1, label: "Anwsers" },
+                  { id: 2, label: "Comments" }
+                ].map((opt) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => setSelected(opt.id)}
+                    style={{
+                      borderBottom: select === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+                      color: select === opt.id ? "#fd7648" : "grey",
+                      background: select === opt.id ? "var(--back-con)" : "transparent",
+                    }}
+                    className='radio-button-chat'
+                    disabled={loading}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              {
+                select === 1 && (
+                  <>
+                    <span id='label-com-count'>{post?.comments_count} Answer{post?.comments_count !== 1 && "s"}</span>
+                    <button
+                      onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                      className="comment-btn"
+                    >
+                      Answer this question
+                    </button>
+                    
+                  </>
+                )
+              }
+              {
+                select === 2 && (
+                  <>
+                  <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
+                  <button
+                    onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                    className="comment-btn"
+                  >
+                    Write a comment
+                  </button>
 
-          {comments.map(c => (
-            <CommentCard key={c.id} c={c} />
-          ))}
-          
-          {comments.length === 0 && (
-            <div id='no-com-div'>
-              <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
-              <p className='no-com-p'>Be the first to comment</p>
-            </div>
-          )}
+                  {comments.map(c => (
+                    <CommentCard 
+                      key={c.id}
+                      c={c}
+                      isReply={false}
+                      postId={id}
+                      expandedReplies={expandedReplies}
+                      onToggleReplies={toggleReplies}
+                      onLikeComment={toggleLikeComment}
+                      onReplyClick={handleReplyClick}
+                      highlightedId={highlightedId}
+                      timeAgoFn={timeAgo}
+                      renderNameFn={renderName}
+                      renderColorFn={renderColor}
+                      renderAvatarFn={renderAvatar}
+                      likingCommentId={likingCommentId}
+                      onDeleteComment={handleDeleteComment}
+                    />
+                  ))}
+                
+                  {comments.length === 0 && (
+                    <div id='no-com-div'>
+                      <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
+                      <p className='no-com-p'>Be the first to comment</p>
+                    </div>
+                  )}
 
-          <div ref={observerRef} style={{ height: "20px" }} />
-          {loadingComments && <p>Loading comments...</p>}
+                  <div ref={observerRef} style={{ height: "20px" }} />
+                  </>
+                )
+              }
+            </>
+              
+          )
+          :
+          (
+            <>
+              <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
+              <button
+                onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                className="comment-btn"
+              >
+                Write a comment
+              </button>
+
+              {comments.map(c => (
+                <CommentCard 
+                  key={c.id}
+                  c={c}
+                  isReply={false}
+                  postId={id}
+                  expandedReplies={expandedReplies}
+                  onToggleReplies={toggleReplies}
+                  onLikeComment={toggleLikeComment}
+                  onReplyClick={handleReplyClick}
+                  highlightedId={highlightedId}
+                  timeAgoFn={timeAgo}
+                  renderNameFn={renderName}
+                  renderColorFn={renderColor}
+                  renderAvatarFn={renderAvatar}
+                  likingCommentId={likingCommentId}
+                  onDeleteComment={handleDeleteComment}
+                />
+              ))}
+            
+              {comments.length === 0 && (
+                <div id='no-com-div'>
+                  <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
+                  <p className='no-com-p'>Be the first to comment</p>
+                </div>
+              )}
+
+              <div ref={observerRef} style={{ height: "20px" }} />
+            </>
+          )
+        }
+         {/* {loadingComments && <p>Loading comments...</p>} */}
         </div>
       </article>
 
@@ -850,7 +1326,6 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (onDelete) onDelete();
-      window.location.reload(); // Refresh to update comments
     } catch (err) {
       console.error(err);
     }

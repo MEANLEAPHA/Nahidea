@@ -1,5 +1,5 @@
 // React State
-import React, { useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useParams, useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -8,6 +8,9 @@ import axios from "axios";
 import {
   Heart,
   Bookmark,
+  ArrowUp,
+  ArrowDown,
+  Trophy
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 // style
@@ -37,364 +40,6 @@ import { DeleteOutlined, EditOutlined, FlagOutlined, LinkOutlined } from '@ant-d
 const { Text } = Typography;
 
 const token = localStorage.getItem("token");
-
-// const mockComments = [
-//   {
-//     id: 1,
-//     post_id: 123,
-//     parent_id: null,
-//     user_id: 1,
-//     content: "Thanks everyone for the feedback! Glad you found these tips helpful. 🔥",
-//     gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
-//     username_mention: null,
-//     is_anonymous: 0,
-//     anonymous_name: null,
-//     anonymous_bg_color: null,
-//     likes_count: 24,
-//     reply_count: 2,
-//     is_deleted: 0,
-//     is_edited: 0,
-//     created_at: "2026-06-13T10:30:00Z",
-//     updated_at: "2026-06-13T10:30:00Z",
-//     avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//     display_name: "JohnDoe",
-//     username: "JohnDoe",
-//     is_liked: true,
-//     replies: [
-//       {
-//         id: 101,
-//         post_id: 123,
-//         parent_id: 1,
-//         user_id: 10,
-//         content: "Great article John! When is part 2 coming?",
-//         gif_url: null,
-//         username_mention: "JohnDoe",
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 8,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 0,
-//         created_at: "2026-06-13T10:35:00Z",
-//         updated_at: "2026-06-13T10:35:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/10.jpg",
-//         display_name: "TechGuru",
-//         username: "TechGuru",
-//         is_liked: false
-//       },
-//       {
-//         id: 102,
-//         post_id: 123,
-//         parent_id: 1,
-//         user_id: 1,
-//         content: "Working on it! Should be out next week. Stay tuned! 🚀",
-//         gif_url: "https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif",
-//         username_mention: "TechGuru",
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 12,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 0,
-//         created_at: "2026-06-13T10:40:00Z",
-//         updated_at: "2026-06-13T10:40:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//         display_name: "JohnDoe",
-//         username: "JohnDoe",
-//         is_liked: true
-//       }
-//     ]
-//   },
-//   {
-//     id: 2,
-//     post_id: 123,
-//     parent_id: null,
-//     user_id: 12,
-//     content: "The useCallback tip saved me from so many re-renders. Thanks for sharing! 🙏",
-//     gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
-//     username_mention: null,
-//     is_anonymous: 1,
-//     anonymous_name: "🐧 Penguin",
-//     anonymous_bg_color: "#4A90E2",
-//     likes_count: 8,
-//     reply_count: 1,
-//     is_deleted: 0,
-//     is_edited: 0,
-//     created_at: "2026-06-13T08:00:00Z",
-//     updated_at: "2026-06-13T08:00:00Z",
-//     avatar_url: null,
-//     display_name: "🐧 Penguin",
-//     username: null,
-//     is_liked: false,
-//     replies: [
-//       {
-//         id: 103,
-//         post_id: 123,
-//         parent_id: 2,
-//         user_id: 1,
-//         content: "Glad it helped you! useCallback is definitely a game-changer when used correctly.",
-//         gif_url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-//         username_mention: null,
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 5,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 1,
-//         created_at: "2026-06-13T09:00:00Z",
-//         updated_at: "2026-06-13T09:05:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//         display_name: "JohnDoe",
-//         username: "JohnDoe",
-//         is_liked: false
-//       }
-//     ]
-//   },
-//   {
-//     id: 3,
-//     post_id: 123,
-//     parent_id: null,
-//     user_id: 13,
-//     content: "What about using SWR or React Query for data fetching optimization?",
-//     gif_url: null,
-//     username_mention: null,
-//     is_anonymous: 0,
-//     anonymous_name: null,
-//     anonymous_bg_color: null,
-//     likes_count: 12,
-//     reply_count: 3,
-//     is_deleted: 0,
-//     is_edited: 0,
-//     created_at: "2026-06-13T07:00:00Z",
-//     updated_at: "2026-06-13T07:00:00Z",
-//     avatar_url: "https://randomuser.me/api/portraits/women/4.jpg",
-//     display_name: "CodeNewbie2024",
-//     username: "CodeNewbie2024",
-//     is_liked: true,
-//     replies: [
-//       {
-//         id: 104,
-//         post_id: 123,
-//         parent_id: 3,
-//         user_id: 1,
-//         content: "Great question! Both are excellent. React Query is my personal favorite for automatic caching and background refetching.",
-//         gif_url: "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif",
-//         username_mention: "CodeNewbie2024",
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 15,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 0,
-//         created_at: "2026-06-13T08:00:00Z",
-//         updated_at: "2026-06-13T08:00:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//         display_name: "JohnDoe",
-//         username: "JohnDoe",
-//         is_liked: true
-//       },
-//       {
-//         id: 105,
-//         post_id: 123,
-//         parent_id: 3,
-//         user_id: 14,
-//         content: "SWR is also great but React Query has more features IMO",
-//         gif_url: null,
-//         username_mention: null,
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 3,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 0,
-//         created_at: "2026-06-13T09:00:00Z",
-//         updated_at: "2026-06-13T09:00:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/6.jpg",
-//         display_name: "ReactMaster",
-//         username: "ReactMaster",
-//         is_liked: false
-//       },
-//       {
-//         id: 106,
-//         post_id: 123,
-//         parent_id: 3,
-//         user_id: 1,
-//         content: "Agreed! TanStack Query has better dev tools too!",
-//         gif_url: "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
-//         username_mention: "ReactMaster",
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 7,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 1,
-//         created_at: "2026-06-13T09:45:00Z",
-//         updated_at: "2026-06-13T09:50:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//         display_name: "JohnDoe",
-//         username: "JohnDoe",
-//         is_liked: true
-//       }
-//     ]
-//   },
-//   {
-//     id: 4,
-//     post_id: 123,
-//     parent_id: null,
-//     user_id: 15,
-//     content: "Love the code examples! Very clear and easy to understand.",
-//     gif_url: "https://media.giphy.com/media/l0MYt5jH6gkTWp8Gg/giphy.gif",
-//     username_mention: null,
-//     is_anonymous: 0,
-//     anonymous_name: null,
-//     anonymous_bg_color: null,
-//     likes_count: 6,
-//     reply_count: 0,
-//     is_deleted: 0,
-//     is_edited: 0,
-//     created_at: "2026-06-13T06:00:00Z",
-//     updated_at: "2026-06-13T06:00:00Z",
-//     avatar_url: "https://randomuser.me/api/portraits/women/5.jpg",
-//     display_name: "DesignLover",
-//     username: "DesignLover",
-//     is_liked: false,
-//     replies: []
-//   },
-//   {
-//     id: 5,
-//     post_id: 123,
-//     parent_id: null,
-//     user_id: 1,
-//     content: "For those asking about production examples, check the link in my bio! I've open-sourced a boilerplate with all these optimizations applied.",
-//     gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
-//     username_mention: null,
-//     is_anonymous: 0,
-//     anonymous_name: null,
-//     anonymous_bg_color: null,
-//     likes_count: 34,
-//     reply_count: 2,
-//     is_deleted: 0,
-//     is_edited: 0,
-//     created_at: "2026-06-13T05:00:00Z",
-//     updated_at: "2026-06-13T05:00:00Z",
-//     avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//     display_name: "JohnDoe",
-//     username: "JohnDoe",
-//     is_liked: true,
-//     replies: [
-//       {
-//         id: 107,
-//         post_id: 123,
-//         parent_id: 5,
-//         user_id: 16,
-//         content: "Just starred it! Great work on the CI/CD setup too.",
-//         gif_url: "https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif",
-//         username_mention: "JohnDoe",
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 4,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 0,
-//         created_at: "2026-06-13T07:00:00Z",
-//         updated_at: "2026-06-13T07:00:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/7.jpg",
-//         display_name: "DevOpsGuy",
-//         username: "DevOpsGuy",
-//         is_liked: false
-//       },
-//       {
-//         id: 108,
-//         post_id: 123,
-//         parent_id: 5,
-//         user_id: 1,
-//         content: "Appreciate it! The GitHub Actions workflow was a pain to set up but worth it 😅",
-//         gif_url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-//         username_mention: "DevOpsGuy",
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 9,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 0,
-//         created_at: "2026-06-13T08:00:00Z",
-//         updated_at: "2026-06-13T08:00:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//         display_name: "JohnDoe",
-//         username: "JohnDoe",
-//         is_liked: true
-//       }
-//     ]
-//   },
-//   {
-//     id: 6,
-//     post_id: 123,
-//     parent_id: null,
-//     user_id: 17,
-//     content: "Any tips for optimizing Next.js apps specifically?",
-//     gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
-//     username_mention: null,
-//     is_anonymous: 1,
-//     anonymous_name: "🌙 Night Owl",
-//     anonymous_bg_color: "#6C5CE7",
-//     likes_count: 3,
-//     reply_count: 1,
-//     is_deleted: 0,
-//     is_edited: 1,
-//     created_at: "2026-06-13T04:00:00Z",
-//     updated_at: "2026-06-13T04:00:00Z",
-//     avatar_url: null,
-//     display_name: "🌙 Night Owl",
-//     username: null,
-//     is_liked: false,
-//     replies: [
-//       {
-//         id: 109,
-//         post_id: 123,
-//         parent_id: 6,
-//         user_id: 1,
-//         content: "For Next.js specifically: use next/dynamic for lazy loading, Image component for optimization, and ISR for static pages.",
-//         gif_url: "https://media.giphy.com/media/26n6WywJyh39n1pBu/giphy.gif",
-//         username_mention: null,
-//         is_anonymous: 0,
-//         anonymous_name: null,
-//         anonymous_bg_color: null,
-//         likes_count: 11,
-//         reply_count: 0,
-//         is_deleted: 0,
-//         is_edited: 1,
-//         created_at: "2026-06-13T06:00:00Z",
-//         updated_at: "2026-06-13T06:10:00Z",
-//         avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
-//         display_name: "JohnDoe",
-//         username: "JohnDoe",
-//         is_liked: true
-//       }
-//     ]
-//   }
-// ];
-
-
-// const mockPagination = {
-//   page: 1,
-//   limit: 10,
-//   total: 6,
-//   total_pages: 1,
-//   has_more: false
-// };
-
-// const mockCommentsResponse = {
-//   comments: mockComments,
-//   pagination: mockPagination
-// };
 
 const parseJSON = (val) => {
   try {
@@ -427,8 +72,118 @@ const timeAgo = (timestamp) => {
   return `${years} year${years > 1 ? 's' : ''} ago`;
 };
 
+// Answer Vote Button Component
+const AnswerVoteButton = memo(({ voteScore, userVote, onUpvote, onDownvote, isVoting }) => {
+  return (
+    <div className="answer-vote-container">
+      <button 
+        className={`answer-vote-btn upvote ${userVote === 'upvote' ? 'active' : ''}`}
+        onClick={onUpvote}
+        disabled={isVoting}
+      >
+        <ArrowUp size={16} />
+      </button>
+      <span className="answer-vote-score">{voteScore}</span>
+      <button 
+        className={`answer-vote-btn downvote ${userVote === 'downvote' ? 'active' : ''}`}
+        onClick={onDownvote}
+        disabled={isVoting}
+      >
+        <ArrowDown size={16} />
+      </button>
+    </div>
+  );
+});
+
+// Answer Card Component
+const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, onAnswerClick, highlightedAnswerId }) => {
+  const renderAnswerContent = () => {
+    switch (answer.question_type) {
+      case 'openend':
+        return <p className="answer-text">{answer.text_answer}</p>;
+      case 'closedend':
+        return (
+          <div className={`answer-badge ${answer.yes_no === 'yes' ? 'answer-yes' : 'answer-no'}`}>
+            {answer.yes_no === 'yes' ? '✅ Yes' : '❌ No'}
+          </div>
+        );
+      case 'rating':
+        return (
+          <div className="answer-rating">
+            {'⭐'.repeat(answer.rating_value)} ({answer.rating_value}/5)
+          </div>
+        );
+      case 'singlechoice':
+        return (
+          <div className="answer-choice-badge">
+            📌 {answer.singlechoice_option_value}
+          </div>
+        );
+      case 'multiplechoice':
+        const choices = JSON.parse(answer.multiplechoice_option_value || '[]');
+        return (
+          <div className="answer-choices">
+            {choices.map((choice, idx) => (
+              <span key={idx} className="answer-choice-badge">📌 {choice}</span>
+            ))}
+          </div>
+        );
+      case 'range':
+        return (
+          <div className="answer-range">
+            📊 Range: {answer.range_value}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div 
+      className={`answer-card ${isPopular ? 'popular-answer' : ''} ${highlightedAnswerId === answer.id ? 'highlight-answer' : ''}`}
+      id={`answer-${answer.id}`}
+      onClick={() => onAnswerClick?.(answer.id)}
+    >
+      <div className="answer-header">
+        <div className="answer-author">
+          <div 
+            className="answer-avatar" 
+            style={{ background: answer.author_bg_color || '#999' }}
+          >
+            {answer.author_name?.slice(0, 2)}
+          </div>
+          <div className="answer-author-info">
+            <span className="answer-author-name">{answer.author_name}</span>
+            <span className="answer-time">{timeAgo(answer.created_at)}</span>
+          </div>
+        </div>
+        {isPopular && (
+          <div className="popular-badge">
+            <Trophy size={14} /> Top Answer
+          </div>
+        )}
+      </div>
+      
+      <div className="answer-body">
+        {renderAnswerContent()}
+      </div>
+      
+      <div className="answer-footer">
+        <AnswerVoteButton
+          voteScore={answer.vote_score}
+          userVote={answer.user_vote_type}
+          onUpvote={onUpvote}
+          onDownvote={onDownvote}
+          isVoting={isVoting}
+        />
+      </div>
+    </div>
+  );
+});
+
 // Memoized Comment Like Button Component
-const CommentLikeButton = memo((({ isLiked, likesCount, onLike, isAnimating }) => {
+const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) => {
   return (
     <button
       className={`comment-like-button ${isLiked ? "liked" : ""}`}
@@ -467,12 +222,6 @@ const CommentLikeButton = memo((({ isLiked, likesCount, onLike, isAnimating }) =
       </motion.div>
       <span>{likesCount}</span>
     </button>
-  );
-}), (prevProps, nextProps) => {
-  return (
-    prevProps.isLiked === nextProps.isLiked &&
-    prevProps.likesCount === nextProps.likesCount &&
-    prevProps.isAnimating === nextProps.isAnimating
   );
 });
 
@@ -528,28 +277,26 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
         )}
 
         <div className="comment-actions">
-         
-            {c.is_deleted === 0 && (
-               <div className="comment-actions-left">
-                <CommentLikeButton
-                  isLiked={c.is_liked}
-                  likesCount={c.likes_count}
-                  onLike={(e) => {
-                    e.preventDefault();
-                    onLikeComment(c.id);
-                  }}
-                  isAnimating={likingCommentId === c.id}
-                />
-                <span onClick={() => onReplyClick(c)}>
-                  Reply
-                </span>
-              </div>
-            )}
-          
+          {c.is_deleted === 0 && (
+            <div className="comment-actions-left">
+              <CommentLikeButton
+                isLiked={c.is_liked}
+                likesCount={c.likes_count}
+                onLike={(e) => {
+                  e.preventDefault();
+                  onLikeComment(c.id);
+                }}
+                isAnimating={likingCommentId === c.id}
+              />
+              <span onClick={() => onReplyClick(c)}>
+                Reply
+              </span>
+            </div>
+          )}
           <div className="comment-actions-right">
             <span className="comment-time">
               {c.is_edited === 1 ? timeAgoFn(c.updated_at) : timeAgoFn(c.created_at)}
-              </span>
+            </span>
           </div>
         </div>
 
@@ -604,122 +351,156 @@ const AboutPost = () => {
   const [favoritingPosts, setFavoritingPosts] = useState(false);
 
   const [comments, setComments] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const [popularAnswer, setPopularAnswer] = useState(null);
+  const [votingAnswerId, setVotingAnswerId] = useState(null);
   const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
   const [page, setPage] = useState(1);
+  const [answerPage, setAnswerPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [hasMoreAnswers, setHasMoreAnswers] = useState(true);
   const [loadingComments, setLoadingComments] = useState(false);
+  const [loadingAnswers, setLoadingAnswers] = useState(false);
 
   const [expandedReplies, setExpandedReplies] = useState({});
-
   const [highlightedId, setHighlightedId] = useState(null);
+  const [highlightedAnswerId, setHighlightedAnswerId] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(1); // 1: Answers, 2: Comments
 
   const observerRef = useRef(null);
-
+  const answerObserverRef = useRef(null);
   const targetCommentId = useRef(null);
+  const targetAnswerId = useRef(null);
   const hasScrolledToHash = useRef(false);
+  const commentsFetched = useRef(false);
+  const answersFetched = useRef(false);
 
-  // use Location to get comment hash
+  // Parse location hash for scrolling
   useEffect(() => {
     if (location.hash) {
-      targetCommentId.current = location.hash.replace("#", "");
+      const hash = location.hash.replace("#", "");
+      if (hash.startsWith('answer-')) {
+        targetAnswerId.current = hash.replace('answer-', '');
+        targetCommentId.current = null;
+      } else {
+        targetCommentId.current = hash;
+        targetAnswerId.current = null;
+      }
     }
   }, [location]);
 
-  // Infinite Scroll Observer
+  // Auto scroll to answer or comment
   useEffect(() => {
+    if (hasScrolledToHash.current) return;
+
+    if (targetAnswerId.current && answers.length > 0) {
+      const answerId = targetAnswerId.current;
+      const found = answers.some(a => String(a.id) === String(answerId));
+      
+      if (found) {
+        setSelectedTab(1);
+        setTimeout(() => {
+          const el = document.getElementById(`answer-${answerId}`);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            hasScrolledToHash.current = true;
+            setHighlightedAnswerId(answerId);
+            setTimeout(() => setHighlightedAnswerId(null), 4000);
+          }
+        }, 500);
+      }
+    } else if (targetCommentId.current && comments.length > 0) {
+      const commentId = targetCommentId.current;
+      let found = false;
+      
+      comments.forEach(comment => {
+        if (String(comment.id) === commentId) {
+          found = true;
+        }
+        comment.replies?.forEach(reply => {
+          if (String(reply.id) === commentId) {
+            found = true;
+            setExpandedReplies(prev => ({ ...prev, [comment.id]: true }));
+          }
+        });
+      });
+      
+      if (found) {
+        setSelectedTab(2);
+        setTimeout(() => {
+          const el = document.getElementById(commentId);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            hasScrolledToHash.current = true;
+            setHighlightedId(commentId);
+            setTimeout(() => setHighlightedId(null), 4000);
+          }
+        }, 500);
+      }
+    }
+  }, [answers, comments]);
+
+  // Infinite scroll for comments
+  useEffect(() => {
+    if (selectedTab !== 2) return;
+    
     const observer = new IntersectionObserver(
       entries => {
-        if (
-          entries[0].isIntersecting &&
-          hasMore &&
-          !loadingComments
-        ) {
+        if (entries[0].isIntersecting && hasMore && !loadingComments) {
           fetchComments(page + 1);
         }
       },
-      {
-        threshold: 1
-      }
+      { threshold: 1 }
     );
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
+    if (observerRef.current) observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [page, hasMore, loadingComments]);
+  }, [page, hasMore, loadingComments, selectedTab]);
 
-  // Auto Open Replies + Scroll To Target
+  // Infinite scroll for answers
   useEffect(() => {
-    if (
-      !targetCommentId.current ||
-      comments.length === 0 ||
-      hasScrolledToHash.current
-    ) return;
+    if (selectedTab !== 1) return;
+    
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasMoreAnswers && !loadingAnswers && post?.post_type === 'question') {
+          fetchAnswers(answerPage + 1);
+        }
+      },
+      { threshold: 1 }
+    );
 
-    const targetId = String(targetCommentId.current);
+    if (answerObserverRef.current) observer.observe(answerObserverRef.current);
+    return () => observer.disconnect();
+  }, [answerPage, hasMoreAnswers, loadingAnswers, selectedTab, post]);
 
-    let found = false;
-
-    comments.forEach(comment => {
-      if (String(comment.id) === targetId) {
-        found = true;
+  // Fetch data when tab changes
+  useEffect(() => {
+    if (post?.post_type === 'question') {
+      if (selectedTab === 1 && !answersFetched.current) {
+        fetchAnswers(1);
+        fetchPopularAnswer();
+        answersFetched.current = true;
+      } else if (selectedTab === 2 && !commentsFetched.current) {
+        fetchComments(1);
+        commentsFetched.current = true;
       }
-      comment.replies?.forEach(reply => {
-        if (String(reply.id) === targetId) {
-          found = true;
-          setExpandedReplies(prev => ({
-            ...prev,
-            [comment.id]: true
-          }));
-        }
-      });
-    });
-
-    if (found) {
-      setTimeout(() => {
-        const el = document.getElementById(targetId);
-        if (el) {
-          el.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-          hasScrolledToHash.current = true;
-          setHighlightedId(targetId);
-          setTimeout(() => {
-            setHighlightedId(null);
-          }, 4000);
-        }
-      }, 300);
+    } else {
+      if (!commentsFetched.current) {
+        fetchComments(1);
+        commentsFetched.current = true;
+      }
     }
-  }, [comments]);
+  }, [selectedTab, post]);
 
-  // Advanced Deep Link Fetching
-  useEffect(() => {
-    if (hasScrolledToHash.current) return;
-    const targetId = targetCommentId.current;
-    if (!targetId || !hasMore || loadingComments) return;
-
-    const found = comments.some(comment => {
-      if (String(comment.id) === String(targetId)) return true;
-      return comment.replies?.some(r => String(r.id) === String(targetId));
-    });
-
-    if (!found && hasMore) {
-      fetchComments(page + 1);
-    }
-  }, [comments, hasMore]);
-
-  // initial load
+  // Initial load
   useEffect(() => {
     handleFetchPost();
     handleView();
     handleHistory();
-    fetchComments(1);
   }, [id]);
 
-  // track view
   const handleView = async () => {
     if (!token) return;
     try {
@@ -746,7 +527,6 @@ const AboutPost = () => {
     }
   };
 
-  // fetch post
   const handleFetchPost = async () => {
     try {
       const res = await axios.get(
@@ -764,7 +544,43 @@ const AboutPost = () => {
     }
   };
 
-  // fetch comments/reply
+  const fetchAnswers = async (pageNum = 1) => {
+    if (loadingAnswers || !hasMoreAnswers || post?.post_type !== 'question') return;
+
+    try {
+      setLoadingAnswers(true);
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/answers/question/${post?.data?.id}?page=${pageNum}&limit=10&sort=top`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const newAnswers = res.data.data;
+      setAnswers(prev => pageNum === 1 ? newAnswers : [...prev, ...newAnswers]);
+      setHasMoreAnswers(res.data.pagination.has_more);
+      setAnswerPage(pageNum);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingAnswers(false);
+    }
+  };
+
+  const fetchPopularAnswer = async () => {
+    if (post?.post_type !== 'question') return;
+    
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/answers/question/${post?.data?.id}/popular`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data.data) {
+        setPopularAnswer(res.data.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const fetchComments = async (pageNum = 1) => {
     if (loadingComments || !hasMore) return;
 
@@ -786,17 +602,72 @@ const AboutPost = () => {
     }
   };
 
-//   const fetchComments = async (pageNum = 1) => {
-//   setLoadingComments(true);
-  
-//   // Simulate API delay
-//   setTimeout(() => {
-//     setComments(pageNum === 1 ? mockComments : [...comments, ...mockComments]);
-//     setHasMore(false);
-//     setPage(pageNum);
-//     setLoadingComments(false);
-//   }, 500);
-// };
+  const handleUpvoteAnswer = async (answerId) => {
+    if (votingAnswerId === answerId) return;
+    setVotingAnswerId(answerId);
+
+    // Optimistic update
+    const previousAnswers = [...answers];
+    setAnswers(prev => prev.map(a => {
+      if (a.id === answerId) {
+        const newVoteType = a.user_vote_type === 'upvote' ? null : 'upvote';
+        const voteDelta = a.user_vote_type === 'upvote' ? -1 : (a.user_vote_type === 'downvote' ? 2 : 1);
+        return {
+          ...a,
+          user_vote_type: newVoteType,
+          vote_score: a.vote_score + voteDelta
+        };
+      }
+      return a;
+    }));
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/answers/${answerId}/upvote`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      setAnswers(previousAnswers);
+      console.error(err);
+    } finally {
+      setVotingAnswerId(null);
+    }
+  };
+
+  const handleDownvoteAnswer = async (answerId) => {
+    if (votingAnswerId === answerId) return;
+    setVotingAnswerId(answerId);
+
+    // Optimistic update
+    const previousAnswers = [...answers];
+    setAnswers(prev => prev.map(a => {
+      if (a.id === answerId) {
+        const newVoteType = a.user_vote_type === 'downvote' ? null : 'downvote';
+        const voteDelta = a.user_vote_type === 'downvote' ? 1 : (a.user_vote_type === 'upvote' ? -2 : -1);
+        return {
+          ...a,
+          user_vote_type: newVoteType,
+          vote_score: a.vote_score + voteDelta
+        };
+      }
+      return a;
+    }));
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/answers/${answerId}/downvote`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      setAnswers(previousAnswers);
+      console.error(err);
+    } finally {
+      setVotingAnswerId(null);
+    }
+  };
+
   const toggleReplies = (commentId) => {
     setExpandedReplies(prev => ({
       ...prev,
@@ -1062,7 +933,7 @@ const AboutPost = () => {
                     )}
                   </div>
                 </p>
-              <p className='post-at'>{post?.created_at}</p>
+                <p className='post-at'>{post?.created_at}</p>
               </div> 
             </div>
             <DotDropDown 
@@ -1123,7 +994,6 @@ const AboutPost = () => {
                   <span className="count-label"> Like</span>
                 </p>
               </button>
-     
             </div>
             <div className='post-footer-right'>
               <button
@@ -1169,52 +1039,177 @@ const AboutPost = () => {
         </div>
 
         <div className="comment-box">
-          {post?.type === "question" ? (
-            <h1>q</h1>
-          )
-          :
-          (
+          {post?.post_type === "question" ? (
             <>
-            <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
-          <button
-            onClick={() => navigate(`/comment`, { state: { postId: id } })}
-            className="comment-btn"
-          >
-            Write a comment
-          </button>
+              <div className='radio-button-div-chat'>
+                {[
+                  { id: 1, label: "Answers", count: answers.length || post?.data?.answers_count },
+                  { id: 2, label: "Comments", count: post?.comments_count }
+                ].map((opt) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      setSelectedTab(opt.id);
+                      if (opt.id === 2 && !commentsFetched.current) {
+                        fetchComments(1);
+                        commentsFetched.current = true;
+                      } else if (opt.id === 1 && !answersFetched.current) {
+                        fetchAnswers(1);
+                        fetchPopularAnswer();
+                        answersFetched.current = true;
+                      }
+                    }}
+                    style={{
+                      borderBottom: selectedTab === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+                      color: selectedTab === opt.id ? "#fd7648" : "grey",
+                    }}
+                    className='radio-button-chat'
+                  >
+                    {opt.label} ({opt.count || 0})
+                  </button>
+                ))}
+              </div>
+              
+              {selectedTab === 1 && (
+                <div className="answers-section">
+                  {popularAnswer && (
+                    <div className="popular-answer-section">
+                      <div className="popular-answer-header">
+                        <Trophy size={16} /> Best Answer
+                      </div>
+                      <AnswerCard
+                        answer={popularAnswer}
+                        isPopular={true}
+                        onUpvote={() => handleUpvoteAnswer(popularAnswer.id)}
+                        onDownvote={() => handleDownvoteAnswer(popularAnswer.id)}
+                        isVoting={votingAnswerId === popularAnswer.id}
+                        onAnswerClick={(answerId) => {
+                          navigate(`/aboutpost/${id}#answer-${answerId}`);
+                        }}
+                        highlightedAnswerId={highlightedAnswerId}
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="all-answers-section">
+                    <h4>All Answers ({answers.length})</h4>
+                    {answers.map(answer => (
+                      <AnswerCard
+                        key={answer.id}
+                        answer={answer}
+                        isPopular={false}
+                        onUpvote={() => handleUpvoteAnswer(answer.id)}
+                        onDownvote={() => handleDownvoteAnswer(answer.id)}
+                        isVoting={votingAnswerId === answer.id}
+                        onAnswerClick={(answerId) => {
+                          navigate(`/aboutpost/${id}#answer-${answerId}`);
+                        }}
+                        highlightedAnswerId={highlightedAnswerId}
+                      />
+                    ))}
+                    
+                    <div ref={answerObserverRef} style={{ height: "20px" }} />
+                    {loadingAnswers && <p className="loading-text">Loading answers...</p>}
+                    {answers.length === 0 && !loadingAnswers && (
+                      <div id='no-com-div'>
+                        <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
+                        <p className='no-com-p'>No answers yet. Be the first to answer!</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <button
+                    onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}`)}
+                    className="answer-question-btn"
+                  >
+                    ✏️ Answer this question
+                  </button>
+                </div>
+              )}
+              
+              {selectedTab === 2 && (
+                <>
+                  {comments.map(c => (
+                    <CommentCard 
+                      key={c.id}
+                      c={c}
+                      isReply={false}
+                      postId={id}
+                      expandedReplies={expandedReplies}
+                      onToggleReplies={toggleReplies}
+                      onLikeComment={toggleLikeComment}
+                      onReplyClick={handleReplyClick}
+                      highlightedId={highlightedId}
+                      timeAgoFn={timeAgo}
+                      renderNameFn={renderName}
+                      renderColorFn={renderColor}
+                      renderAvatarFn={renderAvatar}
+                      likingCommentId={likingCommentId}
+                      onDeleteComment={handleDeleteComment}
+                    />
+                  ))}
+                
+                  {comments.length === 0 && !loadingComments && (
+                    <div id='no-com-div'>
+                      <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
+                      <p className='no-com-p'>No comments yet. Start the conversation!</p>
+                    </div>
+                  )}
 
-          {comments.map(c => (
-            <CommentCard 
-              key={c.id}
-              c={c}
-              isReply={false}
-              postId={id}
-              expandedReplies={expandedReplies}
-              onToggleReplies={toggleReplies}
-              onLikeComment={toggleLikeComment}
-              onReplyClick={handleReplyClick}
-              highlightedId={highlightedId}
-              timeAgoFn={timeAgo}
-              renderNameFn={renderName}
-              renderColorFn={renderColor}
-              renderAvatarFn={renderAvatar}
-              likingCommentId={likingCommentId}
-              onDeleteComment={handleDeleteComment}
-            />
-          ))}
-          
-          {comments.length === 0 && (
-            <div id='no-com-div'>
-              <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
-              <p className='no-com-p'>Be the first to comment</p>
-            </div>
+                  <div ref={observerRef} style={{ height: "20px" }} />
+                  {loadingComments && <p className="loading-text">Loading comments...</p>}
+                  
+                  <button
+                    onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                    className="comment-btn"
+                  >
+                    Write a comment
+                  </button>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
+              
+              {comments.map(c => (
+                <CommentCard 
+                  key={c.id}
+                  c={c}
+                  isReply={false}
+                  postId={id}
+                  expandedReplies={expandedReplies}
+                  onToggleReplies={toggleReplies}
+                  onLikeComment={toggleLikeComment}
+                  onReplyClick={handleReplyClick}
+                  highlightedId={highlightedId}
+                  timeAgoFn={timeAgo}
+                  renderNameFn={renderName}
+                  renderColorFn={renderColor}
+                  renderAvatarFn={renderAvatar}
+                  likingCommentId={likingCommentId}
+                  onDeleteComment={handleDeleteComment}
+                />
+              ))}
+            
+              {comments.length === 0 && !loadingComments && (
+                <div id='no-com-div'>
+                  <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
+                  <p className='no-com-p'>Be the first to comment</p>
+                </div>
+              )}
+
+              <div ref={observerRef} style={{ height: "20px" }} />
+              {loadingComments && <p className="loading-text">Loading comments...</p>}
+              
+              <button
+                onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                className="comment-btn"
+              >
+                Write a comment
+              </button>
+            </>
           )}
-
-          <div ref={observerRef} style={{ height: "20px" }} />
-         </>
-          )
-        }
-         {loadingComments && <p>Loading comments...</p>}
         </div>
       </article>
 

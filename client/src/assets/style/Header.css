@@ -166,9 +166,7 @@ color:var(--font-color)
      display: block;
 }
 
-/* .header-middle:focus-within {
 
-} */
 
 .search-box:focus-within ~ .search-button .search-icon {
   color: var(--primary-color);
@@ -242,6 +240,22 @@ cursor: pointer;
     color: var(--font-color);
     font-size: 20px;
     
+}
+.button-bar-icon-bell{
+    position: relative;
+}
+.badge-noti{
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background-color: red;
+    font-size: xx-small;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #user-status{
     width: 10px;

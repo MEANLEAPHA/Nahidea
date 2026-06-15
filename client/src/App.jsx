@@ -77,6 +77,7 @@ import Trending from './assets/page/Trending';
 import UnsolvedQA from './assets/page/UnsolvedQA';
 import AllFriends from './assets/page/AllFriends';
 import Notifications from './assets/page/Notifications';
+import Spammy from './assets/page/Spammy';
 
 const App = () =>{
     return(
@@ -120,7 +121,8 @@ const App = () =>{
 
                     <Route path='/trending' element={<Trending/>}></Route>
                     <Route path='/unslovedqa' element={<UnsolvedQA/>}></Route>
-                    
+                    <Route path='/spammy' element={<Spammy/>}></Route>
+
                     {/* Hall of fame */}
                     <Route path='/halloffame' element={<HallOfFame/>}></Route>
 
@@ -383,9 +385,10 @@ useEffect(() => {
   // =========================================
   // AFTER ALL HOOKS
   // =========================================
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   // if (!token || !user) {
   //   return <Navigate to="/login" replace />;

@@ -19,11 +19,42 @@ import { useAuth } from '../context/AuthContext';
 
 const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   const navigate = useNavigate();
- 
+  const [unreadCount, setUnreadCount] = useState(0);
   const isMaxAside = localStorage.getItem("maxAside");
- useEffect(() => {
-   
- })
+
+  const fetchUnreadCount = async () => {
+        if (!token) return;
+        
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_SERVER_URL}/api/notifications/unread-count`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setUnreadCount(res.data.unreadCount);
+        } catch (err) {
+            console.error('Failed to fetch unread count:', err);
+        }
+    };
+  useEffect(() => {
+        fetchUnreadCount();
+        
+        // Poll every 30 seconds
+        const interval = setInterval(fetchUnreadCount, 180000);
+        
+        // Refresh when tab becomes visible
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                fetchUnreadCount();
+            }
+        };
+        
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        return () => {
+            clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, []);
  
   return (
      <header>
@@ -60,7 +91,15 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
               <CreateDropDown />
               <SearchOutlined className="mobile-tool bar-icon" onClick={()=>{navigate('/search')}}/>
               <CreateDropDownMin />
-              <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notification')}}><BellOutlined className='bar-icon'/></button>
+              <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notifications')}}>
+                <BellOutlined className='bar-icon'/>
+                {unreadCount > 0 && (
+                    <span className="badge-noti">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                )}
+                {/* <span className="badge-noti">10</span> */}
+              </button>
               <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>
            {/* )}  */}
