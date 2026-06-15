@@ -51,6 +51,11 @@ export default function Spammy() {
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/spam/send`, {
         receiver_id: receiverId,
         spam_type: spamType,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       alert("Spam sent 🚀");
