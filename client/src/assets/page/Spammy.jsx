@@ -48,7 +48,7 @@ export default function Spammy() {
     if (!receiverId) return;
 
     try {
-      await axios.post("/api/spam/send", {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/spam/send`, {
         receiver_id: receiverId,
         spam_type: spamType,
       });
@@ -88,16 +88,16 @@ export default function Spammy() {
   const getSpamAsset = (type) => {
     switch (type) {
       case "poke":
-        return "/spam/poke.gif";
+        return "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODNycmo3NHdiOTF1Mmo4anY3OWlleTg2MnR3MHB4Zm40N3VnbDU3YSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PkR8gPgc2mDlrMSgtu/200.gif";
 
       case "goodnight":
-        return "/spam/goodnight.gif";
+        return "https://media.tenor.com/LBppk55tCvsAAAAM/meme.gif";
 
       case "sendlove":
-        return "/spam/sendlove.gif";
+        return "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycncyOG5hZTdxc3lrMTB0NzJkem4waHl0bWlqMHBpZDF2MmphMnplYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif";
 
       default:
-        return "/spam/default.gif";
+        return "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyenFzZmFmbDJqYjhwNW5kNTZqMHl3YzY4M24xN3R2bWxxZWR4NnNoaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/t8xgPfC5oNIRMrNooe/giphy.gif";
     }
   };
 
