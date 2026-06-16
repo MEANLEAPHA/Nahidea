@@ -10,7 +10,10 @@ import {
   Bookmark,
   ArrowUp,
   ArrowDown,
-  Trophy
+  Trophy,
+  BarChart3,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 // style
@@ -72,7 +75,317 @@ const timeAgo = (timestamp) => {
   return `${years} year${years > 1 ? 's' : ''} ago`;
 };
 
-// Answer Vote Button Component
+// ================================
+// ANSWER UTILITY FUNCTIONS
+// ================================
+
+// Calculate average/aggregated answer for each question type
+const calculateAverageAnswer = (answers, questionType) => {
+  if (!answers || answers.length === 0) return null;
+
+  switch (questionType) {
+    case 'closedend': {
+      const yesCount = answers.filter(a => a.yes_no === 'yes').length;
+      const noCount = answers.filter(a => a.yes_no === 'no').length;
+      const total = answers.length;
+      return {
+        type: 'closedend',
+        yes: {
+          count: yesCount,
+          percentage: Math.round((yesCount / total) * 100)
+        },
+        no: {
+          count: noCount,
+          percentage: Math.round((noCount / total) * 100)
+        },
+        total
+      };
+    }
+
+    case 'rating': {
+      const total = answers.length;
+      const sum = answers.reduce((acc, a) => acc + (a.rating_value || 0), 0);
+      const average = (sum / total).toFixed(1);
+      // Count distribution
+      const distribution = {};
+      answers.forEach(a => {
+        const val = a.rating_value || 0;
+        distribution[val] = (distribution[val] || 0) + 1;
+      });
+      return {
+        type: 'rating',
+        average: parseFloat(average),
+        total,
+        distribution: Object.keys(distribution).sort().map(key => ({
+          value: parseInt(key),
+          count: distribution[key],
+          percentage: Math.round((distribution[key] / total) * 100)
+        }))
+      };
+    }
+
+    case 'singlechoice': {
+      const counts = {};
+      answers.forEach(a => {
+        const val = a.singlechoice_option_value || 'Unknown';
+        counts[val] = (counts[val] || 0) + 1;
+      });
+      const total = answers.length;
+      const sorted = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+      return {
+        type: 'singlechoice',
+        total,
+        choices: sorted.map(key => ({
+          label: key,
+          count: counts[key],
+          percentage: Math.round((counts[key] / total) * 100)
+        }))
+      };
+    }
+
+    case 'multiplechoice': {
+      const counts = {};
+      answers.forEach(a => {
+        const values = parseJSON(a.multiplechoice_option_value) || [];
+        values.forEach(val => {
+          counts[val] = (counts[val] || 0) + 1;
+        });
+      });
+      const total = answers.length;
+      const sorted = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+      return {
+        type: 'multiplechoice',
+        total,
+        choices: sorted.map(key => ({
+          label: key,
+          count: counts[key],
+          percentage: Math.round((counts[key] / total) * 100)
+        }))
+      };
+    }
+
+    case 'rankingorder': {
+      // Calculate average position for each item
+      const positionMap = {};
+      answers.forEach(a => {
+        const texts = parseJSON(a.ranking_position_value) || [];
+        const positions = parseJSON(a.ranking_positions) || [];
+        texts.forEach((text, idx) => {
+          if (!positionMap[text]) {
+            positionMap[text] = { sum: 0, count: 0 };
+          }
+          positionMap[text].sum += positions[idx] || idx + 1;
+          positionMap[text].count += 1;
+        });
+      });
+      const sorted = Object.keys(positionMap).sort((a, b) => {
+        const avgA = positionMap[a].sum / positionMap[a].count;
+        const avgB = positionMap[b].sum / positionMap[b].count;
+        return avgA - avgB;
+      });
+      return {
+        type: 'rankingorder',
+        total: answers.length,
+        items: sorted.map(key => ({
+          label: key,
+          avgPosition: (positionMap[key].sum / positionMap[key].count).toFixed(1)
+        }))
+      };
+    }
+
+    case 'range': {
+      const total = answers.length;
+      const sum = answers.reduce((acc, a) => acc + (a.range_value || 0), 0);
+      const average = (sum / total).toFixed(1);
+      const min = Math.min(...answers.map(a => a.range_value || 0));
+      const max = Math.max(...answers.map(a => a.range_value || 0));
+      return {
+        type: 'range',
+        average: parseFloat(average),
+        min,
+        max,
+        total
+      };
+    }
+
+    case 'openend': {
+      const total = answers.length;
+      // For open-ended, show count of answers and word count stats
+      const wordCounts = answers.map(a => (a.text_answer || '').split(' ').length);
+      const avgWords = (wordCounts.reduce((a, b) => a + b, 0) / total).toFixed(1);
+      return {
+        type: 'openend',
+        total,
+        avgWords: parseFloat(avgWords)
+      };
+    }
+
+    default:
+      return null;
+  }
+};
+
+// ================================
+// AVERAGE ANSWER DISPLAY COMPONENT
+// ================================
+
+const AverageAnswerDisplay = ({ averageData, questionType }) => {
+  if (!averageData) return null;
+
+  const renderContent = () => {
+    switch (questionType) {
+      case 'closedend':
+        return (
+          <div className="average-closedend">
+            <div className="average-bar-container">
+              <div className="average-bar-label">
+                <span>✅ Yes</span>
+                <span>{averageData.yes.count} ({averageData.yes.percentage}%)</span>
+              </div>
+              <div className="average-bar-track">
+                <div 
+                  className="average-bar-fill yes-fill" 
+                  style={{ width: `${averageData.yes.percentage}%` }}
+                />
+              </div>
+            </div>
+            <div className="average-bar-container">
+              <div className="average-bar-label">
+                <span>❌ No</span>
+                <span>{averageData.no.count} ({averageData.no.percentage}%)</span>
+              </div>
+              <div className="average-bar-track">
+                <div 
+                  className="average-bar-fill no-fill" 
+                  style={{ width: `${averageData.no.percentage}%` }}
+                />
+              </div>
+            </div>
+            <div className="average-total-votes">
+              {averageData.total} total votes
+            </div>
+          </div>
+        );
+
+      case 'rating':
+        return (
+          <div className="average-rating">
+            <div className="average-rating-score">
+              <span className="avg-score">{averageData.average}</span>
+              <span className="avg-out-of">/ 5</span>
+            </div>
+            <div className="average-rating-stars">
+              {'⭐'.repeat(Math.round(averageData.average))}
+            </div>
+            <div className="average-rating-distribution">
+              {averageData.distribution.map(item => (
+                <div key={item.value} className="rating-distribution-row">
+                  <span className="rating-value">{item.value}⭐</span>
+                  <div className="rating-bar-track">
+                    <div 
+                      className="rating-bar-fill" 
+                      style={{ width: `${item.percentage}%` }}
+                    />
+                  </div>
+                  <span className="rating-count">{item.count}</span>
+                </div>
+              ))}
+            </div>
+            <div className="average-total-votes">
+              {averageData.total} total ratings
+            </div>
+          </div>
+        );
+
+      case 'singlechoice':
+      case 'multiplechoice':
+        return (
+          <div className="average-choices">
+            {averageData.choices.map((choice, idx) => (
+              <div key={idx} className="choice-bar-container">
+                <div className="choice-bar-label">
+                  <span>{choice.label}</span>
+                  <span>{choice.count} ({choice.percentage}%)</span>
+                </div>
+                <div className="choice-bar-track">
+                  <div 
+                    className="choice-bar-fill" 
+                    style={{ 
+                      width: `${choice.percentage}%`,
+                      animationDelay: `${idx * 0.1}s`
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+            <div className="average-total-votes">
+              {averageData.total} total responses
+            </div>
+          </div>
+        );
+
+      case 'rankingorder':
+        return (
+          <div className="average-ranking">
+            {averageData.items.map((item, idx) => (
+              <div key={idx} className="ranking-item">
+                <span className="ranking-position">#{idx + 1}</span>
+                <span className="ranking-label">{item.label}</span>
+                <span className="ranking-avg">Avg: {item.avgPosition}</span>
+              </div>
+            ))}
+            <div className="average-total-votes">
+              {averageData.total} total rankings
+            </div>
+          </div>
+        );
+
+      case 'range':
+        return (
+          <div className="average-range">
+            <div className="range-stats">
+              <span>Average: {averageData.average}</span>
+              <span>Min: {averageData.min}</span>
+              <span>Max: {averageData.max}</span>
+            </div>
+            <div className="average-total-votes">
+              {averageData.total} total responses
+            </div>
+          </div>
+        );
+
+      case 'openend':
+        return (
+          <div className="average-openend">
+            <div className="openend-stats">
+              <span>📝 {averageData.total} responses</span>
+              <span>📊 Avg {averageData.avgWords} words per answer</span>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="average-answer-container">
+      <div className="average-answer-header">
+        <BarChart3 size={18} />
+        <span>Community Average</span>
+      </div>
+      <div className="average-answer-body">
+        {renderContent()}
+      </div>
+    </div>
+  );
+};
+
+// ================================
+// ANSWER VOTE BUTTON
+// ================================
+
 const AnswerVoteButton = memo(({ voteScore, userVote, onUpvote, onDownvote, isVoting }) => {
   return (
     <div className="answer-vote-container">
@@ -95,7 +408,10 @@ const AnswerVoteButton = memo(({ voteScore, userVote, onUpvote, onDownvote, isVo
   );
 });
 
-// Answer Card Component
+// ================================
+// ANSWER CARD
+// ================================
+
 const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, onAnswerClick, highlightedAnswerId }) => {
   const renderAnswerContent = () => {
     switch (answer.question_type) {
@@ -110,7 +426,7 @@ const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, on
       case 'rating':
         return (
           <div className="answer-rating">
-            {'⭐'.repeat(answer.rating_value)} ({answer.rating_value}/5)
+            {'⭐'.repeat(answer.rating_value || 0)} ({answer.rating_value || 0}/5)
           </div>
         );
       case 'singlechoice':
@@ -119,8 +435,8 @@ const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, on
             📌 {answer.singlechoice_option_value}
           </div>
         );
-      case 'multiplechoice':
-        const choices = JSON.parse(answer.multiplechoice_option_value || '[]');
+      case 'multiplechoice': {
+        const choices = parseJSON(answer.multiplechoice_option_value);
         return (
           <div className="answer-choices">
             {choices.map((choice, idx) => (
@@ -128,6 +444,7 @@ const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, on
             ))}
           </div>
         );
+      }
       case 'range':
         return (
           <div className="answer-range">
@@ -151,10 +468,10 @@ const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, on
             className="answer-avatar" 
             style={{ background: answer.author_bg_color || '#999' }}
           >
-            {answer.author_name?.slice(0, 2)}
+            {answer.author_name?.slice(0, 2) || '??'}
           </div>
           <div className="answer-author-info">
-            <span className="answer-author-name">{answer.author_name}</span>
+            <span className="answer-author-name">{answer.author_name || 'Anonymous'}</span>
             <span className="answer-time">{timeAgo(answer.created_at)}</span>
           </div>
         </div>
@@ -171,7 +488,7 @@ const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, on
       
       <div className="answer-footer">
         <AnswerVoteButton
-          voteScore={answer.vote_score}
+          voteScore={answer.vote_score || 0}
           userVote={answer.user_vote_type}
           onUpvote={onUpvote}
           onDownvote={onDownvote}
@@ -182,7 +499,10 @@ const AnswerCard = memo(({ answer, isPopular, onUpvote, onDownvote, isVoting, on
   );
 });
 
-// Memoized Comment Like Button Component
+// ================================
+// COMMENT LIKE BUTTON
+// ================================
+
 const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) => {
   return (
     <button
@@ -225,7 +545,10 @@ const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) =>
   );
 });
 
-// Memoized Comment Card Component
+// ================================
+// COMMENT CARD
+// ================================
+
 const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
   const isExpanded = expandedReplies[c.id];
   
@@ -340,6 +663,10 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
   );
 });
 
+// ================================
+// MAIN COMPONENT
+// ================================
+
 const AboutPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -353,6 +680,7 @@ const AboutPost = () => {
   const [comments, setComments] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [popularAnswer, setPopularAnswer] = useState(null);
+  const [averageData, setAverageData] = useState(null);
   const [votingAnswerId, setVotingAnswerId] = useState(null);
   const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
 
@@ -366,7 +694,7 @@ const AboutPost = () => {
   const [expandedReplies, setExpandedReplies] = useState({});
   const [highlightedId, setHighlightedId] = useState(null);
   const [highlightedAnswerId, setHighlightedAnswerId] = useState(null);
-  const [selectedTab, setSelectedTab] = useState(1); // 1: Answers, 2: Comments
+  const [selectedTab, setSelectedTab] = useState(1);
 
   const observerRef = useRef(null);
   const answerObserverRef = useRef(null);
@@ -474,6 +802,14 @@ const AboutPost = () => {
     if (answerObserverRef.current) observer.observe(answerObserverRef.current);
     return () => observer.disconnect();
   }, [answerPage, hasMoreAnswers, loadingAnswers, selectedTab, post]);
+
+  // Calculate average when answers change
+  useEffect(() => {
+    if (answers.length > 0 && post?.post_type === 'question') {
+      const data = calculateAverageAnswer(answers, post?.data?.question_type);
+      setAverageData(data);
+    }
+  }, [answers, post]);
 
   // Fetch data when tab changes
   useEffect(() => {
@@ -606,7 +942,6 @@ const AboutPost = () => {
     if (votingAnswerId === answerId) return;
     setVotingAnswerId(answerId);
 
-    // Optimistic update
     const previousAnswers = [...answers];
     setAnswers(prev => prev.map(a => {
       if (a.id === answerId) {
@@ -615,7 +950,7 @@ const AboutPost = () => {
         return {
           ...a,
           user_vote_type: newVoteType,
-          vote_score: a.vote_score + voteDelta
+          vote_score: (a.vote_score || 0) + voteDelta
         };
       }
       return a;
@@ -639,7 +974,6 @@ const AboutPost = () => {
     if (votingAnswerId === answerId) return;
     setVotingAnswerId(answerId);
 
-    // Optimistic update
     const previousAnswers = [...answers];
     setAnswers(prev => prev.map(a => {
       if (a.id === answerId) {
@@ -648,7 +982,7 @@ const AboutPost = () => {
         return {
           ...a,
           user_vote_type: newVoteType,
-          vote_score: a.vote_score + voteDelta
+          vote_score: (a.vote_score || 0) + voteDelta
         };
       }
       return a;
@@ -1072,6 +1406,15 @@ const AboutPost = () => {
               
               {selectedTab === 1 && (
                 <div className="answers-section">
+                  {/* Average Answer Display */}
+                  {averageData && (
+                    <AverageAnswerDisplay 
+                      averageData={averageData} 
+                      questionType={post?.data?.question_type}
+                    />
+                  )}
+                  
+                  {/* Popular/Top Answer */}
                   {popularAnswer && (
                     <div className="popular-answer-section">
                       <div className="popular-answer-header">
@@ -1091,6 +1434,7 @@ const AboutPost = () => {
                     </div>
                   )}
                   
+                  {/* All Answers */}
                   <div className="all-answers-section">
                     <h4>All Answers ({answers.length})</h4>
                     {answers.map(answer => (

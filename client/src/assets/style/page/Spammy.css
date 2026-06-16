@@ -162,7 +162,55 @@
   background-position: center;
   background-size: cover;
 }
+.sent-panel{
+  margin-top:20px;
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,.06);
+}
 
+.sent-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:14px;
+  margin-bottom:12px;
+
+  border:1px solid #ececec;
+  border-radius:14px;
+}
+
+.sent-card h4{
+  margin:0 0 4px;
+  text-transform:capitalize;
+}
+
+.sent-card p{
+  margin:0;
+  color:#777;
+}
+
+.viewed-badge{
+  background:#dff6df;
+  color:#1b8f1b;
+
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.pending-badge{
+  background:#fff4d7;
+  color:#d18d00;
+
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+}
 @media (max-width: 900px) {
   .spam-grid {
     grid-template-columns: 1fr;

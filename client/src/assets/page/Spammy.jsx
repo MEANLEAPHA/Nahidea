@@ -10,14 +10,32 @@ export default function Spammy() {
   const [spamType, setSpamType] = useState("poke");
 
   const [unreadCount, setUnreadCount] = useState(0);
-
+const [sentSpam, setSentSpam] = useState([]);
   const [showCelebration, setShowCelebration] = useState(false);
 
-  useEffect(() => {
-    fetchInbox();
-    fetchUnreadCount();
-  }, []);
+useEffect(() => {
+  fetchInbox();
+  fetchUnreadCount();
+  fetchSentSpam();
+}, []);
+const fetchSentSpam = async () => {
+  try {
 
+    const res = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}/api/spam/sent`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      }
+    );
+
+    setSentSpam(res.data);
+
+  } catch (err) {
+    console.error(err);
+  }
+};
   const fetchInbox = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/spam/inbox`, {
@@ -61,6 +79,7 @@ export default function Spammy() {
       alert("Spam sent 🚀");
 
       setReceiverId("");
+      fetchSentSpam();
     } catch (err) {
       alert(err?.response?.data?.message || "Failed");
     }
@@ -176,6 +195,52 @@ export default function Spammy() {
             </div>
           ))}
         </div>
+        <div className="sent-panel">
+
+  <h2>Your Sent Spam</h2>
+
+  {sentSpam.length === 0 && (
+    <div className="empty-state">
+      No spam sent yet
+    </div>
+  )}
+
+  {sentSpam.map((spam) => (
+    <div
+      key={spam.spam_id}
+      className="sent-card"
+    >
+
+      <div>
+        <h4>{spam.spam_type}</h4>
+
+        <p>
+          To User #{spam.receiver_id}
+        </p>
+      </div>
+
+      <div className="view-status">
+
+        {spam.is_viewed ? (
+          <>
+            <span className="viewed-badge">
+              👀 Viewed
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="pending-badge">
+              ⏳ Waiting
+            </span>
+          </>
+        )}
+
+      </div>
+
+    </div>
+  ))}
+
+</div>
       </div>
 
       {showCelebration && (
