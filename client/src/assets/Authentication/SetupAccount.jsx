@@ -576,7 +576,7 @@ function AvatarPlayground({
                         alt=""
                       />
 
-                      <span>
+                      <span style={{color: 'var(--font-color)'}}>
                         {preset}
                       </span>
                     </div>

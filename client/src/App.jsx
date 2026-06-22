@@ -55,9 +55,7 @@ import Notification from './assets/page/Notification';
 import Search from './assets/page/Search';
 import AnswerQa from './assets/page/AnswerQa';
 import Comment from './assets/page/Comment';
-import AvatarPlayground from './assets/page/AvatarPlayground';
 import ReportComment from './assets/page/ReportComment';
-
 import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
@@ -143,7 +141,7 @@ const App = () =>{
 
                     {/* tool */}
                     <Route path='/search' element={<Search />}></Route>
-                    <Route path='/avatarplayground' element={<AvatarPlayground/>}></Route>
+
 
                 </Route>
 
