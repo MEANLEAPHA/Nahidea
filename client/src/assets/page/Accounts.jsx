@@ -1014,7 +1014,19 @@ export default function Accounts() {
                   }
                   {
                       isOwnProfile && (
-                         <button className='pf-act-btn' type="button" onClick={()=>navigate('/editaccount')}><ToolOutlined /> Edit Profile</button>
+                         <button className='pf-act-btn' type="button" onClick={()=>navigate('/editaccount', 
+                          {state:
+                             { username: user?.username, 
+                               profession: user?.profession,
+                               workplace: user?.work_location, 
+                               bio: user?.bio, 
+                               avatar: user?.avatar_url, 
+                               banner: user?.banner_url,
+                               email: user?.email,
+                               userId: user?.id,
+                               nickname: user?.nickname
+                              }}
+                         )}><ToolOutlined /> Edit Profile</button>
                       )
                    }
                    
