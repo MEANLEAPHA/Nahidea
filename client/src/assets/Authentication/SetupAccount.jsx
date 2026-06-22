@@ -118,7 +118,10 @@ const SetupAccount = () => {
 
   const [banner, setBanner] = useState(
     "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
-  )
+  );
+  const [bannerFile, setBannerFile] = useState(
+    "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
+  );
 
   const [profession, setProfession] =
     useState("");
@@ -176,7 +179,7 @@ const handleSubmit = async (e) => {
 
   try {
     const formData = new FormData();
-    
+   
     // Text fields
     formData.append('profession', profession);
     formData.append('location', location);
@@ -355,7 +358,7 @@ const handleSubmit = async (e) => {
             >
 
               <div className="input-group">
-                <label>
+                <label className='label-setup'>
                   Profession
                 </label>
 
@@ -375,7 +378,7 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className="input-group">
-                <label>
+                <label className='label-setup'>
                   Work Location
                 </label>
 
@@ -395,7 +398,7 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className="input-group">
-                <label>
+                <label className='label-setup'>
                   Nickname
                 </label>
 
@@ -415,7 +418,7 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className="input-group">
-                <label>Bio</label>
+                <label className='label-setup'>Bio</label>
 
                 <textarea
                   placeholder="Tell people who you are..."

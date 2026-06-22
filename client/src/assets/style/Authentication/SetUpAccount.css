@@ -87,6 +87,8 @@ body {
   padding: 8px 10px;
   position: absolute;
   border-radius: 15px;
+  color:var(--font-color);
+  opacity: 0.9;
   bottom: -15px;
   z-index: 3;
   border: 1px solid var(--secondary-color);
@@ -505,6 +507,10 @@ body {
   border: 3px solid transparent;
 
   cursor: pointer;
+}
+.label-setup{
+  color:var(--font-color);
+  opacity: 0.9;
 }
 
 .color-btn.active {

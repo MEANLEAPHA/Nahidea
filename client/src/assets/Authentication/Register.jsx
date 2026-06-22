@@ -328,7 +328,7 @@ const Register = () => {
                   cursor: !isValid || loading ? "not-allowed" : "pointer"
                 }}
               >
-              {loading ? "k..." : "Register"}
+              {loading ? "..." : "Register"}
             </button>
           </div>
           </div>

@@ -181,13 +181,15 @@ export const VerifyEmail = () => {
            </div>
          
         <div className="div-input div-submit">
-              <button disabled={pin.length !== 6 || loading} type="submit" title="Verify">
+              <button disabled={pin.length !== 6 || loading} type="submit" title="Verify" style={{cursor:'pointer'}}>
             {loading ? "Verifying..." : "Verify"}
           </button>
 
             <p
+              type='button'
               onClick={handleResendPin}
               disabled={cooldown > 0}
+              title='click to resend pin'
               style={{background:"none", color:"black", cursor:"pointer", fontSize:"small"}}
             >
               {cooldown > 0
