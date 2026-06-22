@@ -109,7 +109,10 @@ const EditAccount = () => {
       setNickname(state.nickname);
       setBio(state.bio);
       setAvatar(state.avatar);
+      setAvatarFile(state.avatar);
       setBanner(state.banner);
+      setBannerFile(state.banner);
+      setAvatarType(state.avatarType);
       setUsername(state.username);
       setEmail(state.email);
       setUserId(state.userId);
@@ -126,7 +129,7 @@ const handleSubmit = async (e) => {
     formData.append('profession', profession);
     formData.append('location', location);
     formData.append('nickname', nickname);
-    formData.append('userId', userId);
+    formData.append('userId', Number(userId));
     formData.append('email', email);
     formData.append('bio', bio);
     formData.append('avatarType', avatarType);
@@ -155,7 +158,7 @@ const handleSubmit = async (e) => {
 
     if (res.status === 200) {
       setTimeout(() => {
-        res.status === 200 && toast.success('Edit successful!');
+      toast.success('Edit successful!');
         navigate("/accounts", {
             state: {
                 userId: userId
@@ -197,7 +200,7 @@ const handleSubmit = async (e) => {
     }}
   >
     <img 
-      src={banner} 
+      src={banner || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} 
       id="img-banner-setup" 
       alt="banner"
     />
@@ -235,7 +238,7 @@ const handleSubmit = async (e) => {
   <div className="profile-card">
     <div className="avatar-wrapper">
       <img
-        src={avatar}
+        src={avatar || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
         alt="avatar"
         className="profile-avatar"
       />

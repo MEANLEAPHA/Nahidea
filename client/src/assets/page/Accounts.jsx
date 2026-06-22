@@ -1021,6 +1021,8 @@ export default function Accounts() {
                                workplace: user?.work_location, 
                                bio: user?.bio, 
                                avatar: user?.avatar_url, 
+                               avatarType: 
+                                typeof user?.avatar_url === 'string' && user?.avatar_url.startWith('https://api.dicebear.com') ? 'url' : 'file',
                                banner: user?.banner_url,
                                email: user?.email,
                                userId: user?.id,
