@@ -45,7 +45,7 @@ import Loader from "./util/loader";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTran from "../img/nahidea-tran.png";
+// import nahideaTran from "../img/nahidea-tran.png";
 
 
 // data

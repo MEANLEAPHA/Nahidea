@@ -1,22 +1,14 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
 
 import "../style/Authentication/SignPage.css";
-import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTren from "../img/nahidea-tran.png"
 
-// const checks = {
-//   lower: /[a-z]/,
-//   upper: /[A-Z]/,
-//   number: /\d/,
-//   symbol: /[^A-Za-z\d]/,
-//   length: /.{8,}/
-// };
+
 const checks = {
   lower: /[a-z]/,
   upper: /[A-Z]/,
@@ -43,7 +35,7 @@ export const NewPassword = () => {
 };
 
   const [viewPassword, setViewPassword] = useState("password");
-  const [eye, setEye] = useState(faEyeLowVision);
+  const [eye, setEye] = useState(faEyeSlash);
 
     const [isUpperCase, setIsUpperCase] = useState("grey");
     const [isLowerCase, setIsLowerCase] = useState("grey");
@@ -51,7 +43,11 @@ export const NewPassword = () => {
     const [isSymbol, setIsSymbol] = useState("grey");
     const [isLength, setIsLength] = useState("grey");
 
-  const email = localStorage.getItem("resetEmail");
+    const email = localStorage.getItem("resetEmail");
+    if (!email) {
+      navigate("/verifyemailforgetpassword");
+      return;
+    }
 
     const calculateStrength = (value) => {
     let score = 0;
@@ -180,6 +176,7 @@ export const NewPassword = () => {
             value={password}
             onChange={handlePasswordChange}
             onFocus={handleFocus}
+            title="Enter new hard password"
             onBlur={handleBlur}
             onKeyDown={(e) => {
                 if (e.key === " ") {
@@ -200,51 +197,57 @@ export const NewPassword = () => {
               setEye(
                 viewPassword === "password"
                   ? faEye
-                  : faEyeLowVision
+                  : faEyeSlash
               );
             }}
           />
         </div>
 
-        {/* strength bar */}
-        <div style={{ display: "flex", gap: "5px", marginTop: "8px" }}>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div
-              key={i}
-              style={{
-                height: "6px",
-                flex: 1,
-                 borderRadius: "4px",
-                backgroundColor: strength >= i ? "green" : "#ddd",
-              }}
-            />
-          ))}
-        </div>
-{/* Instruction */}
-
+       {
+            showInstruction !== "none" && 
+            <>
+            
           <div className = 'password-instruction' style={{display:showInstruction}}>
-            <p>
+            <p tyle={{margin: '0px'}}>
             <b style={{marginBottom:'15px'}}>Password must contain: </b>
-            <br /> 
-           
+
+            </p>
+            <p style={{margin: '0px'}}>
             <span style={{color:isUpperCase}}>Uppercase</span>
             <span>, </span>
-            <span style={{color:isLowerCase}}>Lowercase </span>
+            <span style={{color:isLowerCase}}>Lowercase</span>
             <span>, </span>
-            <span style={{color:isNumber}}>Number </span>
+            <span style={{color:isNumber}}>Number</span>
             <span>, </span>
-            <span style={{color:isSymbol}}>Symbol </span>
+            <span style={{color:isSymbol}}>Symbol</span>
             <span>, </span>
             <span style={{color:isLength}}>Min 6 and Max 8 </span>
             </p>
           </div>
-          <br />
+            <div style={{ display: "flex", gap: "5px", marginBottom: "20px", marginTop: "8px", width:"200px"}}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                style={{
+                  height: "6px",
+                  flex: 1,
+                  backgroundColor: strength >= i ? "green" : "#dbdbdb",
+                  border: "1px solid #4d4d4d",
+                  borderRadius: "4px"
+                }}
+              />
+            ))}
+            
+          </div>
+          </>
+          } 
          <div className="div-input">
           <input
           type="password"
           placeholder="Confirm Password"
           maxLength="8"
           value={confirmPassword}
+          title="Confirm new hard password"
           onChange={(e) => setConfirmPassword(e.target.value)}
           onKeyDown={(e) => {
                 if (e.key === " ") {
@@ -256,7 +259,7 @@ export const NewPassword = () => {
          </div>
      
         <div className="div-input div-submit reset-input">
-             <button disabled={!isValid || loading}>
+             <button disabled={!isValid || loading} type="submit" title="Save new password" style={{cursor:"pointer"}}>
           {loading ? "Saving..." : "Reset Password"}
         </button>
         </div>

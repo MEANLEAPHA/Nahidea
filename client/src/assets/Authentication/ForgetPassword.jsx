@@ -6,8 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
 
-import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTren from "../img/nahidea-tran.png";
 import "../style/Authentication/SignPage.css";
 export const ForgetPassword = () => {
   const navigate = useNavigate();
@@ -88,6 +86,7 @@ export const ForgetPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="input-auth"
+              title='Enter your email'
             />
             </div>
             <div className="div-input div-submit">
@@ -98,6 +97,7 @@ export const ForgetPassword = () => {
               opacity: !isValid || loading ? 0.5 : 1,
               cursor: !isValid || loading ? "not-allowed" : "pointer",
             }}
+            title='Send PIN'
           >
             {loading ? "Sending..." : "Send PIN"}
           </button>

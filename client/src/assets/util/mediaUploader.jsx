@@ -40,7 +40,7 @@ export  function MediaUploader({ maxFiles = 5, value = [], onChange }) {
   const filledCount = value.length;
   const remaining = maxFiles - filledCount;
 
- const mediaFileUrl = (file) => URL.createObjectURL(file);
+ const mediaFileUrl = (file) => URL.createObjectURL(file); 
 
 
 return (

@@ -1,14 +1,13 @@
 // export default Login;
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../style/Authentication/SignPage.css";
-import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTren from "../img/nahidea-tran.png"
+
 
 import { useAuth } from "../context/AuthContext";
 
@@ -23,7 +22,7 @@ const { setToken, setUser } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [viewPassword, setViewPassword] = useState("password");
-  const [eye, setEye] = useState(faEyeLowVision);
+  const [eye, setEye] = useState(faEyeSlash);
   const [loading, setLoading] = useState(false);
 
   const handleValue = (e) => {
@@ -146,6 +145,7 @@ const { setToken, setUser } = useAuth();
                     onChange={handleValue}
                     required
                     className="input-auth"
+                    title="Enter your email account"
                   />
                 </div>
                 <label>Password</label>
@@ -164,13 +164,14 @@ const { setToken, setUser } = useAuth();
                     }}
                     required
                     className="input-auth"
+                    title="Enter your password"
                   />
                   <FontAwesomeIcon
                     icon={eye}
                     className="show-password-icon"
                     onClick={() => {
                       setViewPassword(viewPassword === "password" ? "text" : "password");
-                      setEye(viewPassword === "password" ? faEye : faEyeLowVision);
+                      setEye(viewPassword === "password" ? faEye : faEyeSlash );
                     }}
                   />
                 </div>
@@ -182,15 +183,16 @@ const { setToken, setUser } = useAuth();
                     opacity: !isValid || loading ? 0.5 : 1,
                     cursor: !isValid || loading ? "not-allowed" : "pointer"
                   }}
+                  title="Click to login"
                 >
                   {loading ? "..." : "Login"}
                 </button>
-                <span onClick={() => navigate('/forgetpassword')}><u>Forget Password?</u></span>
+                <span onClick={() => navigate('/forgetpassword')} title='Click to reset your password'>Forget Password</span>
               </div>
               </div>
               <p className="warm-welcome-p">
                 Don't have an account?{" "}
-                <u onClick={() => navigate("/register")} style={{color:"green", cursor:"pointer"}}>Create one</u>
+                <span onClick={() => navigate("/register")} style={{color:"green", cursor:"pointer"}} title='Click to create an account'>Create one</span>
               </p>
           </div>
         </form>

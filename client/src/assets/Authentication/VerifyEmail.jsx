@@ -170,9 +170,10 @@ export const VerifyEmail = () => {
                 type="text"
                 value={pin}
                 maxLength={6}
+                title="Enter your verification code"
                 placeholder="Enter your verification code"
                 onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, ""); // only digits
+                  const value = e.target.value.replace(/\D/g, ""); 
                   setPin(value);
                 }}
                 className="input-auth"
@@ -180,7 +181,7 @@ export const VerifyEmail = () => {
            </div>
          
         <div className="div-input div-submit">
-              <button disabled={pin.length !== 6 || loading} type="submit">
+              <button disabled={pin.length !== 6 || loading} type="submit" title="Verify">
             {loading ? "Verifying..." : "Verify"}
           </button>
 

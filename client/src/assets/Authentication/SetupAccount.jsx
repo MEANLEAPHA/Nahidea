@@ -4,6 +4,8 @@ import React, {
   useMemo,
 } from "react";
 
+import 
+{LeftOutlined} from '@ant-design/icons';
 import {
   useNavigate,
   useLocation,
@@ -19,7 +21,6 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-// import "../style/Authentication/SetupAccount.css";
 import "../style/Authentication/SetUpAccount.css";
 
 /* ------------------ */
@@ -49,24 +50,26 @@ const AVATAR_STYLES = [
 ];
 
 const COLORS = [
-  "c0aede",
-  "ffd5dc",
-  "b6e3f4",
-  "d1d4f9",
-  "fef08a",
-  "86efac",
-  "fca5a5",
-  "fdba74",
-  "67e8f9",
-  "a7f3d0",
-  "f9a8d4",
-  "ddd6fe",
-  "fecaca",
-  "fcd34d",
-  "93c5fd",
-  "4ade80",
-  "fb7185",
-  "818cf8",
+  "8B5CF6", // violet
+  "EC4899", // pink
+  "38BDF8", // sky
+  "818CF8", // indigo
+  "EAB308", // yellow
+  "4ADE80", // green
+  "F87171", // red
+  "FB923C", // orange
+  "22D3EE", // cyan
+  "2DD4BF", // teal
+  "F472B6", // rose
+  "A78BFA", // purple
+  "FCA5A5", // soft red
+  "FACC15", // amber
+  "60A5FA", // blue
+  "34D399", // emerald
+  "FB7185", // pink-red
+  "6366F1", // indigo
+  "A855F7", // medium purple
+  "3B82F6", // medium blue
 ];
 
 const PRESET_SEEDS = [
@@ -101,12 +104,21 @@ const SetupAccount = () => {
 
   const { state } = useLocation();
 
+  // if(!state?.Email || !state?.UserId) return navigate("/login");
+
   const [showAvatarStudio, setShowAvatarStudio] =
     useState(false);
+  const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
 
   const [avatar, setAvatar] = useState(
-    "https://api.dicebear.com/9.x/adventurer/svg?seed=Alex"
+    "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
   );
+  const [avatarType, setAvatarType] = useState('url'); // 'url' or 'file'
+  const [avatarFile, setAvatarFile] = useState(null);
+
+  const [banner, setBanner] = useState(
+    "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
+  )
 
   const [profession, setProfession] =
     useState("");
@@ -132,34 +144,79 @@ const SetupAccount = () => {
     }
   }, [state]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      const res = await axios.put(
-        `${import.meta.env.VITE_SERVER_URL}/api/update-user`,
-        {
-          avatar,
-          profession,
-          location,
-          nickname,
-          userId,
-          email,
-          bio,
-        }
-      );
+  //   try {
+  //     const res = await axios.put(
+  //       `${import.meta.env.VITE_SERVER_URL}/api/update-user`,
+  //       {
+  //         avatar,
+  //         profession,
+  //         location,
+  //         nickname,
+  //         userId,
+  //         email,
+  //         bio,
+  //       }
+  //     );
 
-      if (res.status === 200) {
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+  //     if (res.status === 200) {
+  //       setTimeout(() => {
+  //         navigate("/login");
+  //       }, 3000);
       
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  try {
+    const formData = new FormData();
+    
+    // Text fields
+    formData.append('profession', profession);
+    formData.append('location', location);
+    formData.append('nickname', nickname);
+    formData.append('userId', userId);
+    formData.append('email', email);
+    formData.append('bio', bio);
+    formData.append('avatarType', avatarType);
+    
+    // Avatar
+    if (avatarType === 'file' && avatarFile) {
+      formData.append('avatar', avatarFile);
+    } else {
+      formData.append('avatar', avatar);
+    }
+    
+    // Banner - just the file if it exists
+    if (bannerFile) {
+      formData.append('banner', bannerFile);
+    }
+
+    const res = await axios.put(
+      `${import.meta.env.VITE_SERVER_URL}/api/update-user`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    if (res.status === 200) {
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
   return (
     <div className="setup-page">
 
@@ -178,39 +235,116 @@ const SetupAccount = () => {
         <div className="setup-container">
 
           {/* LEFT */}
-          <div className="setup-left">
+        <div className="setup-left">
+  <div 
+    id='acc-banner-setup' 
+    style={{ 
+      "--preview-url-banner-setup": `url(${banner})` 
+    }}
+  >
+    <img 
+      src={banner} 
+      id="img-banner-setup" 
+      alt="banner"
+    />
+    <button 
+      id='banner-setup-btn' 
+      type="button"
+      title="Select Banner"
+      onClick={() => document.getElementById('banner-upload').click()}
+    >
+      Edit banner
+    </button>
+    
+    {/* Hidden file input for banner */}
+    <input
+      id="banner-upload"
+      type="file"
+      accept="image/*"
+      style={{ display: 'none' }}
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          // Clean up old object URL
+          if (banner && banner.startsWith('blob:')) {
+            URL.revokeObjectURL(banner);
+          }
+          // Create object URL for preview
+          const previewUrl = URL.createObjectURL(file);
+          setBanner(previewUrl);
+          setBannerFile(file); // Store file for submission
+        }
+      }}
+    />
+  </div>
+  
+  <div className="profile-card">
+    <div className="avatar-wrapper">
+      <img
+        src={avatar}
+        alt="avatar"
+        className="profile-avatar"
+      />
+      <button
+        type="button"
+        className="edit-avatar-btn"
+        title="Select Avatar for you Profile"
+        onClick={() => setShowAvatarDropdown(!showAvatarDropdown)}
+      >
+        <Plus size={20} />
+      </button>
+      
+      {/* Dropdown */}
+      {showAvatarDropdown && (
+        <div className="avatar-dropdown">
+          <button onClick={() => {
+            document.getElementById('avatar-upload').click();
+          }}>
+             Upload Photo
+          </button>
+          <button onClick={() => {
+            // Clean up object URL if exists
+            if (avatar && avatar.startsWith('blob:')) {
+              URL.revokeObjectURL(avatar);
+            }
+            setAvatarType('url');
+            setAvatarFile(null);
+            setShowAvatarDropdown(false);
+            setShowAvatarStudio(true);
+          }}>
+            Cool Avatar
+          </button>
+        </div>
+      )}
+      
+      {/* Hidden file input for avatar */}
+      <input
+        id="avatar-upload"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            // Clean up old object URL
+            if (avatar && avatar.startsWith('blob:')) {
+              URL.revokeObjectURL(avatar);
+            }
+            // Create object URL for preview
+            const previewUrl = URL.createObjectURL(file);
+            setAvatar(previewUrl);
+            setAvatarFile(file);
+            setAvatarType('file');
+            setShowAvatarDropdown(false);
+          }
+        }}
+      />
+    </div>
 
-            <div className="profile-card">
-
-              <div className="avatar-wrapper">
-
-                <img
-                  src={avatar}
-                  alt="avatar"
-                  className="profile-avatar"
-                />
-
-                <button
-                  type="button"
-                  className="edit-avatar-btn"
-                  onClick={() =>
-                    setShowAvatarStudio(
-                      true
-                    )
-                  }
-                >
-                  <Plus size={20} />
-                </button>
-              </div>
-
-              <h2>Create Profile</h2>
-
-              <p>
-                Build your public
-                identity for Nahidea
-              </p>
-            </div>
-          </div>
+    <h2 id="create-label">Create Profile</h2>
+    <p id="label-info">Build your public identity for Nahidea</p>
+      </div>
+    </div>
 
           {/* RIGHT */}
           <div className="setup-right">
@@ -227,8 +361,10 @@ const SetupAccount = () => {
 
                 <input
                   type="text"
-                  placeholder="Software Engineer"
+                  placeholder="Software Engineer or Art Student"
+                  title="Enter your profession"
                   value={profession}
+                  required
                   onChange={(e) =>
                     setProfession(
                       e.target.value
@@ -245,8 +381,10 @@ const SetupAccount = () => {
 
                 <input
                   type="text"
-                  placeholder="Phnom Penh"
+                  required
+                  placeholder="ABC Company or DFG School"
                   value={location}
+                  title="Enter your work location or school name"
                   onChange={(e) =>
                     setLocation(
                       e.target.value
@@ -263,7 +401,9 @@ const SetupAccount = () => {
 
                 <input
                   type="text"
-                  placeholder="@meanleap"
+                  placeholder="NahideaLover"
+                  required
+                  title="Enter your nickname"
                   value={nickname}
                   onChange={(e) =>
                     setNickname(
@@ -280,6 +420,8 @@ const SetupAccount = () => {
                 <textarea
                   placeholder="Tell people who you are..."
                   value={bio}
+                  title="Enter your bio"
+                  required
                   onChange={(e) =>
                     setBio(
                       e.target.value
@@ -291,9 +433,10 @@ const SetupAccount = () => {
 
               <button
                 type="submit"
-                className="submit-btn"
+                className="submit-btns"
+                title="Enter to complete setup"
               >
-                Complete Setup
+                <span>Complete Setup</span>
               </button>
             </form>
           </div>
@@ -385,9 +528,13 @@ function AvatarPlayground({
             )
           }
         >
-          <ArrowLeft size={18} />
-          Back
+          
+          <LeftOutlined id='goback-btn'/>
         </button>
+        <div className="studio-logo">
+          <img src='https://avatars.githubusercontent.com/u/7983162?v=4' alt="Dicebear-logo" id="dicebear-logo"/>
+          <span id="db-label">Dicebear</span>
+        </div>
 
         <button
           className="save-avatar-btn"
@@ -398,12 +545,12 @@ function AvatarPlayground({
           {saved ? (
             <>
               <Check size={18} />
-              Selected
+              Saved
             </>
           ) : (
             <>
               <Save size={18} />
-              Select Avatar
+              Save
             </>
           )}
         </button>
@@ -414,7 +561,7 @@ function AvatarPlayground({
         {/* LEFT */}
         <div className="studio-sidebar">
 
-          <h3>Styles</h3>
+          <h3 className='avatar-label'>Avatar Types</h3>
 
           <div className="style-grid">
 
@@ -447,17 +594,23 @@ function AvatarPlayground({
         <div className="studio-preview">
 
           <div className="preview-card">
+            <div className="preset-sections">
 
-            <img
+              <h3 className='avatar-label'>
+                Your Avatar
+              </h3>
+              <img
               src={avatarUrl}
               alt=""
               className="main-avatar"
             />
+              </div>
+            
 
             <div className="preset-section">
 
-              <h3>
-                Choose Avatar
+              <h3 className='avatar-label'>
+                Avatar Characters
               </h3>
 
               <div className="preset-grid">
@@ -497,15 +650,43 @@ function AvatarPlayground({
         {/* RIGHT */}
         <div className="studio-controls">
 
-          <h3>Customize</h3>
+          <h3 className='avatar-label'>Customize </h3>
 
+                  <div className="control-group">
+
+           
+            <div className="color-list">
+
+              {COLORS.map(
+                (color) => (
+                  <button
+                    key={color}
+                    className={`color-btn ${
+                      backgroundColor ===
+                      color
+                        ? "active"
+                        : ""
+                    }`}
+                    style={{
+                      background: `#${color}`,
+                    }}
+                    onClick={() =>
+                      setBackgroundColor(
+                        color
+                      )
+                    }
+                  />
+                )
+              )}
+            </div>
+          </div>
           <div className="control-group">
 
             <div className="switch-row">
 
-              <label>
+              <span className='avatar-labels'>
                 Flip Avatar
-              </label>
+              </span>
 
               <input
                 type="checkbox"
@@ -521,12 +702,12 @@ function AvatarPlayground({
           </div>
 
           <div className="control-group">
-
+              
             <div className="rotate-header">
 
-              <label>
+              <span className='avatar-labels'>
                 Rotate
-              </label>
+              </span>
 
               <span>
                 {rotate}°
@@ -566,37 +747,7 @@ function AvatarPlayground({
             </button>
           </div>
 
-          <div className="control-group">
-
-            <label>
-              Background Colors
-            </label>
-
-            <div className="color-list">
-
-              {COLORS.map(
-                (color) => (
-                  <button
-                    key={color}
-                    className={`color-btn ${
-                      backgroundColor ===
-                      color
-                        ? "active"
-                        : ""
-                    }`}
-                    style={{
-                      background: `#${color}`,
-                    }}
-                    onClick={() =>
-                      setBackgroundColor(
-                        color
-                      )
-                    }
-                  />
-                )
-              )}
-            </div>
-          </div>
+        
         </div>
       </div>
     </div>

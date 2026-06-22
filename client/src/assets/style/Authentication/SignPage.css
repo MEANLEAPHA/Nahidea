@@ -30,7 +30,7 @@
     justify-content:center;
     align-items: center;
     position: relative;
-    background-image: url(../../img/nahidea-bg.png);
+    background-image: url(../../img/Nahidea-Auth-bg.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -63,19 +63,14 @@ p{
     justify-content: center;
     flex-direction: column;
     align-items: center;
-     padding: 20px;
+    padding: 20px;
     width: 100%;
     height: 100%;
-   margin: 0;
-
+    margin: 0;
     border-radius: 50px;
-     /* Base translucent background (fallback for browsers without blur) */
-  background: rgba(255, 255, 255, 0.682); /* light glass */
-  /* For dark themes, you can swap to rgba(0,0,0,0.25) */
-
-  /* Modern glass effect */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(18px); /* Safari/WebKit */
+    background: rgba(255, 255, 255, 0.682); /* light glass */
+   backdrop-filter: blur(5px);
+   -webkit-backdrop-filter: blur(18px); /* Safari/WebKit */
 }
 
 .logo-container{
@@ -92,7 +87,7 @@ p{
 }
 .logo-container p{
     margin-bottom: 0px;
-    color: black;
+    color: grey;
     font-size: 30px;
     font-family:"Yeseva One", serif;
 }
@@ -136,6 +131,7 @@ p{
 label{
     color: rgb(0, 0, 0);
     opacity: 0.7;
+    font-weight: 550;
     font-family: sans-serif;
 }
 .div-input{
@@ -260,6 +256,7 @@ color: rgb(0, 0, 0);
 
 
 @media screen and (max-width:768px){
+
     .container-form{
         flex-direction: column;
        
@@ -271,8 +268,8 @@ color: rgb(0, 0, 0);
          height:auto;
     }
        .container-form form{
-    max-width: 95%;
-    width: 90%;
+    max-width: 98%;
+    width: 95%;
 
 }
 

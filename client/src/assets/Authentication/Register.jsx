@@ -2,7 +2,7 @@
 // export default Register;
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEyeLowVision, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -11,8 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 const API_URL = import.meta.env.VITE_SERVER_URL; 
 
 import "../style/Authentication/SignPage.css";
-import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTren from "../img/nahidea-tran.png"
 
 const checks = {
   lower: /[a-z]/,
@@ -31,7 +29,7 @@ const Register = () => {
   const [inputConfirmPassword, setInputConfirmPassword] = useState("");
 
   const [viewPassword, setViewPassword] = useState("password");
-  const [eye, setEye] = useState(faEyeLowVision);
+  const [eye, setEye] = useState(faEyeSlash);
 
   const [strength, setStrength] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -113,7 +111,7 @@ const Register = () => {
       setEye(faEye);
     } else {
       setViewPassword("password");
-      setEye(faEyeLowVision);
+      setEye(faEyeSlash);
     }
   };
 
@@ -203,6 +201,7 @@ const Register = () => {
               name="username"
               value={inputUsername}
               onChange={handleValue}
+              title="Enter your username"
               required
               className="input-auth"
             />
@@ -212,6 +211,7 @@ const Register = () => {
             <input
               type="email"
               name="email"
+              title="Enter your valid email address"
               value={inputEmail}
               onChange={handleValue}
               required
@@ -225,6 +225,7 @@ const Register = () => {
               name="password"
               value={inputPassword}
               onChange={handleValue}
+              title = "Enter hard password with instructions down below"
               required
               // ref={passwordRef}
               onFocus={handleFocus}
@@ -248,8 +249,28 @@ const Register = () => {
           </div>
           
 
-          {/* ✅ Strength bars */}
-          <div style={{ display: "flex", gap: "5px", marginTop: "8px", width:"200px"}}>
+          {
+            showInstruction !== "none" && 
+            <>
+            
+          <div className = 'password-instruction' style={{display:showInstruction}}>
+            <p tyle={{margin: '0px'}}>
+            <b style={{marginBottom:'15px'}}>Password must contain: </b>
+
+            </p>
+            <p style={{margin: '0px'}}>
+            <span style={{color:isUpperCase}}>Uppercase</span>
+            <span>, </span>
+            <span style={{color:isLowerCase}}>Lowercase</span>
+            <span>, </span>
+            <span style={{color:isNumber}}>Number</span>
+            <span>, </span>
+            <span style={{color:isSymbol}}>Symbol</span>
+            <span>, </span>
+            <span style={{color:isLength}}>Min 6 and Max 8 </span>
+            </p>
+          </div>
+            <div style={{ display: "flex", gap: "5px", marginBottom: "20px", marginTop: "8px", width:"200px"}}>
             {[1, 2, 3, 4, 5].map((i) => (
               <div
                 key={i}
@@ -257,31 +278,15 @@ const Register = () => {
                   height: "6px",
                   flex: 1,
                   backgroundColor: strength >= i ? "green" : "#dbdbdb",
+                  border: "1px solid #4d4d4d",
                   borderRadius: "4px"
                 }}
               />
             ))}
+            
           </div>
-
-          {/* Instruction */}
-
-          <div className = 'password-instruction' style={{display:showInstruction}}>
-            <p>
-            <b style={{marginBottom:'15px'}}>Password must contain: </b>
-            <br /> 
-           
-            <span style={{color:isUpperCase}}>Uppercase</span>
-            <span>, </span>
-            <span style={{color:isLowerCase}}>Lowercase </span>
-            <span>, </span>
-            <span style={{color:isNumber}}>Number </span>
-            <span>, </span>
-            <span style={{color:isSymbol}}>Symbol </span>
-            <span>, </span>
-            <span style={{color:isLength}}>Min 6 and Max 8 </span>
-            </p>
-          </div>
-            <br />
+          </>
+          }  
             <label>Confirm Password</label>
             <div className="div-input">
               <input
@@ -291,6 +296,7 @@ const Register = () => {
               value={inputConfirmPassword}
               onChange={handleValue}
               required
+              title = "Password must match"
               onKeyDown={(e) => {
                 if (e.key === " ") {
                   e.preventDefault(); 
@@ -301,19 +307,21 @@ const Register = () => {
             </div>
             <div className="div-input div-submit">
            <span style={{display:"flex", alignItems:"center"}}>
-              <input type="checkbox" required style={{width:"20px"}}/>
+              <input type="checkbox" required style={{width:"20px"}} title="By clicking this, you are agree to term & condition"/>
               <a 
                 href="/userAgreement" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                style={{color:"black", textDecoration:"underline"}}
+                style={{color:"black", textDecoration:"none"}}
+                
               >
-                Agree to Term & Condition
+                Term & Condition
               </a>
             </span>
 
             <button
                 type="submit"
+                title="Create your account"
                 disabled={!isValid || loading}
                 style={{
                   opacity: !isValid || loading ? 0.5 : 1,
@@ -326,8 +334,8 @@ const Register = () => {
           </div>
           <p className="warm-welcome-p">
                 Aleady have an account?{" "}
-                <u onClick={() => navigate("/login")} style={{color:"green", cursor:"pointer"}}>Login</u>
-              </p>
+                <span onClick={() => navigate("/login")} style={{color:"green", cursor:"pointer"}} title='Click to login page'>Login</span>
+          </p>
         </div>
       </form>
     

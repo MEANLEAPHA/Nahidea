@@ -5,13 +5,17 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
 import "../style/Authentication/SignPage.css";
-import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTren from "../img/nahidea-tran.png"
+
 
 export const VerifyEmailForgetPassword = () => {
   const navigate = useNavigate();
 
   const email = localStorage.getItem("resetEmail");
+
+  if (!email) {
+    navigate("/forgetpassword");
+    return;
+  }
 
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
@@ -168,16 +172,18 @@ export const VerifyEmailForgetPassword = () => {
                         setPin(value);
                       }}
                         className="input-auth"
+                        title='Enter your 6-digit PIN'
                     />
                 </div>
                 <div className="div-input div-submit">
-                       <button disabled={pin.length !== 6 || loading}>
-                    {loading ? "..." : "Verify"}
+                       <button disabled={pin.length !== 6 || loading} type="submit" title="Verify" style={{cursor: 'pointer'}}>
+                    {loading ? "Verifying..." : "Verify"}
                   </button>
                   <p
                     onClick={handleResendPin}
                     disabled={cooldown > 0}
                      style={{background:"none", color:"black", cursor:"pointer", fontSize:"small"}}
+                     title = "Resend PIN"
                   >
                     {cooldown > 0
                       ? `Resend in ${cooldown}s`
