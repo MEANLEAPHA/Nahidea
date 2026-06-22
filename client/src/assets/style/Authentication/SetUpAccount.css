@@ -205,11 +205,7 @@ body {
   margin-bottom: 24px;
 }
 
-.input-group label {
-  display: block;
-  margin-bottom: 12px;
-  font-weight: 600;
-}
+
 
 .input-group input,
 .input-group textarea {
@@ -443,7 +439,6 @@ body {
   height: 70px;
 }
 
-
 .preset-card span {
   display: block;
   margin-top: 10px;
@@ -511,6 +506,9 @@ body {
 .label-setup{
   color:var(--font-color);
   opacity: 0.9;
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .color-btn.active {

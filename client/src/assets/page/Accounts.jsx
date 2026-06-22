@@ -962,6 +962,8 @@ export default function Accounts() {
         </button>
       )
     };
+
+    const [hoveredPostId, setHoveredPostId] = useState(null);
   
   return (
     <div className="accounts-page">
@@ -1044,7 +1046,7 @@ export default function Accounts() {
                         <>
                             <List dataSource={posts} renderItem={(post) => (
                                 <List.Item key={post.id}>
-                                    <div className="posts">
+                                    <div className="posts" onMouseEnter={() => setHoveredPostId(post.id)} onMouseLeave={() => setHoveredPostId(null)}>
                                         <div className='post-header'>
                                             <div className='post-user-profile'>
                                                 <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
