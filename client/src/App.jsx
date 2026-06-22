@@ -76,6 +76,7 @@ import UnsolvedQA from './assets/page/UnsolvedQA';
 import AllFriends from './assets/page/AllFriends';
 import Notifications from './assets/page/Notifications';
 import Spammy from './assets/page/Spammy';
+import EditAccount from './assets/page/EditAccount';
 
 const App = () =>{
     return(
@@ -99,9 +100,9 @@ const App = () =>{
                     <Route path='/yourpost' element={<YourPosts/>}></Route>
 
                     {/* Account */}
-                    <Route path='/account' element={<Account/>}>
-                    </Route>
-                    
+                    <Route path='/account' element={<Account/>}></Route>
+                    <Route path='/editaccount' element={<EditAccount/>}></Route>
+
                     <Route path='/accounts' element={<Accounts/>}></Route>
                     <Route path='/friends' element={<AllFriends/>}></Route>
 
