@@ -55,7 +55,7 @@ export default function Accounts() {
     const { state } = useLocation(); 
     const navigate = useNavigate();
 
-    const { user,onlineUsers } = useOutletContext();
+    const { user, onlineUsers } = useOutletContext();
 
     // follow
     const [followState, setFollowState] =useState("follow");
@@ -80,6 +80,7 @@ export default function Accounts() {
     const [usernames, setUsernames] = useState("");
     const [nicknames, setNicknames] = useState("");
     const [avatar, setAvatar] = useState("");
+    const [banner, setBanner] = useState("");
     const [workplace, setWorkplace] = useState("");
     const [bios, setBios] = useState("");
     const [professions, setProfessions] = useState("");
@@ -91,12 +92,28 @@ export default function Accounts() {
     const [isOwnProfile, setIsOwnProfile] = useState(false);
 
     useEffect(() => {
-        setIsOwnProfile(String(state?.userId) === String(user?.id));
-        fetchPosts(1, Number(state?.userId || user?.id));
-        setPage(1);
-        fetchFollowStatus();
-        handleFetchProfile();
-    }, [state?.userId]);
+      // if state.userId exists, store it
+      if (state?.userId) {
+        sessionStorage.setItem("profileUserId", state.userId);
+      }
+
+      // fallback: use session value if state is missing
+      const targetId = state?.userId || sessionStorage.getItem("profileUserId") || user?.id;
+
+      if (!targetId) {
+        // nothing to work with → go back
+        navigate(-1);
+        return;
+      }
+
+      setIsOwnProfile(String(targetId) === String(user?.id));
+
+      fetchPosts(1, Number(targetId));
+      setPage(1);
+      fetchFollowStatus();
+      handleFetchProfile(targetId);
+    }, [state?.userId, user?.id]);
+
 
     const handleFetchProfile = async () => {
       try{
@@ -107,6 +124,7 @@ export default function Accounts() {
         setUsernames(data.username);
         setNicknames(data.nickname);
         setAvatar(data.avatar_url);
+        setBanner(data.banner_url);
         setWorkplace(data.work_location);
         setBios(data.bio);
         setProfessions(data.profession);
@@ -934,7 +952,7 @@ export default function Accounts() {
 
         }
         catch(err){
-          console.error('Full error:', err.response?.data); // This will show server error details
+          console.error('Full error:', err.response?.data); 
           console.error('Status:', err.response?.status);
         }
       }
@@ -948,8 +966,8 @@ export default function Accounts() {
   return (
     <div className="accounts-page">
       <div className="accounts-header">  
-        <div id='acc-banner' style={{ "--preview-url-banner": `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTar_ouGael5ODlrC1kbFbKLpEPSJtTQqdaIg&s)` }}>
-            <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTar_ouGael5ODlrC1kbFbKLpEPSJtTQqdaIg&s' id="img-banner"/>
+        <div id='acc-banner' style={{ "--preview-url-banner": `url(${banner || user?.banner_url || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"})` }}>
+            <img src={banner|| user?.banner_url || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} id="img-banner"/>
         </div>
         <div id='acc-pf-info'>
             <div className='acc-pf-info-child acc-pf-info-child-left'>

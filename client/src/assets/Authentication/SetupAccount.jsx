@@ -1,54 +1,13 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-} from "react";
-
-import 
-{LeftOutlined} from '@ant-design/icons';
-import {
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-
+import React, { useState, useEffect, useMemo } from "react";
+import { LeftOutlined } from '@ant-design/icons';
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
-import {
-  Save,
-  Check,
-  RotateCw,
-  Plus,
-  ArrowLeft,
-} from "lucide-react";
-
+import { toast, ToastContainer } from "react-toastify";
+import { Save, Check, RotateCw, Plus, ArrowLeft } from "lucide-react";
 import "../style/Authentication/SetUpAccount.css";
 
-/* ------------------ */
-/* AVATAR DATA */
-/* ------------------ */
-
-const AVATAR_STYLES = [
-  "adventurer",
-  "avataaars",
-  "big-smile",
-  "bottts",
-  "croodles",
-  "fun-emoji",
-  "icons",
-  "identicon",
-  "initials",
-  "lorelei",
-  "micah",
-  "miniavs",
-  "notionists",
-  "open-peeps",
-  "personas",
-  "pixel-art",
-  "rings",
-  "shapes",
-  "thumbs",
-];
-
+const AVATAR_STYLES = [ "adventurer", "avataaars", "big-smile", "bottts", "croodles", "fun-emoji", "icons", "identicon", "initials",
+                        "lorelei", "micah", "miniavs", "notionists", "open-peeps", "personas", "pixel-art", "rings", "shapes", "thumbs" ];
 const COLORS = [
   "8B5CF6", // violet
   "EC4899", // pink
@@ -147,33 +106,6 @@ const SetupAccount = () => {
     }
   }, [state]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const res = await axios.put(
-  //       `${import.meta.env.VITE_SERVER_URL}/api/update-user`,
-  //       {
-  //         avatar,
-  //         profession,
-  //         location,
-  //         nickname,
-  //         userId,
-  //         email,
-  //         bio,
-  //       }
-  //     );
-
-  //     if (res.status === 200) {
-  //       setTimeout(() => {
-  //         navigate("/login");
-  //       }, 3000);
-      
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -213,8 +145,9 @@ const handleSubmit = async (e) => {
 
     if (res.status === 200) {
       setTimeout(() => {
+        res.status === 200 && toast.success('Setup successful! Please log in.');
         navigate("/login");
-      }, 3000);
+      }, 5000);
     }
   } catch (err) {
     console.log(err);
@@ -222,6 +155,10 @@ const handleSubmit = async (e) => {
 };
   return (
     <div className="setup-page">
+
+      <div className='toast-feedback'>
+        <ToastContainer position="top-right" autoClose={2000}/>
+      </div>
 
       {/* AVATAR STUDIO */}
       {showAvatarStudio && (

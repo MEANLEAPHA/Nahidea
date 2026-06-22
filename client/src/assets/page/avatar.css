@@ -5,7 +5,6 @@
 }
 
 /* SIDEBARS */
-
 .style-sidebar,
 .control-sidebar {
   width: 320px;
@@ -23,14 +22,12 @@
 }
 
 /* TITLES */
-
 .style-sidebar h2,
 .control-sidebar h2 {
   margin-bottom: 24px;
 }
 
 /* STYLE GRID */
-
 .style-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -67,7 +64,6 @@
 }
 
 /* CENTER */
-
 .preview-section {
   flex: 1;
   display: flex;
@@ -85,7 +81,6 @@
 }
 
 /* MAIN AVATAR */
-
 .main-avatar {
   width: 280px;
   height: 280px;
@@ -94,7 +89,6 @@
 }
 
 /* PRESET */
-
 .preset-section {
   margin-top: 50px;
 }
@@ -141,7 +135,6 @@
 }
 
 /* CONTROLS */
-
 .control-group {
   margin-bottom: 36px;
 }
@@ -153,7 +146,6 @@
 }
 
 /* SWITCH */
-
 .switch-row {
   display: flex;
   justify-content: space-between;
@@ -161,7 +153,6 @@
 }
 
 /* ROTATE */
-
 .rotate-header {
   display: flex;
   justify-content: space-between;
@@ -189,7 +180,6 @@
 }
 
 /* COLORS */
-
 .color-list {
   display: flex;
   flex-wrap: wrap;
@@ -209,7 +199,6 @@
 }
 
 /* SAVE */
-
 .save-btn {
   width: 100%;
   border: none;
@@ -220,30 +209,26 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
 
-/* MOBILE */
 
+/* MOBILE */
 @media (max-width: 1200px) {
   .avatar-page {
     flex-direction: column;
   }
-
   .style-sidebar,
   .control-sidebar {
     width: auto;
     border: none;
   }
-
   .preset-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .main-avatar {
     width: 220px;
     height: 220px;

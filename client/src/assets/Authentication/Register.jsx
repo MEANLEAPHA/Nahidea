@@ -181,8 +181,6 @@ const Register = () => {
           <ToastContainer position="top-right" autoClose={2000}/>
       </div>
 
-   
-      
       <form onSubmit={(e) => { e.preventDefault(); submitRegister(); }}>
         <div className="form-center">
 

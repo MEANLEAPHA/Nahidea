@@ -185,7 +185,8 @@ export const VerifyEmail = () => {
             {loading ? "Verifying..." : "Verify"}
           </button>
 
-            <p
+            <button
+              style={{background:'none', border:'none', cursor:'pointer', color:'var(--font-color)'}}
               type='button'
               onClick={handleResendPin}
               disabled={cooldown > 0}
@@ -195,7 +196,7 @@ export const VerifyEmail = () => {
               {cooldown > 0
                 ? `Resend in ${cooldown}s`
                 : "Resend PIN"}
-            </p>
+            </button>
           </div>
         </div>
         </div>
