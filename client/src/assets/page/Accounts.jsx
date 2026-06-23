@@ -1022,7 +1022,7 @@ export default function Accounts() {
                                bio: user?.bio, 
                                avatar: user?.avatar_url, 
                                avatarType: 
-                                typeof user?.avatar_url === 'string' && user?.avatar_url.startWith('https://api.dicebear.com') ? 'url' : 'file',
+                                typeof user?.avatar_url === 'string' && user?.avatar_url.startsWith('https://api.dicebear.com') ? 'url' : 'file',
                                banner: user?.banner_url,
                                email: user?.email,
                                userId: user?.id,

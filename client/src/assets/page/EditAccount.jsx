@@ -243,7 +243,7 @@ const handleSubmit = async (e) => {
   <div className="profile-card">
     <div className="avatar-wrapper">
       <img
-        src={avatar || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+        src={avatar || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
         alt="avatar"
         className="profile-avatar"
       />
