@@ -156,6 +156,10 @@ const handleSubmit = async (e) => {
       }
     );
 
+    if(res.status === 409){
+      toast.warning('Nickname already exists! Please try new one.');
+    }
+
     if (res.status === 200) {
       setTimeout(() => {
       toast.success('Edit successful!');
@@ -196,7 +200,7 @@ const handleSubmit = async (e) => {
   <div 
     id='acc-banner-setup' 
     style={{ 
-      "--preview-url-banner-setup": `url(${banner})` 
+      "--preview-url-banner-setup": `url(${banner || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} )` 
     }}
   >
     <img 

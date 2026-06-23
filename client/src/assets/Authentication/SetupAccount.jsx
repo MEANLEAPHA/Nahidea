@@ -144,10 +144,10 @@ const handleSubmit = async (e) => {
     );
 
     if (res.status === 200) {
-      setTimeout(() => {
-        res.status === 200 && toast.success('Setup successful! Please log in.');
+      toast.success('Setup successful! Please log in.');
+      setTimeout(() => {      
         navigate("/login");
-      }, 5000);
+      }, 3000);
     }
   } catch (err) {
     console.log(err);
