@@ -116,6 +116,7 @@ const EditAccount = () => {
       setUsername(state.username);
       setEmail(state.email);
       setUserId(state.userId);
+      console.log(state);
     }
   }, [state]);
 
