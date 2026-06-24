@@ -100,11 +100,11 @@ export default function Accounts() {
       // fallback: use session value if state is missing
       const targetId = state?.userId || sessionStorage.getItem("profileUserId") || user?.id;
 
-      if (!targetId) {
-        // nothing to work with → go back
-        navigate(-1);
-        return;
-      }
+      // if (!targetId) {
+        
+      //   navigate(-1);
+      //   return;
+      // }
 
       setIsOwnProfile(String(targetId) === String(user?.id));
 
@@ -957,7 +957,7 @@ export default function Accounts() {
         }
       }
       return(
-        <button className="pf-act-btn" onClick={()=>{handleUnfollow()}}>
+        <button className="pf-act-btns" onClick={()=>{handleUnfollow()}}>
           Unfollow
         </button>
       )
@@ -990,28 +990,28 @@ export default function Accounts() {
 
                   {
                     !isOwnProfile && (
-                      <button className="pf-act-btn" type="button" onClick={()=> handleFollow()} >
+                      <button className="pf-act-btn" type="button" onClick={()=> handleFollow()}>
                       { followState === "loading" && "Following..." }
                       { followState === "follow" && "Follow" }
-                      { followState === "following" && ( <> <span>Following</span> <Unfollow/> </> )}
+                      { followState === "following" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Following</span> <Unfollow/> </div> )}
                       { followState === "follows_you" && "Follow Back" }
-                      { followState === "mutual" && ( <> <span>Friends</span><Unfollow/> </>)}
+                      { followState === "mutual" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Friends</span><Unfollow/> </div>)}
                     </button>
-                    )
-                  }
-                  {
-                    !isOwnProfile && (
+                    ) 
+                 } 
+                {
+                    !isOwnProfile && ( 
                       <button className='pf-act-btn' type="button" 
                        onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: state?.userId}}})}
                        >
                       <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
                     )
                   }
-                  {
-                    !isOwnProfile && (
+                   {
+                    !isOwnProfile && ( 
                       <button className='pf-act-btn' type="button" onClick={() => navigate('/spammy')}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> Send Spammy</button>
-                    )
-                  }
+                      )
+                   } 
                   {
                       isOwnProfile && (
                          <button className='pf-act-btn' type="button" onClick={()=>navigate('/editaccount', 

@@ -54,6 +54,7 @@ const MutualFriend = ({ onlineUsers }) => {
 
 // FriendCard.jsx
 const FriendCard = ({ username, avatar_url, isOnline, userId }) => {
+  const navigate = useNavigate();
   return (
     <div className="friend-card" onClick={() => navigate(`/accounts/${userId}`)}>
       <div className="friend-pf-div">

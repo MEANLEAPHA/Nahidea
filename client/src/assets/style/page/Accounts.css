@@ -135,16 +135,31 @@
 
 .acc-pf-info-child-right{
      gap: 8px;
+     align-items: center;
 }
 .pf-act-btn{
     cursor: pointer;
     margin-top: 35px;
     padding: 8px 15px;
+    height: auto;
     display: flex;
     align-items: center;
     gap: 5px;
     border: none;
     background: var(--back-con);
+    color: var(--font-color);
+    border-radius: 8px; 
+}
+.pf-act-btns{
+    cursor: pointer;
+  
+    padding: 0px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background: none;
     color: var(--font-color);
     border-radius: 8px; 
 }

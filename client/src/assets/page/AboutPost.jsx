@@ -1377,8 +1377,8 @@ const AboutPost = () => {
             <>
               <div className='radio-button-div-chat'>
                 {[
-                  { id: 1, label: "Answers", count: answers.length || post?.data?.answers_count },
-                  { id: 2, label: "Comments", count: post?.comments_count }
+                  { id: 1, label: "Answers"},
+                  { id: 2, label: "Comments"}
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -1394,46 +1394,31 @@ const AboutPost = () => {
                       }
                     }}
                     style={{
-                      borderBottom: selectedTab === opt.id ? "2px solid #fd7648" : "2px solid transparent",
-                      color: selectedTab === opt.id ? "#fd7648" : "grey",
+        
+                      color: selectedTab === opt.id ? "var(--font-color)" : "grey",
                     }}
                     className='radio-button-chat'
                   >
-                    {opt.label} ({opt.count || 0})
+                    {opt.label}
                   </button>
                 ))}
               </div>
               
               {selectedTab === 1 && (
                 <div className="answers-section">
+                  <button
+                    onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}`)}
+                    className="answer-question-btn"
+                  >
+                     Answer this question
+                  </button>
                   {/* Average Answer Display */}
                   {averageData && (
                     <AverageAnswerDisplay 
                       averageData={averageData} 
                       questionType={post?.data?.question_type}
                     />
-                  )}
-                  
-                  {/* Popular/Top Answer */}
-                  {popularAnswer && (
-                    <div className="popular-answer-section">
-                      <div className="popular-answer-header">
-                        <Trophy size={16} /> Best Answer
-                      </div>
-                      <AnswerCard
-                        answer={popularAnswer}
-                        isPopular={true}
-                        onUpvote={() => handleUpvoteAnswer(popularAnswer.id)}
-                        onDownvote={() => handleDownvoteAnswer(popularAnswer.id)}
-                        isVoting={votingAnswerId === popularAnswer.id}
-                        onAnswerClick={(answerId) => {
-                          navigate(`/aboutpost/${id}#answer-${answerId}`);
-                        }}
-                        highlightedAnswerId={highlightedAnswerId}
-                      />
-                    </div>
-                  )}
-                  
+                  )}  
                   {/* All Answers */}
                   <div className="all-answers-section">
                     <h4>All Answers ({answers.length})</h4>
@@ -1461,18 +1446,17 @@ const AboutPost = () => {
                       </div>
                     )}
                   </div>
-                  
-                  <button
-                    onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}`)}
-                    className="answer-question-btn"
-                  >
-                    ✏️ Answer this question
-                  </button>
                 </div>
               )}
               
               {selectedTab === 2 && (
                 <>
+                  <button
+                    onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                    className="comment-btn"
+                  >
+                    Write a comment
+                  </button>
                   {comments.map(c => (
                     <CommentCard 
                       key={c.id}
@@ -1502,13 +1486,6 @@ const AboutPost = () => {
 
                   <div ref={observerRef} style={{ height: "20px" }} />
                   {loadingComments && <p className="loading-text">Loading comments...</p>}
-                  
-                  <button
-                    onClick={() => navigate(`/comment`, { state: { postId: id } })}
-                    className="comment-btn"
-                  >
-                    Write a comment
-                  </button>
                 </>
               )}
             </>
