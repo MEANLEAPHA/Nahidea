@@ -1061,14 +1061,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
     </div>
    
   );
-}
-
-
-
-
-
-
-
+};
 
 let scriptLoaded = false;
 

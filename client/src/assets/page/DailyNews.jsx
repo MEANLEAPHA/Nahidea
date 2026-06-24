@@ -64,16 +64,16 @@ export default function DailyNews() {
 
   const bgImages = {
     joke:
-      null,
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQTR4mG-c_--0koi55MVsE-eCNFDJlFz3B9hmrxMX7lZyxbGvSDM4MoDk&s=10",
 
     didyouknow:
-      "https://img.spoonflower.com/c/10853676/p/f/m/M79z86J1krFvf-vLS1wKbdDWol5wNp9lx34LjSG8WloxQVWjQ45w/10853676.png",
+      "https://media.istockphoto.com/id/1190244621/vector/hand-drawn-question-marks-set-graphic-faq-ask-vector-illustration-question-isolated-black.jpg?s=612x612&w=0&k=20&c=gWhK0Un8JT5wJgiYW_FKXE1874oysxpk3Y_ihJ6mNiY=",
 
     advice:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=560&fit=crop",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDiow3plyZwUcHthci46Ll92W_DKcb3TQE8gKG-fzHprD1znLp7GRKup0&s=10",
 
     question:
-      null,
+      "https://static.vecteezy.com/system/resources/thumbnails/073/060/904/small/question-mark-background-pattern-neobrutalism-vector.jpg",
   };
 
   /* =========================
@@ -214,20 +214,6 @@ export default function DailyNews() {
       fetcher: fetchWikipedia,
     },
     {
-      id: "joke",
-      title: "Joke",
-      icon: faLaughBeam,
-      fetcher: fetchJoke,
-      bg: bgImages.joke,
-    },
-    {
-      id: "question",
-      title: "Question",
-      icon: faQuestionCircle,
-      fetcher: fetchQuestion,
-      bg: bgImages.question,
-    },
-    {
       id: "didyouknow",
       title: "Did You Know",
       icon: faLightbulb,
@@ -242,6 +228,21 @@ export default function DailyNews() {
       fetcher: fetchAdvice,
       bg: bgImages.advice,
     },
+    {
+      id: "joke",
+      title: "Joke",
+      icon: faLaughBeam,
+      fetcher: fetchJoke,
+      bg: bgImages.joke,
+    },
+    {
+      id: "question",
+      title: "Question",
+      icon: faQuestionCircle,
+      fetcher: fetchQuestion,
+      bg: bgImages.question,
+    },
+    
     
 
     
@@ -331,16 +332,16 @@ export default function DailyNews() {
                 style={{ backgroundImage: `url(${cat.bg})`, backgroundOpacity: 0.5 }}
               />
 
-              <div className='top-card-daily'>
-                   <FontAwesomeIcon
-                  className="card-icons"
-                  icon={cat.icon}
-                />
-                {cat.title}
-              </div>
+                <div className='top-card-daily'>
+                    <FontAwesomeIcon
+                    className="card-icons"
+                    icon={cat.icon}
+                  />
+                  {cat.title}
+                </div>
              
               
-              {data.question}
+                {data.question}
             
 
 

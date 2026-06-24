@@ -162,14 +162,14 @@ const handleSubmit = async (e) => {
     }
 
     if (res.status === 200) {
-      setTimeout(() => {
       toast.success('Edit successful!');
+      setTimeout(() => {
         navigate("/accounts", {
             state: {
                 userId: userId
             }
         });
-      }, 2000);
+      }, 500);
     }
   } catch (err) {
     console.log(err);

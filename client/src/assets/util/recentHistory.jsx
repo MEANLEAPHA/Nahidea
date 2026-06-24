@@ -16,11 +16,6 @@ const RecentHistory = () => {
     return null;
   }
 
-//   const handleClearPostHistory = () => {
-//     localStorage.setItem("recentPostHis", JSON.stringify([]));
-//     setRecentDataHis([]);
-//   };
-
   const deletePostHistory = (postId) => {
     const postData = JSON.parse(localStorage.getItem("recentPostHis")) || [];
     const update = postData.filter((item) => item.id !== postId);
@@ -49,7 +44,7 @@ const RecentHistory = () => {
 };
 
 const PostHistoryCard = ({ item, deletePostHistory }) => {
-  // Safe image renderer
+  const navigate = useNavigate();
   let safeImg = null;
   try {
     if (typeof item.mediaSrc === "string") {
@@ -67,7 +62,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
   }
 
   return (
-    <div className="post-history-card">
+    <div className="post-history-card" onClick={() => navigate(`/aboutpost/${item.id}`)}>
       <div className="post-history-card-info">
         <div id="author-info">
           <div
@@ -87,12 +82,6 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
         <div id="title-div">
           <p id="title">{item.title}</p>
         </div>
-        {/* <button
-          id="history-card-delete"
-          onClick={() => deletePostHistory(item.id)}
-        >
-          Delete
-        </button> */}
       </div>
 
       {safeImg && (

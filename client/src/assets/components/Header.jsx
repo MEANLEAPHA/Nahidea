@@ -59,13 +59,13 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   return (
      <header>
 
-      <div className="header-left header-children">
-        <MenuOutlined className="bar-icon aside-action-bar mobile-tool" onClick={onToggleAside} />
-        <p className='logo-font-main not-mobile-tool'>Nah<span style={{color:'orange'}}>!</span>dea</p>
-        
-         
-         <p className='logo-font-main mobile-tool' >Nah<span style={{color:'gold'}}>!</span>dea</p>
-
+      <div className="header-left header-children" onClick={()=>{navigate('/')}}>
+        <MenuOutlined className="bar-icon aside-action-bar mobile-tool" onClick={(e) => {
+          e.stopPropagation();
+          onToggleAside();
+        }} />
+        <p className='logo-font-main not-mobile-tool' style={{cursor:'pointer'}}>Nah<span style={{color:'orange'}}>!</span>dea</p>
+        <p className='logo-font-main mobile-tool' style={{cursor:'pointer'}}>Nah<span style={{color:'gold'}}>!</span>dea</p>
       </div>
 
       <div className="header-middle header-children">
@@ -94,11 +94,10 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
               <button className='button-bar-icon button-bar-icon-bell' type="button" onClick={()=>{navigate('/notifications')}}>
                 <BellOutlined className='bar-icon'/>
                 {unreadCount > 0 && (
-                    <span className="badge-noti">
+                    <span className="badge-noti" style={{color: 'white'}}>
                         {unreadCount > 99 ? '99+' : unreadCount}
                     </span>
                 )}
-                {/* <span className="badge-noti">10</span> */}
               </button>
               <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>

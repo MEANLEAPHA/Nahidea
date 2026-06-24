@@ -40,6 +40,7 @@ const MutualFriend = ({ onlineUsers }) => {
         {friends?.map((friend) => (
           <FriendCard
             key={friend.id}
+            userId={friend.id}
             username={friend.username}
             avatar_url={friend.avatar_url}
             isOnline={onlineUsers.includes(String(friend.id))}
@@ -52,9 +53,9 @@ const MutualFriend = ({ onlineUsers }) => {
 
 
 // FriendCard.jsx
-const FriendCard = ({ username, avatar_url, isOnline }) => {
+const FriendCard = ({ username, avatar_url, isOnline, userId }) => {
   return (
-    <div className="friend-card">
+    <div className="friend-card" onClick={() => navigate(`/accounts/${userId}`)}>
       <div className="friend-pf-div">
         <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
         {isOnline ? (

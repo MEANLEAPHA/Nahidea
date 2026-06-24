@@ -119,6 +119,7 @@
  align-items: center;
  justify-content: center;
  text-align: center;
+ padding:10px
 }
 .flip-card-back {
   transform: rotateY(180deg);
@@ -183,7 +184,6 @@
 
 .wiki-bg {
   background-size:contain;
-  
   background-position: center;
   background-repeat: no-repeat;
   z-index: 100;
@@ -199,7 +199,7 @@
   inset: 0;
   transform: scale(1.1);
   background: var(--preview) center/cover no-repeat; /* use the variable */
-  filter: blur(8px); /* blur strength */
+  filter: blur(10px); /* blur strength */
   z-index: -1; /* behind content */
 
 }
@@ -229,8 +229,6 @@
 /* =========================
    QUESTION
 ========================= */
-
-
 
 .question-text {
   position: relative;

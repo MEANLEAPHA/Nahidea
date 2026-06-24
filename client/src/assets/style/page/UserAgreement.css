@@ -192,7 +192,7 @@
   line-height: 1;
   margin: 0 0 14px;
   letter-spacing: -0.02em;
-  color: rgb(0, 123, 171);
+  color:var(--font-color);
 }
 
 .ua-effective {
