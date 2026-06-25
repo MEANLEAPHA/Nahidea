@@ -199,8 +199,28 @@
   animation: highlightFade 10s ease;
 }
 
-
-
+.radio-button-div-aboutpost{
+  width:100%;
+  height: auto;
+  display:flex;
+  flex-direction: row;
+  padding:0;
+  margin:0;
+  margin-top: 10px;
+}
+.radio-button-aboutpost{
+  background: none;
+  border: none;
+  color: var(--font-color);
+  cursor: pointer;
+  padding: 0px 10px 0px 0px;
+}
+.radio-button-aboutpost:first-child{
+  border-right: 1px solid var(--secondary-color);
+}
+.radio-button-aboutpost:last-child{
+  padding: 0px 0px 0px 10px;
+}
 #no-com-div{
   width: 100%;
   height: auto;
@@ -529,7 +549,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--primary-color);
+  color: yellowgreen;
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 12px;

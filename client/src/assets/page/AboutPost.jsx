@@ -29,6 +29,7 @@ import { MediaPreview } from "../util/mediaUploader";
 
 // util
 import { DisplayAnimatedIcon } from "../util/upload/AnimatedIcon";
+import {iconOptions} from "../data/post_type_data";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faPen, faEllipsis } from "@fortawesome/free-solid-svg-icons";
@@ -1199,40 +1200,51 @@ const AboutPost = () => {
                           </div>
                 )}
                 {data.question_type === "singlechoice" && (
-                  <div>
-                    {data.choice?.map((c, i) => (
-                        <div key={i} className="option-chip">
-                        {c.choice_text}
-                        </div>
-                      ))}
-                  </div>
+                  // <div>
+                  //   {data.choice?.map((c, i) => (
+                  //       <div key={i} className="option-chip">
+                  //       {c.choice_text}
+                  //       </div>
+                  //     ))}
+                  // </div>
+                  <ul className='choice-ul'>
+                    {
+                      data.choice?.map(
+                        (c, i) => {
+                          <li key={i} className = 'choice-li'>
+                            {c.choice_text}
+                          </li>
+                        }
+                      )
+                    }
+                  </ul>
                 )}
                 {data.question_type === "multiplechoice" && (
-                  <dov>
-                    {data.choices?.map((c, i) => (
-                        <div key={i} className="option-chip">
-                        {c.choice_text}
-                        </div>
-                    ))}
-                  </dov>
+                  // <dov>
+                  //   {data.choices?.map((c, i) => (
+                  //       <div key={i} className="option-chip">
+                  //       {c.choice_text}
+                  //       </div>
+                  //   ))}
+                  // </dov>
+                  <ul className ='choice-ul'>
+                    {
+                      data.choices?.map((c,i) => {
+                        <li key={i} className ='choice-li'>
+                          {c.choices_text}
+                        </li> 
+                      })
+                    }
+                  </ul>
                 )}
-                {data.question_type === "rankingorder" && (
-                  <div>
-                    {data.items?.map((item, idx) => (
-                      <div
-                          key={idx}
-                          className="option-chip rank-chip"
-                      >
-                          <span className="rank-number">
-                          #{idx + 1}
-                          </span>
-
-                          <span className="rank-text">
-                          {item.item_text}
-                          </span>
-                      </div>
-                      ))}
-                  </div>
+                {data.question_type === "rankingorder" && (  
+                  <ul className='choice-ul'>
+                    <li className = 'choice-li' key={i}>
+                        {data.items?.map((item, i) => {
+                           {i + 1} {item.item_text}
+                        })}
+                    </li>
+                  </ul>
                 )}
                 {data.question_type === "rating" && (
                   <div>
@@ -1432,12 +1444,10 @@ const AboutPost = () => {
               </button>
             </div>
           </div>
-        </div>
-
-        <div className="comment-box">
+          <div className="comment-box">
           {post?.post_type === "question" ? (
             <>
-              <div className='radio-button-div-chat'>
+              <div className='radio-button-div-aboutpost'>
                 {[
                   { id: 1, label: "Answers"},
                   { id: 2, label: "Comments"}
@@ -1459,7 +1469,7 @@ const AboutPost = () => {
         
                       color: selectedTab === opt.id ? "var(--font-color)" : "grey",
                     }}
-                    className='radio-button-chat'
+                    className='radio-button-aboutpost'
                   >
                     {opt.label}
                   </button>
@@ -1483,7 +1493,6 @@ const AboutPost = () => {
                   )}  
                   {/* All Answers */}
                   <div className="all-answers-section">
-                    <h4>All Answers ({answers.length})</h4>
                     {answers.map(answer => (
                       <AnswerCard
                         key={answer.id}
@@ -1554,7 +1563,12 @@ const AboutPost = () => {
           ) : (
             <>
               <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count !== 1 && "s"}</span>
-              
+              <button
+                onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                className="comment-btn"
+              >
+                Write a comment
+              </button>
               {comments.map(c => (
                 <CommentCard 
                   key={c.id}
@@ -1578,26 +1592,19 @@ const AboutPost = () => {
               {comments.length === 0 && !loadingComments && (
                 <div id='no-com-div'>
                   <FontAwesomeIcon icon={faMartiniGlassEmpty} className='no-com-p'/>
-                  <p className='no-com-p'>Be the first to comment</p>
+                  <p className='no-com-p'>Be the first to comment or answer</p>
                 </div>
               )}
 
               <div ref={observerRef} style={{ height: "20px" }} />
               {loadingComments && <p className="loading-text">Loading comments...</p>}
-              
-              <button
-                onClick={() => navigate(`/comment`, { state: { postId: id } })}
-                className="comment-btn"
-              >
-                Write a comment
-              </button>
             </>
           )}
         </div>
+        </div>
       </article>
-
       <article id='his-article'>
-         <RecentHistory />
+        <RecentHistory />
         <MutualFriend onlineUsers={onlineUsers} />
         <Rule />  
       </article>
