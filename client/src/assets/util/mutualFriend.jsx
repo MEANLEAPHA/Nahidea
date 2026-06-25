@@ -56,7 +56,11 @@ const MutualFriend = ({ onlineUsers }) => {
 const FriendCard = ({ username, avatar_url, isOnline, userId }) => {
   const navigate = useNavigate();
   return (
-    <div className="friend-card" onClick={() => navigate(`/accounts/${userId}`)}>
+    <div className="friend-card" onClick={() => navigate(`/accounts`, {
+        state: {
+          userId: userId
+        }
+    })}>
       <div className="friend-pf-div">
         <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
         {isOnline ? (

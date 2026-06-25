@@ -1,5 +1,5 @@
 // react state
-import React,{ useState, useEffect, useRef, memo, useCallback } from 'react';
+import React,{ useState, useEffect, useRef, memo, useCallback, useLayoutEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import axios from "axios";
 
@@ -31,7 +31,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
-// import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
+import { saveScroll, getScroll } from "./util/scrollStore";
 import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
@@ -77,32 +77,72 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(true);
 
   // INITIAL LOAD
-  useEffect(() => {
-    fetchPosts(1);
-    setPage(1);
-  }, []);
+
+const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+useEffect(() => {
+  const saved = getScroll("home");
+
+  const loadInitial = async () => {
+    if (saved.page <= 1) {
+      await fetchPosts(1);
+      setPage(1);
+    } else {
+      for (let p = 1; p <= saved.page; p++) {
+        await fetchPosts(p);
+      }
+      setPage(saved.page);
+    }
+    setInitialLoadDone(true);
+  };
+
+  loadInitial();
+}, []);
+  // useEffect(() => {
+  //   fetchPosts(1);
+  //   setPage(1);
+  // }, []);
+
+
+// RESTORE SCROLL once ALL initial pages are back
+const hasRestoredScroll = useRef(false);
+
+useLayoutEffect(() => {
+  if (initialLoadDone && posts.length > 0 && !hasRestoredScroll.current) {
+    const saved = getScroll("home");
+    window.scrollTo(0, saved.y);
+    hasRestoredScroll.current = true;
+  }
+}, [initialLoadDone, posts.length]);
+useEffect(() => {
+  return () => {
+    saveScroll("home", { y: window.scrollY, page });
+  };
+}, [page]);
+
 
   // SCROLL LISTENER
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 200 &&
-        !loading &&
-        !fetching &&
-        hasMore
-      ){
-        setPage((prev) => {
-          const next = prev + 1;
-          fetchPosts(next);
-          return next;
-        });
-      }
-    };
+useEffect(() => {
+  const handleScroll = () => {
+    if (
+      initialLoadDone &&
+      window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 200 &&
+      !loading &&
+      !fetching &&
+      hasMore
+    ){
+      setPage((prev) => {
+        const next = prev + 1;
+        fetchPosts(next);
+        return next;
+      });
+    }
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, fetching, hasMore]);
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [loading, fetching, hasMore, initialLoadDone]);
 
   // FETCH POSTS
   const fetchPosts = async (nextPage = 1) => {

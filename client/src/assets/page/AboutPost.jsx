@@ -3,6 +3,9 @@ import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useParams, useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import MutualFriend from "../util/mutualFriend";
+import RecentHistory from "../util/recentHistory";
+import Rule from './util/rule';
 import axios from "axios";
 // lucide
 import {
@@ -670,7 +673,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
 const AboutPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useOutletContext();
+  const { user, onlineUsers } = useOutletContext();
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [likingPosts, setLikingPosts] = useState(false);
@@ -1120,9 +1123,6 @@ const AboutPost = () => {
               <div className='post-caption'>
                 <p>{data.title}</p>
               </div>
-              <div className='post-content-type'>
-                <span className='content-type'>{data.type}</span>
-              </div>
               <div className='post-body-text'>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {data.text_body || ""}
@@ -1163,25 +1163,87 @@ const AboutPost = () => {
               </div>
               <div className="post-question-answer-preview">
                 {data.question_type === "closedend" && (
-                  <Space direction="vertical">
-                    <Text>Yes: {data.yes_title}</Text>
-                    <Text>No: {data.no_title}</Text>
-                  </Space>
+                  <div className="yesno-div">
+                            <div className="yes-chip">
+                              Yes
+                            </div>
+
+                            <div className="no-chip">
+                              No
+                            </div>
+                        </div>
                 )}
                 {data.question_type === "range" && (
-                  <Text>Range: {data.range_min} - {data.range_max}</Text>
+                   <div className='range-preview-option'>
+                                  <label id="min-label">{data.range_min}</label>
+
+                <div className="range-wrapper">
+                    <input
+                    type="range"
+                    min={data.range_min}
+                    max={data.range_max}
+                    step={data.step}
+                    value={data.default_range_value}
+                    onChange={(e) => setRangeValue(Number(e.target.value))}
+                    />
+                        <div
+                    className="custom-thumb"
+                    style={{
+                        left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
+                    }}
+                    >
+                    {data.default_range_value}
+                    </div>
+                </div>
+                <label id="max-label">{data.range_max}</label>
+                          </div>
                 )}
                 {data.question_type === "singlechoice" && (
-                  <ul>{data.choices?.map((c, i) => <li key={i}>{c.choice_text}</li>)}</ul>
+                  <div>
+                    {data.choice?.map((c, i) => (
+                        <div key={i} className="option-chip">
+                        {c.choice_text}
+                        </div>
+                      ))}
+                  </div>
                 )}
                 {data.question_type === "multiplechoice" && (
-                  <ul>{data.choices?.map((c, i) => <li key={i}>{c.choice_text}</li>)}</ul>
+                  <dov>
+                    {data.choices?.map((c, i) => (
+                        <div key={i} className="option-chip">
+                        {c.choice_text}
+                        </div>
+                    ))}
+                  </dov>
                 )}
                 {data.question_type === "rankingorder" && (
-                  <ol>{data.items?.map((i, idx) => <li key={idx}>{i.item_text}</li>)}</ol>
+                  <div>
+                    {data.items?.map((item, idx) => (
+                      <div
+                          key={idx}
+                          className="option-chip rank-chip"
+                      >
+                          <span className="rank-number">
+                          #{idx + 1}
+                          </span>
+
+                          <span className="rank-text">
+                          {item.item_text}
+                          </span>
+                      </div>
+                      ))}
+                  </div>
                 )}
                 {data.question_type === "rating" && (
-                  <Text>Rating icon: {data.rating_icon_id}</Text>
+                  <div>
+                    {Array.from({length:5}).map((_,i)=>(
+                      <FontAwesomeIcon 
+                      key={i}
+                      icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
+                      style={{ fontSize: "24px", color: "grey" }}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
@@ -1195,7 +1257,7 @@ const AboutPost = () => {
 
       default:
         return null;
-    }
+    } 
   };
 
   const handleLike = async (postId, ownerId) => {
@@ -1249,7 +1311,7 @@ const AboutPost = () => {
 
   return (
     <div className='home-container'>
-      <article id="feed-article">
+      <article id="feed-article about-feed-article">
         <div className="about-posts">
           <div className='post-header'>
             <div className='post-user-profile'>
@@ -1535,15 +1597,9 @@ const AboutPost = () => {
       </article>
 
       <article id='his-article'>
-        <div className='rule-absolute'>
-          <p>Nahidea Rule</p>
-          <p>Private Policy</p>
-          <p>User Agreement</p>
-          <p>Accessibility</p>
-          <div>
-            <p>Nahidea. © 2026. All rights reserved</p>
-          </div>
-        </div>
+         <RecentHistory />
+        <MutualFriend onlineUsers={onlineUsers} />
+        <Rule />  
       </article>
     </div>
   );
