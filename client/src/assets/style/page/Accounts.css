@@ -39,7 +39,7 @@
     position: absolute;
     inset: 0;
     background: var(--preview-url-banner) center/cover no-repeat;
-    object-fit: contain;
+
     filter: blur(8px);
     transform: scale(1.1);
     opacity: 0.6;

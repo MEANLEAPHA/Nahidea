@@ -9,6 +9,7 @@
   font-weight: 600;
   color:var(--font-color);
 }
+
 .comment-btn {
   width: 100%;
   padding: 10px;
@@ -511,21 +512,24 @@
 
 .radio-button-chat:hover {
   color: #fd7648;
+
+
 }
 /* Average Answer Display */
 .average-answer-container {
-  background: linear-gradient(135deg, rgba(253, 118, 72, 0.08) 0%, rgba(253, 118, 72, 0.02) 100%);
-  border: 1px solid rgba(253, 118, 72, 0.2);
+  background: none;
+  border: 1px solid var(--back-con);
   border-radius: 12px;
   padding: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .average-answer-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fd7648;
+  color: var(--primary-color);
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 12px;

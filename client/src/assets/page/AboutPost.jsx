@@ -1091,14 +1091,14 @@ const AboutPost = () => {
     return c.avatar_url || userProfilePic;
   };
 
-  if (!post) {
-    return (
-      <div className="aboutPost">
-        <h1>Post {id}</h1>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  // if (!post) {
+  //   return (
+  //     <div className="aboutPost">
+  //       <h1>Post {id}</h1>
+  //       <p>Loading...</p>
+  //     </div>
+  //   );
+  // }
 
   function tagSplitter(tags = "") {
     if (!tags) return null;
@@ -1311,7 +1311,7 @@ const AboutPost = () => {
 
   return (
     <div className='home-container'>
-      <article id="feed-article about-feed-article">
+      <article id="feed-article">
         <div className="about-posts">
           <div className='post-header'>
             <div className='post-user-profile'>
@@ -1470,7 +1470,7 @@ const AboutPost = () => {
                 <div className="answers-section">
                   <button
                     onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}`)}
-                    className="answer-question-btn"
+                    className="comment-btn"
                   >
                      Answer this question
                   </button>
