@@ -1210,11 +1210,11 @@ const AboutPost = () => {
                   <ul className='choice-ul'>
                     {
                       data.choice?.map(
-                        (c, i) => {
+                        (c, i) => (
                           <li key={i} className = 'choice-li'>
                             {c.choice_text}
                           </li>
-                        }
+                        )
                       )
                     }
                   </ul>
@@ -1229,20 +1229,22 @@ const AboutPost = () => {
                   // </dov>
                   <ul className ='choice-ul'>
                     {
-                      data.choices?.map((c,i) => {
+                      data.choices?.map((c,i) => (
                         <li key={i} className ='choice-li'>
                           {c.choices_text}
                         </li> 
-                      })
+                      ))
                     }
                   </ul>
                 )}
                 {data.question_type === "rankingorder" && (  
                   <ul className='choice-ul'>
                     <li className = 'choice-li' key={i}>
-                        {data.items?.map((item, i) => {
-                           {i + 1} {item.item_text}
-                        })}
+                        {data.items?.map((item, i) => (
+                               <span>{i + 1} {item.item_text}</span> 
+                        )
+                        
+                        )}
                     </li>
                   </ul>
                 )}
