@@ -1239,13 +1239,13 @@ const AboutPost = () => {
                 )}
                 {data.question_type === "rankingorder" && (  
                   <ul className='choice-ul'>
-                    <li className = 'choice-li' key={i}>
-                        {data.items?.map((item, i) => (
-                               <span>{i + 1} {item.item_text}</span> 
-                        )
+                    {data.items?.map((item, i) => (
+                    <li className = 'choice-li'>
+                              {i + 1} {item.item_text}
+                    </li>
+                      )
                         
                         )}
-                    </li>
                   </ul>
                 )}
                 {data.question_type === "rating" && (
