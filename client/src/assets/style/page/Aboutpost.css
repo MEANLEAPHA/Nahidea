@@ -1,6 +1,34 @@
+.back-btn-about-post{
+  background: var(--back-con);
+  font-size: 15px;
+  border: none;
+  color: var(--font-color);
+  padding:5px;
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+.render-qa-post{
+  margin-top: 8px;
+}
+
+.choice-ul{
+  margin: 0;
+  margin-top: 5px;
+  padding: 0;
+}
+.choice-li{
+  list-style: none;
+}
+.tool-answer-icon{
+  font-size: small;
+  opacity: 0.8;
+  color:var(--font-color);
+}
 .comment-box {
   width: 100%;
-  padding: 10px;
+  padding: 10px 15px;
 }
 
 #label-com-count{
@@ -234,53 +262,20 @@
   font-size: large;
   font-weight: 500;
 }
+
 /* Answers Section Styles */
 .answers-section {
   margin-top: 20px;
-}
-
-.popular-answer-section {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 24px;
-  border: 1px solid rgba(255, 215, 0, 0.3);
-}
-
-.popular-answer-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #ffd700;
-  font-weight: 600;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.all-answers-section h4 {
-  margin-bottom: 16px;
-  color: var(--text-color);
-  font-size: 16px;
+ 
 }
 
 /* Answer Card */
 .answer-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.answer-card:hover {
-  border-color: #fd7648;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.answer-card.popular-answer {
-  border-left: 4px solid #ffd700;
+  margin-bottom: 10px;
+  gap: 10px !important;
+  padding:10px 0px !important;
+  border-top: none !important;
+  border-bottom: 2px dashed var(--back-con);
 }
 
 .answer-card.highlight-answer {
@@ -299,7 +294,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
+  padding: 0px !important;
+   border-top: none !important;
 }
 
 .answer-author {
@@ -336,28 +333,19 @@
   color: #999;
 }
 
-.popular-badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 215, 0, 0.15);
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #ffd700;
-}
 
 /* Answer Body */
 .answer-body {
-  margin-bottom: 12px;
-  padding-left: 46px;
+  padding-left: 0px;
+  padding: 0;
+
 }
 
 .answer-text {
   color: var(--text-color);
   line-height: 1.5;
   font-size: 14px;
+  padding-left:15px
 }
 
 .answer-badge {
@@ -366,16 +354,22 @@
   border-radius: 20px;
   font-size: 13px;
   font-weight: 500;
+  justify-content: start !important;
 }
 
-.answer-yes {
-  background: rgba(76, 175, 80, 0.15);
-  color: #4caf50;
+.answer-yess {
+  color:var(--font-color);
+  display: flex;
+  gap:10px;
+  padding-left: 15px;
+   justify-content: start !important;
 }
-
-.answer-no {
-  background: rgba(244, 67, 54, 0.15);
-  color: #f44336;
+.answer-nos {
+  color:var(--font-color);
+  display: flex;
+  gap:10px;
+  padding-left: 15px;
+   justify-content: start !important;
 }
 
 .answer-rating {
@@ -383,42 +377,51 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
+  padding-left: 15px;
 }
-
+.answer-multiple{
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  padding-left: 15px;
+}
 .answer-choice-badge {
   display: inline-block;
-  background: rgba(253, 118, 72, 0.1);
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 0px;
   font-size: 13px;
-  color: #fd7648;
-  margin: 4px;
+  color:var(--font-color);
+  margin: 0px;
+  padding-left: 15px;
 }
 
 .answer-choices {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
+  gap: 5px; 
 }
 
 .answer-range {
   font-size: 14px;
+  padding-left: 15px;
   color: var(--text-color);
 }
 
 /* Answer Footer */
 .answer-footer {
-  padding-left: 46px;
+  padding-left: 0px;
+  margin: 0;
 }
 
 .answer-vote-container {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--hover-bg);
+  background: none;
+  border: 1px solid var(--secondary-color);
   border-radius: 30px;
   padding: 4px 12px;
   width: fit-content;
+  margin: 0;
 }
 
 .answer-vote-btn {
@@ -537,8 +540,7 @@
 }
 /* Average Answer Display */
 .average-answer-container {
-  background: none;
-  border: 1px solid var(--back-con);
+  background: var(--back-con);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 10px;
@@ -549,7 +551,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: yellowgreen;
+  color: var(--font-color);
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 12px;
@@ -601,8 +603,10 @@
 .average-rating-score .avg-score {
   font-size: 28px;
   font-weight: 700;
-  color: #fd7648;
+  color: var(--font-color);
+  font-family: 'Times New Roman', Times, serif;
 }
+
 
 .average-rating-score .avg-out-of {
   font-size: 16px;
@@ -617,13 +621,13 @@
 .rating-distribution-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
   margin-bottom: 6px;
 }
 
 .rating-distribution-row .rating-value {
   font-size: 13px;
-  min-width: 40px;
+  min-width: 10px;
   color: var(--text-color);
 }
 
@@ -637,7 +641,7 @@
 
 .rating-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #fd7648, #ff9a76);
+  background: linear-gradient(90deg,gold, yellow);
   border-radius: 10px;
   transition: width 0.8s ease;
 }
@@ -670,24 +674,18 @@
   overflow: hidden;
 }
 
-.choice-bar-fill {
+.choice-bar-fills {
   height: 100%;
-  background: linear-gradient(90deg, #fd7648, #ff9a76);
+  background: skyblue;
   border-radius: 10px;
-  transition: width 0.8s ease;
-  animation: barGrow 0.6s ease forwards;
 }
 
-@keyframes barGrow {
-  from { width: 0 !important; }
-  to { width: var(--target-width); }
-}
 
 /* Ranking */
 .average-ranking .ranking-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0px;
   padding: 6px 0;
   border-bottom: 1px solid var(--border-color);
 }
@@ -699,7 +697,7 @@
 .ranking-position {
   font-weight: 700;
   color: #fd7648;
-  min-width: 40px;
+  min-width: 25px;
 }
 
 .ranking-label {

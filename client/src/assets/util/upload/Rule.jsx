@@ -11,6 +11,36 @@ import {
   SoundFilled
 } from "@ant-design/icons";
 
+// export default function Rule({ setRule }) {
+//   const [current, setCurrent] = useState("1");
+
+//   const onClick = (e) => {
+//     setCurrent(e.key);
+//   };
+
+//   return (
+   
+//       <>
+//         <p className="rule-title">{setRule.slice(0, 1).toUpperCase() + setRule.slice(1)} Rule</p>
+//           <Menu
+//             onClick={onClick}
+//             style={{ width: "100%" }}
+//             defaultOpenKeys={["sub2"]}
+//             selectedKeys={[current]}
+//             mode="inline"
+//             items={setRule === "content" ? contentItems : setRule === "confession" ? confessionItems : questionItems}
+//           />
+//           <div className='rule-agree-div'>
+//               <p className="rule-agree"><SoundFilled /> By posting, you agree to help keep the platform safe, useful, and enjoyable for everyone. Happy Posting </p>
+//           </div>
+   
+//       </>
+
+    
+ 
+//   );
+// }
+
 export default function Rule({ setRule }) {
   const [current, setCurrent] = useState("1");
 
@@ -18,26 +48,44 @@ export default function Rule({ setRule }) {
     setCurrent(e.key);
   };
 
-  return (
-   
-      <>
-        <p className="rule-title">{setRule.slice(0, 1).toUpperCase() + setRule.slice(1)} Rule</p>
-          <Menu
-            onClick={onClick}
-            style={{ width: "100%" }}
-            defaultOpenKeys={["sub2"]}
-            selectedKeys={[current]}
-            mode="inline"
-            items={setRule === "content" ? contentItems : setRule === "confession" ? confessionItems : questionItems}
-          />
-          <div className='rule-agree-div'>
-              <p className="rule-agree"><SoundFilled /> By posting, you agree to help keep the platform safe, useful, and enjoyable for everyone. Happy Posting </p>
-          </div>
-   
-      </>
+  const getItems = () => {
+    switch(setRule) {
+      case "content":
+        return contentItems;
+      case "confession":
+        return confessionItems;
+      case "question":
+        return questionItems;
+      case "question-comment":
+        return questionCommentItems;
+      case "content-comment":
+        return contentCommentItems;
+      case "confession-comment":
+        return confessionCommentItems;
+      default:
+        return questionItems;
+    }
+  };
 
-    
- 
+  return (
+    <>
+      <p className="rule-title">{setRule.slice(0, 1).toUpperCase() + setRule.slice(1)} Rule</p>
+      <Menu
+        onClick={onClick}
+        style={{ width: "100%" }}
+        defaultOpenKeys={["sub2"]}
+        selectedKeys={[current]}
+        mode="inline"
+        items={getItems()}
+      />
+      {
+        setRule !== 'question-comment' && setRule !== 'content-comment' && setRule !== 'confession-comment' &&
+        <div className='rule-agree-div'>
+        <p className="rule-agree"><SoundFilled /> By posting, you agree to help keep the platform safe, useful, and enjoyable for everyone. Happy Posting</p>
+      </div>
+      }
+      
+    </>
   );
 }
 
@@ -570,6 +618,208 @@ const contentItems = [
           <span style={textStyle}>
             Content that seriously violates community guidelines may be removed
             to maintain a high-quality experience for everyone.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+];
+
+
+const questionCommentItems = [
+  {
+    key: "sub1",
+    label: "Be Helpful & Relevant",
+    icon: <MessageOutlined />,
+    children: [
+      {
+        key: "1",
+        label: (
+          <span style={textStyle}>
+            Provide clear, direct answers that address the question. Stay on topic and avoid off-topic responses.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub2",
+    label: "Explain Your Reasoning",
+    icon: <BulbOutlined />,
+    children: [
+      {
+        key: "2",
+        label: (
+          <span style={textStyle}>
+            Include explanations, steps, or sources to support your answer. Avoid one-word or low-effort responses.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub3",
+    label: "Respectful Discussion",
+    icon: <HeartOutlined />,
+    children: [
+      {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            Disagree constructively by explaining your viewpoint. Don't attack the person or use dismissive language.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub4",
+    label: "Keep It Clean",
+    icon: <SafetyOutlined />,
+    children: [
+      {
+        key: "4",
+        label: (
+          <span style={textStyle}>
+            No spam, promotional links, or self-promotion unless relevant. Report helpful answers and flag harmful comments.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+];
+
+const contentCommentItems = [
+  {
+    key: "sub1",
+    label: "Engage Meaningfully",
+    icon: <MessageOutlined />,
+    children: [
+      {
+        key: "1",
+        label: (
+          <span style={textStyle}>
+            Share thoughtful reactions or questions about the content. Avoid generic comments like "Nice" or "Cool."
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub2",
+    label: "Constructive Feedback",
+    icon: <BulbOutlined />,
+    children: [
+      {
+        key: "2",
+        label: (
+          <span style={textStyle}>
+            Explain why you dislike something and suggest improvements. Balance criticism by acknowledging what works well.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub3",
+    label: "Respect the Creator",
+    icon: <HeartOutlined />,
+    children: [
+      {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            No harassment, personal attacks, or disrespectful comments. Encourage creators by highlighting what you appreciate.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub4",
+    label: "Stay Safe & Appropriate",
+    icon: <SafetyOutlined />,
+    children: [
+      {
+        key: "4",
+        label: (
+          <span style={textStyle}>
+            No spam, self-promotion, or irrelevant links. Flag inappropriate content to keep the community safe.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+];
+
+const confessionCommentItems = [
+  {
+    key: "sub1",
+    label: "Respond with Empathy",
+    icon: <HeartOutlined />,
+    children: [
+      {
+        key: "1",
+        label: (
+          <span style={textStyle}>
+            Respond with kindness, understanding, and support. Avoid judgmental, dismissive, or harsh language.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub2",
+    label: "Share Thoughtful Perspectives",
+    icon: <BulbOutlined />,
+    children: [
+      {
+        key: "2",
+        label: (
+          <span style={textStyle}>
+            Offer different viewpoints respectfully. Don't give unsolicited advice unless the confessor asks.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub3",
+    label: "Protect Anonymity",
+    icon: <SafetyOutlined />,
+    children: [
+      {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            Never attempt to identify or expose the confessor. Don't share personal information in confession threads.
+          </span>
+        ),
+        disabled: true,
+      },
+    ],
+  },
+  {
+    key: "sub4",
+    label: "Keep the Space Safe",
+    icon: <GlobalOutlined />,
+    children: [
+      {
+        key: "4",
+        label: (
+          <span style={textStyle}>
+            No harassment, mockery, or hostility toward confessions. Report serious issues through proper channels.
           </span>
         ),
         disabled: true,

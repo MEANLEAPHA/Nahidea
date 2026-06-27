@@ -10,12 +10,13 @@ import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,Search
           FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, 
           SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,FlagOutlined,LinkOutlined,DeleteOutlined,
           EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
+          BorderOutlined,
       } from '@ant-design/icons';
 import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
 
@@ -230,7 +231,6 @@ useEffect(() => {
       case "confession":
         return (
           <>
-           
                    <div className='post-caption' onClick={()=>{
                         const HisData = {
                           id: post.id,
@@ -274,7 +274,6 @@ useEffect(() => {
       case "question":
         return (
           <>
-      
                  <div className="post-question-answer-preview">
 
                       {data.question_type === "closedend" && (
@@ -368,10 +367,10 @@ useEffect(() => {
                         <div className="question-preview-card" onClick={
                           ()=>{        
                             const QaData = {
-                                    question_id : data.id,
+                                  question_id : data.id,
                                   title : data.title,
                                   choice: 
-                                    data.choice?.map(c => ({
+                                    data.choices?.map(c => ({
                                       choice_text: c.choice_text,
                                       singlechoice_id: c.singlechoice_id,
                                       id: c.id,
@@ -391,22 +390,37 @@ useEffect(() => {
                                 <FolderOpenOutlined /> Unsolved
                             </span>
                         </div>
+                        <ul className='choice-ul'>
+                            {
+                              data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map(
+                                (c, i) => (
+                                  <li key={i} className = 'choice-li'>
+                                    <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/> {c.choice_text}
+                                  </li>
+                                )
+                              )
+                            }
+                            {data.choices?.length > 4 && (
+                              <li className = 'choice-li'>
+                                 <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/>  +{data.choiced?.length - 3} more
+                              </li>
+                            )}
+                        </ul>
 
-                        <div className="question-preview-options two-grid">
-                        {data.choice?.slice(0, data.choice?.length > 4 ? 3 : 4)
+                        {/* <div className="question-preview-options two-grid">
+                        {data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4)
                         .map((c, i) => (
                             <div key={i} className="option-chip">
                             {c.choice_text}
                             </div>
                         ))}
 
-                        {data.choice?.length > 4 && (
+                        {data.choices?.length > 4 && (
                         <div className="option-chip more-chip">
-                            +{data.choice?.length - 3} more
+                            +{data.choiced?.length - 3} more
                         </div>
                         )}
-
-                        </div>
+                        </div> */}
                     </div>
                       )}
 
@@ -441,7 +455,7 @@ useEffect(() => {
                             </span>
                           </div>
 
-                         <div className="question-preview-options two-grid">
+                         {/* <div className="question-preview-options two-grid">
                             {data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4)
                             .map((c, i) => (
                                 <div key={i} className="option-chip">
@@ -454,8 +468,23 @@ useEffect(() => {
                                 +{data.choices?.length - 3} more
                             </div>
                             )}
+                        </div> */}
 
-                        </div>
+                        <ul className ='choice-ul'>
+                          {
+                            data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c,i) => (
+                              <li key={i} className ='choice-li'>
+                                <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                              </li> 
+                            ))
+                          }
+                          {data.choices?.length > 4 && (
+                            <div className ='choice-li'>
+                                <BorderOutlined className='tool-answer-icon'/> +{data.choices?.length - 3} more
+                            </div>
+                            )}
+                        </ul>
+
                     </div>
                       )}
 
@@ -511,6 +540,18 @@ useEffect(() => {
                                     </div>
                                 )}
                             </div>
+                            <ul className='choice-ul'>
+                              {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
+                                <li className = 'choice-li'>
+                                    {i + 1}. {item.item_text}
+                                </li>
+                              ))}
+                              {data.items?.length > 4 && (
+                                <li className = 'choice-li'>
+                                  4. +{data.items?.length - 3} more
+                                </li>
+                              )}
+                            </ul>
                     </div>
                       )}
 

@@ -62,7 +62,28 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
   }
 
   return (
-    <div className="post-history-card" onClick={() => navigate(`/aboutpost/${item.id}`)}>
+    <div className="post-history-card" onClick={() => {
+       const HisData = {
+                        id: item.id,
+                        title: item.title,
+                        mediaSrc : item.media_url,
+                        author:  item.is_anonymous === 1 ? item.anonymous_name : item.username,
+                        authurPf: item.is_anonymous === 1 ? nahIdeaAuth : item.authorPf,
+                        isAnonymous: item.is_anonymous,
+                        anonymousBg: item.anonymous_bg_color,
+                      }
+                      const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+      
+                      let newList;
+                      if (recentDataHis.some(items => items.id === item.id)) {
+                        const raminData = recentDataHis.filter(items => items.id !== item.id);
+                        newList = [HisData, ...raminData].slice(0, 50);
+                      } else {
+                        newList = [HisData, ...recentDataHis].slice(0, 50);
+                      }
+                      localStorage.setItem("recentPostHis", JSON.stringify(newList));
+      navigate(`/aboutpost/${item.id}`);
+    }}>
       <div className="post-history-card-info">
         <div id="author-info">
           <div

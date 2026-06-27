@@ -52,9 +52,8 @@
 .about-posts{
      width: 100%;
     height: auto;
- 
     margin: auto;
-    padding-top: 15px;
+    padding-top: 10px;
     padding-left: 15px;
     padding-right: 15px;
     margin-top: 0px;
@@ -1166,7 +1165,10 @@ RESPONSIVE
 }
 @media screen and (max-width: 520px) {
  
-
+.about-posts{
+    padding: 25px 0px;
+  
+}
     .user-profile{
         width: 30px;
         height: 30px;
