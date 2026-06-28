@@ -168,19 +168,19 @@ export default function Home() {
 
   // SAVE SCROLL - FIXED VERSION with proper refs
   useEffect(() => {
-    const saveCurrentScroll = () => {
-      // Use refs to get latest values
-      const currentPage = pageRef.current;
-      const currentY = window.scrollY;
-      
-      console.log('Saving scroll - Page:', currentPage, 'Y:', currentY);
-      
-      saveScroll("home", {
-        y: currentY,
-        page: currentPage
-      });
-    };
 
+    const saveCurrentScroll = () => {
+      saveScroll("home", {
+        y: scrollYRef.current,
+        page: pageRef.current,
+      });
+
+      console.log(
+        "Saving",
+        scrollYRef.current,
+        pageRef.current
+      );
+};
     // Save on page unload or navigation
     const handleBeforeUnload = () => {
       saveCurrentScroll();
@@ -326,7 +326,7 @@ fetchingRef.current = true;
                 <div className='post-caption' onClick={ () => {
 
                    saveScroll("home", {
-                      y: scrollYRef.current,
+                      y: window.scrollY,
                       page: pageRef.current,
                     });
 
