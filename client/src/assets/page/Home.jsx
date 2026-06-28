@@ -79,24 +79,30 @@ export default function Home() {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [isRestoringScroll, setIsRestoringScroll] = useState(false);
 
-  // Ref to track if this is the first load
-  const isFirstLoad = useRef(true);
+  // Refs for latest values
   const hasRestoredScroll = useRef(false);
+  const pageRef = useRef(page);
+  const postsRef = useRef(posts);
+  const isNavigating = useRef(false);
 
-  // INITIAL LOAD - with proper sequential fetching
-
-  // useEffect(() => {
-  //   fetchPosts(1);
-  //   setPage(1);
-  // }, []);
+  // Update refs when state changes
+  useEffect(() => {
+    pageRef.current = page;
+  }, [page]);
 
   useEffect(() => {
+    postsRef.current = posts;
+  }, [posts]);
+
+  // INITIAL LOAD
+  useEffect(() => {
     const saved = getScroll("home");
-    
+    console.log('Initial load - Saved scroll:', saved);
+
     const loadInitial = async () => {
       try {
         setLoading(true);
-        
+
         if (saved.page <= 1) {
           await fetchPosts(1);
           setPage(1);
@@ -118,87 +124,118 @@ export default function Home() {
     loadInitial();
   }, []);
 
-
-  // RESTORE SCROLL - using requestAnimationFrame and useLayoutEffect
+  // RESTORE SCROLL
   useLayoutEffect(() => {
     if (initialLoadDone && posts.length > 0 && !hasRestoredScroll.current) {
       const saved = getScroll("home");
-      
-      // Use multiple attempts to ensure DOM is ready
+      console.log('Restoring scroll - Target Y:', saved.y, 'Target Page:', saved.page);
+
       const attemptScroll = (attempts = 0) => {
-        if (attempts > 5) return; // Give up after 5 attempts
-        
-        // Check if scroll position is available
+        if (attempts > 5) return;
+
         const scrollY = saved.y || 0;
-        
-        // Try to scroll
+
         window.scrollTo({
           top: scrollY,
           behavior: 'instant'
         });
-        
-        // Verify if scroll was applied
+
         requestAnimationFrame(() => {
           const currentScroll = window.scrollY;
           if (Math.abs(currentScroll - scrollY) > 10 && attempts < 5) {
-            // Scroll wasn't applied, retry
             setTimeout(() => attemptScroll(attempts + 1), 100);
           } else {
             hasRestoredScroll.current = true;
             setIsRestoringScroll(false);
+            console.log('Scroll restored to:', window.scrollY);
           }
         });
       };
-      
+
       setIsRestoringScroll(true);
       attemptScroll(0);
     }
   }, [initialLoadDone, posts.length]);
 
-  // SAVE SCROLL on page unload and when page changes
+  // SAVE SCROLL - FIXED VERSION with proper refs
   useEffect(() => {
     const saveCurrentScroll = () => {
-      saveScroll("home", { 
-        y: window.scrollY, 
-        page: page 
+      // Use refs to get latest values
+      const currentPage = pageRef.current;
+      const currentY = window.scrollY;
+      
+      console.log('Saving scroll - Page:', currentPage, 'Y:', currentY);
+      
+      saveScroll("home", {
+        y: currentY,
+        page: currentPage
       });
     };
 
-    // Save on page unload
-    window.addEventListener('beforeunload', saveCurrentScroll);
-    
-    // Save periodically while scrolling
-    const handleScroll = () => {
-      // Throttle the save operation
-      if (!window._scrollTimeout) {
-        window._scrollTimeout = setTimeout(() => {
-          saveScroll("home", { 
-            y: window.scrollY, 
-            page: page 
-          });
-          window._scrollTimeout = null;
-        }, 500);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('beforeunload', saveCurrentScroll);
-      window.removeEventListener('scroll', handleScroll);
-      if (window._scrollTimeout) {
-        clearTimeout(window._scrollTimeout);
-        window._scrollTimeout = null;
-      }
-      // Save on unmount
+    // Save on page unload or navigation
+    const handleBeforeUnload = () => {
       saveCurrentScroll();
     };
-  }, [page]);
+
+    // Throttled save while scrolling
+    let scrollTimeout = null;
+    const handleScroll = () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      scrollTimeout = setTimeout(() => {
+        saveCurrentScroll();
+      }, 300);
+    };
+
+    // Save on visibility change (tab switch)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        saveCurrentScroll();
+      }
+    };
+
+    // Save on click events (catch navigation clicks)
+    const handleClick = (e) => {
+      // Check if click is on a navigation link
+      const target = e.target.closest('a, button');
+      if (target) {
+        const href = target.getAttribute('href');
+        const onClick = target.getAttribute('onclick');
+        // If it's a navigation link (internal link)
+        if ((href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) ||
+            (onClick && onClick.includes('navigate'))) {
+          saveCurrentScroll();
+        }
+      }
+    };
+
+    // Intercept navigation for React Router
+    const originalNavigate = navigate;
+    // We can't override navigate directly, so we'll use the click handler
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('click', handleClick, true);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('click', handleClick, true);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      // Save on unmount with latest values
+      saveCurrentScroll();
+    };
+  }, []); // Empty dependency array - we use refs for latest values
 
   // SCROLL LISTENER for infinite scroll
   useEffect(() => {
     if (!initialLoadDone || isRestoringScroll) return;
-    
+
     const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >=
@@ -219,46 +256,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, fetching, hasMore, initialLoadDone, isRestoringScroll]);
 
-  // FETCH POSTS
-  // const fetchPosts = async (nextPage = 1) => {
-  //   if (fetching) return;
-
-  //   try {
-  //     setFetching(true);
-  //     setLoading(true);
-
-  //     const res = await axios.get(
-  //       `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const payload = res.data;
-  //     const newPosts = payload.data;
-
-  //     if (!payload || !Array.isArray(newPosts)) {
-  //       throw new Error("Bad response");
-  //     }
-
-  //     if (newPosts.length < 25) {
-  //       setHasMore(false);
-        
-  //     }
-
-  //     setPosts((prev) => [...prev, ...newPosts]);
-  //     setSource(payload.source);
-  //   } catch {
-  //     setError("Failed to load post");
-  //   } finally {
-  //     setLoading(false);
-  //     setFetching(false);
-  //   }
-  // };
-
-   // FETCH POSTS - improved version
+  // FETCH POSTS - improved version
   const fetchPosts = async (nextPage = 1) => {
     if (fetching || loading) return;
 
@@ -297,7 +295,7 @@ export default function Home() {
     }
   };
 
-  
+
   // Render post style
   const renderPostContent = (post) => {
 
@@ -982,3 +980,58 @@ function DisplayAnimatedIcon({ src, isHovered }) {
     />
   );
 }
+
+
+
+
+
+
+
+
+
+  // INITIAL LOAD - with proper sequential fetching
+
+  // useEffect(() => {
+  //   fetchPosts(1);
+  //   setPage(1);
+  // }, []);
+
+  
+  // FETCH POSTS
+  // const fetchPosts = async (nextPage = 1) => {
+  //   if (fetching) return;
+
+  //   try {
+  //     setFetching(true);
+  //     setLoading(true);
+
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     const payload = res.data;
+  //     const newPosts = payload.data;
+
+  //     if (!payload || !Array.isArray(newPosts)) {
+  //       throw new Error("Bad response");
+  //     }
+
+  //     if (newPosts.length < 25) {
+  //       setHasMore(false);
+        
+  //     }
+
+  //     setPosts((prev) => [...prev, ...newPosts]);
+  //     setSource(payload.source);
+  //   } catch {
+  //     setError("Failed to load post");
+  //   } finally {
+  //     setLoading(false);
+  //     setFetching(false);
+  //   }
+  // };
