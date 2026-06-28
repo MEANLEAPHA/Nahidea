@@ -66,11 +66,11 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
        const HisData = {
                         id: item.id,
                         title: item.title,
-                        mediaSrc : item.media_url,
-                        author:  item.is_anonymous === 1 ? item.anonymous_name : item.username,
-                        authurPf: item.is_anonymous === 1 ? nahIdeaAuth : item.authorPf,
-                        isAnonymous: item.is_anonymous,
-                        anonymousBg: item.anonymous_bg_color,
+                        mediaSrc: item.mediaSrc,
+                        author:  item.author,
+                        authurPf: item.authurPf,
+                        isAnonymous: item.isAnonymous,
+                        anonymousBg: item.anonymousBg,
                       }
                       const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
       

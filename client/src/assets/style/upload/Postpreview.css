@@ -466,7 +466,7 @@
   max-width: 100%;
   max-height: 380px;
  height: 100% !important;            /* fill the slide height */
-  border-radius: 25px;
+  border-radius: 15px;
   overflow: hidden;
 
   margin: 0 auto; /* fallback horizontal centering */
@@ -489,7 +489,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 25px;
+  border-radius: 15px;
   background: var(--preview-url) center/cover no-repeat;
   filter: blur(40px);
   transform: scale(1.1);
@@ -530,7 +530,7 @@
 .media-preview-empty .ant-skeleton-image{
   width: 100% !important;
   height: 150px !important;
-  border-radius: 12px;
+  border-radius: 8px;
   display: block !important;
   background-color: #e0e0e0;
   display: flex !important;

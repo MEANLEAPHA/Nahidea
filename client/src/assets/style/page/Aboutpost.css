@@ -20,6 +20,7 @@
 }
 .choice-li{
   list-style: none;
+  color:var(--font-color);
 }
 .tool-answer-icon{
   font-size: small;
