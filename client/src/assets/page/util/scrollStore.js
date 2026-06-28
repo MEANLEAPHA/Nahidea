@@ -1,18 +1,19 @@
 // src/assets/util/scrollStore.js
 const STORAGE_KEY = 'home_scroll_data';
 
-export function saveScroll(key, value) {
-  try {
-    const data = {
-      y: value.y,
-      page: value.page,
-      timestamp: Date.now()
-    };
-    localStorage.setItem(`${STORAGE_KEY}_${key}`, JSON.stringify(data));
-  } catch (e) {
-    console.warn('Failed to save scroll position:', e);
-  }
-}
+const saveCurrentScroll = () => {
+  saveScroll("home", {
+    y: scrollYRef.current,
+    page: pageRef.current,
+  });
+
+  console.log(
+    "Saving scroll",
+    scrollYRef.current,
+    "page",
+    pageRef.current
+  );
+};
 
 export function getScroll(key) {
   try {

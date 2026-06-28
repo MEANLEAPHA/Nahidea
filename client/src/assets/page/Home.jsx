@@ -85,6 +85,9 @@ export default function Home() {
   const postsRef = useRef(posts);
   const isNavigating = useRef(false);
 
+  const scrollYRef = useRef(0);
+  const fetchingRef = useRef(false);
+
   // Update refs when state changes
   useEffect(() => {
     pageRef.current = page;
@@ -124,6 +127,10 @@ export default function Home() {
     loadInitial();
   }, []);
 
+  useEffect(() => {
+    scrollYRef.current = window.scrollY;
+  }, []);
+
   // RESTORE SCROLL
   useLayoutEffect(() => {
     if (initialLoadDone && posts.length > 0 && !hasRestoredScroll.current) {
@@ -139,6 +146,8 @@ export default function Home() {
           top: scrollY,
           behavior: 'instant'
         });
+        
+        scrollYRef.current = scrollY;
 
         requestAnimationFrame(() => {
           const currentScroll = window.scrollY;
@@ -179,13 +188,16 @@ export default function Home() {
 
     // Throttled save while scrolling
     let scrollTimeout = null;
-    const handleScroll = () => {
+   const handleScroll = () => {
+      scrollYRef.current = window.scrollY;
+
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
+
       scrollTimeout = setTimeout(() => {
         saveCurrentScroll();
-      }, 300);
+      }, 150);
     };
 
     // Save on visibility change (tab switch)
@@ -218,16 +230,17 @@ export default function Home() {
     window.addEventListener('scroll', handleScroll);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     document.addEventListener('click', handleClick, true);
-
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      document.removeEventListener('click', handleClick, true);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener("click", handleClick, true);
+
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
-      // Save on unmount with latest values
+
+      // save last known position
       saveCurrentScroll();
     };
   }, []); // Empty dependency array - we use refs for latest values
@@ -258,7 +271,9 @@ export default function Home() {
 
   // FETCH POSTS - improved version
   const fetchPosts = async (nextPage = 1) => {
-    if (fetching || loading) return;
+    if (fetchingRef.current) return;
+
+fetchingRef.current = true;
 
     try {
       setFetching(true);
@@ -290,9 +305,10 @@ export default function Home() {
       setError("Failed to load post");
       console.error('Fetch error:', error);
     } finally {
-      setLoading(false);
-      setFetching(false);
-    }
+  fetchingRef.current = false;
+  setLoading(false);
+  setFetching(false);
+}
   };
 
 
