@@ -325,6 +325,11 @@ fetchingRef.current = true;
           <>
                 <div className='post-caption' onClick={ () => {
 
+                   saveScroll("home", {
+                      y: scrollYRef.current,
+                      page: pageRef.current,
+                    });
+
                     const HisData = {
                       id: post.id,
                       title: data.title,
@@ -345,7 +350,6 @@ fetchingRef.current = true;
                     }
 
                     localStorage.setItem("recentPostHis", JSON.stringify(newList));
-
                     navigate(`/aboutpost/${post.id}`);
                   }}>
                     <p>{data.title}</p>
