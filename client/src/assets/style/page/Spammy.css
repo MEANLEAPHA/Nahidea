@@ -395,12 +395,32 @@ border-radius: 8px !important;
   height: auto !important;
 
 }
+
 .customsp__option--is-focused {
   outline: none !important;
   border: none !important;
 }
 
-
+.sent-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.delete-all-spam-btn{
+  background: none;
+  color:var(--font-color);
+  opacity: 0.9;
+  border: none;
+  cursor: pointer;
+}
+.delete-all-spam-btn:hover{
+  color: tomato;
+}
+.view-status{
+ display: flex;
+ gap: 5px;
+ align-items: center;
+}
 @media (max-width: 900px) {
   .spam-header{
     flex-direction: column;
