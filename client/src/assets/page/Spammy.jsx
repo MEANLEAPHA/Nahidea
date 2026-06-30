@@ -20,6 +20,7 @@ const getAuthHeaders = () => ({
 
 export default function Spammy() {
   const [inbox, setInbox] = useState([]);
+  
   const [activeSpam, setActiveSpam] = useState(null);
 
   // The actually-selected user to send spam to (must come from a dropdown pick)
@@ -124,6 +125,7 @@ export default function Spammy() {
       toast.error("Couldn't load sent spam");
     }
   };
+
 
   const fetchInbox = async () => {
     try {
@@ -236,7 +238,7 @@ export default function Spammy() {
   };
 
   // Wipe the whole inbox (soft delete on the receiver's side)
-  const handleDeleteAll = async () => {
+  const handleDeleteAll = async (type) => {
     if (deletingAll || inbox.length === 0) return;
 
     const confirmed = window.confirm(
@@ -247,14 +249,19 @@ export default function Spammy() {
     setDeletingAll(true);
     try {
       await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/delete-all?type=inbox`,
+        `${import.meta.env.VITE_SERVER_URL}/api/spam/delete-all?type=${type}`,
         getAuthHeaders()
       );
 
-      setInbox([]);
-      setUnreadCount(0);
-      setActiveSpam(null);
-      toast.success("Inbox cleared");
+      if(type === "sent") {
+        setSentSpam([]);
+        toast.success("Spam Sent Cleared");
+      }else{
+        setInbox([]);
+        setUnreadCount(0);
+        setActiveSpam(null);
+        toast.success("Inbox cleared");
+      }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Couldn't clear inbox");
     } finally {
@@ -262,31 +269,7 @@ export default function Spammy() {
     }
   };
 
-  const handleDeleteAllSent = async () => {
-    if (deletingAll || inbox.length === 0) return;
 
-    const confirmed = window.confirm(
-      "Delete your entire inbox? This can't be undone."
-    );
-    if (!confirmed) return;
-
-    setDeletingAll(true);
-    try {
-      await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/delete-all?type=sent`,
-        getAuthHeaders()
-      );
-
-      setInbox([]);
-      setUnreadCount(0);
-      setActiveSpam(null);
-      toast.success("Inbox cleared");
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Couldn't clear inbox");
-    } finally {
-      setDeletingAll(false);
-    }
-  };
 
   // Delete a single inbox item. `e.stopPropagation()` is required here —
   // this button lives inside the spam-card, which has its own onClick to
@@ -356,7 +339,7 @@ export default function Spammy() {
           <button
             type="button"
             className="spam-right-btn"
-            onClick={handleDeleteAll}
+            onClick={handleDeleteAll("inbox")}
             disabled={deletingAll || inbox.length === 0}
           >
             <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />{" "}
@@ -519,7 +502,7 @@ export default function Spammy() {
       <div className="sent-panel">
         <div className="sent-header">
           <h3 className="spam-h3-label">Your Sent Spam</h3>
-          <button type='button' className="delete-all-spam-btn" onClick = {() => handleDeleteAllSent()}>Clear All</button>
+          <button type='button' className="delete-all-spam-btn" onClick = {handleDeleteAll('sent')} disabled={deletingAll || sentSpam.length === 0}>Clear All</button>
         </div>
         
         {sentSpam.length === 0 && <div className="empty-state">No spam sent yet</div>}
