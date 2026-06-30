@@ -18,10 +18,34 @@
   margin-bottom: 5px;
 }
 
-.spam-header h1 {
+.spam-header-right{
+ display:flex;
+ align-items: center;
+ gap: 10px;
+ justify-content: end;
+ width: 70%;
+ height: auto;
+ margin:0;
+ padding: 0;
+
+}
+.spam-right-btn{
+  background: var(--back-con);
+  color: var(--font-color);
+  padding: 8px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+  border-radius: 30px;
+}
+.spam-right-btn:hover{
+  opacity: 1;
+  transform: scale(0.95);
+}
+/* .spam-header h1 {
   font-size: 30px;
   margin: 0;
-}
+} */
 
 .spam-badge {
   background: var(--back-con);
@@ -115,7 +139,7 @@
 }
 
 .spam-card {
-  border: 1px solid #ececec;
+  border: 1px solid var(--secondary-color);
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 12px;
@@ -131,7 +155,7 @@
 }
 
 .spam-card.unread {
-  border-left: 5px solid #ff6b57;
+  border-left: 5px solid skyblue;
 }
 
 .spam-card h3 {
@@ -149,15 +173,48 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: red;
+  background:skyblue;
 }
-
+.inbox-spam-div{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.inbox-user-img{
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.inbox-user-h3{
+  margin: 0;
+}
+.inbox-user-p{
+  margin: 0;
+}
 .empty-state {
   text-align: center;
   padding: 40px;
   color: #999;
 }
 
+.inbox-spam-delete{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.detete-one-spam-btn{
+  background: none;
+  color: var(--font-color);
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+}
+.detete-one-spam-btn:hover{
+  color:tomato;
+  transform: scale(0.9);
+}
 .spam-overlay {
   position: fixed;
   inset: 0;
@@ -213,22 +270,33 @@
   padding:14px;
   margin-bottom:12px;
 
-  border:1px solid #ececec;
+  border:1px solid var(--secondary-color);
   border-radius:14px;
 }
 
-.sent-card h4{
+.sent-card .spam-h4{
   margin:0 0 4px;
   text-transform:capitalize;
 }
 
-.sent-card p{
+.sent-card .spam-p{
   margin:0;
   color:#777;
 }
-
+.sent-data-div{
+  display:flex;
+  gap: 10px;
+}
+.sent-gif-holder{
+  width: 50px;
+  height: auto;
+  min-height: 50px;
+  object-fit: cover;
+ border-radius: 5px;
+  max-height: 70px;
+}
 .viewed-badge{
-  background:#dff6df;
+
   color:#1b8f1b;
 
   padding:8px 12px;
@@ -238,7 +306,7 @@
 }
 
 .pending-badge{
-  background:#fff4d7;
+ 
   color:#d18d00;
 
   padding:8px 12px;
@@ -255,24 +323,25 @@
   font-family: sans-serif !important;
   height: auto;
   font-size: small !important;
-  min-height: 40px !important;
-  
-  
-   
+  min-height: 70px !important;
+  max-height: 70px !important;
   color: var(--font-color) !important;
   padding:0px !important;
+  padding-left: 10px !important;
 }
 /* Selected value text */
 .customsp__single-value {
   color: var(--font-color) !important;
   margin: 0 !important;
+  height: auto !important;
 }
 
 /* Placeholder text */
 .customsp__placeholder {
-  color: var(--font-color) !important;
+  color: grey !important;
   opacity: 0.7; /* optional */
   margin: 0 !important;
+  height: auto !important;
 }
 
 /* Input text when typing */
@@ -280,12 +349,14 @@
   color: var(--font-color) !important;
   margin: 0 !important;
   padding:0px !important;
+  height: auto !important;
 
 }
 .customsp__control--is-focused {
   outline: none !important;
   border: 3px solid var(--secondary-color) !important;
   box-shadow: none !important; /* optional glow */
+  height: auto !important;
     
 }
 /* Dropdown menu */
@@ -300,6 +371,7 @@
 .customsp__option {
   padding: 10px !important;
   font-family: sans-serif !important;
+  height: auto !important;
   color: var(--font-color) !important;
   border-radius: 10px !important;
    background: none !important;
@@ -317,16 +389,29 @@ background: var(--background-color) !important;
 }
 .customsp__option--is-selected {
 transform: scale(0.9);
-border-radius: 20px !important;
-  background-color: var(--primary-color) !important;
+border-radius: 8px !important;
+  background-color: var(--secondary-color) !important;
   color: var(--font-color) !important;
+  height: auto !important;
+
 }
 .customsp__option--is-focused {
   outline: none !important;
   border: none !important;
 }
 
+
 @media (max-width: 900px) {
+  .spam-header{
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+  .spam-header-right{
+     justify-content: start;
+     margin-bottom: 10px;
+     width: 100%;
+  }
   .spam-dashboard {
   padding: 10px 20px;
   width: 100%;

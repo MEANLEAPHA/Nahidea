@@ -12,13 +12,34 @@ import axios from "axios";
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
 
+const token = localStorage.getItem("token");
+
 const Aside = (props) => {
    
-   
+    const [spamUnreadCount, setSpamUnreadCount] = useState(0);
     const [chatUnreadCount, setChatUnreadCount] = useState(0);
+
+    const fetchUnReadSpam = async () => {
+        try{
+
+            const res = await axios.get(
+                `${process.env.VITE_SERVER_URL}/api/spam/unread-count`,
+                {
+                    headers : {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            setSpamUnreadCount(res.data.unread || 0)
+
+        }catch(err){
+            console.log(err);
+        }
+    }
      const fetchUnreadCount = async () => {
         try {
-            const token = localStorage.getItem("token");
+            
 
             const res = await axios.get(
             `${process.env.VITE_SERVER_URL}/api/chat/unread-count`,
@@ -30,22 +51,31 @@ const Aside = (props) => {
             );
 
             setChatUnreadCount(
-            res.data.unreadCount || 0
+            res.data.unreadCounts || 0
             );
         } catch (err) {
             console.log(err);
         }
         };
+
+
         useEffect(() => {
         fetchUnreadCount();
-
-        const interval = setInterval(
-            fetchUnreadCount,
-            100000
+        fetchUnReadSpam();
+        const intervalChat = setInterval(
+            fetchUnreadCount, 100000
+        );
+        const intervalSpam = setInterval(
+            fetchUnReadSpam, 100000
         );
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(intervalChat);
+            clearInterval(intervalSpam);
+        }
         }, []);
+
+        
     // Mobile responsive on Aside
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -78,7 +108,8 @@ const Aside = (props) => {
         return(
             <ul className="max-ul">
                 <AppendMain
-                    chatUnreadCount={chatUnreadCount}
+                    chatUnreadCount = { chatUnreadCount }
+                    chatUnreadSpam = { spamUnreadCount }
                 />
                 <AppendUserTool />
                 <AppendExplore />
@@ -92,7 +123,8 @@ const Aside = (props) => {
     return (
         <ul className="min-ul">
         <AppendMinAside
-            chatUnreadCount={chatUnreadCount}
+            chatUnreadCount = { chatUnreadCount }
+            chatUnreadSpam = { spamUnreadCount }
         />
         </ul>
     );
@@ -101,24 +133,17 @@ const Aside = (props) => {
     if (isMobile) {
         return (
             <aside style={{ display: props.append ? "block" : "none" }} className='max-aside'>
-               
-                        <MaxAsideUl />
-            
+                <MaxAsideUl />
             </aside>
         );
     }
-
-
-    
     return (
        <aside className={showMaxAside ? "max-aside" : "min-aside"}>
-                {showMaxAside ? <MaxAsideUl /> : <SmallAsideUl />}
+            {showMaxAside ? <MaxAsideUl /> : <SmallAsideUl />}
             <button className="btn-col" onClick={toggleAside}>{showMaxAside ? <VerticalRightOutlined style={{color:"grey", fontSize:"large"}}/> : <VerticalLeftOutlined style={{color:"grey", fontSize:"large"}}/>} </button>
         </aside>
     );
 };
-
-
 
 const MinInfo = [
     {
@@ -167,31 +192,33 @@ const MinCard = ({a, icon, unreadCount}) => {
 }
 
     const AppendMinAside = ({
-    chatUnreadCount
+    chatUnreadCount, chatUnreadSpam
     }) => {
     return MinInfo.map(item => (
         <MinAside
         key={item.id}
         {...item}
-        unreadCount={
+        unreadCount = {
             item.a === "/chat"
             ? chatUnreadCount
+            : 0
+        }
+        chatUnreadSpam = {
+            item.a === "/spammy"
+            ? chatUnreadSpam 
             : 0
         }
         />
     ));
     };
 
-    const MinAside = ({
-    a,
-    icon,
-    unreadCount
-    }) => {
+    const MinAside = ({  a, icon, unreadCount, chatUnreadSpam }) => {
     return (
         <MinCard
-        a={a}
-        icon={icon}
-        unreadCount={unreadCount}
+        a = { a }
+        icon = { icon }
+        unreadCount = { unreadCount }
+        chatUnreadSpam = { chatUnreadSpam }
         />
     );
     };
@@ -200,7 +227,8 @@ const MinCard = ({a, icon, unreadCount}) => {
     icon,
     label,
     classNameBtn,
-    unreadCount
+    unreadCount,
+    unreadSpam
     }) => {
     const navigate = useNavigate();
     return(
@@ -213,6 +241,11 @@ const MinCard = ({a, icon, unreadCount}) => {
                 {unreadCount > 0 && (
                     <span className="chat-aside-badge">
                     {unreadCount}
+                    </span>
+                )}
+                {unreadSpam > 0 && (
+                    <span className="chat-aside-badge">
+                    {unreadSpam}
                     </span>
                 )}
                 <div>
@@ -236,7 +269,7 @@ const Mains= [
 ];
 
 
-const AppendMain = ({ chatUnreadCount }) => {
+const AppendMain = ({ chatUnreadCount, chatUnreadSpam }) => {
   return Mains.map(item => (
     <Main
       key={item.id}
@@ -246,6 +279,12 @@ const AppendMain = ({ chatUnreadCount }) => {
           ? chatUnreadCount
           : 0
       }
+      unreadSpam = {
+        item.a === "/spammy"
+        ? chatUnreadSpam
+        : 0
+      }
+
     />
   ));
 };
@@ -255,7 +294,8 @@ const Main = ({
   icon,
   label,
   classNameBtn,
-  unreadCount
+  unreadCount,
+  unreadSpam
 }) => {
   return (
     <Card
@@ -264,6 +304,7 @@ const Main = ({
       label={label}
       classNameBtn={classNameBtn}
       unreadCount={unreadCount}
+      unreadSpam = {unreadSpam}
     />
   );
 };

@@ -171,14 +171,17 @@ export const spammy_options = [
   {
     value: "poke",
     label: "Poke",
+    img: "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODNycmo3NHdiOTF1Mmo4anY3OWlleTg2MnR3MHB4Zm40N3VnbDU3YSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PkR8gPgc2mDlrMSgtu/200.gif",
   },
   {
     value: "goodnight",
     label: "Good Night",
+    img: "https://media.tenor.com/LBppk55tCvsAAAAM/meme.gif",
   },
   {
     value: "sendlove",
     label: "Send Love",
+    img: "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycncyOG5hZTdxc3lrMTB0NzJkem4waHl0bWlqMHBpZDF2MmphMnplYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif",
   },
 ]
 export const confession_options = [
