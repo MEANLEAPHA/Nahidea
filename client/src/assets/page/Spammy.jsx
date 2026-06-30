@@ -285,7 +285,10 @@ export default function Spammy() {
         getAuthHeaders()
       );
 
-      if(type === 'sent'){
+      if(type === 'sent'){   
+        setSentSpam((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
+      }
+      else{
         setInbox((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
         if (!spam.is_viewed) {
           setUnreadCount((prev) => Math.max(prev - 1, 0));
@@ -293,9 +296,7 @@ export default function Spammy() {
         if (activeSpam?.spam_id === spam.spam_id) {
           setActiveSpam(null);
         }
-      }
-      else{
-        setSentSpam((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
+
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Couldn't delete that spam");
@@ -368,7 +369,6 @@ export default function Spammy() {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                // Typing again invalidates any prior selection
                 setReceiverId(null);
               }}
               onFocus={() => {
