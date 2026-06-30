@@ -2,7 +2,6 @@
 import React,{ useState, useEffect, useRef, memo } from 'react';
 import { useNavigate, useOutletContext } from "react-router-dom";
 
-
 import Select from "react-select";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -371,13 +370,10 @@ export default function Questiion(){
               postTag={tags} selectType={selectType?.value}
               isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} selectTypeIcon={selectedIcon}
               post_type='question'
-
               questionType={questionType?.value}
               singleChoices={singleChoices}
-
               multipleChoices={multipleChoices}
               includeAllAbove={includeAllAbove}
-
               min={min}
               max={max}
               step={step}
@@ -395,40 +391,4 @@ export default function Questiion(){
   );
 }
 
-// const QuestionAnswerPreview = ({ questionType }) => {
-//   switch (questionType) {
-//     case "openend":
-//       return null;
-
-//     case "closedend":
-//       return <div>yes/no</div>;
-
-//     case "range":
-//       return <div>range</div>;
-
-//     case "singlechoice":
-//       return <div>singlechoice</div>;
-
-//     case "multiplechoice":
-//       return <div>multiplechoice</div>;
-
-//     case "rankingorder":
-//       return <div>rankingorder</div>;
-
-//     case "rating":
-//       return <div>rating</div>;
-
-//     default:
-//       return null;
-//   }
-// };
-// const questionOptions = [
-//   { value: "openend", label: "Open End" },
-//   { value: "closedend", label: "Closed End" },
-//   { value: "singlechoice", label: "Single Choice" },
-//   { value: "multiplechoice", label: "Multiple Choice" },
-//   { value: "range", label: "Range" },
-//   { value: "rating", label: "Rating" },
-//   { value: "rankingorder", label: "Ranking Order" },
-// ];
 

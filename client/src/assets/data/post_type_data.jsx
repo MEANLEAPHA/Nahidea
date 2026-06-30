@@ -4,6 +4,12 @@ import {
   faHeart,
   faSmile,
   faSadTear,
+  faHandBackFist,
+  faFaceGrinHearts,
+  faThumbsUp,
+  faFaceSurprise,
+  faFlag,
+  faThumbsDown,
 } from "@fortawesome/free-regular-svg-icons";
 
 
@@ -161,6 +167,20 @@ export const content_options = [
   },
 ];
 
+export const spammy_options = [
+  {
+    value: "poke",
+    label: "Poke",
+  },
+  {
+    value: "goodnight",
+    label: "Good Night",
+  },
+  {
+    value: "sendlove",
+    label: "Send Love",
+  },
+]
 export const confession_options = [
   {
     value: "secret_crush",
@@ -471,9 +491,13 @@ export const iconOptions = [
   { id: 1, name: "star", icon: faStar },
   { id: 2, name: "heart", icon: faHeart },
   { id: 3, name: "happy", icon: faSmile },
-  { id: 4, name: "crying", icon: faSadTear },
+  { id: 4, name: "faceheart", icon: faFaceGrinHearts },
+  { id: 5, name: "wow", icon: faFaceSurprise },
+  { id: 6, name: "crying", icon: faSadTear },
+  { id: 7, name: "like", icon: faThumbsUp },
+  { id: 8, name: "dislike", icon: faThumbsDown },
+  { id: 9, name: "flag", icon: faFlag },
 ];
-
 
 
 export const question_type = [

@@ -4,12 +4,12 @@ import { useNavigate, useOutletContext} from "react-router-dom";
 
 // ant import
 import { Skeleton, Menu, Switch, Dropdown, Space  } from 'antd';
-import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
+import{SignatureOutlined, FolderOpenOutlined, BorderOutlined} from '@ant-design/icons';
 
 // fontAwesome import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faHeart, faMessage} from "@fortawesome/free-regular-svg-icons";
-import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar, faRankingStar} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faCircle, faHeart, faMessage} from "@fortawesome/free-regular-svg-icons";
+import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar, faRankingStar, faPen} from "@fortawesome/free-solid-svg-icons";
 
 // util import
 import { AnonymousName, AnonymousProfile } from "../anonymousTokens";
@@ -90,204 +90,96 @@ export default function PreviewPost ({
     function QuesitionType () {  
     switch (questionTypeValue) {
         case "openend":
-            return <div className="question-preview-card">
-                        <div className="question-preview-header question-preview-header-open-end">
-                            <span className="question-badge openend-badge">
-                               <SignatureOutlined /> Write Your Answer
-                            </span>
-                            <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                          </div>
-                    </div>;
+            return null;
         case "closedend":
-            return <div className="closed-preview-card question-preview-card">
-                        <div className="question-preview-header">
-                            <span className="question-badge yesno-badge">
-                             <FontAwesomeIcon icon={faThumbsUp}/> Yes / No <FontAwesomeIcon icon={faThumbsDown}/>
-                            </span>
-                            <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                          </div>
-
-                          <div className="yesno-div">
-                            <div className="yes-chip">
-                              Yes
-                            </div>
-
-                            <div className="no-chip">
-                              No
-                            </div>
+            return  <div className="yesno-div render-qa-post">
+                        <div className="yes-chip">
+                            Yes
+                        </div>
+                        <div className="no-chip">
+                            No
                         </div>
                     </div>;
         case "singlechoice":
-            return <div className="question-preview-card">
-                    {/* {singleChoices.map((singleChoice) => (
-                        <div className='singlechoice-preview-option'>
-                            <input type="radio" value={singleChoice} name="singlechoice"/>
-                                <label htmlFor={singleChoice}>{singleChoice}</label>
-                        </div> 
-                    ))} */}
-                        <div className="question-preview-header">
-                        <span className="question-badge single-badge"><FontAwesomeIcon icon={faHandPointer} /> Pick One</span>
-                        <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                        </div>
-
-                        <div className="question-preview-options two-grid">
-                        {singleChoices
-                        .slice(0, singleChoices.length > 4 ? 3 : 4)
-                        .map((c, i) => (
-                            <div key={i} className="option-chip">
-                            {c}
-                            </div>
-                        ))}
-
+            return <ul className='choice-ul'>
+                        {
+                            singleChoices.slice(0, singleChoices.length > 4 ? 3 : 4).map(
+                            (c, i) => (
+                                <li key={i} className = 'choice-li'>
+                                <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/> {c}
+                                </li>
+                            )
+                            )
+                        }
                         {singleChoices.length > 4 && (
-                        <div className="option-chip more-chip">
-                            +{singleChoices.length - 3} more
+                            <li className = 'choice-li'>
+                                <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/>  +{singleChoices.length - 3} more
+                            </li>
+                        )}
+                    </ul>;
+        case "multiplechoice":
+            return  <ul className ='choice-ul'>
+                        {
+                        multipleChoices?.slice(0, multipleChoices?.length > 4 ? 3 : 4).map((c,i) => (
+                            <li key={i} className ='choice-li'>
+                            <BorderOutlined className='tool-answer-icon'/>  {c}
+                            </li> 
+                        ))
+                        }
+                        {multipleChoices?.length > 4 && (
+                        <div className ='choice-li'>
+                            <BorderOutlined className='tool-answer-icon'/> +{multipleChoices?.length - 3} more
                         </div>
                         )}
-
-                        </div>
-                    </div>;
-        case "multiplechoice":
-            return <div className="question-preview-card">
-                    {/* {multipleChoices.map((multipleChoice) => (
-                        <div className='multiplechoice-preview-option'>
-                            <input type="checkbox" value={multipleChoice} name="multiplechoice"/>
-                                <label htmlFor={multipleChoice}>{multipleChoice}</label>
-                        </div> 
-                    ))}
-                    {includeAllAbove === 1 && <div className='multiplechoice-preview-option'>
-                        <input type="checkbox" value="All above" name="multiplechoice"/>
-                            <label htmlFor="All above">All above</label>
-                    </div>} */}
-                        <div className="question-preview-header">
-                            <span className="question-badge multiple-badge">
-                             <FontAwesomeIcon icon={faHandPeace} /> Pick Multiple
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                          </div>
-
-                         <div className="question-preview-options two-grid">
-                            {multipleChoices
-                            .slice(0, multipleChoices.length > 4 ? 3 : 4)
-                            .map((c, i) => (
-                                <div key={i} className="option-chip">
-                                {c}
-                                </div>
-                            ))}
-
-                            {multipleChoices.length > 4 && (
-                            <div className="option-chip more-chip">
-                                +{multipleChoices.length - 3} more
-                            </div>
-                            )}
-
-                        </div>
-                    </div>;
+                    </ul>
+                    
         case "range":
-            return <div className= "question-preview-card">
-
-                <div className="question-preview-header">
-                            <span className="question-badge range-badge">
-                            <FontAwesomeIcon icon={faLocationCrosshairs} /> Range
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                          </div>
-                          <div className='range-preview-option'>
-                                  <label id="min-label">{min}</label>
-
-                <div className="range-wrapper">
-                    <input
-                    type="range"
-                    min={min}
-                    max={max}
-                    step={step}
-                    value={rangeValue}
-                    onChange={(e) => setRangeValue(Number(e.target.value))}
-                    />
-                        <div
-                    className="custom-thumb"
-                    style={{
-                        left: `${((rangeValue - min) / (max - min)) * 100}%`
-                    }}
-                    >
-                    {rangeValue}
-                    </div>
-                </div>
-                <label id="max-label">{max}</label>
-                          </div>
-              
-
-                </div>
-        case "rating":
-            return  <div className="question-preview-card">
-                 <div className="question-preview-header">
-                            <span className="question-badge rating-badge">
-                              <FontAwesomeIcon icon={faStar} /> Rate
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                          </div>
-                {Array.from({length:5}).map((_,i)=>(
-                    <FontAwesomeIcon 
-                    key={i}
-                    icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
-                    style={{ fontSize: "24px", color: "grey" }}
-                    />
-                ))}
-            </div>;
-        case "rankingorder":
-            return <div className="question-preview-card">
-                    {/* {rankingChoices.map((rankingChoice) => (
-                        <div className='rankingorder-preview-option'>
-                            <input value={rankingChoice} name="rankingorder" disabled/>
-                                <label htmlFor={rankingChoice}>{rankingChoice}</label>
-                        </div>
-                    ))}; */}
-                    <div className="question-preview-header">
-                            <span className="question-badge rank-badge">
-                              <FontAwesomeIcon icon={faRankingStar} /> Move the Rankings
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Open
-                            </span>
-                          </div>
-
-                          <div className="question-preview-options two-grid">
-                                {rankingChoices
-                                    .slice(0, rankingChoices.length > 4 ? 3 : 4)
-                                    .map((item, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="option-chip rank-chip"
-                                    >
-                                        <span className="rank-number">
-                                        #{idx + 1}
-                                        </span>
-
-                                        <span className="rank-text">
-                                        {item}
-                                        </span>
-                                    </div>
-                                    ))}
-
-                                {rankingChoices.length > 4 && (
-                                    <div className="option-chip more-chip">
-                                    +{rankingChoices.length - 3} more
-                                    </div>
-                                )}
+            return  <div className='range-preview-option'>
+                        <label id="min-label">{min}</label>
+                        <div className="range-wrapper">
+                            <input
+                            type="range"
+                            min={min}
+                            max={max}
+                            step={step}
+                            value={rangeValue}
+                            onChange={(e) => setRangeValue(Number(e.target.value))}
+                            />
+                                <div
+                            className="custom-thumb"
+                            style={{
+                                left: `${((rangeValue - min) / (max - min)) * 100}%`
+                            }}
+                            >
+                            {rangeValue}
                             </div>
-                    </div>;
+                        </div>
+                        <label id="max-label">{max}</label>
+                    </div>
+        case "rating":
+            return  <div className='render-qa-post'>
+                        {Array.from({length:5}).map((_,i)=>(
+                            <FontAwesomeIcon 
+                            key={i}
+                            icon={iconOptions.find((opt) => opt.id === ratingIconId)?.icon}
+                            style={{ fontSize: "24px", color: "grey" }}
+                            />
+                        ))}
+                    </div>
+
+        case "rankingorder":
+            return  <ul className='choice-ul'>
+                        {rankingChoices?.slice(0, rankingChoices?.length > 4 ? 3 : 4).map((item, i) => (
+                        <li className = 'choice-li'>
+                            {i + 1}. {item}
+                        </li>
+                        ))}
+                        {rankingChoices?.length > 4 && (
+                        <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                            +{rankingChoices?.length - 3} more
+                        </li>
+                        )}
+                    </ul>;
     default:
         return null;
     }
@@ -321,11 +213,11 @@ export default function PreviewPost ({
                     titleValue === "" && postTagsValue.length === 0 ? <div className='post-skeleton-holder'>
                         <Skeleton active style={{marginTop:"10px"}}/></div> : (
                     <>
-                      <div className='post-body-text'>
-                            {questionTypeValue !== "" && QuesitionType()}
-                        </div>
                         <div className='post-caption'>
                             <p>{titleValue}</p>
+                        </div>
+                        <div className='post-body-text'>
+                            {questionTypeValue !== "" && QuesitionType()}
                         </div>
                         {
                             textBodyValue && (
@@ -347,18 +239,17 @@ export default function PreviewPost ({
                 }
                 <div  className='post-thumbnail'>   
                     {titleValue === "" && postTagsValue.length === 0 ?
-                   <Skeleton.Image active/>
-                            
-                            :
-                            <MediaPreview files={filesMediaValues}/>
+                        <Skeleton.Image active/>
+                        :
+                        <MediaPreview files={filesMediaValues}/>
                     }
-            
                 </div>
             </div>
 
             <div className='post-footer'>
                 <div className='post-footer-left'>
                     <button className='button-action-footer'><FontAwesomeIcon icon={faHeart} className='button-action-footer-icon'/> <p><span>0</span><span className='count-label'> Like</span></p></button>
+                    {post_type === "question" && <button className='button-action-footer'><FontAwesomeIcon icon={faPen} className='button-action-footer-icon'/><p><span className='count-label'> Answer</span></p></button>}
                     <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>0</span><span className='count-label'> Comment</span></p></button>
                 </div>
                 <div className='post-footer-right'>

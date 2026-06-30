@@ -1,13 +1,8 @@
 import { SignatureOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons';
 export default function  OpenEnd() {
   return(
-    // <div className="question-preview-card" style={{border: "none"}}>
-    //     <div className="question-preview-header question-preview-header-open-end">
-    //         <span className="question-badge openend-badge">
-    //           <SignatureOutlined /> Write Your Answer
-    //         </span>
-    //       </div>
-    // </div>
     null
   )
 };

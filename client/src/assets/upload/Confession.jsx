@@ -9,7 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { confession_options } from "../data/post_type_data";
 
 // util import
-import {MoreFieldsConAndQues} from "../util/moreFlieds";
+import {MoreFieldsCon} from "../util/moreFlieds";
 import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import { useAnonymousTokens, AnonymousTokensCoolDown} from "../util/anonymousTokens";
@@ -191,8 +191,7 @@ export default function Confession() {
                 {title.length}/300
               </div>
             </div>
-
-            <MoreFieldsConAndQues
+            <MoreFieldsCon
               tags={tags}
               setTags={setTags}
               isAnonymous={isAnonymous}

@@ -11,42 +11,35 @@ MULTIPLE CHOICE
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 /* ROW */
 .multiple-choice-row {
-  width: 100%;
-   border: 1px solid var(--secondary-color);
-    border-radius: 14px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
   overflow: hidden;
+  justify-content: center;
 }
 
+.square-div{
+  
+}
 /* INPUT */
 .multiple-choice-input {
   flex: 1;
-
   height: 42px;
   min-height: 42px;
-
-  border: 1px solid var(--secondary-color);
-
-  background: var(--background-color);
-
+  background: none;
   border: none;
-
-  padding: 0 18px;
-
+  padding: 0px;
   font-size: 15px;
+  border-bottom: 1px solid var(--secondary-color);
   font-weight: 500;
-
   color: var(--font-color);
-
   outline: none;
-
   transition: 0.25s ease;
   box-sizing: border-box;
 }
@@ -55,38 +48,25 @@ MULTIPLE CHOICE
   color: gray;
 }
 
-.multiple-choice-input:focus {
-  background: var(--back-con);
-}
 
 /* DELETE */
 .btn-delete-multiple-choice {
   min-width: 7%;
   height: auto;
-
   border-radius: 14px;
-
   border: none;
-
   background: none;
-
   color: var(--font-color);
-
   opacity: 0.8;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition: 0.25s ease;
 }
 
 .btn-delete-multiple-choice:hover {
   color: tomato;
-
   opacity: 1;
-
   transform: translateY(-2px);
 }
 
@@ -96,13 +76,10 @@ MULTIPLE CHOICE
 }
 
 .all-above-input {
-  background: rgba(253, 118, 72, 0.08);
-
-  border: 1px dashed var(--primary-color);
-
-  color: var(--primary-color);
-
-  font-weight: 700;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--secondary-color);
+  color: var(--font-color);
 
   cursor: not-allowed;
 }
@@ -111,46 +88,32 @@ MULTIPLE CHOICE
 .multiple-choice-divider {
   width: 100%;
   height: 1px;
-
   background: var(--secondary-color);
-
   margin: 24px 0;
 }
 
 /* ACTIONS */
 .multiple-choice-actions {
   width: 100%;
-
   display: flex;
   align-items: center;
   gap: 12px;
-
-
-  margin-top: 10px;
+  margin-top: 20px;
   flex-wrap: wrap;
 }
 
 /* BUTTON */
 .btn-multiple-choice {
   height: 42px;
-
   padding: 0 20px;
-
   border-radius: 14px;
-
   border: 1px solid var(--secondary-color);
-
   background: none;
-
   color: var(--font-color);
-
   opacity: 0.8;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition: 0.25s ease;
 }
 

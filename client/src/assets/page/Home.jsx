@@ -456,7 +456,6 @@ fetchingRef.current = true;
                                 max={data.range_max}
                                 step={data.step}
                                 value={data.default_range_value}
-                                onChange={(e) => setRangeValue(Number(e.target.value))}
                                 />
                                     <div
                                 className="custom-thumb"
@@ -484,7 +483,7 @@ fetchingRef.current = true;
                             }
                             {data.choices?.length > 4 && (
                               <li className = 'choice-li'>
-                                 <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/>  +{data.choiced?.length - 3} more
+                                 <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/>  +{data.choices?.length - 3} more
                               </li>
                             )}
                         </ul>
@@ -508,18 +507,18 @@ fetchingRef.current = true;
                       )}
 
                       {data.question_type === "rankingorder" && (
-                         <ul className='choice-ul'>
+                        <ul className='choice-ul'>
                               {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
                                 <li className = 'choice-li'>
                                     {i + 1}. {item.item_text}
                                 </li>
                               ))}
                               {data.items?.length > 4 && (
-                                <li className = 'choice-li'>
-                                  4. +{data.items?.length - 3} more
+                                <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                                  +{data.items?.length - 3} more
                                 </li>
                               )}
-                            </ul>
+                          </ul>
                       )}
 
                       {data.question_type === "rating" && (

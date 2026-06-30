@@ -1,6 +1,6 @@
 import "../../style/upload/questionType/singlechoice.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 export default function SingleChoice ({ value, onChange}) {
   const maxChoices = 10;
@@ -39,6 +39,12 @@ export default function SingleChoice ({ value, onChange}) {
         <div className="single-choice-parent">
   {value.map((choice, index) => (
     <div key={index} className="single-choice-row">
+      <div
+        className="square-div"
+      >
+        <FontAwesomeIcon icon={faCircle} />
+      </div>
+
       <input
         type="text"
         className="single-choice-input"

@@ -1,5 +1,6 @@
 import React,{ useState, useEffect, useRef, memo } from 'react';
 import {BrowserRouter, Routes, Route, Outlet, useNavigate, Navigate} from 'react-router-dom';
+import { Toaster } from "react-hot-toast";
 
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -401,9 +402,7 @@ useEffect(() => {
       ? onlineUsers.includes(String(user.id))
       : false;
 
-  // =========================================
-  // RENDER
-  // =========================================
+  
   return (
     <>
       <Header
@@ -411,6 +410,15 @@ useEffect(() => {
         onToggleAside={toggleAside}
         onToggleTheme={toggleTheme}
         currentTheme={darkMode}
+      />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: darkMode ? "#1f1f1f" : "#ffffff",
+            color: darkMode ? "#ffffff" : "#1f1f1f",
+          },
+        }}
       />
 
       <main style={{ position: "relative" }}>

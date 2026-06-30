@@ -1,75 +1,19 @@
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { iconOptions } from "../../data/post_type_data";
-// export default function Rating ({ value, onChange}) {
-//   return (
-//     <div>
-//       <p>{Array.from({length:5}).map((_,i)=>(
-//         <FontAwesomeIcon 
-//           key={i}
-//           icon={iconOptions.find((opt) => opt.id === value)?.icon}
-//           style={{ fontSize: "24px", color: "#ff3434" }}
-//         />
-//       ))}</p>
-    
-//       <button
-//         type="button"
-//         onClick={() => {
-//           const selector = document.getElementById("icon-selector");
-//           selector.style.display =
-//             selector.style.display === "none" ? "block" : "none";
-//         }}
-//       >
-//         Change icon type
-//       </button>
-
-//       <div id="icon-selector" style={{ display: "none", marginTop: "10px" }}>
-//         {iconOptions.map((opt) => (
-//           <label key={opt.id} style={{ marginRight: "15px", cursor: "pointer" }}>
-//             <input
-//               type="radio"
-//               name="iconType"
-//               value={opt.id}
-//               checked={value === opt.id}
-//               onChange={() => onChange(opt.id)}
-//               style={{ display: "none" }}
-//             />
-//             <FontAwesomeIcon
-//               icon={opt.icon}
-//               style={{
-//                 fontSize: "28px",
-//                 color: value === opt.id ? "#ff9800" : "#555",
-//               }}
-//             />
-//           </label>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
 import { useState } from "react";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { iconOptions } from "../../data/post_type_data";
-
 import "../../style/upload/questionType/rating.css";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
 export default function Rating({ value, onChange }) {
-
   const [openSelector, setOpenSelector] = useState(false);
-
   const selectedIcon = iconOptions.find(
     (opt) => opt.id === value
   );
-
   return (
     <div className="question-type-wrapper">
     <div className="rating-wrapper">
-
       {/* PREVIEW */}
       <div className="rating-preview">
-
         {Array.from({ length: 5 }).map((_, i) => (
           <div
             key={i}
@@ -77,10 +21,10 @@ export default function Rating({ value, onChange }) {
           >
             <FontAwesomeIcon
               icon={selectedIcon?.icon}
+              style={{cursor:"pointer"}}
             />
           </div>
         ))}
-
       </div>
 
       {/* TOGGLE */}
@@ -90,8 +34,8 @@ export default function Rating({ value, onChange }) {
         onClick={() => setOpenSelector(!openSelector)}
       >
         {openSelector
-          ? "Close icon selector"
-          : "Change icon type"}
+          ? <span>Change icon type <FontAwesomeIcon icon={faAngleUp} /></span>
+          : <span>Change icon type <FontAwesomeIcon icon={faAngleDown} /></span>}
       </button>
 
       {/* SELECTOR */}

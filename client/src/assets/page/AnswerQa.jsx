@@ -10,23 +10,14 @@ import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 import '../style/page/AnswerQa.css';
 
 const AnswerQa = () => {
-    const DEV_MODE = true;
-
-
     const {postId, questionId, questionType} = useParams();
-
     const [QaData, setQaData] = useState({});
-
     const [openendInput, setOpenendInput] = useState('');
     const [rangeInput, setRangeInput] = useState(null);
     const [ratingInput, setRatingInput] = useState(0);
     const [closedendInput, setClosedendInput] = useState(null);
-
     const [singleChoiceInput, setSingleChoiceInput] = useState({id: null, text: null});
-
     const [multipleChoice, setMultipleChoice] = useState([]); 
-
-
     const [rankingOrderInput, setRankingOrderInput] = useState([]);   
     const [rankingOrderValue, setRankingOrderValue] = useState([]);   
     
@@ -83,18 +74,6 @@ const AnswerQa = () => {
                     );
                 case "range":
                     return(
-                    // <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    //     <span>{QaData?.range_min}</span>
-                    //     <input
-                    //     type="range"
-                    //     min={QaData?.range_min}
-                    //     max={QaData?.range_max}
-                    //     step={QaData?.range_step}
-                    //     value={rangeInput ?? QaData?.default_range_value}
-                    //     onChange={(e) => setRangeInput(e.target.value)}
-                    //     />
-                    //     <span>{QaData?.range_max}</span>
-                    // </div>
                     <div className="answer-range">
                         <span className="answer-range-value">
                             {QaData?.range_min}
@@ -130,26 +109,6 @@ const AnswerQa = () => {
                     );
                 case "closedend":
                     return(
-                        // <div>
-                        //     {
-                        //         [
-                        //             {label:'yes', value:'yes'}, 
-                        //             {label:'no', value:'no'}
-                        //         ].map((option) => (
-                        //             <div key={option.value}>
-                        //             <input
-                        //                 type="radio"
-                        //                 id={option.value}
-                        //                 name="closedend"
-                        //                 value={option.value}
-                        //                 checked={closedendInput === option.value}
-                        //                 onChange={(e) => setClosedendInput(e.target.value)}
-                        //             />
-                        //             <label htmlFor={option.value}>{option.label}</label>
-                        //             </div>
-                        //         ))
-                        //     } 
-                        // </div>
                         <div className="answer-yesno">
                             <div
                             className={`answer-yes ${
@@ -181,27 +140,6 @@ const AnswerQa = () => {
                     );
                 case "singlechoice":
                     return (
-                        // <div>
-                        // {QaData?.choice?.length > 0 ? (
-                        //     QaData.choice.map(c => (
-                        //     <div key={c.id}>
-                        //         <input
-                        //         type="radio"
-                        //         id={`single-${c.id}`}
-                        //         name="singlechoice"
-                        //         value={c.id}
-                        //         checked={singleChoiceInput?.id === c.id}
-                        //         onChange={(e) => setSingleChoiceInput({ id: c.id, text: c.choice_text })}
-                        //         />
-                        //         <label htmlFor={`single-${c.id}`}>
-                        //         {c.choice_text}
-                        //         </label>
-                        //     </div>
-                        //     ))
-                        // ) : (
-                        //     <p>Loading choices...</p>
-                        // )}
-                        // </div>
                         <div className="answer-choice-list">
                             {QaData?.choice?.map(c => (
                                 <label
@@ -240,50 +178,6 @@ const AnswerQa = () => {
                             QaData?.choices?.length > 0 &&
                             multipleChoice.length === QaData.choices.length;
                         return (
-                            // <div>
-                            // {QaData?.include_all_above === 1 && QaData?.choices?.length > 0 && (
-                            //     <div>
-                            //     <input
-                            //         type="checkbox"
-                            //         id="select-all"
-                            //         checked={allSelected}
-                            //         onChange={(e) => {
-                            //         setMultipleChoice(
-                            //             e.target.checked
-                            //             ? QaData.choices.map(c => ({ id: c.id, text: c.choice_text }))
-                            //             : []
-                            //         );
-                            //         }}
-                            //     />
-                            //     <label htmlFor="select-all">Select All</label>
-                            //     </div>
-                            // )}
-
-                            // {QaData?.choices?.length > 0 ? (
-                            //     QaData.choices.map(c => (
-                            //     <div key={c.id}>
-                            //         <input
-                            //         type="checkbox"
-                            //         id={`multi-${c.id}`}
-                            //         value={c.id}
-                            //         checked={multipleChoice.some(sel => sel.id === c.id)}
-                            //         onChange={(e) => {
-                            //             const id = Number(e.target.value);
-                            //             setMultipleChoice(prev =>
-                            //             prev.some(sel => sel.id === id)
-                            //                 ? prev.filter(sel => sel.id !== id)
-                            //                 : [...prev, { id: c.id, text: c.choice_text }]
-                            //             );
-                            //         }}
-                            //         />
-                            //         <label htmlFor={`multi-${c.id}`}>{c.choice_text}</label>
-                            //     </div>
-                            //     ))
-                            // ) : (
-                            //     <p>Loading choices...</p>
-                            // )}
-                            // </div>
-
                             <div className="answer-choice-list">
                                 {QaData?.choices?.map(c => (
 
@@ -380,62 +274,6 @@ const AnswerQa = () => {
 
                     case "rankingorder":
                         return (
-                            // <DragDropContext
-                            // onDragEnd={(result) => {
-                            //     if (!result.destination) return;
-
-                            //     const reordered = Array.from(QaData?.items || []);
-                            //     const [moved] = reordered.splice(result.source.index, 1);
-                            //     reordered.splice(result.destination.index, 0, moved);
-
-                            //     // IDs in order → analytics
-                            //     setRankingOrderInput(reordered.map(item => item.id));
-
-                            //     // Texts in order → display
-                            //     setRankingOrderValue(reordered.map(item => item.item_text));
-
-                            //     // Update UI
-                            //     setQaData({ ...QaData, items: reordered });
-                            // }}
-                            // >
-                            // <Droppable droppableId="ranking-list">
-                            //     {(provided) => (
-                            //     <div {...provided.droppableProps} ref={provided.innerRef}>
-                            //         {QaData?.items?.length > 0 ? (
-                            //         QaData.items.map((item, index) => (
-                            //             <Draggable key={item.id} draggableId={String(item.id)} index={index}>
-                            //             {(provided, snapshot) => (
-                            //                 <div
-                            //                 ref={provided.innerRef}
-                            //                 {...provided.draggableProps}
-                            //                 {...provided.dragHandleProps}
-                            //                 style={{
-                            //                     display: "flex",
-                            //                     alignItems: "center",
-                            //                     padding: "10px",
-                            //                     marginBottom: "8px",
-                            //                     background: snapshot.isDragging ? "#e0f7fa" : "#fafafa",
-                            //                     border: "1px solid #ccc",
-                            //                     borderRadius: "6px",
-                            //                     ...provided.draggableProps.style,
-                            //                 }}
-                            //                 >
-                            //                 <span style={{ marginRight: "10px", fontWeight: "bold" }}>
-                            //                     {index + 1}.
-                            //                 </span>
-                            //                 <span style={{ flex: 1 }}>{item.item_text}</span>
-                            //                 </div>
-                            //             )}
-                            //             </Draggable>
-                            //         ))
-                            //         ) : (
-                            //         <p>Loading items...</p>
-                            //         )}
-                            //         {provided.placeholder}
-                            //     </div>
-                            //     )}
-                            // </Droppable>
-                            // </DragDropContext>
                              <DragDropContext
                                 onDragEnd={(result) => {
 
@@ -540,17 +378,6 @@ const AnswerQa = () => {
                               
                     case "rating":
                         return (
-                            // <div className="rating-stars">
-                            // {Array.from({length:5}).map((_,i)=>(
-                            //     <FontAwesomeIcon 
-                            //     key={i}
-                            //     icon={iconOptions.find(opt => opt.id === QaData?.rating_icon_id)?.icon}
-                            //     style={{ fontSize: "28px", color: i < ratingInput ? "#ff3434" : "#ccc", cursor:"pointer" }}
-                            //     onClick={() => setRatingInput(i+1)}
-                            //     />
-                            // ))}
-                            //   <p>{QaData?.title}</p>
-                            // </div>
                             <div className="answer-rating">
 
                                 {Array.from({ length: 5 }).map((_, i) => (
@@ -622,103 +449,6 @@ const AnswerQa = () => {
             }
         };
 
-    useEffect(() => {
-
-  if (!DEV_MODE) return;
-
-  switch(questionType){
-
-    case "openend":
-      setQaData({
-        title:"Tell us about your startup journey",
-        question_related_to:"Experience"
-      });
-      break;
-
-    case "closedend":
-      setQaData({
-        title:"Would you recommend this product?",
-        question_related_to:"Simple yes/no question."
-      });
-      break;
-
-    case "singlechoice":
-      setQaData({
-        title:"Favorite Programming Language",
-        question_related_to:"Choose one option.",
-        choice:[
-          {id:1,choice_text:"JavaScript"},
-          {id:2,choice_text:"Python"},
-          {id:3,choice_text:"Go"},
-          {id:4,choice_text:"Rust"}
-        ]
-      });
-      break;
-
-    case "multiplechoice":
-      setQaData({
-        title:"Technologies You Use",
-        question_related_to:"Select all that apply.",
-        include_all_above: 1,
-        include_all_above:1,
-        choices:[
-          {id:1,choice_text:"React"},
-          {id:2,choice_text:"Node.js"},
-          {id:3,choice_text:"Docker"},
-          {id:4,choice_text:"MySQL"}
-        ]
-      });
-      break;
-
-    case "range":
-      setQaData({
-        title:"How satisfied are you?",
-        question_related_to:"Drag the slider.",
-        range_min:0,
-        range_max:100,
-        range_step:5,
-        default_range_value:50
-      });
-      break;
-
-    case "rating":
-      setQaData({
-        title:"Rate this experience",
-        question_related_to:"Tap an icon.",
-        rating_icon_id:3
-      });
-      break;
-
-    case "rankingorder":
-      setQaData({
-        title:"Rank these skills",
-        question_related_to:"Drag to reorder.",
-        items:[
-          {
-            id:1,
-            item_text:"Communication"
-          },
-          {
-            id:2,
-            item_text:"Leadership"
-          },
-          {
-            id:3,
-            item_text:"Problem Solving"
-          },
-          {
-            id:4,
-            item_text:"Technical Skills"
-          }
-        ]
-      });
-      break;
-
-    default:
-      break;
-  }
-
-}, [questionType]);
 function iconRender(questionType){
     switch(questionType){
 
@@ -776,21 +506,7 @@ function iconRender(questionType){
   }
 }
 
-    // return (
-    //     <div>
-    //         <h1>AnswerQa</h1>
-    //         {!QaData ? (
-    //             <p>Loading...</p>
-    //         ) : (
-    //             <form onSubmit={handleSubmit} id="answer-form">
-    //                 <p>{QaData.title}</p>
-    //                 <p>{QaData.question_related_to}</p>
-    //                 {renderQuestion(QaData)}
-    //                 <button type="submit">Submit</button>
-    //             </form>
-    //         )}
-    //     </div>
-    // );
+
     return (
         <div className="answer-page">
             <div className="answer-card">

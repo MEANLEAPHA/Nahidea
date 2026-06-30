@@ -39,7 +39,6 @@
   font-size: 1.5rem;
   font-weight: 600;
   opacity: 0.9;
-  margin-bottom: 1.5rem;
   color: var(--font-color);
   border-left: 4px solid green;
   padding-left: 1rem;
@@ -97,7 +96,7 @@
   border: 1px solid var(--secondary-color);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100%;justify-content: center;
 }
 
 .question-card:hover {
@@ -154,9 +153,10 @@
 /* Question title */
 .question-title {
   padding: 0 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
   font-weight: 500;
   line-height: 1.4;
+  margin-top: 15px;
 }
 
 .question-title p {

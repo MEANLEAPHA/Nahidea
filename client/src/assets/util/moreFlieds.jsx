@@ -375,13 +375,90 @@ export const MarkdownPreview = ({ content }) => {
   );
 };
 
+ export const MoreFieldsCon = memo(({
+  tags, setTags,
+  setConAndQuesFileValue,
+  isAnonymous, setIsAnonymous, tokens,
+  conAndQuesFileValue
+}) => {
+  const [selected, setSelected] = useState(1);
 
+  return (
+    <>
+    <div id="select-radio-type">
+  
+      <div className='radio-button-div-type'>
+        {[            {label: 'Image', icon: <FontAwesomeIcon icon={faImages} />, id: 1},
+                      {label: 'Tags', icon: <TagsOutlined />, id: 2},
+                      {label: 'Anonymous', icon: <FontAwesomeIcon icon={faMask} />, id: 3},
+                    ].map((opt) => (
+          <button key={opt.id} onClick={() => setSelected(opt.id)} type="button" className='radio-button-type' style={{
+              borderBottom: selected === opt.id ? "3px solid #fd7648" : "3px solid transparent",
+              color: selected === opt.id ? "#fd7648" : "grey",
+            }}>
+            {opt.icon}{" "}{opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+      <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
+       {selected === 1 && (
+        <div className="media-uploader">
+          {
+            conAndQuesFileValue === null ? (
+             
+                <label className="upload-placeholder">
+                  <CloudUploadOutlined id='cloud-icon'/>
+                   
+              
+                  <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setConAndQuesFileValue(e.target.files[0])}
+                  className="file-input"
+                />
+                  <small className="upload-hint">
+                      Upload image
+                    </small>
+                  
+                </label>
+             
+            ) : (
+              <Carousel arrows infinite={true} className="media-carousel" swipe={true} draggable={true} autoplay={{ pauseOnHover: true }} autoplaySpeed={10000}
+               prevArrow={<button className="slick-arrow slick-prev"><LeftOutlined /></button>}
+               nextArrow={<button className="slick-arrow slick-next"><RightOutlined /></button>} >
+              <div className="carousel-slide">
+                <div className="preview-wrapper"
+                      style={{ "--preview-url": `url(${URL.createObjectURL(conAndQuesFileValue)})` }}
+                >
+                  <img
+                    src={URL.createObjectURL(conAndQuesFileValue)}
+                    alt="Confession"
+                    className="preview-image" 
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setConAndQuesFileValue(null)}
+                    className="remove-btn"
+                  >
+                    <DeleteOutlined />
+                  </button>
+                </div>
+              </div>
+               </Carousel>
+            )
+          }
+      </div>)}
+      {selected === 2 && <TagInput value={tags} onChange={setTags} />}
+      {selected === 3 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
+      </div>
+      </>
+  );
+});
 
  export const MoreFieldsConAndQues = memo(({
   tags, setTags,
-  mediaFiles, setMediaFiles,
   isAnonymous, setIsAnonymous, tokens,
-  conAndQuesFileValue
 }) => {
   const [selected, setSelected] = useState(1);
 
