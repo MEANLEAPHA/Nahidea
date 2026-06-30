@@ -274,7 +274,7 @@ export default function Spammy() {
   // Delete a single inbox item. `e.stopPropagation()` is required here —
   // this button lives inside the spam-card, which has its own onClick to
   // open the spam, and clicks otherwise bubble up to it.
-  const handleDeleteOne = async (e, spam) => {
+  const handleDeleteOne = async (e, spam, type) => {
     e.stopPropagation();
     if (deletingSpamId) return;
 
@@ -285,12 +285,17 @@ export default function Spammy() {
         getAuthHeaders()
       );
 
-      setInbox((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
-      if (!spam.is_viewed) {
-        setUnreadCount((prev) => Math.max(prev - 1, 0));
+      if(type === 'sent'){
+        setInbox((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
+        if (!spam.is_viewed) {
+          setUnreadCount((prev) => Math.max(prev - 1, 0));
+        }
+        if (activeSpam?.spam_id === spam.spam_id) {
+          setActiveSpam(null);
+        }
       }
-      if (activeSpam?.spam_id === spam.spam_id) {
-        setActiveSpam(null);
+      else{
+        setSentSpam((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Couldn't delete that spam");
@@ -339,7 +344,10 @@ export default function Spammy() {
           <button
             type="button"
             className="spam-right-btn"
-            onClick={handleDeleteAll("inbox")}
+            onClick={(e) => {
+              handleDeleteAll("inbox");
+              e.stopPropagation();
+            }}
             disabled={deletingAll || inbox.length === 0}
           >
             <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />{" "}
@@ -478,7 +486,7 @@ export default function Spammy() {
                 <button
                   type="button"
                   className="detete-one-spam-btn"
-                  onClick={(e) => handleDeleteOne(e, spam)}
+                  onClick={(e) => handleDeleteOne(e, spam, 'inbox')}
                   disabled={deletingSpamId === spam.spam_id}
                 >
                   <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />
@@ -502,7 +510,10 @@ export default function Spammy() {
       <div className="sent-panel">
         <div className="sent-header">
           <h3 className="spam-h3-label">Your Sent Spam</h3>
-          <button type='button' className="delete-all-spam-btn" onClick = {handleDeleteAll('sent')} disabled={deletingAll || sentSpam.length === 0}>Clear All</button>
+          <button type='button' className="delete-all-spam-btn" onClick={(e) => {
+              handleDeleteAll("sent");
+              e.stopPropagation();
+            }} disabled={deletingAll || sentSpam.length === 0}>Clear All</button>
         </div>
         
         {sentSpam.length === 0 && <div className="empty-state">No spam sent yet</div>}
@@ -523,7 +534,7 @@ export default function Spammy() {
               <button
                   type="button"
                   className="detete-one-spam-btn"
-                  onClick={(e) => handleDeleteOne(e, spam)}
+                  onClick={(e) => handleDeleteOne(e, spam, "sent")}
                   disabled={deletingSpamId === spam.spam_id}
                 >
                   <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />
