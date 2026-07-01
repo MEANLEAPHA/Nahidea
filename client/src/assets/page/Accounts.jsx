@@ -78,6 +78,7 @@ export default function Accounts() {
 
     // data render
     const [usernames, setUsernames] = useState("");
+    const [userId, setUserId] = useState("");
     const [nicknames, setNicknames] = useState("");
     const [avatar, setAvatar] = useState("");
     const [banner, setBanner] = useState("");
@@ -122,6 +123,7 @@ export default function Accounts() {
         )
         const data = res.data.userData;
         setUsernames(data.username);
+        setUserId(data.id);
         setNicknames(data.nickname);
         setAvatar(data.avatar_url);
         setBanner(data.banner_url);
@@ -1002,14 +1004,20 @@ export default function Accounts() {
                 {
                     !isOwnProfile && ( 
                       <button className='pf-act-btn' type="button" 
-                       onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: state?.userId}}})}
+                       onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: userId || state?.userId}}})}
                        >
                       <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
                     )
                   }
                    {
                     !isOwnProfile && ( 
-                      <button className='pf-act-btn' type="button" onClick={() => navigate('/spammy')}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> Send Spammy</button>
+                      <button className='pf-act-btn' type="button" onClick={() => navigate('/spammy' , {
+                        state: {
+                          username: usernames,
+                          id: userId || state?.userId,
+                          avatar: avatar
+                        }
+                      })}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> Send Spammy</button>
                       )
                    } 
                   {

@@ -183,7 +183,176 @@ export const spammy_options = [
     label: "Send Love",
     img: "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycncyOG5hZTdxc3lrMTB0NzJkem4waHl0bWlqMHBpZDF2MmphMnplYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif",
   },
-]
+
+  // --- Conversation Starters ---
+  {
+    value: "hello",
+    label: "Hello",
+    img: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZuOTRwMTc0c3ZuYTNscjF3OHRnZTR1OTB1dHlvN2p3NmQweHlociZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Cmr1OMJ2FN0B2/giphy.gif",
+  },
+  {
+    value: "text_me",
+    label: "Text Me",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnJoZXY0Z3Z0ZXhuMDM0ZjJ1cjRueTlmYm05ZGs2cm1hcjNsd280ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tJ2EIL8tBtEHVMRzo5/giphy.gif",
+  },
+  {
+    value: "callme",
+    label: "Call Me",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cThxNzhxZHIzbTBmaXVwc21vMWxlMzN6dDUzMnoxaTNqcjZnNTBrNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/5ICdheP4MoQGt70pD5/giphy.gif",
+  },
+  {
+    value: "can_we_talk",
+    label: "Can We Talk?",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MjJhdXBpOHZiaWlnYjllc2RsaGMwOHYyczh1MmQ2MGFoYjB0ZHZ4eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xT3i1iGcxzSObWeH04/giphy.gif",
+  },
+  {
+    value: "can_i_have_your_number",
+    label: "Can I Have Your Number?",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHNwYzB0dzd6azZwMHIwdjVic3k2MDhxenRwaW5oeHU3NzV4bDBoZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/RtFxzpt8RxzDqCAgLh/giphy.gif",
+  },
+  {
+    value: "are_you_single",
+    label: "Are You Single?",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExenBucmVhZ3g2NWRvYzY4bDFoMTFydmRtcjV0bXNlcWg0dmh3NTVmeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/bT2lokItWQKwE/giphy.gif",
+  },
+
+  // --- Quick Replies ---
+  {
+    value: "yes",
+    label: "Yes",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3NWpvbXl0Zm9ndnVjZzdlaTZ3ZmZsd29qd3hvM3F2c2NuZXlleGRubCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/sOSRNpG3OiD0jsepP7/giphy.gif",
+  },
+  {
+    value: "no",
+    label: "No ",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3lyeXFuczludmZnNnpqdmRhMXk0ZTFvM3lzdWZ5bnFreHQyd3RmcSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/d2Z9y3eDoq2cxPpK/giphy.gif",
+  },
+
+  // --- Wholesome / Emotional ---
+  {
+    value: "wake_up",
+    label: "Wake Up ",
+    img: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGQyOHZ0ejN6bDN6eGZicWhlZnFkeGYwbG43bHB4bHd3dWpoNmgwNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WZj3l2HIRubde/giphy.gif",
+  },
+  {
+    value: "miss_you",
+    label: "Miss You ",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZDlyMGRhem9tc2xmNmU0czVnY2hiOXFnNDVsM3RlN2M1N3F6NGI0ayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/UuZCWshuPCSSivRrpM/giphy.gif",
+  },
+  {
+    value: "thinking_of_you",
+    label: "Thinking of You ",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3M3Jod3IyZ3Q4dDFqdzN6bzQwbHZlbTd2YmQzMmY5MWt0ZDh6Y3AydSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IvQ1ipt61gFUlCK1dV/giphy.gif",
+  },
+  {
+    value: "hug",
+    label: "Virtual Hug ",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHJ6aXB3NnNmMTh3NGljZHFta2RiNzlmZ3p4MzdudndzZDh2NzBhbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1JmGiBtqTuehfYxuy9/giphy.gif",
+  },
+  {
+    value: "proud_of_you",
+    label: "Proud of You ",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWk5czR6eHQ1OHVmaGt2aGszdXY5YzF4bjg2M3lyY2VobjhrY283ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/raFwbIrDK5jZh8Z3Sl/giphy.gif",
+  },
+
+  // --- Playful Jabs ---
+  {
+    value: "sus",
+    label: "You're Sus ",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjZucnA5NDg4eDdkNm81dDVxbDZ4YzYzMG5tYTd5eGExb3J0cWd0dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ANbD1CCdA3iI8/giphy.gif",
+  },
+  {
+    value: "touch_grass",
+    label: "Touch Grass",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2N0MGprNmY0NHFxYmwza2dweXRoeGR0Zmd0MTN0eWtveHNmbGJiaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/EG9Zc506rqw8qiv6YK/giphy.gif",
+  },
+  {
+    value: "skill_issue",
+    label: "Skill Issue ",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBvejI5OGdwbGwyZDZpMGx2MGd1ZnFsaDc3bThpY2sxMmhjY2w0cSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/AqEvr3Zwuw6DJngOKw/giphy.gif",
+  },
+  {
+    value: "npc",
+    label: "NPC Behavior",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW53Mm95b3poOHJiMTVlb3VrcTlqeHl2b2JpaGJ6dWg4djZlZjgxeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/nTKs3aBsBdaDqofkEY/giphy.gif",
+  },
+  {
+    value: "caught_in_4k",
+    label: "Caught in 4K",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjZwaGhtZzJ1bm45bDB3cXBsN3JiZ2Z2Z2Q0eW1nc2sxYXNuZW1ybCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/4zCP1LiRo3YXba11R5/giphy.gif",
+  },
+  {
+    value: "ratio",
+    label: "Ratio'd",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDY3eG1oMGhkYmt6eWlzbTJpM3MyaGo2azRjZjR1c2ZobnhreHphciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/hVNiE7R6PH7fiwpCwO/giphy.gif",
+  },
+  {
+    value: "facepalm",
+    label: "Facepalm",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2I5M2xmamN6bHAyZ2Q0aDEwZGpodGdxZmZ0b25kYjduZTY0bXBldiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/XD4qHZpkyUFfq/giphy.gif",
+  },
+  {
+    value: "get_a_job",
+    label: "Get a Job",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTJkYWdmOW4zMXAyZGNvdmxmcnhlajY4NTFwZmU1dGhkMjZyaWJybCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JQYsf4F5Jx2C70Knf3/giphy.gif",
+  },
+
+  // --- Check-in / Social Pressure ---
+  {
+    value: "sos",
+    label: "SOS",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG1hMnhxanJpaGFhdXJubTVzMjJwYWEzZm1sbnRtOThpdHJoMnhyaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/U7bo3ZBR8lcKSmGdlT/giphy.gif",
+  },
+  {
+    value: "check_in",
+    label: "You Okay?",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWwxNXNib214d2lseXB0cHAwOTRkMzBuMmJjMjRiNTJkZWV4cjF1aiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ll6j3RjFcFHgOxVgXO/giphy.gif",
+  },
+  {
+    value: "ghost_alert",
+    label: "Ghost Alert",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjl6b2g0azlsdzBlODdhcXZoeDFlaDdnOGtuc2p0dTVlc2p3b2Y5NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/4KZ1Q6nU8owonpgpSv/giphy.gif",
+  },
+  {
+    value: "where_are_you",
+    label: "Where Are You?",
+    img: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3b2dranNndnRubHRxYXFwOWc4bTJjNWswa3VucjN2d2dmcHpmOGU3MiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/yxITEyCwy1jJAJLDnr/giphy.gif",
+  },
+
+  // --- Hype / Compliments ---
+  {
+    value: "slay",
+    label: "Slay",
+    img: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjV4ZXFucmt6OGV3enA1Zzc3ZGVra2U1MGwzZ3VpY3U3ZjV0cnlzNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7TT9E5KSGJpUqWUyNz/giphy.gif",
+  },
+  {
+    value: "you_ate",
+    label: "You Ate",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTM2bjJzODF3NXVobzI4b2Ezd2Vxbm11em9rMmRmY2dna25tZTU3dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7UyhJrObrFS5RrnASI/giphy.gif",
+  },
+  {
+    value: "rizz_check",
+    label: "Rizz Check",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmxwa3h0dW45dHdwY3Bub3F6dGdwdXpjYnRteG10b2oxMzBwczVtbyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/eF7Mt0yiLo03H42V5W/giphy.gif",
+  },
+  {
+    value: "rent_free",
+    label: "Living Rent Free",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWQ5bTIwOXFtYnI2MGZ0aXh2bWhid284dWI4eTF2M2k1MTBlM3h3ZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/rjmUhz7wLZMtdrz3kX/giphy.gif",
+  },
+
+  // --- Competitive ---
+  {
+    value: "challenge",
+    label: "I Challenge You",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGR1ZHduMTIyeWIzZTBjbzVwODRhaHF3aTF3NW16cnM0N2UwYmp5MSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PgikPT6uMPmxl5wzlN/giphy.gif",
+  },
+  {
+    value: "brain_rot",
+    label: "Brain Rot ",
+    img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTUydW1rcWg4d2d3aGpvdGJwcnZqM3NuMmx0YW5ncWo2dXY2aTRwMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/emleA2iGk5UFLXrGoX/giphy.gif",
+  },
+];
 export const confession_options = [
   {
     value: "secret_crush",

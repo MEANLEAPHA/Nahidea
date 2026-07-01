@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import toast from "react-hot-toast";
 import "../style/page/Spammy.css";
 import { faInbox, faTriangleExclamation, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { spammy_options } from "../data/post_type_data";
 import { faEnvelope, faEnvelopeOpen, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 const SEARCH_DEBOUNCE_MS = 300;
 const MIN_SEARCH_LENGTH = 1;
+const PREFILL_KEY = "spammy_prefill";
 
 const getAuthHeaders = () => ({
   headers: {
@@ -18,15 +19,59 @@ const getAuthHeaders = () => ({
   },
 });
 
+function loadPrefill(locationState) {
+  // Fresh navigation state takes priority
+  if (locationState?.id && locationState?.username) {
+    const data = {
+      id: locationState.id,
+      username: locationState.username,
+      avatar: locationState.avatar ?? null,
+    };
+    try {
+      sessionStorage.setItem(PREFILL_KEY, JSON.stringify(data));
+    } catch {}
+    return data;
+  }
+
+  // Fall back to sessionStorage (survives refresh)
+  try {
+    const raw = sessionStorage.getItem(PREFILL_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {
+    sessionStorage.removeItem(PREFILL_KEY);
+  }
+
+  return null;
+}
+
+function savePrefill(id, username, avatar = null) {
+  try {
+    sessionStorage.setItem(PREFILL_KEY, JSON.stringify({ id, username, avatar }));
+  } catch {}
+}
+
+function clearPrefill() {
+  sessionStorage.removeItem(PREFILL_KEY);
+}
+
+
+
 export default function Spammy() {
+  const location = useLocation();
+
+  const prefillRef = useRef(null);
+  const prefillLoaded = useRef(false);
+  if (!prefillLoaded.current) {
+    prefillLoaded.current = true;
+    prefillRef.current = loadPrefill(location.state); 
+  }
+  const prefill = prefillRef.current;
+
   const [inbox, setInbox] = useState([]);
-  
   const [activeSpam, setActiveSpam] = useState(null);
 
-  // The actually-selected user to send spam to (must come from a dropdown pick)
-  const [receiverId, setReceiverId] = useState(null);
-  // What's currently typed in the search box (separate from the selection)
-  const [searchQuery, setSearchQuery] = useState("");
+  const [receiverId, setReceiverId] = useState(prefill?.id ?? null);
+  const [searchQuery, setSearchQuery] = useState(prefill?.username ?? "");
 
   const [spamType, setSpamType] = useState(
     Array.isArray(spammy_options) && spammy_options.length > 0
@@ -42,12 +87,16 @@ export default function Spammy() {
 
   const [sending, setSending] = useState(false);
   const [markingAllViewed, setMarkingAllViewed] = useState(false);
-  const [deletingAll, setDeletingAll] = useState(false);
+
+  const [deletingAllInbox, setDeletingAllInbox] = useState(false);
+  const [deletingAllSent, setDeletingAllSent] = useState(false);
   const [deletingSpamId, setDeletingSpamId] = useState(null);
 
   const searchContainerRef = useRef(null);
   const debounceRef = useRef(null);
   const searchRequestIdRef = useRef(0);
+
+  const skipNextSearchRef = useRef(!!prefill);
 
   useEffect(() => {
     fetchInbox();
@@ -55,7 +104,6 @@ export default function Spammy() {
     fetchSentSpam();
   }, []);
 
-  // Close the dropdown when clicking outside of the search box
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -69,11 +117,15 @@ export default function Spammy() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Debounced user search, with protection against out-of-order responses
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     const query = searchQuery.trim();
+
+    if (skipNextSearchRef.current) {
+      skipNextSearchRef.current = false;
+      return;
+    }
 
     if (query.length < MIN_SEARCH_LENGTH) {
       setSearchResults([]);
@@ -87,13 +139,10 @@ export default function Spammy() {
     debounceRef.current = setTimeout(async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/searchUser?q=${encodeURIComponent(
-            query
-          )}`,
+          `${import.meta.env.VITE_SERVER_URL}/api/searchUser?q=${encodeURIComponent(query)}`,
           getAuthHeaders()
         );
 
-        // Ignore stale responses from earlier keystrokes
         if (requestId === searchRequestIdRef.current) {
           setSearchResults(res.data);
           setShowDropdown(true);
@@ -126,7 +175,6 @@ export default function Spammy() {
     }
   };
 
-
   const fetchInbox = async () => {
     try {
       const res = await axios.get(
@@ -149,7 +197,6 @@ export default function Spammy() {
       setUnreadCount(res.data.unread);
     } catch (err) {
       console.error(err);
-      // Non-critical, fail silently rather than nag the user
     }
   };
 
@@ -168,18 +215,16 @@ export default function Spammy() {
     try {
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/spam/send`,
-        {
-          receiver_id: receiverId,
-          spam_type: spamType.value,
-        },
+        { receiver_id: receiverId, spam_type: spamType.value },
         getAuthHeaders()
       );
 
-      toast.success("Spam sent 🚀");
+      toast.success("Spam Sent");
 
       setReceiverId(null);
       setSearchQuery("");
       setSearchResults([]);
+      clearPrefill(); // selection fulfilled — don't restore on next visit/refresh
       fetchSentSpam();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Failed to send spam");
@@ -192,14 +237,12 @@ export default function Spammy() {
     try {
       await axios.put(
         `${import.meta.env.VITE_SERVER_URL}/api/spam/view/${spam.spam_id}`,
-        {}, // body
-        getAuthHeaders() // config
+        {},
+        getAuthHeaders()
       );
 
       setActiveSpam(spam);
 
-      // Reflect the read state locally so re-opening the same item doesn't
-      // keep decrementing the unread count or showing the unread dot.
       setInbox((prev) =>
         prev.map((s) =>
           s.spam_id === spam.spam_id ? { ...s, is_viewed: 1 } : s
@@ -215,7 +258,6 @@ export default function Spammy() {
     }
   };
 
-  // Mark every unread inbox item as viewed in one shot
   const handleViewAll = async () => {
     if (markingAllViewed || unreadCount === 0) return;
 
@@ -226,7 +268,6 @@ export default function Spammy() {
         {},
         getAuthHeaders()
       );
-
       setInbox((prev) => prev.map((s) => ({ ...s, is_viewed: 1 })));
       setUnreadCount(0);
       toast.success("Marked all as read");
@@ -237,45 +278,47 @@ export default function Spammy() {
     }
   };
 
-  // Wipe the whole inbox (soft delete on the receiver's side)
   const handleDeleteAll = async (type) => {
-    if (deletingAll || inbox.length === 0) return;
+    const isInbox = type !== "sent";
+    // Guard against the right list, not always inbox
+    const list = isInbox ? inbox : sentSpam;
+    if (list.length === 0) return;
 
     const confirmed = window.confirm(
-      "Delete your entire inbox? This can't be undone."
+      isInbox
+        ? "Delete your entire inbox? This can't be undone."
+        : "Clear all sent spam? This can't be undone."
     );
     if (!confirmed) return;
 
-    setDeletingAll(true);
+    if (isInbox) setDeletingAllInbox(true);
+    else setDeletingAllSent(true);
+
     try {
       await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/api/spam/delete-all?type=${type}`,
         getAuthHeaders()
       );
 
-      if(type === "sent") {
-        setSentSpam([]);
-        toast.success("Spam Sent Cleared");
-      }else{
+      if (isInbox) {
         setInbox([]);
         setUnreadCount(0);
         setActiveSpam(null);
         toast.success("Inbox cleared");
+      } else {
+        setSentSpam([]);
+        toast.success("Sent spam cleared");
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Couldn't clear inbox");
+      toast.error(err?.response?.data?.message || "Couldn't clear spam");
     } finally {
-      setDeletingAll(false);
+      if (isInbox) setDeletingAllInbox(false);
+      else setDeletingAllSent(false);
     }
   };
 
-
-
-  // Delete a single inbox item. `e.stopPropagation()` is required here —
-  // this button lives inside the spam-card, which has its own onClick to
-  // open the spam, and clicks otherwise bubble up to it.
   const handleDeleteOne = async (e, spam, type) => {
-    e.stopPropagation();
+    e.stopPropagation(); 
     if (deletingSpamId) return;
 
     setDeletingSpamId(spam.spam_id);
@@ -285,10 +328,9 @@ export default function Spammy() {
         getAuthHeaders()
       );
 
-      if(type === 'sent'){   
+      if (type === "sent") {
         setSentSpam((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
-      }
-      else{
+      } else {
         setInbox((prev) => prev.filter((s) => s.spam_id !== spam.spam_id));
         if (!spam.is_viewed) {
           setUnreadCount((prev) => Math.max(prev - 1, 0));
@@ -296,7 +338,6 @@ export default function Spammy() {
         if (activeSpam?.spam_id === spam.spam_id) {
           setActiveSpam(null);
         }
-
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Couldn't delete that spam");
@@ -306,19 +347,79 @@ export default function Spammy() {
   };
 
   const getSpamAsset = (type) => {
-    switch (type) {
-      case "poke":
-        return "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODNycmo3NHdiOTF1Mmo4anY3OWlleTg2MnR3MHB4Zm40N3VnbDU3YSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PkR8gPgc2mDlrMSgtu/200.gif";
+  switch (type) {
+    case "poke":
+      return "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODNycmo3NHdiOTF1Mmo4anY3OWlleTg2MnR3MHB4Zm40N3VnbDU3YSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PkR8gPgc2mDlrMSgtu/200.gif";
+    case "goodnight":
+      return "https://media.tenor.com/LBppk55tCvsAAAAM/meme.gif";
+    case "text_me":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnJoZXY0Z3Z0ZXhuMDM0ZjJ1cjRueTlmYm05ZGs2cm1hcjNsd280ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tJ2EIL8tBtEHVMRzo5/giphy.gif";
+    case "get_a_job":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTJkYWdmOW4zMXAyZGNvdmxmcnhlajY4NTFwZmU1dGhkMjZyaWJybCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JQYsf4F5Jx2C70Knf3/giphy.gif";
+    case "callme":
+      return "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cThxNzhxZHIzbTBmaXVwc21vMWxlMzN6dDUzMnoxaTNqcjZnNTBrNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/5ICdheP4MoQGt70pD5/giphy.gif";
+    case "hello": 
+      return "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZuOTRwMTc0c3ZuYTNscjF3OHRnZTR1OTB1dHlvN2p3NmQweHlociZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Cmr1OMJ2FN0B2/giphy.gif";
+    case "can_we_talk":
+      return "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MjJhdXBpOHZiaWlnYjllc2RsaGMwOHYyczh1MmQ2MGFoYjB0ZHZ4eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xT3i1iGcxzSObWeH04/giphy.gif";
+    case "are_you_single":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExenBucmVhZ3g2NWRvYzY4bDFoMTFydmRtcjV0bXNlcWg0dmh3NTVmeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/bT2lokItWQKwE/giphy.gif";
+    case "yes":
+      return "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3NWpvbXl0Zm9ndnVjZzdlaTZ3ZmZsd29qd3hvM3F2c2NuZXlleGRubCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/sOSRNpG3OiD0jsepP7/giphy.gif";
+    case "no":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3lyeXFuczludmZnNnpqdmRhMXk0ZTFvM3lzdWZ5bnFreHQyd3RmcSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/d2Z9y3eDoq2cxPpK/giphy.gif";
+    case "sendlove":
+      return "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycncyOG5hZTdxc3lrMTB0NzJkem4waHl0bWlqMHBpZDF2MmphMnplYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif";
+    case "wake_up":
+      return "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGQyOHZ0ejN6bDN6eGZicWhlZnFkeGYwbG43bHB4bHd3dWpoNmgwNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WZj3l2HIRubde/giphy.gif";
+    case "can_i_have_your_number":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHNwYzB0dzd6azZwMHIwdjVic3k2MDhxenRwaW5oeHU3NzV4bDBoZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/RtFxzpt8RxzDqCAgLh/giphy.gif";
+    case "miss_you":
+      return "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZDlyMGRhem9tc2xmNmU0czVnY2hiOXFnNDVsM3RlN2M1N3F6NGI0ayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/UuZCWshuPCSSivRrpM/giphy.gif";
+    case "thinking_of_you":
+      return "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3M3Jod3IyZ3Q4dDFqdzN6bzQwbHZlbTd2YmQzMmY5MWt0ZDh6Y3AydSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IvQ1ipt61gFUlCK1dV/giphy.gif";
+    case "hug":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHJ6aXB3NnNmMTh3NGljZHFta2RiNzlmZ3p4MzdudndzZDh2NzBhbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1JmGiBtqTuehfYxuy9/giphy.gif";
+    case "proud_of_you":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWk5czR6eHQ1OHVmaGt2aGszdXY5YzF4bjg2M3lyY2VobjhrY283ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/raFwbIrDK5jZh8Z3Sl/giphy.gif";
+    case "sus":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjZucnA5NDg4eDdkNm81dDVxbDZ4YzYzMG5tYTd5eGExb3J0cWd0dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ANbD1CCdA3iI8/giphy.gif";
+    case "touch_grass":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2N0MGprNmY0NHFxYmwza2dweXRoeGR0Zmd0MTN0eWtveHNmbGJiaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/EG9Zc506rqw8qiv6YK/giphy.gif";
+    case "skill_issue":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBvejI5OGdwbGwyZDZpMGx2MGd1ZnFsaDc3bThpY2sxMmhjY2w0cSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/AqEvr3Zwuw6DJngOKw/giphy.gif";
+    case "npc":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW53Mm95b3poOHJiMTVlb3VrcTlqeHl2b2JpaGJ6dWg4djZlZjgxeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/nTKs3aBsBdaDqofkEY/giphy.gif";
+    case "caught_in_4k":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjZwaGhtZzJ1bm45bDB3cXBsN3JiZ2Z2Z2Q0eW1nc2sxYXNuZW1ybCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/4zCP1LiRo3YXba11R5/giphy.gif";
+    case "ratio":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDY3eG1oMGhkYmt6eWlzbTJpM3MyaGo2azRjZjR1c2ZobnhreHphciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/hVNiE7R6PH7fiwpCwO/giphy.gif";
+    case "facepalm":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2I5M2xmamN6bHAyZ2Q0aDEwZGpodGdxZmZ0b25kYjduZTY0bXBldiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/XD4qHZpkyUFfq/giphy.gif";
+    case "sos":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG1hMnhxanJpaGFhdXJubTVzMjJwYWEzZm1sbnRtOThpdHJoMnhyaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/U7bo3ZBR8lcKSmGdlT/giphy.gif";
+    case "check_in":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWwxNXNib214d2lseXB0cHAwOTRkMzBuMmJjMjRiNTJkZWV4cjF1aiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ll6j3RjFcFHgOxVgXO/giphy.gif";
+    case "ghost_alert":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjl6b2g0azlsdzBlODdhcXZoeDFlaDdnOGtuc2p0dTVlc2p3b2Y5NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/4KZ1Q6nU8owonpgpSv/giphy.gif";
+    case "where_are_you":
+      return "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3b2dranNndnRubHRxYXFwOWc4bTJjNWswa3VucjN2d2dmcHpmOGU3MiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/yxITEyCwy1jJAJLDnr/giphy.gif";
+    case "slay":
+      return "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjV4ZXFucmt6OGV3enA1Zzc3ZGVra2U5MGwzZ3VpY3U3ZjV0cnlzNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7TT9E5KSGJpUqWUyNz/giphy.gif";
+    case "you_ate":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTM2bjJzODF3NXVobzI4b2Ezd2Vxbm11em9rMmRmY2dna25tZTU3dSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7UyhJrObrFS5RrnASI/giphy.gif";
+    case "rizz_check":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmxwa3h0dW45dHdwY3Bub3F6dGdwdXpjYnRteG10b2oxMzBwczVtbyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/eF7Mt0yiLo03H42V5W/giphy.gif";
+    case "rent_free":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWQ5bTIwOXFtYnI2MGZ0aXh2bWhid284dWI4eTF2M2k1MTBlM3h3ZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/rjmUhz7wLZMtdrz3kX/giphy.gif";
+    case "challenge":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGR1ZHduMTIyeWIzZTBjbzVwODRhaHF3aTF3NW16cnM0N2UwYmp5MSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PgikPT6uMPmxl5wzlN/giphy.gif";
+    case "brain_rot":
+      return "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTUydW1rcWg4d2d3aGpvdGJwcnZqM3NuMmx0YW5ncWo2dXY2aTRwMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/emleA2iGk5UFLXrGoX/giphy.gif";
 
-      case "goodnight":
-        return "https://media.tenor.com/LBppk55tCvsAAAAM/meme.gif";
-
-      case "sendlove":
-        return "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycncyOG5hZTdxc3lrMTB0NzJkem4waHl0bWlqMHBpZDF2MmphMnplYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif";
-
-      default:
-        return "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyenFzZmFmbDJqYjhwNW5kNTZqMHl3YzY4M24xN3R2bWxxZWR4NnNoaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/t8xgPfC5oNIRMrNooe/giphy.gif";
-    }
+    default:
+      return "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyenFzZmFmbDJqYjhwNW5kNTZqMHl3YzY4M24xN3R2bWxxZWR4NnNoaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/t8xgPfC5oNIRMrNooe/giphy.gif";
+  }
   };
 
   return (
@@ -345,14 +446,11 @@ export default function Spammy() {
           <button
             type="button"
             className="spam-right-btn"
-            onClick={(e) => {
-              handleDeleteAll("inbox");
-              e.stopPropagation();
-            }}
-            disabled={deletingAll || inbox.length === 0}
+            onClick={() => handleDeleteAll("inbox")}
+            disabled={deletingAllInbox || inbox.length === 0}
           >
             <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />{" "}
-            {deletingAll ? "Deleting…" : "Delete All"}
+            {deletingAllInbox ? "Deleting…" : "Delete All"}
           </button>
         </div>
       </div>
@@ -370,11 +468,13 @@ export default function Spammy() {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setReceiverId(null);
+                clearPrefill();     
               }}
               onFocus={() => {
                 if (searchResults.length > 0) setShowDropdown(true);
               }}
             />
+
             {searchLoading && <div className="search-loading">Searching…</div>}
 
             {showDropdown && searchResults.length > 0 && (
@@ -388,10 +488,11 @@ export default function Spammy() {
                       setSearchQuery(user.username);
                       setSearchResults([]);
                       setShowDropdown(false);
+                      savePrefill(user.id, user.username, user.avatar_url);
                     }}
                   >
                     <img
-                      src={user.avatar_url}
+                      src={user.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
                       alt="avatar"
                       className="avatar"
                       onError={(e) => {
@@ -418,9 +519,7 @@ export default function Spammy() {
           <Select
             options={spammy_options}
             value={spamType}
-            onChange={(option) => {
-              setSpamType(option);
-            }}
+            onChange={(option) => setSpamType(option)}
             classNamePrefix="customsp"
             placeholder="Select spam type"
             formatOptionLabel={(option) => (
@@ -458,6 +557,7 @@ export default function Spammy() {
           <h3 className="spam-h3-label">Inbox</h3>
 
           {inbox.length === 0 && <div className="empty-state">No spam received</div>}
+
           {inbox.map((spam) => (
             <div
               key={spam.spam_id}
@@ -467,7 +567,7 @@ export default function Spammy() {
               <div className="inbox-spam-div">
                 <img
                   className="inbox-user-img"
-                  src={spam.sender_avatar_url}
+                  src={spam.sender_avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
                   alt=""
                   onError={(e) => {
                     e.target.onerror = null;
@@ -476,9 +576,9 @@ export default function Spammy() {
                 />
                 <div className="inbox-user-info">
                   <h3 className="inbox-user-h3">
-                    {spam.sender_username ? spam.sender_username : `User #${spam.sender_id}`}
+                    {spam.sender_username ?? `User #${spam.sender_id}`}
                   </h3>
-                  <p className="inbox-user-p">sent you a {spam.spam_type}</p>
+                  <p className="inbox-user-p">sent you a spammy</p>
                 </div>
               </div>
 
@@ -486,7 +586,7 @@ export default function Spammy() {
                 <button
                   type="button"
                   className="detete-one-spam-btn"
-                  onClick={(e) => handleDeleteOne(e, spam, 'inbox')}
+                  onClick={(e) => handleDeleteOne(e, spam, "inbox")}
                   disabled={deletingSpamId === spam.spam_id}
                 >
                   <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />
@@ -510,13 +610,18 @@ export default function Spammy() {
       <div className="sent-panel">
         <div className="sent-header">
           <h3 className="spam-h3-label">Your Sent Spam</h3>
-          <button type='button' className="delete-all-spam-btn" onClick={(e) => {
-              handleDeleteAll("sent");
-              e.stopPropagation();
-            }} disabled={deletingAll || sentSpam.length === 0}>Clear All</button>
+          <button
+            type="button"
+            className="delete-all-spam-btn"
+            onClick={() => handleDeleteAll("sent")}
+            disabled={deletingAllSent || sentSpam.length === 0}
+          >
+            {deletingAllSent ? "Clearing…" : "Clear All"}
+          </button>
         </div>
-        
+
         {sentSpam.length === 0 && <div className="empty-state">No spam sent yet</div>}
+
         {sentSpam.map((spam) => (
           <div key={spam.spam_id} className="sent-card">
             <div className="sent-data-div">
@@ -524,22 +629,21 @@ export default function Spammy() {
               <div className="sent-info-div">
                 <h4 className="spam-h4">{spam.spam_type}</h4>
                 <p className="spam-p">
-                  To {spam.receiver_username ? spam.receiver_username : `User #${spam.receiver_id}`}
+                  To {spam.receiver_username ?? `User #${spam.receiver_id}`}
                 </p>
               </div>
             </div>
 
             <div className="view-status">
-
               <button
-                  type="button"
-                  className="detete-one-spam-btn"
-                  onClick={(e) => handleDeleteOne(e, spam, "sent")}
-                  disabled={deletingSpamId === spam.spam_id}
-                >
-                  <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />
-                </button>
-                
+                type="button"
+                className="detete-one-spam-btn"
+                onClick={(e) => handleDeleteOne(e, spam, "sent")}
+                disabled={deletingSpamId === spam.spam_id}
+              >
+                <FontAwesomeIcon icon={faTrashCan} style={{ opacity: "0.8" }} />
+              </button>
+
               {spam.is_viewed ? (
                 <span className="viewed-badge">
                   <FontAwesomeIcon icon={faEnvelopeOpen} /> Seen
