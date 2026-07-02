@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback, memo } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
-import { LeftOutlined, LoadingOutlined } from "@ant-design/icons";
+import { DeleteOutlined, LeftOutlined, LoadingOutlined, RetweetOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast"; // swap for `import { toast } from "sonner"` if that's what you're using
 import Rule from "../util/upload/Rule";
 import Masonry from "react-masonry-css";
@@ -221,7 +221,7 @@ const Comment = () => {
       username_mention: state?.username_mention || null,
       user_id_mention: state?.user_id_mention || null,
       username: user.username,
-      gif_url: selectedGif,
+      gif_url: selectedGif.gif_url,
       is_anonymous: enabled ? 1 : 0,
       comment_id: state?.comment_id || null,
     };
@@ -408,6 +408,15 @@ const Comment = () => {
                         ))}
                       </Masonry>
                     )}
+                  </div>
+                </div>
+              )}
+              {selectedGif && (
+                <div className="selected-gif-preview">
+                  <img src={selectedGif.gif_url} alt="gif" className='preview-gif-holder' />
+                  <div className='preview-gif-holder-action'>
+                    <button onClick={() => setSelectedGif(null)} className='preview-gif-btn'><DeleteOutlined /></button>
+                    <button onClick={() => setShowGifPicker(!showGifPicker)} className='preview-gif-btn'><RetweetOutlined /></button>
                   </div>
                 </div>
               )}
