@@ -38,13 +38,6 @@ const Comment = () => {
   const navigate = useNavigate();
   const { user } = useOutletContext();
 
-  // --- Recover navigation state -------------------------------------
-  // `location.state` is only present when the user arrives via an
-  // in-app navigate() call. A hard refresh, a back/forward nav, or
-  // opening the URL directly wipes it and previously crashed the page
-  // (fetchAnon dereferenced state.postId on a null state). We snapshot
-  // it into sessionStorage on arrival and fall back to that snapshot
-  // whenever location.state is missing.
   const [state] = useState(() => {
     if (location.state) {
       try {
@@ -221,7 +214,7 @@ const Comment = () => {
       username_mention: state?.username_mention || null,
       user_id_mention: state?.user_id_mention || null,
       username: user.username,
-      gif_url: state?.gif_url || selectedGif.gif_url,
+      gif_url: state?.gif_url || selectedGif?.gif_url || null,
       is_anonymous: enabled ? 1 : 0,
       comment_id: state?.comment_id || null,
     };

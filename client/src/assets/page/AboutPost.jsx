@@ -4,6 +4,7 @@ import { useParams, useOutletContext, useNavigate, useLocation } from "react-rou
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 // style
 import "../style/page/Aboutpost.css";
@@ -542,6 +543,8 @@ const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) =>
 const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
   const isExpanded = expandedReplies[c.id];
   
+  const navigate = useNavigate();
+
   return (
     <div
       className={`
@@ -663,10 +666,11 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/api/comments/${comm_id}/${post_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      if(res.status === 200) toast.success("Comment deleted");
       if (onDelete) onDelete();
     } catch (err) {
       console.error(err);
@@ -676,6 +680,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
   const handleCopyLink = () => {
     const url = `${window.location.origin}${window.location.pathname}#${comm_id}`;
     navigator.clipboard.writeText(url);
+    toast.success("Copied");
   };
 
   const isOwner = Number(ownerId) === Number(user?.id);
@@ -1629,7 +1634,7 @@ const AboutPost = () => {
                 <>
                   <span id='label-com-count'>{post?.comments_count} Comment{post?.comments_count > 1 && "s"}</span>
                   <button
-                    onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                    onClick={() => navigate(`/comment`, { state: { postId: id, postType: post?.post_type } })}
                     className="comment-btn"
                   >
                     <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Write a comment
