@@ -429,11 +429,10 @@ export default function Spammy() {
           <FontAwesomeIcon icon={faTriangleExclamation} style={{ color: "gold" }} />{" "}
           Spammy
         </h2>
-
         <div className="spam-header-right">
-          <div className="spam-badge">
-            <FontAwesomeIcon icon={faInbox} style={{ opacity: "0.8" }} /> {unreadCount}
-          </div>
+          <button className="spam-right-btn">
+            <FontAwesomeIcon icon={faInbox} style={{ opacity: "0.8", cursor: 'none' }} /> {unreadCount}
+          </button>
           <button
             className="spam-right-btn"
             type="button"
@@ -627,7 +626,7 @@ export default function Spammy() {
             <div className="sent-data-div">
               <img src={getSpamAsset(spam.spam_type)} className="sent-gif-holder" alt="" />
               <div className="sent-info-div">
-                <h4 className="spam-h4">{spam.spam_type}</h4>
+                <h4 className="spam-h4">{spammy_options.find((o) => o.value === spam.spam_type).label}</h4>
                 <p className="spam-p">
                   To {spam.receiver_username ?? `User #${spam.receiver_id}`}
                 </p>
@@ -646,11 +645,11 @@ export default function Spammy() {
 
               {spam.is_viewed ? (
                 <span className="viewed-badge">
-                  <FontAwesomeIcon icon={faEnvelopeOpen} /> Seen
+                  <FontAwesomeIcon icon={faEnvelopeOpen} /> <span className='view-status-label'>Seen</span>
                 </span>
               ) : (
                 <span className="pending-badge">
-                  <FontAwesomeIcon icon={faEnvelope} /> Delivered
+                  <FontAwesomeIcon icon={faEnvelope} /> <span className='view-status-label'>Delivered</span> 
                 </span>
               )}
             </div>

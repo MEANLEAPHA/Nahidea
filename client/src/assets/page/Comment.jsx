@@ -1,110 +1,677 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback, memo } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { LeftOutlined, LoadingOutlined } from "@ant-design/icons";
+import toast from "react-hot-toast"; // swap for `import { toast } from "sonner"` if that's what you're using
+import Rule from "../util/upload/Rule";
+import Masonry from "react-masonry-css";
 
-const token = localStorage.getItem("token");
+import "../style/page/Comment.css";
+import { faFaceGrinWink } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMask, faUserSecret } from "@fortawesome/free-solid-svg-icons";
 
-const username = sessionStorage.getItem("username");
+import { AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
+
+const AnonymousPf = memo(AnonymousProfile);
+const AnonymousNm = memo(AnonymousName);
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_SERVER_URL,
+});
+
+// Attach the auth token per-request instead of reading it once at module
+// load time — a stale closure over `token` meant a re-login mid-session
+// never took effect until a full page reload.
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+const STATE_KEY = "comment_nav_state";
+const draftKey = (postId, mode, commentId) =>
+  `comment_draft_${postId}_${mode === "edit" ? commentId : "new"}`;
+
 const Comment = () => {
-  const { state } = useLocation();
-  const {user} = useOutletContext();
-  
+  const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useOutletContext();
 
+  // --- Recover navigation state -------------------------------------
+  // `location.state` is only present when the user arrives via an
+  // in-app navigate() call. A hard refresh, a back/forward nav, or
+  // opening the URL directly wipes it and previously crashed the page
+  // (fetchAnon dereferenced state.postId on a null state). We snapshot
+  // it into sessionStorage on arrival and fall back to that snapshot
+  // whenever location.state is missing.
+  const [state] = useState(() => {
+    if (location.state) {
+      try {
+        sessionStorage.setItem(STATE_KEY, JSON.stringify(location.state));
+      } catch {
+        // sessionStorage may be unavailable (private mode / quota) — non-fatal
+      }
+      return location.state;
+    }
+    try {
+      const saved = sessionStorage.getItem(STATE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
 
+  const missingState = !state?.postId;
 
-  // const [content, setContent] = useState(
-  // state?.mode === "edit" ? state?.content || "" : ""
-  // );
-  
-  const [content, setContent] = useState("");
-  const [gif, setGif] = useState("");
-  const [isAnon, setIsAnon] = useState(false);
+  const [selectedGif, setSelectedGif] = useState(null);
+  const [gifSearch, setGifSearch] = useState("");
+  const [gifs, setGifs] = useState([]);
+  const [gifLoading, setGifLoading] = useState(false);
+  const [showGifPicker, setShowGifPicker] = useState(false);
+  const [selected, setSelected] = useState(1);
+
   const [lockedAnon, setLockedAnon] = useState(false);
+  const [anonLoading, setAnonLoading] = useState(true);
+  const [showAnnoy, setShowAnnoy] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+  const [visible, setVisible] = useState(false);
 
- 
+  const [content, setContent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const hasRestoredDraft = useRef(false);
+
+  // --- Bail out early if we truly have nothing to work with ----------
   useEffect(() => {
+    if (missingState) {
+      toast.error("We lost track of which post this comment belongs to.");
+      navigate(-1);
+    }
+  }, [missingState, navigate]);
+
+  // --- Load anonymous-identity lock state -----------------------------
+  useEffect(() => {
+    if (missingState) return;
+
+    let cancelled = false;
+    const fetchAnon = async () => {
+      setAnonLoading(true);
+      try {
+        const res = await api.get(`/api/get-anon-identity/${state.postId}`);
+        if (!cancelled && res.data?.exists) setLockedAnon(true);
+      } catch (err) {
+        if (!cancelled) {
+          console.error("Failed to load anonymous identity", err);
+          toast.error("Couldn't check anonymous status for this post.");
+        }
+      } finally {
+        if (!cancelled) setAnonLoading(false);
+      }
+    };
+
     fetchAnon();
-    if (state?.content) setContent(state.content);
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [missingState, state?.postId]);
 
-  const fetchAnon = async () => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/api/get-anon-identity/${state.postId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  // --- Restore content: prefer explicit nav content, else a saved draft
+  useEffect(() => {
+    if (missingState || hasRestoredDraft.current) return;
+    hasRestoredDraft.current = true;
 
-    if (res.data.exists) setLockedAnon(true);
-  };
+    if (state?.content) {
+      setContent(state.content);
+      return;
+    }
+
+    try {
+      const saved = sessionStorage.getItem(
+        draftKey(state.postId, state.mode, state.commentId)
+      );
+      if (saved) {
+        setContent(saved);
+        toast("Restored your unsent draft.", { icon: "📝" });
+      }
+    } catch {
+      // ignore
+    }
+  }, [missingState, state]);
+
+  // --- Persist the draft as the user types (debounced) ----------------
+  useEffect(() => {
+    if (missingState) return;
+    const handle = setTimeout(() => {
+      try {
+        const key = draftKey(state.postId, state.mode, state.commentId);
+        if (content.trim()) {
+          sessionStorage.setItem(key, content);
+        } else {
+          sessionStorage.removeItem(key);
+        }
+      } catch {
+        // ignore storage errors
+      }
+    }, 400);
+    return () => clearTimeout(handle);
+  }, [content, missingState, state]);
+
+  // --- GIF search -------------------------------------------------------
+  useEffect(() => {
+    if (!showGifPicker) return;
+
+    const controller = new AbortController();
+    const fetchGifs = async () => {
+      setGifLoading(true);
+      try {
+        const endpoint =
+          selected === 1
+            ? `/api/search-gif?q=${encodeURIComponent(gifSearch)}`
+            : `/api/search-gif-fav?q=${encodeURIComponent(gifSearch)}`;
+        const res = await api.get(endpoint, { signal: controller.signal });
+        setGifs(res.data);
+      } catch (err) {
+        if (!axios.isCancel(err) && err.name !== "CanceledError") {
+          console.error("GIF fetch failed", err);
+          toast.error("Couldn't load GIFs. Try again in a moment.");
+        }
+      } finally {
+        setGifLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(fetchGifs, 300);
+    return () => {
+      clearTimeout(debounce);
+      controller.abort();
+    };
+  }, [gifSearch, selected, showGifPicker]);
+
+  // --- Anonymous-card enter/exit animation timing ----------------------
+  useEffect(() => {
+    if (enabled) {
+      setVisible(true);
+    } else {
+      const timer = setTimeout(() => setVisible(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [enabled]);
+
+  const clearDraft = useCallback(() => {
+    if (missingState) return;
+    try {
+      sessionStorage.removeItem(draftKey(state.postId, state.mode, state.commentId));
+    } catch {
+      // ignore
+    }
+  }, [missingState, state]);
 
   const submit = async () => {
+    if (missingState || submitting) return;
+
+    if (!content.trim() && !selectedGif) {
+      toast.error("Write something (or add a GIF) before submitting.");
+      return;
+    }
+
+    setSubmitting(true);
     const payload = {
       content,
       username_mention: state?.username_mention || null,
       user_id_mention: state?.user_id_mention || null,
       username: user.username,
-      gif_url: gif,
-      is_anonymous: isAnon ? 1 : 0,
-      comment_id: state?.comment_id || null
+      gif_url: selectedGif,
+      is_anonymous: enabled ? 1 : 0,
+      comment_id: state?.comment_id || null,
     };
 
-    if (state?.mode === "edit") {
-     const res = await axios.put(
-        `${import.meta.env.VITE_SERVER_URL}/api/comments/${state.commentId}`,
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      navigate(`/aboutpost/${state.postId}#${state.commentId}`);
-    } else {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${state.postId}/comments`,
-        payload,
-        { headers: { Authorization:  `Bearer ${token}`} }
-      );
-      const newCommendId = res.data.comment_id;
-      navigate(`/aboutpost/${state.postId}#${newCommendId}`);
+    try {
+      if (state?.mode === "edit") {
+        await api.put(`/api/comments/${state.commentId}`, payload);
+        toast.success("Comment updated.");
+        clearDraft();
+        sessionStorage.removeItem(STATE_KEY);
+        navigate(`/aboutpost/${state.postId}#${state.commentId}`);
+      } else {
+        const res = await api.post(`/api/posts/${state.postId}/comments`, payload);
+        const newCommentId = res.data.comment_id;
+        toast.success("Comment posted.");
+        clearDraft();
+        sessionStorage.removeItem(STATE_KEY);
+        navigate(`/aboutpost/${state.postId}#${newCommentId}`);
+      }
+    } catch (err) {
+      console.error("Comment submit failed", err);
+      const message =
+        err.response?.data?.message ||
+        (state?.mode === "edit"
+          ? "Couldn't update your comment. Please try again."
+          : "Couldn't post your comment. Please try again.");
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
     }
-    
-
-    
   };
 
+  if (missingState) {
+    // We already toast + navigate(-1) in the effect above; render nothing
+    // meaningful in the meantime rather than crashing on state.postId.
+    return null;
+  }
+
   return (
-    <div className="comment-page">
+    <div className="home-container">
+      <article id="feed-article">
+        <div className="comment-page">
+          <div className="comments-header">
+            <button
+              type="button"
+              className="back-btn-about-post"
+              onClick={() => navigate(-1)}
+              aria-label="Go back"
+            >
+              <LeftOutlined />
+            </button>
+            <button
+              onClick={submit}
+              className="submit-comm-btn"
+              disabled={submitting || (!content.trim() && !selectedGif)}
+              aria-busy={submitting}
+            >
+              {submitting ? <LoadingOutlined spin /> : "Submit"}
+            </button>
+          </div>
+          <div className="comments-nav">
+            <div className="comms-avatar-div">
+              <AnonymousPf
+                enabled={enabled}
+                realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+              />
+            </div>
+            <div className="comms-body">
+              <AnonymousNm enabled={enabled} realName={user?.username || "guest"} />
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Comment something about this post..."
+                className="comm-textarea"
+                disabled={submitting}
+              />
+              <div className="comms-footer">
+                {!lockedAnon && state?.mode !== "edit" && (
+                  <button
+                    className="gif-button"
+                    onClick={() => setShowAnnoy(!showAnnoy)}
+                    aria-label="Toggle anonymous mode options"
+                    disabled={anonLoading}
+                  >
+                    <FontAwesomeIcon icon={faMask} />
+                  </button>
+                )}
 
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Write something..."
-      />
+                {state?.mode !== "edit" && (
+                  <button
+                    className="gif-button"
+                    onClick={() => setShowGifPicker(!showGifPicker)}
+                    aria-label="Toggle GIF picker"
+                  >
+                    <FontAwesomeIcon icon={faFaceGrinWink} />
+                  </button>
+                )}
+              </div>
+              {showAnnoy && (
+                <div className={`anonymous-card ${visible ? "show" : "hide"}`}>
+                  <FontAwesomeIcon
+                    icon={faUserSecret}
+                    id="anonymous-icon"
+                    className={enabled ? "show" : "hide"}
+                  />
 
-      <input
-        value={gif}
-        onChange={(e) => setGif(e.target.value)}
-        placeholder="GIF URL"
-      />
+                  <div className="anonymous-header">
+                    <div className="anonymous-title">Anonymous Mode</div>
 
-      {gif && (
-        <img src={gif} className="gif-preview" />
-      )}
-
-      {!lockedAnon && (
-        <label>
-          <input
-            type="checkbox"
-            checked={isAnon}
-            onChange={() => setIsAnon(!isAnon)}
-          />
-          Anonymous
-        </label>
-      )}
-
-      <button onClick={submit}>
-        Submit
-      </button>
-
+                    <div className={`status-badge ${enabled ? "on" : "off"}`}>
+                      {enabled ? "ON" : "OFF"}
+                    </div>
+                  </div>
+                  <p className="token-text">
+                    Once you turn on anonymous mode, your identity will always be hidden on this post.
+                  </p>
+                  <div
+                    className={`toggle-container ${enabled ? "active" : ""}`}
+                    role="switch"
+                    aria-checked={enabled}
+                    tabIndex={0}
+                    onClick={() => setEnabled(!enabled)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setEnabled(!enabled);
+                      }
+                    }}
+                  >
+                    <div className="toggle-track">
+                      <div className="toggle-thumb" />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {showGifPicker && (
+                <div>
+                  <div className="radio-button-div-chat">
+                    {[{ id: 1, label: "All" }, { id: 2, label: "Favorite" }].map((opt) => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setSelected(opt.id)}
+                        style={{
+                          borderBottom: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+                          color: selected === opt.id ? "#fd7648" : "grey",
+                        }}
+                        className="radio-button-chat"
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="gif-picker">
+                    <input
+                      type="text"
+                      placeholder="Search GIFs..."
+                      value={gifSearch}
+                      onChange={(e) => setGifSearch(e.target.value)}
+                      className="gif-search"
+                    />
+                    {gifLoading ? (
+                      <div className="gif-loading">
+                        <LoadingOutlined spin /> Loading GIFs…
+                      </div>
+                    ) : gifs.length === 0 ? (
+                      <div className="gif-empty">No GIFs found.</div>
+                    ) : (
+                      <Masonry
+                        breakpointCols={{ default: 3, 700: 2, 500: 2, 350: 1 }}
+                        className="gif-masonry"
+                        columnClassName="gif-masonry-column"
+                      >
+                        {gifs.map((gif) => (
+                          <img
+                            key={gif.id}
+                            src={gif.gif_url}
+                            alt={gif.gif_label}
+                            onClick={() => {
+                              setSelectedGif(gif);
+                              setShowGifPicker(false);
+                            }}
+                            className="gif-masonry-item"
+                          />
+                        ))}
+                      </Masonry>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </article>
+      <article id="his-article">
+        <Rule
+          setRule={
+            state?.postType === "question"
+              ? "question-comment"
+              : state?.postType === "content"
+              ? "content-comment"
+              : "confession-comment"
+          }
+        />
+      </article>
     </div>
   );
 };
 
 export default Comment;
+
+// import React, { useEffect, useState,  memo } from "react";
+// import axios from "axios";
+// import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+// import { LeftOutlined } from "@ant-design/icons";
+// import Rule from "../util/upload/Rule";
+// import Masonry from 'react-masonry-css';
+
+// import "../style/page/Comment.css";
+// import { faFaceGrinWink } from "@fortawesome/free-regular-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faMask, faUserSecret } from "@fortawesome/free-solid-svg-icons";
+
+// const token = localStorage.getItem("token");
+
+// const username = sessionStorage.getItem("username");
+
+// import { AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
+// const AnonymousPf = memo(AnonymousProfile);
+// const AnonymousNm = memo(AnonymousName);
+
+// const api = axios.create({
+//   baseURL: import.meta.env.VITE_SERVER_URL,
+// });
+
+
+// const Comment = () => {
+//   const { state } = useLocation();
+//   const { user } = useOutletContext();
+  
+//   const navigate = useNavigate();
+
+//   const [selectedGif, setSelectedGif] = useState(null);
+//   const [gifSearch, setGifSearch] = useState('');
+//   const [gifs, setGifs] = useState([]);
+//   const [showGifPicker, setShowGifPicker] = useState(false);
+//   const [selected, setSelected] = useState(1);
+
+//   const [lockedAnon, setLockedAnon] = useState(false);
+//   const [showAnnoy, setShowAnnoy] = useState(false);
+//   const [enabled, setEnabled] = useState(false);
+
+//   const [content, setContent] = useState("");
+
+//   useEffect(() => {
+//     fetchAnon();
+//     if (state?.content) setContent(state.content);
+//   }, []);
+
+//    useEffect(() => {
+//     const fetchGifs = async () => {
+//       try {
+//         const token = localStorage.getItem('token');
+//         const endpoint = selected === 1
+//           ? `/api/search-gif?q=${encodeURIComponent(gifSearch)}`
+//           : `/api/search-gif-fav?q=${encodeURIComponent(gifSearch)}`;
+//         const res = await api.get(endpoint, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         setGifs(res.data);
+//       } catch (err) {
+//         console.error('GIF fetch failed', err);
+//       }
+//     };
+
+//     const debounce = setTimeout(fetchGifs, 300);
+//     return () => clearTimeout(debounce);
+//   }, [gifSearch, selected]);
+
+//   const fetchAnon = async () => {
+//     const res = await axios.get(
+//       `${import.meta.env.VITE_SERVER_URL}/api/get-anon-identity/${state.postId}`,
+//       { headers: { Authorization: `Bearer ${token}` } }
+//     );
+
+//     if (res.data.exists) setLockedAnon(true);
+//   };
+
+//   const submit = async () => {
+//     const payload = {
+//       content,
+//       username_mention: state?.username_mention || null,
+//       user_id_mention: state?.user_id_mention || null,
+//       username: user.username,
+//       gif_url: selectedGif,
+//       is_anonymous: enabled ? 1 : 0,
+//       comment_id: state?.comment_id || null
+//     };
+
+//     if (state?.mode === "edit") {
+//      const res = await axios.put(
+//         `${import.meta.env.VITE_SERVER_URL}/api/comments/${state.commentId}`,
+//         payload,
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+//       navigate(`/aboutpost/${state.postId}#${state.commentId}`);
+//     } else {
+//       const res = await axios.post(
+//         `${import.meta.env.VITE_SERVER_URL}/api/posts/${state.postId}/comments`,
+//         payload,
+//         { headers: { Authorization:  `Bearer ${token}`} }
+//       );
+//       const newCommendId = res.data.comment_id;
+//       navigate(`/aboutpost/${state.postId}#${newCommendId}`);
+//     }
+//   };
+
+//   const [visible, setVisible] = useState(enabled);
+//     useEffect(() => {
+//       if (enabled) {
+//         setVisible(true); 
+//       } else {
+//         const timer = setTimeout(() => setVisible(false), 1000);
+//         return () => clearTimeout(timer);
+//       }
+//     }, [enabled]);
+//   return (
+//     <div className='home-container'>
+//       <article id="feed-article">
+//         <div className="comment-page">
+
+//         <div className="comments-header">
+//           <button type='button' className='back-btn-about-post' onClick={() => navigate(-1)}><LeftOutlined /></button>
+//           <button onClick={submit} className='submit-comm-btn'>
+//             Submit
+//           </button>
+//         </div>
+//         <div className="comments-nav">
+         
+//             <div className="comms-avatar-div">
+//               <AnonymousPf enabled={enabled} realPf={user?.avatar_url || 'https://api.dicebear.com/9.x/adventurer/svg?seed=Felix'}/> 
+//             </div>
+//           <div className='comms-body'>
+//             <AnonymousNm enabled={enabled} realName={user?.username || 'guest'}/>
+//             <textarea
+//               value={content}
+//               onChange={(e) => setContent(e.target.value)}
+//               placeholder="Comment something about this post..."
+//               className='comm-textarea'
+//             />
+//             <div className='comms-footer'>
+//               {
+//                 !lockedAnon && state?.mode !== "edit" && (
+//                   <button className="gif-button" onClick={() => setShowAnnoy(!showAnnoy)}>
+//                     <FontAwesomeIcon icon={faMask} />
+//                   </button>
+//                 )
+//               }
+               
+//               { state?.mode !== "edit" && ( 
+//                 <button className="gif-button" onClick={() => setShowGifPicker(!showGifPicker)}>
+//                   <FontAwesomeIcon icon={faFaceGrinWink} />
+//                 </button>
+//               )}
+
+//             </div>
+//             {
+//               showAnnoy && (
+//                 <div className="anonymous-card">
+//                   <FontAwesomeIcon
+//                     icon={faUserSecret}
+//                     id="anonymous-icon"
+//                     className={enabled ? "show" : "hide"}
+//                   />
+  
+//                   <div className="anonymous-header">
+//                     <div className="anonymous-title">
+//                        Anonymous Mode
+//                     </div>
+                
+//                     <div className={`status-badge ${enabled ? "on" : "off"}`}>
+//                       {enabled ? "ON" : "OFF"}
+//                     </div>
+//                   </div>
+//                   <p className="token-text">
+//                     Once you turn on annoymous mode, your idenfity will alway be hidden on this post.
+//                   </p>
+//                   <div
+//                       className={`toggle-container ${enabled ? "active" : ""}`}
+//                       onClick={() => setEnabled(!enabled)}
+//                     >
+//                       <div className="toggle-track">
+//                         <div className="toggle-thumb" />
+//                       </div>
+//                     </div>
+//                 </div>
+//               )
+//             }
+//             {showGifPicker && (
+//               <div>
+//                 <div className='radio-button-div-chat'>
+//                   {[{ id: 1, label: "All" }, { id: 2, label: "Favorite" }].map((opt) => (
+//                     <button
+//                       key={opt.id}
+//                       onClick={() => setSelected(opt.id)}
+//                       style={{
+//                         borderBottom: selected === opt.id ? "2px solid #fd7648" : "2px solid transparent",
+//                         color: selected === opt.id ? "#fd7648" : "grey",
+//                       }}
+//                       className='radio-button-chat'
+//                     >
+//                       {opt.label}
+//                     </button>
+//                   ))}
+//                 </div>
+//                 <div className="gif-picker">
+//                   <input
+//                     type="text"
+//                     placeholder="Search GIFs..."
+//                     value={gifSearch}
+//                     onChange={(e) => setGifSearch(e.target.value)}
+//                     className="gif-search"
+//                   />
+//                   <Masonry
+//                     breakpointCols={{ default: 3, 700: 2, 500: 2, 350: 1 }}
+//                     className="gif-masonry"
+//                     columnClassName="gif-masonry-column"
+//                   >
+//                     {gifs.map(gif => (
+//                       <img
+//                         key={gif.id}
+//                         src={gif.gif_url}
+//                         alt={gif.gif_label}
+//                         onClick={() => { setSelectedGif(gif); setShowGifPicker(false); }}
+//                         className="gif-masonry-item"
+//                       />
+//                     ))}
+//                   </Masonry>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+//           </div>
+//         </div>
+//       </article>
+//       <article id='his-article'>
+//           <Rule setRule={state?.postType === "question" ? "question-comment" : state?.postType === "content" ? "content-comment" : "confession-comment"} />
+//       </article>
+    
+//     </div>
+//   );
+// };
+
+// export default Comment;

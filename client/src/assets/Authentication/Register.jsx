@@ -165,9 +165,6 @@ const Register = () => {
       }
     } catch (error) {
       console.error(error);
-      if (res.status === 506){
-        toast.error(data.message);
-      }
       toast.error("Server error");
     }
 

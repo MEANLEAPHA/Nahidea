@@ -139,9 +139,6 @@ export const VerifyEmail = () => {
 
     } catch (err) {
       console.error(err);
-      if(res.status === 506){
-        toast.error(data.message);
-      }
       toast.error("Server error");
     }
     setLoading(false);

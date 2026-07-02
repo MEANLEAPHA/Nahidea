@@ -52,7 +52,6 @@ import Search from './assets/page/Search';
 import AnswerQa from './assets/page/AnswerQa';
 import Comment from './assets/page/Comment';
 import ReportComment from './assets/page/ReportComment';
-import Account from './assets/page/Account';
 import SetupAccount from './assets/Authentication/SetupAccount';
 import HallOfFame from './assets/page/HallOfFame';
 import ReportHistory from './assets/page/ReportHistory';
@@ -94,7 +93,6 @@ const App = () =>{
               <Route path='/yourpost' element={<YourPosts/>}></Route>
 
               {/* Account */}
-              <Route path='/account' element={<Account/>}></Route>
               <Route path='/editaccount' element={<EditAccount/>}></Route>
 
               <Route path='/accounts' element={<Accounts/>}></Route>

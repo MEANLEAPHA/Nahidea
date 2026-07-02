@@ -19,6 +19,7 @@ const checks = {
 
 export const NewPassword = () => {
   const navigate = useNavigate();
+  const email = localStorage.getItem("resetEmail");
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -43,11 +44,12 @@ export const NewPassword = () => {
     const [isSymbol, setIsSymbol] = useState("grey");
     const [isLength, setIsLength] = useState("grey");
 
-    const email = localStorage.getItem("resetEmail");
-    if (!email) {
-      navigate("/verifyemailforgetpassword");
-      return;
-    }
+    
+    useEffect(() => {
+      if (!email) navigate("/verifyemailforgetpassword", { replace: true });
+    }, [email, navigate]); 
+
+    if (!email) return null;
 
     const calculateStrength = (value) => {
     let score = 0;

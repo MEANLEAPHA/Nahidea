@@ -9,17 +9,17 @@ import "../style/Authentication/SignPage.css";
 
 export const VerifyEmailForgetPassword = () => {
   const navigate = useNavigate();
-
   const email = localStorage.getItem("resetEmail");
-
-  if (!email) {
-    navigate("/forgetpassword");
-    return;
-  }
 
   const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (!email) navigate("/forgetpassword", { replace: true });
+  }, [email, navigate]);
+
+  if (!email) return null;
 
   const handleSubmit = async () => {
     if (pin.length !== 6) {
@@ -135,9 +135,6 @@ export const VerifyEmailForgetPassword = () => {
       };
     } catch (err) {
       console.error(err);
-      if(res.status === 506){
-              toast.error(data.message);
-            }
       toast.error("Server error. Please try again later.");
     };
     setLoading(false);

@@ -38,7 +38,9 @@
   font-weight: 600;
   color:var(--font-color);
 }
-
+.btn-cursor{
+  cursor: pointer;
+}
 .comment-btn {
   width: 100%;
   padding: 10px;
@@ -55,9 +57,9 @@
   border: 2px solid var(--secondary-color);
   opacity: 1;
 }
-.comm-mention-name{
-  font-size: medium;
-    margin-right: 3px;
+
+.comm-mention-name:hover{
+  text-decoration: underline;
 }
 .comment {
   width: auto;
@@ -136,11 +138,13 @@
   align-items: center;
   color: var(--font-color);
   opacity: 0.8;
+  margin-top: 5px;
  
 }
+
 .comment-actions-left{
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 10px;
 }
 .comment-like-button{

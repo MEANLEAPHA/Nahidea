@@ -42,10 +42,6 @@
   opacity: 1;
   transform: scale(0.95);
 }
-/* .spam-header h1 {
-  font-size: 30px;
-  margin: 0;
-} */
 
 .spam-badge {
   background: var(--back-con);
@@ -59,6 +55,8 @@
   display: grid;
   grid-template-columns: 340px 1fr;
   gap: 20px;
+  align-items: start;
+  justify-content: start;
 }
 
 .send-panel,
@@ -66,6 +64,15 @@
   background: var(--back-con);
   border-radius: 18px;
   padding: 20px;
+  height: auto;
+}
+.inbox-panel{
+  height: auto;
+  min-height: 250px;
+  max-height: 500px;
+  overflow-y: auto;
+   scrollbar-width: thin;
+    scrollbar-color: var(--secondary-color) var(--background-color);
 }
 
 .search-user-container{
@@ -422,6 +429,7 @@ border-radius: 8px !important;
  align-items: center;
 }
 @media (max-width: 900px) {
+ 
   .spam-header{
     flex-direction: column;
     justify-content: start;
@@ -433,7 +441,7 @@ border-radius: 8px !important;
      width: 100%;
   }
   .spam-dashboard {
-  padding: 10px 20px;
+  padding: 0px 20px;
   width: 100%;
 }
   .spam-grid {
@@ -443,4 +451,23 @@ border-radius: 8px !important;
   .spam-overlay img {
     width: 95%;
   }
+  .view-status{
+    gap: 3px;
+  }
+  .view-status-label{
+    display: none;
+  }
+  .spam-h4{
+    font-size: 12px;
+  }
+  .spam-p{
+    font-size: small;
+  }
+  .inbox-panel{
+  height: auto;
+  min-height:auto;
+  max-height: auto;
+
+
+}
 }

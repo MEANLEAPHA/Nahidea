@@ -188,7 +188,7 @@ export default function PreviewPost ({
         <div className="posts preview-posts" style={{display:displaySelected}}>
             <div className='post-header'>
                 <div className='post-user-profile'>
-                    {/* avatar_url from auth */}
+                    
                 <AnonymousPf enabled={isAnonymousValue} realPf={user?.avatar_url || 'https://api.dicebear.com/9.x/adventurer/svg?seed=Felix'}/> 
                     <div className='user-post-info'>
                         <p className='post-username'>

@@ -4,9 +4,6 @@ import { useParams, useOutletContext, useNavigate, useLocation } from "react-rou
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
-// lucide
-import { Heart, Bookmark, ArrowUp, ArrowDown, Trophy, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
-import { motion, AnimatePresence, transform } from "framer-motion";
 
 // style
 import "../style/page/Aboutpost.css";
@@ -14,12 +11,9 @@ import "../style/page/Home.css";
 import "../style/upload/MultipleMedia.css";
 import "../style/upload/Postpreview.css";
 
-// util
-import { DisplayAnimatedIcon } from "../util/upload/AnimatedIcon";
-import {iconOptions} from "../data/post_type_data";
-import { MediaPreview } from "../util/mediaUploader";
-import DotDropDown from './util/dotDropDown';
-import Rule from "../util/upload/Rule";
+// lucide
+import { Heart, Bookmark, ArrowUp, ArrowDown, Trophy, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence, transform } from "framer-motion";
 
 // fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,6 +24,13 @@ import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import { Typography, Space, Dropdown } from "antd";
 import { BorderOutlined, CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, EnterOutlined, FlagOutlined, LeftOutlined, LinkOutlined } from '@ant-design/icons';
 const { Text } = Typography;
+
+// util
+import { DisplayAnimatedIcon } from "../util/upload/AnimatedIcon";
+import {iconOptions} from "../data/post_type_data";
+import { MediaPreview } from "../util/mediaUploader";
+import DotDropDown from './util/dotDropDown';
+import Rule from "../util/upload/Rule";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
@@ -66,6 +67,7 @@ const timeAgo = (timestamp) => {
   if (months < 12) return `${months} month${months > 1 ? 's' : ''} ago`;
   const years = Math.floor(days / 365);
   return `${years} year${years > 1 ? 's' : ''} ago`;
+
 };
 
 const calculateAverageAnswer = (answers, questionType) => {
@@ -499,6 +501,7 @@ const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) =>
     <button
       className={`comment-like-button ${isLiked ? "liked" : ""}`}
       type="button"
+      style={{cursor: 'pointer'}}
       onClick={onLike}
     >
       <motion.div
@@ -536,7 +539,7 @@ const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) =>
   );
 });
 
-const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
+const CommentCard = memo(({ c, is_annoymous, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
   const isExpanded = expandedReplies[c.id];
   
   return (
@@ -548,18 +551,19 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
       `}
       id={c.id}
     >
-      <div className="avatar" style={{ background: renderColorFn(c) }}>
-        <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
-      </div>
+    <div className="avatar" style={{ background: renderColorFn(c) }} onClick = {Number(is_annoymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>
+      <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
+    </div>
 
       <div className="comment-body">
         <div className="comment-header">
           <div className="comment-name-wrapper">
-            <b className="comment-name">{renderNameFn(c)}</b>
+            <b className="comment-name" onClick = {Number(is_annoymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>{renderNameFn(c)}</b>
           </div>
           <CommentDropDown 
             ownerId={c.user_id} 
             comm_id={c.id} 
+            postType={c.post_type}
             comm_text={c.content} 
             comm_gif={c.gif_url} 
             post_id={postId}
@@ -569,7 +573,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
 
         <div className="comment-text">
           {c.username_mention && (
-            <span style={{ color: 'skyblue' }} className='comm-mention-name'>@{c.username_mention}</span>
+            <span style={{ color: 'skyblue', cursor: 'none' }} className='comm-mention-name'>@{c.username_mention}</span>
           )}
           <span className='comm-content'>{c.content}
             {c.is_edited === 1 && !c.is_deleted && (
@@ -598,7 +602,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
                 }}
                 isAnimating={likingCommentId === c.id}
               />
-              <span onClick={() => onReplyClick(c)}>
+              <span onClick={() => onReplyClick(c)} className='btn-cursor'>
                 Reply
               </span>
             </div>
@@ -628,6 +632,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
               <CommentCard 
                 key={r.id} 
                 c={r} 
+                is_annoymous = {r?.is_annoymous}
                 isReply={true}
                 postId={postId}
                 expandedReplies={expandedReplies}
@@ -650,7 +655,7 @@ const CommentCard = memo(({ c, isReply, postId, expandedReplies, onToggleReplies
   );
 });
 
-const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDelete }) => {
+const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDelete, postType }) => {
   const { user } = useOutletContext();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -699,6 +704,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
               commentId: comm_id, 
               content: comm_text, 
               gif_url: comm_gif, 
+              postType: postType,
               mode: "edit" 
             },
           });
@@ -737,7 +743,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
       classNames={{ root: "profile-dropdown" }}
     >
       <div className="comm-header-right">
-        <FontAwesomeIcon icon={faEllipsis} className="icon-formore-comm" />
+        <FontAwesomeIcon icon={faEllipsis} className="icon-formore-comm" style={{cursor: 'pointer'}}/>
       </div>
     </Dropdown>
   );
@@ -979,7 +985,6 @@ const AboutPost = () => {
     }
   };
 
-
   const fetchComments = async (pageNum = 1) => {
     if (loadingComments || !hasMore) return;
 
@@ -1130,7 +1135,8 @@ const AboutPost = () => {
         comment_id: c.id,
         user_id_mention: c.user_id || null,
         username_mention: renderName(c),
-        mode: "reply"
+        mode: "reply",
+        postType: post?.post_type
       }
     });
   };
@@ -1578,7 +1584,7 @@ const AboutPost = () => {
                 {selectedTab === 2 && (
                   <>
                     <button
-                      onClick={() => navigate(`/comment`, { state: { postId: id } })}
+                      onClick={() => navigate(`/comment`, { state: { postId: id, postType: post?.post_type} })}
                       className="comment-btn"
                     >
                       <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Write a comment
@@ -1587,6 +1593,8 @@ const AboutPost = () => {
                       <CommentCard 
                         key={c.id}
                         c={c}
+                        is_annoymous = {c?.is_annoymous}
+                        is_annoymous={c?.is_annoymous}
                         isReply={false}
                         postId={id}
                         expandedReplies={expandedReplies}

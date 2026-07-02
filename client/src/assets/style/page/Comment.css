@@ -1,0 +1,91 @@
+.comment-page{
+    padding: 0px 20px;
+}
+.comments-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+.submit-comm-btn{
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    border-radius: 10px;
+    width: 90px;
+    height: 30px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+.submit-comm-btn:hover{
+    opacity: 1;
+}
+
+.comments-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 10px;
+    padding: 0;
+    width: 100%;
+    position: relative;
+    height: auto;
+    margin-top: 10px;
+}
+
+
+.comms-avatar-div{
+    width: 35px;
+    height: 35px;
+    background: grey;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.comms-avatar{
+    width: 100%;
+    height: 100%;
+     object-fit: cover;
+     border-radius: 50%;
+}
+
+
+.comms-body{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    height: auto;
+     position: relative;
+     overflow: hidden;
+}
+
+.author-name-com{
+    color:var(--font-color);
+    font-weight: 600;
+}
+.comm-textarea{
+    background: none;
+    padding: 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    color:var(--font-color)
+}
+.comm-textarea:focus{
+     border: 2px solid var(--secondary-color);
+     outline: none;
+}
+.comms-footer{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    width: 100%;
+    height: auto;
+    margin-top: 8px;
+}
+
+@media screen and (max-width:1000px) {
+    .comment-page{
+        padding: 15px 10px;
+    }
+}

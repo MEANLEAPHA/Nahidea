@@ -563,20 +563,9 @@ setLikingPosts(prev => new Set(prev).add(postId));
   );
 
   try {
-
-    // await axios.post(
-    //   `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
-    //   {},
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`
-    //     }
-    //   }
-    // );
    await api.post(
       `/api/posts/${postId}/${ownerId}/like`, {}
     );
-
   } catch (err) {
 
     // rollback on fail
@@ -625,17 +614,7 @@ const handleFavorite = async (postId) => {
   );
 
   try {
-
-    await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
+    await api.post( `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`, {})
   } catch (err) {
 
     // rollback

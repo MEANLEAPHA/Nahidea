@@ -63,7 +63,11 @@ const SetupAccount = () => {
 
   const { state } = useLocation();
 
-  // if(!state?.Email || !state?.UserId) return navigate("/login");
+  useEffect(() => {
+    if (!state?.Email || !state?.UserId) {
+      navigate("/login", { replace: true });
+    }
+  }, [state, navigate]);
 
   const [showAvatarStudio, setShowAvatarStudio] =
     useState(false);
@@ -149,9 +153,10 @@ const handleSubmit = async (e) => {
         navigate("/login");
       }, 3000);
     }
-  } catch (err) {
-    console.log(err);
-  }
+ } catch (err) {
+  console.error(err);
+  toast.error("Something went wrong, please try again.");
+}
 };
   return (
     <div className="setup-page">

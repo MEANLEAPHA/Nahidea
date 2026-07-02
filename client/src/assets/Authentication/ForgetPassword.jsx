@@ -58,7 +58,6 @@ export const ForgetPassword = () => {
       console.error(err);
       toast.error("Server error");
     }
-
     setLoading(false);
   };
 

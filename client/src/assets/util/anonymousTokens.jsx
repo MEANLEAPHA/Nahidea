@@ -128,9 +128,26 @@ const generateNum = Array.from({length: 6}, ()=> Math.floor(Math.random() *10)).
 
 export function AnonymousProfile({ enabled, realPf }) {
   const colors = [
-    "yellowgreen", "skyblue", "tomato", "yellow",
-    "purple", "orange", "grey", "black", "brown",
-    "pink", "cyan"
+    "#8B5CF6", // violet
+    "#EC4899", // pink
+    "#38BDF8", // sky
+    "#818CF8", // indigo
+    "#EAB308", // yellow
+    "#4ADE80", // green
+    "#F87171", // red
+    "#FB923C", // orange
+    "#22D3EE", // cyan
+    "#2DD4BF", // teal
+    "#F472B6", // rose
+    "#A78BFA", // purple
+    "#FCA5A5", // soft red
+    "#FACC15", // amber
+    "#60A5FA", // blue
+    "#34D399", // emerald
+    "#FB7185", // pink-red
+    "#6366F1", // indigo
+    "#A855F7", // medium purple
+    "#3B82F6", // medium blue
   ];
 
   const randomIndex = Math.floor(Math.random() * colors.length);
@@ -158,11 +175,12 @@ export function AnonymousToggle({
     if (enabled) {
       setVisible(true); // show immediately
     } else {
-      // fade out first, then remove from layout
-      const timer = setTimeout(() => setVisible(false), 1000); // match transition duration
+      
+      const timer = setTimeout(() => setVisible(false), 1000); // match transition durations
       return () => clearTimeout(timer);
     }
   }, [enabled]);
+
   return (
   
  
@@ -220,18 +238,3 @@ export function AnonymousTokensCoolDown({tokens, countdown}){
     </>
   );
 }
-
-
-   // <div id="anonymous-wrapper">
-    //   <p id="token-reminder-p">You have remaining <span style={{color: "#fd7648"}}>{tokens}</span> anonymous token{tokens === 1 ? "" : "s"}</p>
-    //   {tokens !== 0 ? (<div className="toggle-switch">
-    //   <input
-    //     type="checkbox"
-    //     checked={enabled}
-    //     onChange={(e) => setEnabled(e.target.checked)}
-    //     id="deadlineStatus"
-    //   />
-    //   <label htmlFor="deadlineStatus"></label>
-    //   <p id="toggle-text-preview">{enabled ? "On" : "Off"}</p>
-    // </div>): null}
-    // </div>
