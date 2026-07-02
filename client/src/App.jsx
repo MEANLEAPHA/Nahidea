@@ -220,7 +220,7 @@ const Layout = () => {
     if (!token) return;
     const handleTrackLogin = async () => {
       try {
-        await api.post('/api/record-login'); // no manual header needed anymore
+        await api.post('/api/record-login');
       } catch (err) {
         console.error(err);
       }

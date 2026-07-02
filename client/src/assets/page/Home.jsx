@@ -1,7 +1,7 @@
 // react state
 import React,{ useState, useEffect, useRef, memo, useCallback, useLayoutEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import axios from "axios";
+import api from "../api/axiosInstance";
 
 // antd
 import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown, message} from "antd";
@@ -99,9 +99,7 @@ export default function Home() {
 
   // INITIAL LOAD
   useEffect(() => {
-    const saved = getScroll("home");
-    console.log('Initial load - Saved scroll:', saved);
-
+    const saved = getScroll("home"); 
     const loadInitial = async () => {
       try {
         setLoading(true);
@@ -273,19 +271,14 @@ export default function Home() {
   const fetchPosts = async (nextPage = 1) => {
     if (fetchingRef.current) return;
 
-fetchingRef.current = true;
+    fetchingRef.current = true;
 
     try {
       setFetching(true);
       setLoading(true);
 
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const res = await api.get(
+        `/api/all-posts?page=${nextPage}`
       );
 
       const payload = res.data;
@@ -571,14 +564,17 @@ setLikingPosts(prev => new Set(prev).add(postId));
 
   try {
 
-    await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
+    // await axios.post(
+    //   `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
+    //   {},
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`
+    //     }
+    //   }
+    // );
+   await api.post(
+      `/api/posts/${postId}/${ownerId}/like`, {}
     );
 
   } catch (err) {
