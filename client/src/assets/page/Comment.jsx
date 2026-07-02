@@ -221,7 +221,7 @@ const Comment = () => {
       username_mention: state?.username_mention || null,
       user_id_mention: state?.user_id_mention || null,
       username: user.username,
-      gif_url: selectedGif.gif_url,
+      gif_url: state?.gif_url || selectedGif.gif_url,
       is_anonymous: enabled ? 1 : 0,
       comment_id: state?.comment_id || null,
     };

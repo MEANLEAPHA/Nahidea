@@ -539,7 +539,7 @@ const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) =>
   );
 });
 
-const CommentCard = memo(({ c, is_annoymous, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
+const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
   const isExpanded = expandedReplies[c.id];
   
   return (
@@ -563,7 +563,7 @@ const CommentCard = memo(({ c, is_annoymous, isReply, postId, expandedReplies, o
           <CommentDropDown 
             ownerId={c.user_id} 
             comm_id={c.id} 
-            postType={c.post_type}
+            postType={postType}
             comm_text={c.content} 
             comm_gif={c.gif_url} 
             post_id={postId}
@@ -632,6 +632,7 @@ const CommentCard = memo(({ c, is_annoymous, isReply, postId, expandedReplies, o
               <CommentCard 
                 key={r.id} 
                 c={r} 
+                postType = {postType}
                 is_annoymous = {r?.is_annoymous}
                 isReply={true}
                 postId={postId}
@@ -1593,6 +1594,7 @@ const AboutPost = () => {
                       <CommentCard 
                         key={c.id}
                         c={c}
+                        postType = {post?.post_type}
                         is_annoymous = {c?.is_annoymous}
                         is_annoymous={c?.is_annoymous}
                         isReply={false}
@@ -1636,6 +1638,7 @@ const AboutPost = () => {
                     <CommentCard 
                       key={c.id}
                       c={c}
+                      postType = {post?.post_type}
                       isReply={false}
                       postId={id}
                       expandedReplies={expandedReplies}
