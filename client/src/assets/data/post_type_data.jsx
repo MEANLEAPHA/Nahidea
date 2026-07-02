@@ -12,8 +12,6 @@ import {
   faThumbsDown,
 } from "@fortawesome/free-regular-svg-icons";
 
-
-
 export const content_options = [
   {
     value: "advice",
@@ -353,6 +351,7 @@ export const spammy_options = [
     img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTUydW1rcWg4d2d3aGpvdGJwcnZqM3NuMmx0YW5ncWo2dXY2aTRwMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/emleA2iGk5UFLXrGoX/giphy.gif",
   },
 ];
+
 export const confession_options = [
   {
     value: "secret_crush",
@@ -671,7 +670,6 @@ export const iconOptions = [
   { id: 9, name: "flag", icon: faFlag },
 ];
 
-
 export const question_type = [
   {id:1, label:"Open End", value:"openend"},
   {id:2, label:"Closed End", value:"closedend"},
@@ -681,7 +679,6 @@ export const question_type = [
   {id:6, label:"Rating", value:"rating"},
   {id:7, label:"Ranking Order", value:"rankingorder"}
 ];
-
 
 export const gif_category = [
   // 🎭 Core Reactions

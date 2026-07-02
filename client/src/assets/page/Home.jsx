@@ -704,7 +704,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
 
                             <div className='user-post-info'>
                               <p className='post-username'>
-                                {post.username} 
+                                {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} 
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 

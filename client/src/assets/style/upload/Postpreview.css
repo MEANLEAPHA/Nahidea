@@ -21,8 +21,6 @@
 }
 
 
-
-
 /* POST UI DESIGN */
 .posts{
     width: 100%;
@@ -236,13 +234,6 @@
     padding: 0;
     margin: auto;
     color: var(--font-color);
-  
-    /* max-height: 280px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical; */
 }
 .post-body-text p{
     color: var(--font-color);
@@ -391,8 +382,8 @@
 }
 .tag-text{
     font-size: small;
-  
-    color:var(--primary-color);
+    color:rgb(48, 48, 224) !important;
+    padding: 0;
     margin: 0;
     opacity: 0.9;
     cursor: pointer;

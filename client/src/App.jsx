@@ -1,47 +1,42 @@
+// import React
 import React,{ useState, useEffect, useRef, memo } from 'react';
 import {BrowserRouter, Routes, Route, Outlet, useNavigate, Navigate} from 'react-router-dom';
 import { Toaster } from "react-hot-toast";
-
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import {
-  connectSocket,
-  disconnectSocket,
-  getSocket
-} from "./socket";
 
+// socket
+import { connectSocket, disconnectSocket, getSocket } from "./socket";
+
+// api
+import api from './assets/api/axiosInstance';
+import { authStore } from './assets/api/authStore';
+
+// authContext
 import { useAuth } from './assets/context/AuthContext';
 
-// Import Page
+// Style
+import './assets/style/App.css';
+import './assets/style/Main.css';
+import './assets/style/Section.css';
 
-// Component
-  
+//util
+import getToken from './assets/util/auth';
+
+// Component Page
 import Aside from './assets/components/Aside';
 import Header from '../src/assets/components/Header'; 
-// Home
 import Home from './assets/page/Home';
-
-// Authentication
 import Login  from './assets/Authentication/Login';
 import Register from './assets/Authentication/Register';
 import { VerifyEmail } from './assets/Authentication/VerifyEmail';
 import { ForgetPassword } from './assets/Authentication/ForgetPassword';
 import { VerifyEmailForgetPassword } from './assets/Authentication/VerifyEmailForgetPassword';
 import { NewPassword } from './assets/Authentication/NewPassword';
-
-// Action upload
 import Question from './assets/upload/Question';
 import Confession from './assets/upload/Confession';
 import Content from './assets/upload/Content';
 import EditContentBody from './assets/upload/EditContentBody';
-
-//util
-import getToken from './assets/util/auth';
-
-// Style
-import './assets/style/App.css';
-import './assets/style/Main.css';
-import './assets/style/Section.css'
 import PrivacyPolicy from './assets/page/Privatepolicy';
 import GifFeed from './assets/page/GifFeed';
 import GifUpload from './assets/upload/GifUpload';
@@ -82,147 +77,113 @@ import EditAccount from './assets/page/EditAccount';
 const App = () =>{
     return(
         <BrowserRouter>
-            <Routes>
-                
-                {/* Home Page */}
-                <Route path='/' element={<Layout/>}>
-                    {/* Action Upload page */}
-                    <Route index element={<Home/>} />
-                    <Route path='/home' element={<Home/>}></Route>
-                   
-                    {/* Report&FeedBack */}
-                    <Route path='/report-conversation' element={<ReportConversation/>}></Route>
+          <Routes>
+            <Route path='/' element={<Layout/>}>
+              {/* Action Upload page */}
+              <Route index element={<Home/>} />
+              <Route path='/home' element={<Home/>}></Route>
+              
+              {/* Report&FeedBack */}
+              <Route path='/report-conversation' element={<ReportConversation/>}></Route>
 
 
-                    {/*Storage data*/}
-                    <Route path='/history' element={<History/>}></Route>
-                    <Route path='/favorite' element={<Favorite/>}></Route>
-                    <Route path='/likepost' element={<LikePost/>}></Route>
-                    <Route path='/yourpost' element={<YourPosts/>}></Route>
+              {/*Storage data*/}
+              <Route path='/history' element={<History/>}></Route>
+              <Route path='/favorite' element={<Favorite/>}></Route>
+              <Route path='/likepost' element={<LikePost/>}></Route>
+              <Route path='/yourpost' element={<YourPosts/>}></Route>
 
-                    {/* Account */}
-                    <Route path='/account' element={<Account/>}></Route>
-                    <Route path='/editaccount' element={<EditAccount/>}></Route>
+              {/* Account */}
+              <Route path='/account' element={<Account/>}></Route>
+              <Route path='/editaccount' element={<EditAccount/>}></Route>
 
-                    <Route path='/accounts' element={<Accounts/>}></Route>
-                    <Route path='/friends' element={<AllFriends/>}></Route>
+              <Route path='/accounts' element={<Accounts/>}></Route>
+              <Route path='/friends' element={<AllFriends/>}></Route>
 
-                    {/* Upload posts */}
-                    <Route path='/create/question' element={<Question/>}></Route>
-                    <Route path='/create/confession' element={<Confession/>}></Route>
-                    <Route path='/create/content' element={<Content/>}></Route>
+              {/* Upload posts */}
+              <Route path='/create/question' element={<Question/>}></Route>
+              <Route path='/create/confession' element={<Confession/>}></Route>
+              <Route path='/create/content' element={<Content/>}></Route>
 
-                    {/* post */}
-                    <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>
-                    <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
-                    <Route path='/comment' element={<Comment/>}></Route>
-                    <Route path ='/report' element={<ReportComment/>}></Route>
-                    <Route path='/edit/content' element={<EditContentBody/>}></Route>
+              {/* post */}
+              <Route path='/aboutpost/:id' element={<AboutPost/>}></Route>
+              <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
+              <Route path='/comment' element={<Comment/>}></Route>
+              <Route path ='/report' element={<ReportComment/>}></Route>
+              <Route path='/edit/content' element={<EditContentBody/>}></Route>
 
-                    <Route path='/trending' element={<Trending/>}></Route>
-                    <Route path='/unslovedqa' element={<UnsolvedQA/>}></Route>
-                    <Route path='/spammy' element={<Spammy/>}></Route>
+              <Route path='/trending' element={<Trending/>}></Route>
+              <Route path='/unslovedqa' element={<UnsolvedQA/>}></Route>
+              <Route path='/spammy' element={<Spammy/>}></Route>
 
-                    {/* Hall of fame */}
-                    <Route path='/halloffame' element={<HallOfFame/>}></Route>
+              {/* Hall of fame */}
+              <Route path='/halloffame' element={<HallOfFame/>}></Route>
 
-                    {/* Gif */}
-                    <Route path='/gif' element={<GifFeed/>}></Route>
-                    <Route path='/upload/gif' element={<GifUpload/>}></Route>
-                    <Route path='/favorite/gif' element={<FavoritesGif/>}></Route>
+              {/* Gif */}
+              <Route path='/gif' element={<GifFeed/>}></Route>
+              <Route path='/upload/gif' element={<GifUpload/>}></Route>
+              <Route path='/favorite/gif' element={<FavoritesGif/>}></Route>
 
-                    {/* User assistant */}
-                    <Route path='/help' element={<Help/>}></Route>
-                   
-                    {/* User Dashboard */}
-                    <Route path='/notification' element={<Notification/>}></Route>
-                    <Route path='/notifications' element={<Notifications/>}></Route>
-                    {/* feedback */}
-                    <Route path='/reporthistory' element={<ReportHistory/>}></Route> 
-                    <Route path='/feedback' element={<FeedbackForm/>}></Route> 
+              {/* User assistant */}
+              <Route path='/help' element={<Help/>}></Route>
+              
+              {/* User Dashboard */}
+              <Route path='/notification' element={<Notification/>}></Route>
+              <Route path='/notifications' element={<Notifications/>}></Route>
+              {/* feedback */}
+              <Route path='/reporthistory' element={<ReportHistory/>}></Route> 
+              <Route path='/feedback' element={<FeedbackForm/>}></Route> 
 
-                    {/* tool */}
-                    <Route path='/search' element={<Search />}></Route>
+              {/* tool */}
+              <Route path='/search' element={<Search />}></Route>
+            </Route>
 
+            {/* gossiper */}
+              <Route path='/chat' element={<Chat/>}></Route>
 
-                </Route>
+            {/* User assistant */}
+            <Route path='/useragreement' element = {<UserAgreement/>} />
+            <Route path='/nahidearule' element={<Rule/>} />
+            <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
+            <Route path='/accessibility' element={<Accessibility/>}></Route>
 
-                {/* gossiper */}
-                 <Route path='/chat' element={<Chat/>}></Route>
-
-
-                {/* User assistant */}
-                <Route path='/useragreement' element = {<UserAgreement/>} />
-                <Route path='/nahidearule' element={<Rule/>} />
-                <Route path='/privacypolicy' element={<PrivacyPolicy/>}></Route>
-                <Route path='/accessibility' element={<Accessibility/>}></Route>
-
-                {/* Authentication */}
-                <Route path='/login' element={<Login/>}></Route>
-                <Route path='/register' element={<Register/>}></Route>
-                <Route path='/verifyemail' element={<VerifyEmail/>}></Route>
-                <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
-                <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
-                <Route path='/newpassword' element={<NewPassword/>}></Route>
-                <Route path='/setupaccount' element={<SetupAccount/>}></Route>
-        
-                {/* Not Found page */}
-                <Route path='*' element={<NotFound/>}></Route>
-                
-            </Routes>
+            {/* Authentication */}
+            <Route path='/login' element={<Login/>}></Route>
+            <Route path='/register' element={<Register/>}></Route>
+            <Route path='/verifyemail' element={<VerifyEmail/>}></Route>
+            <Route path='/forgetpassword' element={<ForgetPassword/>}></Route>
+            <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
+            <Route path='/newpassword' element={<NewPassword/>}></Route>
+            <Route path='/setupaccount' element={<SetupAccount/>}></Route>
+    
+            {/* Not Found page */}
+            <Route path='*' element={<NotFound/>}></Route>   
+          </Routes>
         </BrowserRouter>
     )
-}
+};
+
+// Registered once, at the top level, independent of which page/layout is
+// mounted — fixes the "interceptor gets ejected on /chat or /login" gap.
+const AuthRedirectListener = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    authStore.registerRedirectHandler(() => {
+      navigate("/login", { replace: true });
+    });
+  }, [navigate]);
+  return null;
+};
  
 
 const Layout = () => {
 
   const navigate = useNavigate();
 
-  const {
-    user,
-    token,
-    loading,
-    logout,
-  } = useAuth();
-
+  const { user, token, loading, logout, } = useAuth();
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-// =========================================
-// AXIOS INTERCEPTOR (final update)
-// =========================================
-useEffect(() => {
-  const interceptor = axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      if (error.response?.status === 401) {
-        const token = localStorage.getItem("token");
-        const expiry = localStorage.getItem("tokenExpiry");
-
-        // Only force logout if token is gone or expired
-        if (!token || (expiry && Date.now() > Number(expiry))) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("tokenExpiry");
-
-          disconnectSocket();
-          logout?.();
-
-          navigate("/login", { replace: true });
-        }
-      }
-
-      return Promise.reject(error);
-    }
-  );
-
-  return () => {
-    axios.interceptors.response.eject(interceptor);
-  };
-}, [navigate, logout]);
-
-  // =========================================
   // SOCKET
-  // =========================================
   useEffect(() => {
 
     if (!token || !user) return;
@@ -255,111 +216,37 @@ useEffect(() => {
 
   }, [token, user]);
 
-  // =========================================
-  // AUTO LOGOUT
-  // =========================================
   useEffect(() => {
-
     if (!token) return;
-
-    const expiry = Number(
-      localStorage.getItem("tokenExpiry")
-    );
-
-    if (!expiry) return;
-
-    const remaining = expiry - Date.now();
-
-    if (remaining <= 0) {
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-
-      disconnectSocket();
-
-      logout?.();
-
-      navigate("/login", {
-        replace: true
-      });
-
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-
-      disconnectSocket();
-
-      logout?.();
-
-      navigate("/login", {
-        replace: true
-      });
-
-    }, remaining);
-
-    return () => clearTimeout(timeout);
-
-  }, [token, navigate, logout]);
-
-  // =========================================
-  // TRACK LOGIN
-  // =========================================
-  useEffect(() => {
-
-    if (!token) return;
-
     const handleTrackLogin = async () => {
-
       try {
-
-        await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/record-login`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
+        await api.post('/api/record-login'); // no manual header needed anymore
       } catch (err) {
-
         console.error(err);
-
       }
     };
-
     handleTrackLogin();
-
   }, [token]);
 
-  // =========================================
+
   // ASIDE
-  // =========================================
   const [showMaxAside, setMaxAside] = useState(() => {
     return localStorage.getItem("maxAside") === "true";
   });
 
   useEffect(() => {
-
     localStorage.setItem(
       "maxAside",
       showMaxAside
     );
-
   }, [showMaxAside]);
 
   const toggleAside = () => {
     setMaxAside(prev => !prev);
   };
 
-  // =========================================
+
   // THEME
-  // =========================================
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true";
   });
@@ -382,9 +269,7 @@ useEffect(() => {
     setDarkMode(prev => !prev);
   };
 
-  // =========================================
   // AFTER ALL HOOKS
-  // =========================================
   
   // if (loading) {
   //   return <div>Loading...</div>;
@@ -394,37 +279,24 @@ useEffect(() => {
   //   return <Navigate to="/login" replace />;
   // }
 
-  // =========================================
+
   // ONLINE
-  // =========================================
-  const isOnline =
-    user?.id
-      ? onlineUsers.includes(String(user.id))
-      : false;
+  const isOnline = user?.id ? onlineUsers.includes(String(user.id)) : false;
 
   
   return (
     <>
-      <Header
-        avatar_url={user?.avatar_url}
-        onToggleAside={toggleAside}
-        onToggleTheme={toggleTheme}
-        currentTheme={darkMode}
+      <Header avatar_url={user?.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} />
+      <Toaster position="top-right" 
+               toastOptions={{
+                  style: {
+                    background: darkMode ? "#1f1f1f" : "#ffffff",
+                    color: darkMode ? "#ffffff" : "#1f1f1f",
+                  },
+               }}
       />
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: darkMode ? "#1f1f1f" : "#ffffff",
-            color: darkMode ? "#ffffff" : "#1f1f1f",
-          },
-        }}
-      />
-
       <main style={{ position: "relative" }}>
-
         <Aside append={showMaxAside} />
-
         <section>
           <Outlet
             context={{
@@ -434,14 +306,11 @@ useEffect(() => {
             }}
           />
         </section>
-
       </main>
     </>
   );
+
 };
-
-
-
 
 const NotFound = () =>{
     return(
@@ -450,6 +319,7 @@ const NotFound = () =>{
         </h1>
     )
 }
+
 export default App;
 
 

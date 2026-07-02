@@ -224,7 +224,7 @@ export default function Spammy() {
       setReceiverId(null);
       setSearchQuery("");
       setSearchResults([]);
-      clearPrefill(); // selection fulfilled — don't restore on next visit/refresh
+      clearPrefill(); 
       fetchSentSpam();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Failed to send spam");

@@ -41,6 +41,1499 @@ const { Text } = Typography;
 
 const token = localStorage.getItem("token");
 
+const mockContentPost = {
+  id: 123,
+  user_id: 1,
+  username: "JohnDoe",
+  avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "content",
+  likes_count: 42,
+  comments_count: 7,
+  views_count: 328,
+  created_at: "2026-06-15T10:30:00Z",
+  status: "active",
+  tags: "javascript,react,coding,webdev",
+  is_liked: false,
+  is_favorited: false,
+  data: {
+    id: 123,
+    title: "10 Tips for Better React Performance",
+    type: "tutorial",
+    text_body: `## React Performance Optimization Tips
+
+### 1. Use React.memo for expensive components
+\`\`\`jsx
+const ExpensiveComponent = React.memo(({ data }) => {
+  // component logic
+});
+\`\`\`
+
+### 2. Implement virtualization for long lists
+Use **react-window** or **react-virtualized** for rendering large datasets.
+
+### 3. Avoid inline functions in render
+\`\`\`jsx
+// ❌ Bad
+<button onClick={() => handleClick()}>Click</button>
+
+// ✅ Good
+<button onClick={handleClick}>Click</button>
+\`\`\`
+
+### 4. Lazy load components
+\`\`\`jsx
+const LazyComponent = React.lazy(() => import('./Component'));
+\`\`\`
+
+### 5. Use useCallback and useMemo appropriately
+
+These are just a few tips to get started! What performance issues are you facing?`,
+    media_url: JSON.stringify([
+      "https://picsum.photos/id/1/800/400",
+      "https://picsum.photos/id/2/800/400",
+      "https://picsum.photos/id/3/800/400"
+    ])
+  }
+};
+
+// For CONFESSION type post
+const mockConfessionPost = {
+  id: 124,
+  user_id: 2,
+  username: "Anonymous Confession",
+  avatar_url: null,
+  is_anonymous: 1,
+  anonymous_name: "🕊️ Lost Soul",
+  anonymous_bg_color: "#FF6B6B",
+  post_type: "confession",
+  likes_count: 156,
+  comments_count: 23,
+  views_count: 1245,
+  created_at: "2026-06-14T10:30:00Z",
+  status: "active",
+  tags: "confession,life,truth",
+  is_liked: true,
+  is_favorited: false,
+  data: {
+    id: 124,
+    title: "I've been pretending to be happy for 2 years",
+    media_url: "https://picsum.photos/id/20/800/400"
+  }
+};
+
+// For QUESTION type post - CLOSEDEND
+const mockQuestionPostClosedEnd = {
+  id: 125,
+  user_id: 1,
+  username: "JohnDoe",
+  avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "question",
+  likes_count: 89,
+  comments_count: 12,
+  views_count: 678,
+  created_at: "2026-06-15T08:00:00Z",
+  status: "active",
+  tags: "poll,opinion,tech",
+  is_liked: false,
+  is_favorited: true,
+  data: {
+    id: 125,
+    title: "Do you think AI will replace developers?",
+    question_type: "closedend",
+    yes_title: "Yes, eventually",
+    no_title: "No, AI is just a tool",
+    answers_count: 8,
+    media_url: "https://picsum.photos/id/26/800/400"
+  }
+};
+
+// For QUESTION type post - RATING
+const mockQuestionPostRating = {
+  id: 126,
+  user_id: 3,
+  username: "MovieBuff",
+  avatar_url: "https://randomuser.me/api/portraits/women/1.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "question",
+  likes_count: 234,
+  comments_count: 45,
+  views_count: 1890,
+  created_at: "2026-06-14T10:30:00Z",
+  status: "active",
+  tags: "movies,rating,review",
+  is_liked: false,
+  is_favorited: false,
+  data: {
+    id: 126,
+    title: "Rate the new Dune movie from 1-10",
+    question_type: "rating",
+    rating_icon_id: 2,
+    answers_count: 15,
+    media_url: "https://picsum.photos/id/15/800/400"
+  }
+};
+
+// For QUESTION type post - SINGLECHOICE
+const mockQuestionPostSingleChoice = {
+  id: 127,
+  user_id: 4,
+  username: "TechEnthusiast",
+  avatar_url: "https://randomuser.me/api/portraits/men/2.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "question",
+  likes_count: 56,
+  comments_count: 8,
+  views_count: 345,
+  created_at: "2026-06-13T10:30:00Z",
+  status: "active",
+  tags: "poll,opinion,tech",
+  is_liked: true,
+  is_favorited: false,
+  data: {
+    id: 127,
+    title: "Which JavaScript framework do you prefer?",
+    question_type: "singlechoice",
+    choice: [
+      { id: 1, choice_text: "React ⚛️" },
+      { id: 2, choice_text: "Vue.js 💚" },
+      { id: 3, choice_text: "Angular 🔴" },
+      { id: 4, choice_text: "Svelte 🟠" }
+    ],
+    answers_count: 12,
+    media_url: "https://picsum.photos/id/104/800/400"
+  }
+};
+
+// For QUESTION type post - MULTIPLECHOICE
+const mockQuestionPostMultipleChoice = {
+  id: 128,
+  user_id: 5,
+  username: "FoodieMaster",
+  avatar_url: "https://randomuser.me/api/portraits/women/2.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "question",
+  likes_count: 78,
+  comments_count: 34,
+  views_count: 567,
+  created_at: "2026-06-12T10:30:00Z",
+  status: "active",
+  tags: "food,pizza,survey",
+  is_liked: false,
+  is_favorited: false,
+  data: {
+    id: 128,
+    title: "What toppings do you want on your pizza?",
+    question_type: "multiplechoice",
+    choices: [
+      { id: 1, choices_text: "Pepperoni 🍕" },
+      { id: 2, choices_text: "Mushrooms 🍄" },
+      { id: 3, choices_text: "Bell Peppers 🫑" },
+      { id: 4, choices_text: "Olives 🫒" },
+      { id: 5, choices_text: "Extra Cheese 🧀" }
+    ],
+    answers_count: 10,
+    media_url: "https://picsum.photos/id/108/800/400"
+  }
+};
+
+// For QUESTION type post - RANKINGORDER
+const mockQuestionPostRanking = {
+  id: 129,
+  user_id: 6,
+  username: "GameReviewer",
+  avatar_url: "https://randomuser.me/api/portraits/men/3.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "question",
+  likes_count: 145,
+  comments_count: 28,
+  views_count: 890,
+  created_at: "2026-06-11T10:30:00Z",
+  status: "active",
+  tags: "gaming,ranking,best",
+  is_liked: false,
+  is_favorited: true,
+  data: {
+    id: 129,
+    title: "Rank the best games of 2024",
+    question_type: "rankingorder",
+    items: [
+      { id: 1, item_text: "Elden Ring" },
+      { id: 2, item_text: "Black Myth: Wukong" },
+      { id: 3, item_text: "Final Fantasy VII Rebirth" },
+      { id: 4, item_text: "Helldivers 2" },
+      { id: 5, item_text: "Dragon's Dogma 2" }
+    ],
+    answers_count: 7,
+    media_url: "https://picsum.photos/id/104/800/400"
+  }
+};
+
+// For QUESTION type post - RANGE
+const mockQuestionPostRange = {
+  id: 130,
+  user_id: 7,
+  username: "HealthCoach",
+  avatar_url: "https://randomuser.me/api/portraits/women/3.jpg",
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_type: "question",
+  likes_count: 34,
+  comments_count: 8,
+  views_count: 234,
+  created_at: "2026-06-10T10:30:00Z",
+  status: "active",
+  tags: "health,fitness,wellness",
+  is_liked: false,
+  is_favorited: false,
+  data: {
+    id: 130,
+    title: "How many hours do you sleep per night?",
+    question_type: "range",
+    range_min: 0,
+    range_max: 12,
+    step: 0.5,
+    default_range_value: 7,
+    answers_count: 9,
+    media_url: "https://picsum.photos/id/29/800/400"
+  }
+};
+
+// ================================
+// 2. MOCK ANSWERS DATA (All Question Types)
+// ================================
+
+// ClosedEnd Answers
+const mockClosedEndAnswers = [
+  {
+    id: 1,
+    question_id: 125,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 125,
+    question_type: "closedend",
+    text_answer: null,
+    yes_no: "yes",
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T09:00:00Z",
+    updated_at: "2026-06-15T09:00:00Z",
+    author_name: "TechGuru",
+    author_avatar: "https://randomuser.me/api/portraits/men/4.jpg",
+    author_bg_color: null,
+    upvotes: 12,
+    downvotes: 1,
+    vote_score: 11,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 2,
+    question_id: 125,
+    user_id: 10,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 125,
+    question_type: "closedend",
+    text_answer: null,
+    yes_no: "yes",
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T08:30:00Z",
+    updated_at: "2026-06-15T08:30:00Z",
+    author_name: "SarahDev",
+    author_avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+    author_bg_color: null,
+    upvotes: 8,
+    downvotes: 0,
+    vote_score: 8,
+    user_vote_type: null
+  },
+  {
+    id: 3,
+    question_id: 125,
+    user_id: 12,
+    is_anonymous: 1,
+    anonymous_name: "🌙 NightOwl",
+    anonymous_bg_color: "#6C5CE7",
+    post_id: 125,
+    question_type: "closedend",
+    text_answer: null,
+    yes_no: "no",
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T22:00:00Z",
+    updated_at: "2026-06-14T22:00:00Z",
+    author_name: "🌙 NightOwl",
+    author_avatar: null,
+    author_bg_color: "#6C5CE7",
+    upvotes: 5,
+    downvotes: 3,
+    vote_score: 2,
+    user_vote_type: "downvote"
+  },
+  {
+    id: 4,
+    question_id: 125,
+    user_id: 14,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 125,
+    question_type: "closedend",
+    text_answer: null,
+    yes_no: "yes",
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T20:00:00Z",
+    updated_at: "2026-06-14T20:00:00Z",
+    author_name: "CodeMaster",
+    author_avatar: "https://randomuser.me/api/portraits/men/5.jpg",
+    author_bg_color: null,
+    upvotes: 6,
+    downvotes: 0,
+    vote_score: 6,
+    user_vote_type: null
+  },
+  {
+    id: 5,
+    question_id: 125,
+    user_id: 15,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 125,
+    question_type: "closedend",
+    text_answer: null,
+    yes_no: "no",
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T18:00:00Z",
+    updated_at: "2026-06-14T18:00:00Z",
+    author_name: "AI_Skeptic",
+    author_avatar: "https://randomuser.me/api/portraits/women/5.jpg",
+    author_bg_color: null,
+    upvotes: 3,
+    downvotes: 0,
+    vote_score: 3,
+    user_vote_type: null
+  },
+  {
+    id: 6,
+    question_id: 125,
+    user_id: 16,
+    is_anonymous: 1,
+    anonymous_name: "🐱 CatLover",
+    anonymous_bg_color: "#FF6B6B",
+    post_id: 125,
+    question_type: "closedend",
+    text_answer: null,
+    yes_no: "yes",
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T16:00:00Z",
+    updated_at: "2026-06-14T16:00:00Z",
+    author_name: "🐱 CatLover",
+    author_avatar: null,
+    author_bg_color: "#FF6B6B",
+    upvotes: 4,
+    downvotes: 1,
+    vote_score: 3,
+    user_vote_type: null
+  }
+];
+
+// Rating Answers
+const mockRatingAnswers = [
+  {
+    id: 7,
+    question_id: 126,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 126,
+    question_type: "rating",
+    text_answer: null,
+    yes_no: null,
+    rating_value: 5,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T11:00:00Z",
+    updated_at: "2026-06-15T11:00:00Z",
+    author_name: "MovieBuff",
+    author_avatar: "https://randomuser.me/api/portraits/men/6.jpg",
+    author_bg_color: null,
+    upvotes: 20,
+    downvotes: 0,
+    vote_score: 20,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 8,
+    question_id: 126,
+    user_id: 10,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 126,
+    question_type: "rating",
+    text_answer: null,
+    yes_no: null,
+    rating_value: 4,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T10:30:00Z",
+    updated_at: "2026-06-15T10:30:00Z",
+    author_name: "FilmCritic",
+    author_avatar: "https://randomuser.me/api/portraits/women/6.jpg",
+    author_bg_color: null,
+    upvotes: 15,
+    downvotes: 1,
+    vote_score: 14,
+    user_vote_type: null
+  },
+  {
+    id: 9,
+    question_id: 126,
+    user_id: 12,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 126,
+    question_type: "rating",
+    text_answer: null,
+    yes_no: null,
+    rating_value: 3,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T10:00:00Z",
+    updated_at: "2026-06-15T10:00:00Z",
+    author_name: "CasualViewer",
+    author_avatar: "https://randomuser.me/api/portraits/men/7.jpg",
+    author_bg_color: null,
+    upvotes: 8,
+    downvotes: 2,
+    vote_score: 6,
+    user_vote_type: null
+  },
+  {
+    id: 10,
+    question_id: 126,
+    user_id: 14,
+    is_anonymous: 1,
+    anonymous_name: "🎬 Cinephile",
+    anonymous_bg_color: "#4A90E2",
+    post_id: 126,
+    question_type: "rating",
+    text_answer: null,
+    yes_no: null,
+    rating_value: 5,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T09:30:00Z",
+    updated_at: "2026-06-15T09:30:00Z",
+    author_name: "🎬 Cinephile",
+    author_avatar: null,
+    author_bg_color: "#4A90E2",
+    upvotes: 12,
+    downvotes: 0,
+    vote_score: 12,
+    user_vote_type: null
+  },
+  {
+    id: 11,
+    question_id: 126,
+    user_id: 15,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 126,
+    question_type: "rating",
+    text_answer: null,
+    yes_no: null,
+    rating_value: 1,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T23:00:00Z",
+    updated_at: "2026-06-14T23:00:00Z",
+    author_name: "HarshCritic",
+    author_avatar: "https://randomuser.me/api/portraits/women/7.jpg",
+    author_bg_color: null,
+    upvotes: 3,
+    downvotes: 5,
+    vote_score: -2,
+    user_vote_type: "downvote"
+  }
+];
+
+// SingleChoice Answers
+const mockSingleChoiceAnswers = [
+  {
+    id: 12,
+    question_id: 127,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 127,
+    question_type: "singlechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: 1,
+    singlechoice_option_value: "React ⚛️",
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T09:00:00Z",
+    updated_at: "2026-06-15T09:00:00Z",
+    author_name: "ReactDev",
+    author_avatar: "https://randomuser.me/api/portraits/men/8.jpg",
+    author_bg_color: null,
+    upvotes: 25,
+    downvotes: 2,
+    vote_score: 23,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 13,
+    question_id: 127,
+    user_id: 10,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 127,
+    question_type: "singlechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: 2,
+    singlechoice_option_value: "Vue.js 💚",
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T08:30:00Z",
+    updated_at: "2026-06-15T08:30:00Z",
+    author_name: "VueLover",
+    author_avatar: "https://randomuser.me/api/portraits/women/8.jpg",
+    author_bg_color: null,
+    upvotes: 10,
+    downvotes: 3,
+    vote_score: 7,
+    user_vote_type: "downvote"
+  },
+  {
+    id: 14,
+    question_id: 127,
+    user_id: 12,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 127,
+    question_type: "singlechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: 1,
+    singlechoice_option_value: "React ⚛️",
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T08:00:00Z",
+    updated_at: "2026-06-15T08:00:00Z",
+    author_name: "FrontendGuru",
+    author_avatar: "https://randomuser.me/api/portraits/men/9.jpg",
+    author_bg_color: null,
+    upvotes: 8,
+    downvotes: 0,
+    vote_score: 8,
+    user_vote_type: null
+  },
+  {
+    id: 15,
+    question_id: 127,
+    user_id: 14,
+    is_anonymous: 1,
+    anonymous_name: "🦊 CodeFox",
+    anonymous_bg_color: "#FF6B35",
+    post_id: 127,
+    question_type: "singlechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: 4,
+    singlechoice_option_value: "Svelte 🟠",
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T22:00:00Z",
+    updated_at: "2026-06-14T22:00:00Z",
+    author_name: "🦊 CodeFox",
+    author_avatar: null,
+    author_bg_color: "#FF6B35",
+    upvotes: 6,
+    downvotes: 1,
+    vote_score: 5,
+    user_vote_type: null
+  },
+  {
+    id: 16,
+    question_id: 127,
+    user_id: 15,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 127,
+    question_type: "singlechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: 3,
+    singlechoice_option_value: "Angular 🔴",
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T20:00:00Z",
+    updated_at: "2026-06-14T20:00:00Z",
+    author_name: "AngularFan",
+    author_avatar: "https://randomuser.me/api/portraits/men/10.jpg",
+    author_bg_color: null,
+    upvotes: 4,
+    downvotes: 2,
+    vote_score: 2,
+    user_vote_type: null
+  }
+];
+
+// MultipleChoice Answers
+const mockMultipleChoiceAnswers = [
+  {
+    id: 17,
+    question_id: 128,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 128,
+    question_type: "multiplechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: "[1,2,3,5]",
+    multiplechoice_option_value: '["Pepperoni 🍕", "Mushrooms 🍄", "Bell Peppers 🫑", "Extra Cheese 🧀"]',
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T12:00:00Z",
+    updated_at: "2026-06-15T12:00:00Z",
+    author_name: "PizzaLover",
+    author_avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+    author_bg_color: null,
+    upvotes: 30,
+    downvotes: 1,
+    vote_score: 29,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 18,
+    question_id: 128,
+    user_id: 10,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 128,
+    question_type: "multiplechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: "[1,4]",
+    multiplechoice_option_value: '["Pepperoni 🍕", "Olives 🫒"]',
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T11:30:00Z",
+    updated_at: "2026-06-15T11:30:00Z",
+    author_name: "OliveFan",
+    author_avatar: "https://randomuser.me/api/portraits/women/9.jpg",
+    author_bg_color: null,
+    upvotes: 12,
+    downvotes: 4,
+    vote_score: 8,
+    user_vote_type: null
+  },
+  {
+    id: 19,
+    question_id: 128,
+    user_id: 12,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 128,
+    question_type: "multiplechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: "[2,3,4]",
+    multiplechoice_option_value: '["Mushrooms 🍄", "Bell Peppers 🫑", "Olives 🫒"]',
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T11:00:00Z",
+    updated_at: "2026-06-15T11:00:00Z",
+    author_name: "VeggieLover",
+    author_avatar: "https://randomuser.me/api/portraits/women/10.jpg",
+    author_bg_color: null,
+    upvotes: 10,
+    downvotes: 2,
+    vote_score: 8,
+    user_vote_type: null
+  },
+  {
+    id: 20,
+    question_id: 128,
+    user_id: 14,
+    is_anonymous: 1,
+    anonymous_name: "🍕 PizzaAddict",
+    anonymous_bg_color: "#E74C3C",
+    post_id: 128,
+    question_type: "multiplechoice",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: "[1,2,3,4,5]",
+    multiplechoice_option_value: '["Pepperoni 🍕", "Mushrooms 🍄", "Bell Peppers 🫑", "Olives 🫒", "Extra Cheese 🧀"]',
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T23:00:00Z",
+    updated_at: "2026-06-14T23:00:00Z",
+    author_name: "🍕 PizzaAddict",
+    author_avatar: null,
+    author_bg_color: "#E74C3C",
+    upvotes: 8,
+    downvotes: 0,
+    vote_score: 8,
+    user_vote_type: null
+  }
+];
+
+// RankingOrder Answers
+const mockRankingAnswers = [
+  {
+    id: 21,
+    question_id: 129,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 129,
+    question_type: "rankingorder",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: "[5,2,3,4,1]",
+    ranking_position_value: '["Elden Ring", "Black Myth: Wukong", "Final Fantasy VII Rebirth", "Helldivers 2", "Dragon\'s Dogma 2"]',
+    range_value: null,
+    created_at: "2026-06-15T14:00:00Z",
+    updated_at: "2026-06-15T14:00:00Z",
+    author_name: "GameMaster",
+    author_avatar: "https://randomuser.me/api/portraits/men/12.jpg",
+    author_bg_color: null,
+    upvotes: 18,
+    downvotes: 2,
+    vote_score: 16,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 22,
+    question_id: 129,
+    user_id: 10,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 129,
+    question_type: "rankingorder",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: "[3,4,2,5,1]",
+    ranking_position_value: '["Final Fantasy VII Rebirth", "Elden Ring", "Black Myth: Wukong", "Dragon\'s Dogma 2", "Helldivers 2"]',
+    range_value: null,
+    created_at: "2026-06-15T13:00:00Z",
+    updated_at: "2026-06-15T13:00:00Z",
+    author_name: "RPG_Fan",
+    author_avatar: "https://randomuser.me/api/portraits/women/11.jpg",
+    author_bg_color: null,
+    upvotes: 12,
+    downvotes: 1,
+    vote_score: 11,
+    user_vote_type: null
+  },
+  {
+    id: 23,
+    question_id: 129,
+    user_id: 12,
+    is_anonymous: 1,
+    anonymous_name: "🎮 Gamer",
+    anonymous_bg_color: "#2ECC71",
+    post_id: 129,
+    question_type: "rankingorder",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: "[5,4,1,3,1]",
+    ranking_position_value: '["Black Myth: Wukong", "Helldivers 2", "Elden Ring", "Final Fantasy VII Rebirth", "Dragon\'s Dogma 2"]',
+    range_value: null,
+    created_at: "2026-06-14T20:00:00Z",
+    updated_at: "2026-06-14T20:00:00Z",
+    author_name: "🎮 Gamer",
+    author_avatar: null,
+    author_bg_color: "#2ECC71",
+    upvotes: 8,
+    downvotes: 3,
+    vote_score: 5,
+    user_vote_type: null
+  }
+];
+
+// Range Answers
+const mockRangeAnswers = [
+  {
+    id: 24,
+    question_id: 130,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 130,
+    question_type: "range",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: 8,
+    created_at: "2026-06-15T13:00:00Z",
+    updated_at: "2026-06-15T13:00:00Z",
+    author_name: "SleepExpert",
+    author_avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+    author_bg_color: null,
+    upvotes: 22,
+    downvotes: 0,
+    vote_score: 22,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 25,
+    question_id: 130,
+    user_id: 10,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 130,
+    question_type: "range",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: 6,
+    created_at: "2026-06-15T12:30:00Z",
+    updated_at: "2026-06-15T12:30:00Z",
+    author_name: "Insomniac",
+    author_avatar: "https://randomuser.me/api/portraits/men/13.jpg",
+    author_bg_color: null,
+    upvotes: 10,
+    downvotes: 1,
+    vote_score: 9,
+    user_vote_type: null
+  },
+  {
+    id: 26,
+    question_id: 130,
+    user_id: 12,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 130,
+    question_type: "range",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: 7,
+    created_at: "2026-06-15T12:00:00Z",
+    updated_at: "2026-06-15T12:00:00Z",
+    author_name: "AverageSleeper",
+    author_avatar: "https://randomuser.me/api/portraits/women/13.jpg",
+    author_bg_color: null,
+    upvotes: 8,
+    downvotes: 0,
+    vote_score: 8,
+    user_vote_type: null
+  },
+  {
+    id: 27,
+    question_id: 130,
+    user_id: 14,
+    is_anonymous: 1,
+    anonymous_name: "🌙 NightOwl",
+    anonymous_bg_color: "#6C5CE7",
+    post_id: 130,
+    question_type: "range",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: 5,
+    created_at: "2026-06-14T23:00:00Z",
+    updated_at: "2026-06-14T23:00:00Z",
+    author_name: "🌙 NightOwl",
+    author_avatar: null,
+    author_bg_color: "#6C5CE7",
+    upvotes: 6,
+    downvotes: 2,
+    vote_score: 4,
+    user_vote_type: "downvote"
+  },
+  {
+    id: 28,
+    question_id: 130,
+    user_id: 15,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 130,
+    question_type: "range",
+    text_answer: null,
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: 9,
+    created_at: "2026-06-14T22:00:00Z",
+    updated_at: "2026-06-14T22:00:00Z",
+    author_name: "OverSleeper",
+    author_avatar: "https://randomuser.me/api/portraits/men/14.jpg",
+    author_bg_color: null,
+    upvotes: 4,
+    downvotes: 0,
+    vote_score: 4,
+    user_vote_type: null
+  }
+];
+
+// OpenEnd Answers
+const mockOpenEndAnswers = [
+  {
+    id: 29,
+    question_id: 131,
+    user_id: 8,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 131,
+    question_type: "openend",
+    text_answer: "React Query is the best choice for data fetching. It handles caching, background updates, and pagination automatically. I've been using it for 2 years and it's a game changer!",
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T10:30:00Z",
+    updated_at: "2026-06-15T10:30:00Z",
+    author_name: "TechMaster",
+    author_avatar: "https://randomuser.me/api/portraits/men/15.jpg",
+    author_bg_color: null,
+    upvotes: 24,
+    downvotes: 3,
+    vote_score: 21,
+    user_vote_type: "upvote"
+  },
+  {
+    id: 30,
+    question_id: 131,
+    user_id: 10,
+    is_anonymous: 1,
+    anonymous_name: "🦊 CodeFox",
+    anonymous_bg_color: "#FF6B35",
+    post_id: 131,
+    question_type: "openend",
+    text_answer: "SWR is simpler to set up and has great DevTools. It's perfect if you're using Next.js or just want something lightweight.",
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-15T09:00:00Z",
+    updated_at: "2026-06-15T09:00:00Z",
+    author_name: "🦊 CodeFox",
+    author_avatar: null,
+    author_bg_color: "#FF6B35",
+    upvotes: 15,
+    downvotes: 2,
+    vote_score: 13,
+    user_vote_type: null
+  },
+  {
+    id: 31,
+    question_id: 131,
+    user_id: 12,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    post_id: 131,
+    question_type: "openend",
+    text_answer: "For enterprise apps with complex state, Redux Toolkit is still king. It's battle-tested and has the best ecosystem.",
+    yes_no: null,
+    rating_value: null,
+    singlechoice_option_id: null,
+    singlechoice_option_value: null,
+    multiplechoice_option_ids: null,
+    multiplechoice_option_value: null,
+    ranking_positions: null,
+    ranking_position_value: null,
+    range_value: null,
+    created_at: "2026-06-14T18:00:00Z",
+    updated_at: "2026-06-14T18:00:00Z",
+    author_name: "EnterpriseDev",
+    author_avatar: "https://randomuser.me/api/portraits/men/16.jpg",
+    author_bg_color: null,
+    upvotes: 8,
+    downvotes: 1,
+    vote_score: 7,
+    user_vote_type: "downvote"
+  }
+];
+
+// ================================
+// 3. MOCK COMMENTS DATA
+// ================================
+
+const mockComments = [
+  {
+    id: 1,
+    post_id: 125,
+    parent_id: null,
+    user_id: 1,
+    content: "Great question! I think AI will definitely change how we work.",
+    gif_url: null,
+    username_mention: null,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    likes_count: 12,
+    reply_count: 2,
+    is_deleted: 0,
+    is_edited: 0,
+    created_at: "2026-06-15T10:30:00Z",
+    updated_at: "2026-06-15T10:30:00Z",
+    avatar_url: "https://randomuser.me/api/portraits/men/1.jpg",
+    display_name: "JohnDoe",
+    username: "JohnDoe",
+    is_liked: true,
+    replies: [
+      {
+        id: 101,
+        post_id: 125,
+        parent_id: 1,
+        user_id: 8,
+        content: "True! But it will create new jobs too.",
+        gif_url: null,
+        username_mention: "JohnDoe",
+        is_anonymous: 0,
+        anonymous_name: null,
+        anonymous_bg_color: null,
+        likes_count: 5,
+        reply_count: 0,
+        is_deleted: 0,
+        is_edited: 0,
+        created_at: "2026-06-15T11:00:00Z",
+        updated_at: "2026-06-15T11:00:00Z",
+        avatar_url: "https://randomuser.me/api/portraits/men/4.jpg",
+        display_name: "TechGuru",
+        username: "TechGuru",
+        is_liked: false
+      },
+      {
+        id: 102,
+        post_id: 125,
+        parent_id: 1,
+        user_id: 10,
+        content: "I agree with both of you!",
+        gif_url: "https://media.giphy.com/media/26gR2qGFzKXgX7XIs/giphy.gif",
+        username_mention: null,
+        is_anonymous: 0,
+        anonymous_name: null,
+        anonymous_bg_color: null,
+        likes_count: 3,
+        reply_count: 0,
+        is_deleted: 0,
+        is_edited: 1,
+        created_at: "2026-06-15T11:30:00Z",
+        updated_at: "2026-06-15T11:35:00Z",
+        avatar_url: "https://randomuser.me/api/portraits/women/4.jpg",
+        display_name: "SarahDev",
+        username: "SarahDev",
+        is_liked: false
+      }
+    ]
+  },
+  {
+    id: 2,
+    post_id: 125,
+    parent_id: null,
+    user_id: 12,
+    content: "AI is just a tool. It won't replace creativity.",
+    gif_url: null,
+    username_mention: null,
+    is_anonymous: 1,
+    anonymous_name: "🌙 NightOwl",
+    anonymous_bg_color: "#6C5CE7",
+    likes_count: 8,
+    reply_count: 1,
+    is_deleted: 0,
+    is_edited: 0,
+    created_at: "2026-06-14T22:00:00Z",
+    updated_at: "2026-06-14T22:00:00Z",
+    avatar_url: null,
+    display_name: "🌙 NightOwl",
+    username: null,
+    is_liked: false,
+    replies: [
+      {
+        id: 103,
+        post_id: 125,
+        parent_id: 2,
+        user_id: 14,
+        content: "Creativity is the one thing AI can't replicate!",
+        gif_url: null,
+        username_mention: null,
+        is_anonymous: 0,
+        anonymous_name: null,
+        anonymous_bg_color: null,
+        likes_count: 7,
+        reply_count: 0,
+        is_deleted: 0,
+        is_edited: 0,
+        created_at: "2026-06-15T08:00:00Z",
+        updated_at: "2026-06-15T08:00:00Z",
+        avatar_url: "https://randomuser.me/api/portraits/men/5.jpg",
+        display_name: "CodeMaster",
+        username: "CodeMaster",
+        is_liked: true
+      }
+    ]
+  },
+  {
+    id: 3,
+    post_id: 125,
+    parent_id: null,
+    user_id: 15,
+    content: "I've seen AI write better code than some juniors! 😂",
+    gif_url: "https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif",
+    username_mention: null,
+    is_anonymous: 0,
+    anonymous_name: null,
+    anonymous_bg_color: null,
+    likes_count: 15,
+    reply_count: 0,
+    is_deleted: 0,
+    is_edited: 0,
+    created_at: "2026-06-14T20:00:00Z",
+    updated_at: "2026-06-14T20:00:00Z",
+    avatar_url: "https://randomuser.me/api/portraits/women/5.jpg",
+    display_name: "AI_Skeptic",
+    username: "AI_Skeptic",
+    is_liked: false,
+    replies: []
+  }
+];
+
+// ================================
+// 4. CALCULATED AVERAGE DATA (Based on mockAnswers)
+// ================================
+
+// ClosedEnd Average
+const mockClosedEndAverage = {
+  type: "closedend",
+  yes: {
+    count: 4,
+    percentage: 67
+  },
+  no: {
+    count: 2,
+    percentage: 33
+  },
+  total: 6
+};
+
+// Rating Average
+const mockRatingAverage = {
+  type: "rating",
+  average: 3.8,
+  total: 5,
+  distribution: [
+    { value: 2, count: 1, percentage: 20 },
+    { value: 3, count: 1, percentage: 20 },
+    { value: 4, count: 1, percentage: 20 },
+    { value: 5, count: 2, percentage: 40 }
+  ]
+};
+
+// SingleChoice Average
+const mockSingleChoiceAverage = {
+  type: "singlechoice",
+  total: 5,
+  choices: [
+    { label: "React ⚛️", count: 2, percentage: 40 },
+    { label: "Vue.js 💚", count: 1, percentage: 20 },
+    { label: "Svelte 🟠", count: 1, percentage: 20 },
+    { label: "Angular 🔴", count: 1, percentage: 20 }
+  ]
+};
+
+// MultipleChoice Average
+const mockMultipleChoiceAverage = {
+  type: "multiplechoice",
+  total: 4,
+  choices: [
+    { label: "Pepperoni 🍕", count: 3, percentage: 75 },
+    { label: "Mushrooms 🍄", count: 2, percentage: 50 },
+    { label: "Bell Peppers 🫑", count: 2, percentage: 50 },
+    { label: "Olives 🫒", count: 2, percentage: 50 },
+    { label: "Extra Cheese 🧀", count: 2, percentage: 50 }
+  ]
+};
+
+// RankingOrder Average
+const mockRankingAverage = {
+  type: "rankingorder",
+  total: 3,
+  items: [
+    { label: "Elden Ring", avgPosition: "1.7" },
+    { label: "Black Myth: Wukong", avgPosition: "2.3" },
+    { label: "Final Fantasy VII Rebirth", avgPosition: "2.7" },
+    { label: "Helldivers 2", avgPosition: "3.7" },
+    { label: "Dragon's Dogma 2", avgPosition: "4.7" }
+  ]
+};
+
+// Range Average
+const mockRangeAverage = {
+  type: "range",
+  average: 7.0,
+  min: 5,
+  max: 9,
+  total: 5
+};
+
+// OpenEnd Average
+const mockOpenEndAverage = {
+  type: "openend",
+  total: 3,
+  avgWords: 18.3
+};
+
+// ================================
+// 5. POPULAR/TOP ANSWER (Highest vote_score)
+// ================================
+
+const mockPopularAnswer = {
+  id: 1,
+  question_id: 125,
+  user_id: 8,
+  is_anonymous: 0,
+  anonymous_name: null,
+  anonymous_bg_color: null,
+  post_id: 125,
+  question_type: "closedend",
+  text_answer: null,
+  yes_no: "yes",
+  rating_value: null,
+  singlechoice_option_id: null,
+  singlechoice_option_value: null,
+  multiplechoice_option_ids: null,
+  multiplechoice_option_value: null,
+  ranking_positions: null,
+  ranking_position_value: null,
+  range_value: null,
+  created_at: "2026-06-15T09:00:00Z",
+  updated_at: "2026-06-15T09:00:00Z",
+  author_name: "TechGuru",
+  author_avatar: "https://randomuser.me/api/portraits/men/4.jpg",
+  author_bg_color: null,
+  upvotes: 12,
+  downvotes: 1,
+  vote_score: 11,
+  user_vote_type: "upvote"
+};
+
+// ================================
+// 6. COMPLETE MOCK RESPONSE
+// ================================
+
+const mockAnswersResponse = {
+  success: true,
+  data: mockClosedEndAnswers,
+  pagination: {
+    page: 1,
+    limit: 10,
+    total: 6,
+    total_pages: 1,
+    has_more: false
+  }
+};
+
+const mockCommentsResponse = {
+  comments: mockComments,
+  pagination: {
+    page: 1,
+    limit: 10,
+    total: 3,
+    total_pages: 1,
+    has_more: false
+  }
+};
+
 const parseJSON = (val) => {
   try {
     return typeof val === "string" ? JSON.parse(val) : val;
@@ -1323,3 +2816,73 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
 };
 
 export default AboutPost;
+
+// const handleFetchPost = async () => {
+//   try {
+//     // USE MOCK DATA - comment out real API
+//     setPost(mockQuestionPostSingleChoice);
+//     if (mockQuestionPostSingleChoice.is_anonymous !== 1 && mockQuestionPostSingleChoice.avatar_url) {
+//       setUserProfilePic(mockQuestionPostSingleChoice.avatar_url);
+//     }
+    
+//     // REAL API - comment this out for testing
+//     // const res = await axios.get(...);
+//     // setPost(res.data.data);
+//   } catch (err) {
+//     console.error(err);
+//     setPost(null);
+//   }
+// };
+//   const fetchAnswers = async (pageNum = 1) => {
+//   if (loadingAnswers || !hasMoreAnswers || post?.post_type !== 'question') return;
+
+//   try {
+//     setLoadingAnswers(true);
+    
+//     // MOCK - Remove this and uncomment real API for production
+//     setTimeout(() => {
+//       let newAnswers = [];
+//       switch (post?.data?.question_type) {
+//         case 'closedend':
+//           newAnswers = mockClosedEndAnswers;
+//           setAverageData(mockClosedEndAverage);
+//           break;
+//         case 'rating':
+//           newAnswers = mockRatingAnswers;
+//           setAverageData(mockRatingAverage);
+//           break;
+//         case 'singlechoice':
+//           newAnswers = mockSingleChoiceAnswers;
+//           setAverageData(mockSingleChoiceAverage);
+//           break;
+//         case 'multiplechoice':
+//           newAnswers = mockMultipleChoiceAnswers;
+//           setAverageData(mockMultipleChoiceAverage);
+//           break;
+//         case 'rankingorder':
+//           newAnswers = mockRankingAnswers;
+//           setAverageData(mockRankingAverage);
+//           break;
+//         case 'range':
+//           newAnswers = mockRangeAnswers;
+//           setAverageData(mockRangeAverage);
+//           break;
+//         case 'openend':
+//           newAnswers = mockOpenEndAnswers;
+//           setAverageData(mockOpenEndAverage);
+//           break;
+//         default:
+//           newAnswers = mockClosedEndAnswers;
+//       }
+      
+//       setAnswers(prev => pageNum === 1 ? newAnswers : [...prev, ...newAnswers]);
+//       setHasMoreAnswers(false);
+//       setAnswerPage(pageNum);
+//       setLoadingAnswers(false);
+//     }, 300);
+    
+//   } catch (err) {
+//     console.error(err);
+//     setLoadingAnswers(false);
+//   }
+// };
