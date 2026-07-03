@@ -104,6 +104,6 @@ const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
       </div>
     </Dropdown>
   );
-};
+}; 
 
 export default DotDropDown;
