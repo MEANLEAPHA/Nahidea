@@ -995,9 +995,9 @@ export default function Accounts() {
                       <button className="pf-act-btn" type="button" onClick={()=> handleFollow()}>
                       { followState === "loading" && "Following..." }
                       { followState === "follow" && "Follow" }
-                      { followState === "following" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Following</span> <Unfollow/> </div> )}
+                      { followState === "following" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Following</span> | <Unfollow/> </div> )}
                       { followState === "follows_you" && "Follow Back" }
-                      { followState === "mutual" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Friends</span><Unfollow/> </div>)}
+                      { followState === "mutual" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Friends</span> | <Unfollow/> </div>)}
                     </button>
                     ) 
                  } 
@@ -1041,7 +1041,7 @@ export default function Accounts() {
                    }
                    
                 </div>
-                <MenuDropDown />
+                <MenuDropDown/>
             </div>
             
         </div>
@@ -1050,10 +1050,10 @@ export default function Accounts() {
         <div id="data-outlet">
          {error ?
                     (  
-                        <div className='error-container'>
-                            <Loader />
-                            <p>Opps! Failed to load</p>
-                        </div>
+                      <div className='error-container'>
+                          <Loader />
+                          <p>Opps! Failed to load</p>
+                      </div>
                     ) 
                     :
                     posts.length === 0 && !loading ? 
@@ -1077,7 +1077,6 @@ export default function Accounts() {
                                                 <div className='user-post-info'>
                                                     <p className='post-username'>
                                                         {post.username} 
-                                                        <div className='dot'></div>
                                                         <div className='category-post-div'>
                                                             <span className="post-type-label">{post?.data?.type}</span> 
                                                            {post?.data?.cate_icon && (
@@ -1353,23 +1352,23 @@ const formatJoinDate = (dateString) => {
 
   const MenuDropDown = () =>{
     const navigate = useNavigate();
+    const { state } = useLocation();
     const upload_items = [
       {
         label: (
-          <li onClick={()=>navigate('/create/content')}>
+          <li onClick={(e) => {
+            e.stopPropagation();
+            navigate("/reportUser", {
+              state: {
+                userId:  state?.userId || sessionStorage.getItem("profileUserId") || user?.id
+              }
+            })
+          }}>
             <FlagOutlined /> <span>Report User</span>
           </li>
         ),
         key: '0',
       },
-      {
-        label: (
-          <li onClick={()=>navigate('/create/confession')}>
-            <LinkOutlined /> <span>Copy Link</span>
-          </li>
-        ),
-        key: '1',
-      }
       ];
     return(
       <Dropdown menu={{ items: upload_items }} trigger={['click']} classNames={{ root: "profile-dropdown create-dropdown"}}>
@@ -1377,7 +1376,6 @@ const formatJoinDate = (dateString) => {
     </Dropdown>
     )
   }
-
 
 const FriendList = ({targetUsername, tagetUserId}) => {
   const [friendList, setFriendList] = useState([]);

@@ -230,10 +230,9 @@
 }
 
 .highlight-comment{
-  background:#3a3a3a;
-  border-radius:10px;
+  background:#3a3a3a62;
   transition:0.3s;
-  animation: highlightFade 10s ease;
+  animation: highlightFade 5s ease;
 }
 
 .radio-button-div-aboutpost{

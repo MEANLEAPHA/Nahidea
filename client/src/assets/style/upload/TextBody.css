@@ -1,7 +1,7 @@
 
 /* text-body */
 .text-body-container{
-    width: 99%;
+    width: 100%;
     height: auto;
     background: var(--back-con);
     border: 1px solid var(--secondary-color);
