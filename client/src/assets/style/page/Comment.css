@@ -41,12 +41,17 @@
     background: grey;
     border-radius: 50%;
     overflow: hidden;
+    display: flex;
+    object-fit: cover;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
 }
 .comms-avatar{
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
      object-fit: cover;
-     border-radius: 50%;
+
 }
 
 
@@ -88,4 +93,5 @@
     .comment-page{
         padding: 15px 10px;
     }
+  
 }

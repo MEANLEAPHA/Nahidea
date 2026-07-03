@@ -1426,49 +1426,6 @@ const AboutPost = () => {
 
           <div className='post-footer'>
             <div className='post-footer-left'>
-              {/* <button
-                className={`button-action-footer like-button ${post?.is_liked ? "liked" : ""}`}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLike(post?.id, post?.user_id);
-                }}
-              >
-                <motion.div
-                  className="action-icon-wrapper"
-                  whileTap={{ scale: 0.75 }}
-                  animate={likingPosts ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] } : {}}
-                  transition={{ duration: 0.45, ease: "easeInOut" }}
-                >
-                  <AnimatePresence mode="wait">
-                    {post?.is_liked ? (
-                      <motion.div
-                        key="liked"
-                        initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
-                        animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                        exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 22 }}
-                      >
-                        <Heart size={19} className="button-action-footer-icon liked-heart" fill="currentColor" />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="unliked"
-                        initial={{ scale: 0.4, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.4, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Heart size={19} className="button-action-footer-icon" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-                <p>
-                  <span>{post?.likes_count}</span>
-                  <span className="count-label"> Like</span>
-                </p>
-              </button> */}
                 <button
                                                     className={`button-action-footer like-button ${
                                                       post.is_liked ? "liked" : ""
@@ -1567,44 +1524,6 @@ const AboutPost = () => {
                 </button>
             </div>
             <div className='post-footer-right'>
-              {/* <button
-                className={`button-action-footer button-action-footer-last favorite-button ${post?.is_favorited ? "favorited" : ""}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleFavorite(post?.id);
-                }}
-              >
-                <motion.div
-                  className="action-icon-wrapper"
-                  whileTap={{ scale: 0.75 }}
-                  animate={favoritingPosts ? { scale: [1, 1.25, 1], y: [0, -5, 0] } : {}}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                >
-                  <AnimatePresence mode="wait">
-                    {post?.is_favorited ? (
-                      <motion.div
-                        key="favorited"
-                        initial={{ scale: 0.4, opacity: 0, y: 10 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.4, opacity: 0, y: 10 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 22 }}
-                      >
-                        <Bookmark size={18} className="button-action-footer-icon favorited-bookmark" fill="currentColor" />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="unfavorited"
-                        initial={{ scale: 0.4, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.4, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Bookmark size={18} className="button-action-footer-icon" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </button> */}
                <button
                                                 className={`button-action-footer button-action-footer-last favorite-button ${
                                                   post.is_favorited ? "favorited" : ""
@@ -1731,7 +1650,7 @@ const AboutPost = () => {
                 {selectedTab === 1 && (
                   <div>
                     <button
-                      onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}`)}
+                      onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}
                       className="comment-btn"
                     >
                       <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Answer this question

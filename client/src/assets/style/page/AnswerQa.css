@@ -5,11 +5,29 @@
   display: flex;
   justify-content: center;
 }
-
+.answer-author-div{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: auto;
+  margin-top:10px
+}
+.anonymous-toggle-div{
+  display: flex;
+  gap: 5px;
+  font-size: small;
+  align-items: center;
+}
+.annoy-icon{
+  font-size: large;
+  color:grey
+}
 .answer-card {
   width: 100%;
   max-width: 850px;
-
+  border: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -119,7 +137,7 @@
   border: 1px solid var(--secondary-color);
 
   border-radius: 14px;
-
+  color: var(--font-color);
   padding: 14px;
 
   cursor: pointer;
@@ -331,21 +349,11 @@
 }
 
 .answer-ranking-number{
-  width:32px;
-  height:32px;
-
-  border-radius:8px;
-
-  background:#a88cff;
-
-  color:white;
-
+  color:var(--font-color);
   display:flex;
   align-items:center;
   justify-content:center;
-
   font-weight:700;
-
   flex-shrink:0;
 }
 
