@@ -1483,7 +1483,7 @@ const AboutPost = () => {
                                                       className="action-icon-wrapper"
                                                       whileTap={{ scale: 0.75 }}
                                                       animate={
-                                                        likingPosts.has(post.id)
+                                                        likingPosts
                                                           ? {
                                                               scale: [1, 1.35, 1],
                                                               rotate: [0, -15, 15, 0]
@@ -1618,7 +1618,7 @@ const AboutPost = () => {
                                                   className="action-icon-wrapper"
                                                   whileTap={{ scale: 0.75 }}
                                                   animate={
-                                                    favoritingPosts.has(post.id)
+                                                    favoritingPosts
                                                       ? {
                                                           scale: [1, 1.25, 1],
                                                           y: [0, -5, 0]
