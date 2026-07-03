@@ -11,7 +11,6 @@ import {
     ShareAltOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
-import ReportPostModal from '../ReportPostModal';
 import handleDeletePost from './deletePost';
 import handleCopyLink from './copyLink';
 
