@@ -723,7 +723,7 @@ const AnswerQa = () => {
       setPageLoading(true);
 
       try {
-        const alreadyRes = await api.get(`/api/check-answered/${questionId}`);
+        const alreadyRes = await api.get(`/api/answers/check-answered/${questionId}`);
         if (cancelled) return;
 
         if (alreadyRes.data.alreadyAnswered) {
@@ -760,7 +760,7 @@ const AnswerQa = () => {
 
   const handleFetchQa = async () => {
     try {
-      const res = await api.get(`/api/get-question/${questionId}/${questionType}`);
+      const res = await api.get(`/api/answers/get-question/${questionId}/${questionType}`);
       const data = res.data.datas;
       setQaData(data);
     } catch (err) {
@@ -1059,7 +1059,7 @@ const AnswerQa = () => {
     setSubmitting(true);
 
     try {
-      await api.post(`/api/answer-qa/${postId}/${questionId}/${questionType}`, payload);
+      await api.post(`/api/answers/answer-qa/${postId}/${questionId}/${questionType}`, payload);
 
       // this question is now answered — don't let a stale cache serve it again
       const QaStoreRaw = sessionStorage.getItem("QaStore");
