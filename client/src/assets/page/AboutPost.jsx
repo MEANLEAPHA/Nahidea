@@ -1488,7 +1488,7 @@ const AboutPost = () => {
                                                               scale: [1, 1.35, 1],
                                                               rotate: [0, -15, 15, 0]
                                                             }
-                                                          : {}
+                                                          : { scale: 1, rotate: 0 }
                                                       }
                                                       transition={{
                                                         duration: 0.45,
@@ -1623,7 +1623,7 @@ const AboutPost = () => {
                                                           scale: [1, 1.25, 1],
                                                           y: [0, -5, 0]
                                                         }
-                                                      : {}
+                                                      : { scale: 1, rotate: 0 }
                                                   }
                                                   transition={{
                                                     duration: 0.4,
@@ -1694,7 +1694,7 @@ const AboutPost = () => {
               
                                                   </AnimatePresence>
                                                 </motion.div>
-                                                                            </button>  
+              </button>  
             </div>
           </div>
           <div className="comment-box">
