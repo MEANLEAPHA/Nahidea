@@ -63,7 +63,7 @@ const codeFor = (value) => {
   return `R${String(index + 1).padStart(2, "0")}`;
 };
 
-const ReportComment = () => {
+const ReportPost = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -84,14 +84,14 @@ const ReportComment = () => {
     }
   });
 
-  const missingState = !state?.commentId;
+  const missingState = !state?.postId;
 
   const [type, setType] = useState("spam");
   const [reason, setReason] = useState("");
   const [touched, setTouched] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const alreadyReportedKey = state?.commentId ? `reported_comment_${state.commentId}` : null;
+  const alreadyReportedKey = state?.postId ? `reported_post_${state.postId}` : null;
   const [alreadyReported, setAlreadyReported] = useState(false);
 
   useEffect(() => {
@@ -129,7 +129,7 @@ const ReportComment = () => {
 
     setSubmitting(true);
     try {
-      await api.post(`/api/comments/${state.commentId}/report`, {
+      await api.post(`/api/reports/${state.postId}/post`, {
         report_type: type,
         reason: trimmedReason,
       });
@@ -284,4 +284,4 @@ const ReportComment = () => {
   );
 };
 
-export default ReportComment;
+export default ReportPost;

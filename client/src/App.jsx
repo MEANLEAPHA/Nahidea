@@ -72,6 +72,7 @@ import AllFriends from './assets/page/AllFriends';
 import Notifications from './assets/page/Notifications';
 import Spammy from './assets/page/Spammy';
 import EditAccount from './assets/page/EditAccount';
+import ReportPost from './assets/page/ReportPost';
 
 const App = () =>{
     return(
@@ -108,6 +109,7 @@ const App = () =>{
               <Route path='/answer/:postId/:questionId/:questionType' element={<AnswerQa/>}></Route>
               <Route path='/comment' element={<Comment/>}></Route>
               <Route path ='/report' element={<ReportComment/>}></Route>
+              <Route path ='/reportPost' element={<ReportPost/>}></Route>
               <Route path='/edit/content' element={<EditContentBody/>}></Route>
 
               <Route path='/trending' element={<Trending/>}></Route>
