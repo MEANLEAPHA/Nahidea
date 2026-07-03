@@ -81,13 +81,15 @@ const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
     },
     {
       label: (
-        <li onClick={() => setOpenReport(true)}>
+        <li onClick={(e) => {
+          e.stopPropagation();
+          navigate("/reportPost", {
+            state: {
+              postId: post_id
+            }
+          })
+        }}>
           <FlagOutlined /> Report Post
-          <ReportPostModal
-            open={openReport}
-            setOpen={setOpenReport}
-            postId={post_id}
-          />
         </li>
       ),
       key: "3",
