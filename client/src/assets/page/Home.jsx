@@ -33,7 +33,6 @@ import { motion, AnimatePresence } from "framer-motion";
 // util
 import {MediaPreview} from "../util/mediaUploader";
 import { saveScroll, getScroll } from "./util/scrollStore";
-import ReportPostModal from './ReportPostModal';
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
 import parseJSON from './util/parseJson';
