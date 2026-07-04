@@ -366,7 +366,7 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, onAnswerClick
   const renderAnswerContent = () => {
     switch (answer.question_type) {
       case 'openend':
-        return <p className="answer-text"><EnterOutlined style={{transform: 'scaleX(-1)', fontSize: "15px",}}/> {answer.text_answer}</p>;
+        return <div className="answer-choice-badge"><EnterOutlined style={{transform: 'scaleX(-1)', fontSize: "15px",}}/> {answer.text_answer}</div>;
       case 'closedend':
         return (
           <div className={`${answer.yes_no === 'yes' ? 'answer-yess' : 'answer-nos'}`}>
@@ -449,7 +449,7 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, onAnswerClick
             className="answer-avatar" 
             style={{ background: answer.author_bg_color || '#999' }}
           >
-            {answer.author_name?.slice(0, 2) || '??'}
+            <img src={answer.is_annoymous === 1 ? nahIdeaAuth : (answer.avatar_url || 'https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp')}/>
           </div>
           <div className="answer-author-info">
             <span className="answer-author-name">{answer.author_name || 'Anonymous'}</span>
@@ -605,7 +605,7 @@ const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expanded
                 }}
                 isAnimating={likingCommentId === c.id}
               />
-              <span onClick={() => onReplyClick(c)} className='btn-cursor'>
+              <span onClick={() => onReplyClick(c)} className='btn-cursor' style={{ margin: 0 }}>
                 Reply
               </span>
             </div>
@@ -636,7 +636,7 @@ const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expanded
                 key={r.id} 
                 c={r} 
                 postType = {postType}
-                is_annoymous = {r?.is_annoymous}
+                is_annoymous = {r.is_annoymous}
                 isReply={true}
                 postId={postId}
                 expandedReplies={expandedReplies}
@@ -773,7 +773,7 @@ const AboutPost = () => {
   const [popularAnswer, setPopularAnswer] = useState(null);
   const [averageData, setAverageData] = useState(null);
   const [votingAnswerId, setVotingAnswerId] = useState(null);
-  const [userProfilePic, setUserProfilePic] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIMICmqUJvaXbGlMPkkTZdGfR_y1ptPhg7tg&s");
+  const [userProfilePic, setUserProfilePic] = useState("https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp");
 
   const [page, setPage] = useState(1);
   const [answerPage, setAnswerPage] = useState(1);
@@ -1656,7 +1656,7 @@ const AboutPost = () => {
                       <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Answer this question
                     </button>
                     {/* Average Answer Display */}
-                    {averageData && (
+                    {averageData && post?.data?.question_type !== "openend" && (
                       <AverageAnswerDisplay 
                         averageData={averageData} 
                         questionType={post?.data?.question_type}
@@ -1705,7 +1705,7 @@ const AboutPost = () => {
                         key={c.id}
                         c={c}
                         postType = {post?.post_type}
-                        is_annoymous = {c?.is_annoymous}
+                        is_annoymous = {c.is_annoymous}
                         is_annoymous={c?.is_annoymous}
                         isReply={false}
                         postId={id}
@@ -1749,6 +1749,7 @@ const AboutPost = () => {
                       key={c.id}
                       c={c}
                       postType = {post?.post_type}
+                      is_annoymous = {c.is_annoymous}
                       isReply={false}
                       postId={id}
                       expandedReplies={expandedReplies}

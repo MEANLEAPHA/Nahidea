@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, memo } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { DeleteOutlined, LeftOutlined, LoadingOutlined, RetweetOutlined } from "@ant-design/icons";
-import toast from "react-hot-toast"; // swap for `import { toast } from "sonner"` if that's what you're using
+import toast from "react-hot-toast";
 import Rule from "../util/upload/Rule";
 import Masonry from "react-masonry-css";
 
