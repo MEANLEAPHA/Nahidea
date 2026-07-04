@@ -1,9 +1,8 @@
 // React State
-import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, memo} from 'react';
 import { useParams, useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import axios from "axios";
 import toast from "react-hot-toast";
 
 // style
@@ -13,16 +12,16 @@ import "../style/upload/MultipleMedia.css";
 import "../style/upload/Postpreview.css";
 
 // lucide
-import { Heart, Bookmark, ArrowUp, ArrowDown, Trophy, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
-import { motion, AnimatePresence, transform } from "framer-motion";
+import { Heart, Bookmark, ArrowUp, ArrowDown, BarChart3} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp, faMartiniGlassEmpty, faMessage, faPen, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp, faMartiniGlassEmpty, faPen, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 // antd
-import { Typography, Space, Dropdown } from "antd";
+import { Typography, Dropdown } from "antd";
 import { BorderOutlined, CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, EnterOutlined, FlagOutlined, LeftOutlined, LinkOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
@@ -36,8 +35,8 @@ import Rule from "../util/upload/Rule";
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 
-// token
-const token = localStorage.getItem("token");
+// token api
+import api from "../api/axiosInstance";
 
 // Helper
 const parseJSON = (val) => {
@@ -363,6 +362,7 @@ const AverageAnswerDisplay = ({ averageData, questionType, ratingIcon }) => {
 };
 
 const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, highlightedAnswerId, ratingIcon }) => {
+  const navigate = useNavigate();
   const renderAnswerContent = () => {
     switch (answer.question_type) {
       case 'openend':
@@ -556,7 +556,7 @@ const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expanded
       `}
       id={c.id}
     >
-    <div className="avatar" style={{ background: renderColorFn(c) }} onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: is_anonymous === 1 ? 'none' : 'pointer'}}>
+    <div className="avatar" style={{ background: renderColorFn(c), cursor: is_anonymous === 1 ? 'none' : 'pointer' }} onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null}>
       <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
     </div>
 
@@ -572,7 +572,7 @@ const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expanded
             comm_text={c.content} 
             comm_gif={c.gif_url} 
             post_id={postId}
-            onDelete={() => onDeleteComment(c.id, postId)}
+            onDelete={() => onDeleteComment?.()}
           />
         </div>
 
@@ -661,7 +661,7 @@ const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expanded
   );
 });
 
-const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDelete, postType }) => {
+const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, postType, onDelete }) => {
   const { user } = useOutletContext();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -672,12 +672,12 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
     );
   if (!confirmed) return;
     try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/comments/${comm_id}/${post_id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if(res.status === 200) toast.success("Comment deleted");
-      if (onDelete) onDelete();
+      const res = await api.delete(`/api/comments/${comm_id}/${post_id}`);
+      if(res.status === 200) {
+        toast.success("Comment deleted");
+        onDelete?.()
+      };
+     
     } catch (err) {
       console.error(err);
     }
@@ -776,7 +776,6 @@ const AboutPost = () => {
 
   const [comments, setComments] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [popularAnswer, setPopularAnswer] = useState(null);
   const [averageData, setAverageData] = useState(null);
   const [votingAnswerId, setVotingAnswerId] = useState(null);
   const [userProfilePic, setUserProfilePic] = useState("https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp");
@@ -800,6 +799,24 @@ const AboutPost = () => {
   const hasScrolledToHash = useRef(false);
   const commentsFetched = useRef(false);
   const answersFetched = useRef(false);
+
+  // Initial load
+  useEffect(() => {
+    setPost(null);
+    setComments([]); setAnswers([]); setAverageData(null);
+    setPage(1); setAnswerPage(1);
+    setHasMore(true); setHasMoreAnswers(true);
+    setSelectedTab(1);
+    commentsFetched.current = false;
+    answersFetched.current = false;
+    hasScrolledToHash.current = false;
+    targetCommentId.current = null;
+    targetAnswerId.current = null;
+
+    handleFetchPost();
+    handleView();
+    handleHistory();
+  }, [id]);
 
   // Parse location hash for scrolling
   useEffect(() => {
@@ -873,7 +890,7 @@ const AboutPost = () => {
     const observer = new IntersectionObserver(
       entries => {
         if (entries[0].isIntersecting && hasMore && !loadingComments) {
-          fetchComments(page + 1);
+         fetchComments(page + 1, true);
         }
       },
       { threshold: 1 }
@@ -915,45 +932,31 @@ const AboutPost = () => {
         fetchAnswers(1);
         answersFetched.current = true;
       } else if (selectedTab === 2 && !commentsFetched.current) {
-        fetchComments(1);
+        fetchComments(1, true);
         commentsFetched.current = true;
       }
     } else {
       if (!commentsFetched.current) {
-        fetchComments(1);
+        fetchComments(1, true);
         commentsFetched.current = true;
       }
     }
   }, [selectedTab, post]);
 
-  // Initial load
-  useEffect(() => {
-    handleFetchPost();
-    handleView();
-    handleHistory();
-  }, [id]);
-
+ 
   const handleView = async () => {
-    if (!token) return;
+    // if (!token) return;
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/record-view-post/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/api/record-view-post/${id}`, {});
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleHistory = async () => {
-    if (!token) return;
+    // if (!token) return;
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/history-post/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/api/history-post/${id}`, {});
     } catch (err) {
       console.error(err);
     }
@@ -961,15 +964,9 @@ const AboutPost = () => {
 
   const handleFetchPost = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-posts/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.get(`/api/get-posts/${id}`);
       const data = res.data.data;
       setPost(data);
-      // if (data && data.is_anonymous !== 1 && data.avatar_url) {
-      //   setUserProfilePic(data.avatar_url);
-      // }
     } catch (err) {
       console.error(err);
       setPost(null);
@@ -981,11 +978,7 @@ const AboutPost = () => {
 
     try {
       setLoadingAnswers(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/answers/question/${post?.data?.id}?page=${pageNum}&limit=10&sort=top`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
+      const res = await api.get(`/api/answers/question/${post?.data?.id}?page=${pageNum}&limit=10&sort=top`);
       const newAnswers = res.data.data;
       setAnswers(prev => pageNum === 1 ? newAnswers : [...prev, ...newAnswers]);
       setHasMoreAnswers(res.data.pagination.has_more);
@@ -997,16 +990,12 @@ const AboutPost = () => {
     }
   };
 
-  const fetchComments = async (pageNum = 1) => {
-    if (loadingComments || !hasMore) return;
+  const fetchComments = async (pageNum = 1, force = false) => {
+    if (loadingComments || (!hasMore && !force)) return;
 
     try {
       setLoadingComments(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${id}/comments?page=${pageNum}&limit=10`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
+      const res = await api.get(`/api/comments/post/${id}?page=${pageNum}&limit=10`);
       const newComments = res.data.comments;
       setComments(prev => pageNum === 1 ? newComments : [...prev, ...newComments]);
       setHasMore(res.data.pagination.has_more);
@@ -1037,11 +1026,7 @@ const AboutPost = () => {
     }));
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/answers/${answerId}/upvote`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/api/record-vote-answer/${answerId}`, {});
     } catch (err) {
       setAnswers(previousAnswers);
       console.error(err);
@@ -1069,11 +1054,7 @@ const AboutPost = () => {
     }));
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/answers/${answerId}/downvote`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/api/record-vote-answer/${answerId}`, {});
     } catch (err) {
       setAnswers(previousAnswers);
       console.error(err);
@@ -1082,23 +1063,13 @@ const AboutPost = () => {
     }
   };
 
+  const handleDeleteComment = () => fetchComments(1, true);
+
   const toggleReplies = (commentId) => {
     setExpandedReplies(prev => ({
       ...prev,
       [commentId]: !prev[commentId]
     }));
-  };
-
-  const handleDeleteComment = async (commentId, postId) => {
-    try {
-      await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/${postId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchComments(1);
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   const toggleLikeComment = async (commentId) => {
@@ -1127,13 +1098,9 @@ const AboutPost = () => {
     });
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/comments/${commentId}/like`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/api/record-vote-comment/${commentId}`, {});
     } catch (err) {
-      fetchComments(1);
+      fetchComments(1, true);
       console.error(err);
     } finally {
       setLikingCommentId(null);
@@ -1262,7 +1229,7 @@ const AboutPost = () => {
                     max={data.range_max}
                     step={data.step}
                     value={data.default_range_value}
-                    onChange={(e) => setRangeValue(Number(e.target.value))}
+                    readOnly
                     />
                         <div
                     className="custom-thumb"
@@ -1303,7 +1270,7 @@ const AboutPost = () => {
                 {data.question_type === "rankingorder" && (  
                   <ul className='choice-ul'>
                     {data.items?.map((item, i) => (
-                    <li className = 'choice-li'>
+                    <li className = 'choice-li' key={i}>
                               {i + 1}. {item.item_text}
                     </li>
                       )
@@ -1352,11 +1319,8 @@ const AboutPost = () => {
     });
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  
+      await api.post(`/api/posts/${postId}/${ownerId}/like`);
     } catch (err) {
       setPost(previousPost);
       console.log(err);
@@ -1376,11 +1340,7 @@ const AboutPost = () => {
     });
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/api/posts/${postId}/favorite`, {});
     } catch (err) {
       setPost(previousPost);
       console.log(err);
@@ -1641,7 +1601,7 @@ const AboutPost = () => {
                       onClick={() => {
                         setSelectedTab(opt.id);
                         if (opt.id === 2 && !commentsFetched.current) {
-                          fetchComments(1);
+                          fetchComments(1, true);
                           commentsFetched.current = true;
                         } else if (opt.id === 1 && !answersFetched.current) {
                           fetchAnswers(1);
@@ -1685,9 +1645,6 @@ const AboutPost = () => {
                           onUpvote={() => handleUpvoteAnswer(answer.id)}
                           onDownvote={() => handleDownvoteAnswer(answer.id)}
                           isVoting={votingAnswerId === answer.id}
-                          // onAnswerClick={(answerId) => {
-                          //   navigate(`/aboutpost/${id}#answer-${answerId}`);
-                          // }}
                           highlightedAnswerId={highlightedAnswerId}
                         />
                       ))}
@@ -1718,7 +1675,6 @@ const AboutPost = () => {
                         c={c}
                         postType = {post?.post_type}
                         is_anonymous = {c.is_anonymous}
-                        is_anonymous={c?.is_anonymous}
                         isReply={false}
                         postId={id}
                         expandedReplies={expandedReplies}
@@ -1802,3 +1758,13 @@ const AboutPost = () => {
 };
 
 export default AboutPost;
+
+
+
+
+
+
+
+    // onAnswerClick={(answerId) => {
+                          //   navigate(`/aboutpost/${id}#answer-${answerId}`);
+                          // }}
