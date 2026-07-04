@@ -995,7 +995,7 @@ const AboutPost = () => {
 
     try {
       setLoadingComments(true);
-      const res = await api.get(`/api/comments/post/${id}?page=${pageNum}&limit=10`);
+      const res = await api.get(`/api/posts/${id}/comments?page=${pageNum}&limit=10`);
       const newComments = res.data.comments;
       setComments(prev => pageNum === 1 ? newComments : [...prev, ...newComments]);
       setHasMore(res.data.pagination.has_more);
@@ -1026,7 +1026,7 @@ const AboutPost = () => {
     }));
 
     try {
-      await api.post(`/api/record-vote-answer/${answerId}`, {});
+      await api.post(`/api/answers/${answerId}/upvote`, {});
     } catch (err) {
       setAnswers(previousAnswers);
       console.error(err);
@@ -1054,7 +1054,7 @@ const AboutPost = () => {
     }));
 
     try {
-      await api.post(`/api/record-vote-answer/${answerId}`, {});
+      await api.post(`/api/answers/${answerId}/downvote`, {});
     } catch (err) {
       setAnswers(previousAnswers);
       console.error(err);
@@ -1098,7 +1098,7 @@ const AboutPost = () => {
     });
 
     try {
-      await api.post(`/api/record-vote-comment/${commentId}`, {});
+      await api.post(`/api/comments/${commentId}/like`, {});
     } catch (err) {
       fetchComments(1, true);
       console.error(err);
