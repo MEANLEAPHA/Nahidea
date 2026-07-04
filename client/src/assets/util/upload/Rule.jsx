@@ -27,11 +27,11 @@ export default function Rule({ setRule }) {
         return confessionItems;
       case "question":
         return questionItems;
-      case "question-comment":
+      case "question Comment":
         return questionCommentItems;
-      case "content-comment":
+      case "content Comment":
         return contentCommentItems;
-      case "confession-comment":
+      case "confession Comment":
         return confessionCommentItems;
       default:
         return questionItems;
@@ -50,7 +50,7 @@ export default function Rule({ setRule }) {
         items={getItems()}
       />
       {
-        setRule !== 'question-comment' && setRule !== 'content-comment' && setRule !== 'confession-comment' &&
+        setRule !== 'question Comment' && setRule !== 'content Comment' && setRule !== 'confession Comment' &&
         <div className='rule-agree-div'>
         <p className="rule-agree"><SoundFilled /> By posting, you agree to help keep the platform safe, useful, and enjoyable for everyone. Happy Posting</p>
       </div>

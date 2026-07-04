@@ -69,7 +69,7 @@ const AnswerQa = () => {
           await handleFetchQa();
         }
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         if (!cancelled) {
           toast.error("Couldn't load this question.");
           navigate(-1);

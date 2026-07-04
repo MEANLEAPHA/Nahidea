@@ -362,7 +362,7 @@ const AverageAnswerDisplay = ({ averageData, questionType, ratingIcon }) => {
   );
 };
 
-const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, onAnswerClick, highlightedAnswerId, ratingIcon }) => {
+const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, highlightedAnswerId, ratingIcon }) => {
   const renderAnswerContent = () => {
     switch (answer.question_type) {
       case 'openend':
@@ -441,7 +441,6 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, onAnswerClick
     <div 
       className={`answer-card ${highlightedAnswerId === answer.id ? 'highlight-answer' : ''}`}
       id={`answer-${answer.id}`}
-      onClick={() => onAnswerClick?.(answer.id)}
     >
       <div className="answer-header">
         <div className="answer-author">
@@ -449,10 +448,13 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, onAnswerClick
             className="answer-avatar" 
             style={{ background: answer.author_bg_color || '#999' }}
           >
-            <img src={answer.is_anonymous === 1 ? nahIdeaAuth : (answer.avatar_url || 'https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp')} alt="avatar" className="avatar-image"/>
+            <img src={answer.is_anonymous === 1 ? nahIdeaAuth : (answer.avatar_url || 'https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp')} alt="avatar" className="avatar-image"  style= {{cursor: answer.is_anonymous === 1 ? 'none' : 'pointer'}}/>
           </div>
           <div className="answer-author-info">
-            <span className="answer-author-name">{answer.author_name || 'Anonymous'}</span>
+            <span className="answer-author-name" 
+              onClick ={answer.is_anonymous !== 1 ? () => navigate(`/accounts`, { state: {userId: answer.user_id}}) : null} style= {{cursor: answer.is_anonymous === 1 ? 'none' : 'pointer'}}>
+                {answer.author_name || 'Anonymous'}
+            </span>
             <span className="answer-time">{timeAgo(answer.created_at)}</span>
           </div>
         </div>
@@ -554,14 +556,14 @@ const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expanded
       `}
       id={c.id}
     >
-    <div className="avatar" style={{ background: renderColorFn(c) }} onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>
+    <div className="avatar" style={{ background: renderColorFn(c) }} onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: is_anonymous === 1 ? 'none' : 'pointer'}}>
       <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
     </div>
 
       <div className="comment-body">
         <div className="comment-header">
           <div className="comment-name-wrapper">
-            <b className="comment-name" onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>{renderNameFn(c)}</b>
+            <b className="comment-name" onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: is_anonymous === 1 ? 'none' : 'pointer'}}>{renderNameFn(c)}</b>
           </div>
           <CommentDropDown 
             ownerId={c.user_id} 
@@ -665,6 +667,10 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, onDel
   const token = localStorage.getItem("token");
 
   const handleDelete = async () => {
+    const confirmed = window.confirm(
+        "Are you sure you want to delete this comment? This can't be undone."
+    );
+  if (!confirmed) return;
     try {
       const res = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/api/comments/${comm_id}/${post_id}`,
@@ -1394,14 +1400,17 @@ const AboutPost = () => {
               <button type='button' className='back-btn-about-post' onClick={() => navigate(-1)}><LeftOutlined /></button>
 
               <div id="author-pf-div" 
-                   style={{ backgroundColor: post?.is_anonymous === 1 ? post.anonymous_bg_color : "" }}
-                    onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null} style= {{cursor: 'pointer'}}
+                  style={{ backgroundColor: post?.is_anonymous === 1 ? post.anonymous_bg_color : "", cursor: post?.is_anonymous === 1 ? 'none' : 'pointer' }}
+                  onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null}
               >
                 <img src={post?.is_anonymous === 1 ? nahIdeaAuth : (post?.avatar_url || userProfilePic)} id="author-pf" alt="avatar" />
               </div>
 
               <div className='user-post-info'>
-                <p className='post-username'>
+                <p className='post-username' 
+                   onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null}
+                   style= {{ cursor: post?.is_anonymous === 1 ? 'none' : 'pointer'}}
+                >
                   {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} 
                   <div className='dot'></div>
                   <div className='category-post-div'>
@@ -1676,9 +1685,9 @@ const AboutPost = () => {
                           onUpvote={() => handleUpvoteAnswer(answer.id)}
                           onDownvote={() => handleDownvoteAnswer(answer.id)}
                           isVoting={votingAnswerId === answer.id}
-                          onAnswerClick={(answerId) => {
-                            navigate(`/aboutpost/${id}#answer-${answerId}`);
-                          }}
+                          // onAnswerClick={(answerId) => {
+                          //   navigate(`/aboutpost/${id}#answer-${answerId}`);
+                          // }}
                           highlightedAnswerId={highlightedAnswerId}
                         />
                       ))}
@@ -1785,7 +1794,7 @@ const AboutPost = () => {
       </article>
 
       <article id='his-article'>
-        <Rule setRule={post?.post_type === "question" ? "question-comment" : post?.post_type === "content" ? "content-comment" : "confession-comment"} />
+        <Rule setRule={post?.post_type === "question" ? "question Comment" : post?.post_type === "content" ? "content Comment" : "confession Comment"} />
       </article>
 
     </div>
