@@ -1767,4 +1767,4 @@ export default AboutPost;
 
     // onAnswerClick={(answerId) => {
                           //   navigate(`/aboutpost/${id}#answer-${answerId}`);
-                          // }}
+                          // }} 

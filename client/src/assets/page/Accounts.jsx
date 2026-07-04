@@ -1518,4 +1518,4 @@ function DisplayAnimatedIcon({ src, isHovered }) {
       style={{ width: "20px", height: "20px" }}
     />
   );
-}
+} 

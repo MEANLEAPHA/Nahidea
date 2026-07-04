@@ -879,28 +879,40 @@ YES NO
 .yesno-div{
  display: flex;
  width: 100%;
+ gap: 1px;
  height: auto;
 }
 .yes-chip{
     width: calc(100% /2);
-    background-color: rgba(153, 205, 50, 0.5);
+    background-color:var(--back-con) !important;
     padding: 10px;
     text-align: center;
     border-top-left-radius: 15px;
-    border-right: 1px solid var(--back-con);
+    border: 2px solid var(--secondary-color) !important;
+    cursor: pointer;
     border-bottom-left-radius: 15px;
 }
+.yes-chip:hover{
+    background-color: rgba(172, 255, 47, 0.5) !important;
+
+}
+
 
 .no-chip{
     width: calc(100% /2);
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color:var(--back-con) !important;
     padding: 10px;
     text-align: center;
     border-top-right-radius: 15px;
-    border-left: 1px solid var(--back-con);
+    border: 2px solid var(--secondary-color) !important;
         border-bottom-right-radius: 15px;
+       cursor: pointer;
 }
 
+.no-chip:hover{
+    background-color: rgba(255, 0, 0, 0.5) !important;
+
+}
 /* =========================================
 RANK
 ========================================= */

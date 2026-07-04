@@ -1,37 +1,24 @@
 // react state
-import React,{ useState, useEffect, useRef, memo, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, memo, useLayoutEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import api from "../api/axiosInstance";
 
 // antd
-import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown, message} from "antd";
-const { Title, Text } = Typography;
-import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined,
-          FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, 
-          SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, ReloadOutlined,FlagOutlined,LinkOutlined,DeleteOutlined,
-          EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
-          BorderOutlined,
-      } from '@ant-design/icons';
-import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
+import { List, Typography, Spin } from "antd";
+const { Text } = Typography;
+import { BorderOutlined, } from '@ant-design/icons';
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleDot,faEllipsisVertical, faPen, faRetweet} from "@fortawesome/free-solid-svg-icons";
-import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
-import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faPen} from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
 // lucide
-import {
-  Heart,
-  HeartOff,
-  Bookmark,
-  LoaderCircle
-} from "lucide-react";
+import { Heart, Bookmark } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 
 // util
-import {MediaPreview} from "../util/mediaUploader";
+import { MediaPreview } from "../util/mediaUploader";
 import { saveScroll, getScroll } from "./util/scrollStore";
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
@@ -46,15 +33,17 @@ import "../style/upload/MultipleMedia.css";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTran from "../img/nahidea-tran.png";
 import DailyNews from './DailyNews';
 
 // data
 import { iconOptions } from "../data/post_type_data";
 import Rule from './util/rule';
 
-// token 
-const token = localStorage.getItem("token");
+
+// api token
+import api from "../api/axiosInstance";
+
+
 
 export default function Home() {
 
@@ -69,12 +58,12 @@ export default function Home() {
   // loading
   const [loading, setLoading] = useState(false); 
   const [fetching, setFetching] = useState(false); 
-  const [source, setSource] = useState("");
   const [error, setError] = useState(null);
 
   // pagination
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [isRestoringScroll, setIsRestoringScroll] = useState(false);
 
@@ -82,6 +71,7 @@ export default function Home() {
   const hasRestoredScroll = useRef(false);
   const pageRef = useRef(page);
   const postsRef = useRef(posts);
+  const hasMoreRef = useRef(hasMore);
   const isNavigating = useRef(false);
 
   const scrollYRef = useRef(0);
@@ -95,6 +85,10 @@ export default function Home() {
   useEffect(() => {
     postsRef.current = posts;
   }, [posts]);
+
+  useEffect(() => {
+    hasMoreRef.current = hasMore;
+  }, [hasMore]);
 
   // INITIAL LOAD
   useEffect(() => {
@@ -110,6 +104,7 @@ export default function Home() {
           // Fetch all pages up to saved page
           for (let p = 1; p <= saved.page; p++) {
             await fetchPosts(p);
+            if (!hasMoreRef.current) break;
           }
           setPage(saved.page);
         }
@@ -240,7 +235,7 @@ export default function Home() {
       // save last known position
       saveCurrentScroll();
     };
-  }, []); // Empty dependency array - we use refs for latest values
+  }, []); 
 
   // SCROLL LISTENER for infinite scroll
   useEffect(() => {
@@ -254,11 +249,14 @@ export default function Home() {
         !fetching &&
         hasMore
       ) {
-        setPage((prev) => {
-          const next = prev + 1;
-          fetchPosts(next);
-          return next;
-        });
+        const next = pageRef.current + 1;
+        setPage(next);
+        fetchPosts(next);
+        // setPage((prev) => {
+        //   const next = prev + 1;
+        //   fetchPosts(next);
+        //   return next;
+        // });
       }
     };
 
@@ -292,7 +290,7 @@ export default function Home() {
       }
 
       setPosts((prev) => [...prev, ...newPosts]);
-      setSource(payload.source);
+      setError(null); 
     } catch (error) {
       setError("Failed to load post");
       console.error('Fetch error:', error);
@@ -303,47 +301,44 @@ export default function Home() {
 }
   };
 
+  const openPost = (post) => {
+      saveScroll("home", { y: window.scrollY, page: pageRef.current });
+
+      const HisData = {
+        id: post.id,
+        title: post.data.title,
+        mediaSrc: post.data.media_url,
+        author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+        authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+        isAnonymous: post.is_anonymous,
+        anonymousBg: post.anonymous_bg_color,
+      };
+
+      let recentDataHis = [];
+      try {
+        recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+      } catch {
+        recentDataHis = [];
+      }
+
+      const withoutCurrent = recentDataHis.filter(item => item.id !== post.id);
+      const newList = [HisData, ...withoutCurrent].slice(0, 50);
+      localStorage.setItem("recentPostHis", JSON.stringify(newList));
+
+      navigate(`/aboutpost/${post.id}`);
+    };
 
   // Render post style
   const renderPostContent = (post) => {
 
     const data = post.data;
-
     if (!data) return <Text type="secondary">No content</Text>;
 
     switch (post.post_type) {
       case "content":
         return (
           <>
-                <div className='post-caption' onClick={ () => {
-
-                   saveScroll("home", {
-                      y: window.scrollY,
-                      page: pageRef.current,
-                    });
-
-                    const HisData = {
-                      id: post.id,
-                      title: data.title,
-                      mediaSrc : data.media_url,
-                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                      isAnonymous: post.is_anonymous,
-                      anonymousBg: post.anonymous_bg_color,
-                    }
-                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                    let newList;
-                    if (recentDataHis.some(item => item.id === post.id)) {
-                      const raminData = recentDataHis.filter(item => item.id !== post.id);
-                      newList = [HisData, ...raminData].slice(0, 50);
-                    } else {
-                      newList = [HisData, ...recentDataHis].slice(0, 50);
-                    }
-
-                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
-                    navigate(`/aboutpost/${post.id}`);
-                  }}>
+                <div className='post-caption' onClick={ () => { openPost(post) }}>
                     <p>{data.title}</p>
                 </div>
               <div  className='post-thumbnail'>         
@@ -355,30 +350,7 @@ export default function Home() {
       case "confession":
         return (
           <>
-                   <div className='post-caption' onClick={()=>{
-                        const HisData = {
-                          id: post.id,
-                          title: data.title,
-                          mediaSrc : data.media_url,
-                          author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                          authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                          isAnonymous: post.is_anonymous,
-                          anonymousBg: post.anonymous_bg_color,
-                        }
-                        const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                        let newList;
-                        if (recentDataHis.some(item => item.id === post.id)) {
-                          const raminData = recentDataHis.filter(item => item.id !== post.id);
-                          newList = [HisData, ...raminData].slice(0, 50);
-                        } else {
-                          newList = [HisData, ...recentDataHis].slice(0, 50);
-                        }
-
-                        localStorage.setItem("recentPostHis", JSON.stringify(newList));
-
-                      navigate(`/aboutpost/${post.id}`)
-                    }}>
+                   <div className='post-caption' onClick={ () => { openPost(post) }}>
                     <p>{data.title}</p>
                 </div>
              
@@ -398,32 +370,10 @@ export default function Home() {
       case "question":
         return (
           <>
-                 <div className='post-caption' onClick={ () => {
-                    const HisData = {
-                      id: post.id,
-                      title: data.title,
-                      mediaSrc : data.media_url,
-                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                      isAnonymous: post.is_anonymous,
-                      anonymousBg: post.anonymous_bg_color,
-                    }
-                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                    let newList;
-                    if (recentDataHis.some(item => item.id === post.id)) {
-                      const raminData = recentDataHis.filter(item => item.id !== post.id);
-                      newList = [HisData, ...raminData].slice(0, 50);
-                    } else {
-                      newList = [HisData, ...recentDataHis].slice(0, 50);
-                    }
-
-                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
-                    navigate(`/aboutpost/${post.id}`)
-                  }}>
+                 <div className='post-caption' onClick={ () => { openPost(post) }}>
                   <p>{data.title}</p>
                 </div>
-                 <div className="post-question-answer-preview">
+                 <div className="post-question-answer-preview" onClick={ () => { openPost(post) }}>
 
                       {data.question_type === "closedend" && (
 
@@ -501,7 +451,7 @@ export default function Home() {
                       {data.question_type === "rankingorder" && (
                         <ul className='choice-ul'>
                               {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
-                                <li className = 'choice-li'>
+                                <li className = 'choice-li' key={i}>
                                     {i + 1}. {item.item_text}
                                 </li>
                               ))}
@@ -613,7 +563,7 @@ const handleFavorite = async (postId) => {
   );
 
   try {
-    await api.post( `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`, {})
+    await api.post( `/api/posts/${postId}/favorite`, {})
   } catch (err) {
 
     // rollback
@@ -644,23 +594,18 @@ const handleFavorite = async (postId) => {
     });
   }
 };
+
 const [hoveredPostId, setHoveredPostId] = useState(null);
   return (
     <div className='home-container'>
       <article id="feed-article">
         <DailyNews/>
   
-            {error ? (
-              <div className='error-container'>
-                <Loader />
-                <p>Opps! Failed to load</p>
-              </div>
-            ) : posts.length === 0 && !loading ? (
-               <div className='error-container'>
-                <Loader />
-                <p>No posts found</p>
-              </div>
-            ) : (
+            {error && posts.length === 0 ? (
+                <div className='error-container'><Loader /><p>Opps! Failed to load</p></div>
+              ) : posts.length === 0 && !loading ? (
+                <div className='error-container'><Loader /><p>No posts found</p></div>
+              ) : (
               <>
                 <List
                   dataSource={posts}
@@ -672,13 +617,23 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
 
                           <div className='post-user-profile'>
 
-                            <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
-                              <img src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url} id="author-pf"/>
+                            <div id="author-pf-div" 
+                              style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : "grey", cursor: post.is_anonymous === 1 ? 'none' : 'pointer'}}
+                              onClick={Number(post.is_anonymous) !== 1 ? () => {navigate('/accounts', {state: {userId: post.user_id}})} : null}
+                            >
+                              <img 
+                                src={post.is_anonymous === 1 ? nahIdeaAuth : (post.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp")} id="author-pf"
+                              />
                             </div>
 
                             <div className='user-post-info'>
                               <p className='post-username'>
-                                {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} 
+                                <span 
+                                  style={{cursor: post.is_anonymous === 1 ? 'none' : 'pointer'}}
+                                  onClick={Number(post.is_anonymous) !== 1 ? () => {navigate('/accounts', {state: {userId: post.user_id}})} : null}
+                                > 
+                                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} 
+                                </span>
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
@@ -694,8 +649,12 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                             </div> 
                           </div>
 
-                          <DotDropDown ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
-                                        page={page || 1} text_body={post?.data?.text_body || ""} contentId={post?.data?.id || 1}
+                          <DotDropDown 
+                            ownerId={post.user_id}
+                            post_type={post.post_type}
+                            post_id={post.id}
+                            text_body={post?.data?.text_body || ""}
+                            contentId={post?.data?.id || 1}
                           />
 
                         </div>
@@ -721,11 +680,11 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                         whileTap={{ scale: 0.75 }}
                                         animate={
                                           likingPosts.has(post.id)
-                                            ? {
+                                             ? {
                                                 scale: [1, 1.35, 1],
                                                 rotate: [0, -15, 15, 0]
                                               }
-                                            : {}
+                                            : { scale: 1, rotate: 0 }
                                         }
                                         transition={{
                                           duration: 0.45,
@@ -802,8 +761,8 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                         <span className="count-label"> Like</span>
                                       </p>
                              </button>
-                             {post.post_type === "question" && <button className='button-action-footer' type='button' onClick={()=> navigate(`aboutpost/${post.id}`)}><FontAwesomeIcon icon={faPen} className='button-action-footer-icon'/><p><span className='count-label'> Answer</span></p></button>}
-                              <button className='button-action-footer' type='button' onClick={()=> navigate(`aboutpost/${post.id}`)}><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' /><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
+                             {post.post_type === "question" && <button className='button-action-footer' type='button' onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}><FontAwesomeIcon icon={faPen} className='button-action-footer-icon'/><p><span>{post.answers_count}</span><span className='count-label'> Answer</span></p></button>}
+                             <button className='button-action-footer' type='button' onClick={()=> openPost(post)}><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' /><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
                               <button
@@ -821,10 +780,10 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                     animate={
                                       favoritingPosts.has(post.id)
                                         ? {
-                                            scale: [1, 1.25, 1],
-                                            y: [0, -5, 0]
-                                          }
-                                        : {}
+                                                          scale: [1, 1.35, 1],
+                                                          rotate: [0, -15, 15, 0]
+                                                        }
+                                                      : { scale: 1, rotate: 0 }
                                     }
                                     transition={{
                                       duration: 0.4,
@@ -895,19 +854,16 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
 
                                     </AnimatePresence>
                                   </motion.div>
-                                                              </button>          
-                                                            </div> 
-                                                        </div>
+                              </button>          
+                            </div> 
+                        </div>
 
                                                       </div>
                                                     </List.Item>
                                                   )}
                                                 />
-                                            {loading && (
-                                              <div className="nextPost-load-div">
-                                                <Spin />
-                                              </div>
-                                            )}
+                                            {loading && <div className="nextPost-load-div"><Spin /></div>}
+                                            {error && posts.length > 0 && <p className="inline-error">Couldn't load more — <button onClick={() => fetchPosts(pageRef.current)}>retry</button></p>}
                                           </>
                                         )}
       </article>
@@ -980,51 +936,3 @@ function DisplayAnimatedIcon({ src, isHovered }) {
 
 
 
-
-
-  // INITIAL LOAD - with proper sequential fetching
-
-  // useEffect(() => {
-  //   fetchPosts(1);
-  //   setPage(1);
-  // }, []);
-
-  
-  // FETCH POSTS
-  // const fetchPosts = async (nextPage = 1) => {
-  //   if (fetching) return;
-
-  //   try {
-  //     setFetching(true);
-  //     setLoading(true);
-
-  //     const res = await axios.get(
-  //       `${import.meta.env.VITE_SERVER_URL}/api/all-posts?page=${nextPage}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const payload = res.data;
-  //     const newPosts = payload.data;
-
-  //     if (!payload || !Array.isArray(newPosts)) {
-  //       throw new Error("Bad response");
-  //     }
-
-  //     if (newPosts.length < 25) {
-  //       setHasMore(false);
-        
-  //     }
-
-  //     setPosts((prev) => [...prev, ...newPosts]);
-  //     setSource(payload.source);
-  //   } catch {
-  //     setError("Failed to load post");
-  //   } finally {
-  //     setLoading(false);
-  //     setFetching(false);
-  //   }
-  // };
