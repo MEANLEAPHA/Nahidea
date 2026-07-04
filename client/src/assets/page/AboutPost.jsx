@@ -449,7 +449,7 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, onAnswerClick
             className="answer-avatar" 
             style={{ background: answer.author_bg_color || '#999' }}
           >
-            <img src={answer.is_annoymous === 1 ? nahIdeaAuth : (answer.avatar_url || 'https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp')}/>
+            <img src={answer.is_anonymous === 1 ? nahIdeaAuth : (answer.avatar_url || 'https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp')} alt="avatar" className="avatar-image"/>
           </div>
           <div className="answer-author-info">
             <span className="answer-author-name">{answer.author_name || 'Anonymous'}</span>
@@ -535,12 +535,12 @@ const CommentLikeButton = memo(({ isLiked, likesCount, onLike, isAnimating }) =>
           )}
         </AnimatePresence>
       </motion.div>
-      <span>{likesCount}</span>
+      <span style={{margin: 0}}>{likesCount}</span>
     </button>
   );
 });
 
-const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
+const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expandedReplies, onToggleReplies, onLikeComment, onReplyClick, highlightedId, timeAgoFn, renderNameFn, renderColorFn, renderAvatarFn, likingCommentId, onDeleteComment }) => {
   const isExpanded = expandedReplies[c.id];
   
   const navigate = useNavigate();
@@ -554,14 +554,14 @@ const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expanded
       `}
       id={c.id}
     >
-    <div className="avatar" style={{ background: renderColorFn(c) }} onClick = {Number(is_annoymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>
+    <div className="avatar" style={{ background: renderColorFn(c) }} onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>
       <img src={renderAvatarFn(c)} alt="avatar" className="avatar-image"/>
     </div>
 
       <div className="comment-body">
         <div className="comment-header">
           <div className="comment-name-wrapper">
-            <b className="comment-name" onClick = {Number(is_annoymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>{renderNameFn(c)}</b>
+            <b className="comment-name" onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: 'pointer'}}>{renderNameFn(c)}</b>
           </div>
           <CommentDropDown 
             ownerId={c.user_id} 
@@ -636,7 +636,7 @@ const CommentCard = memo(({ c, postType, is_annoymous, isReply, postId, expanded
                 key={r.id} 
                 c={r} 
                 postType = {postType}
-                is_annoymous = {r.is_annoymous}
+                is_anonymous = {r.is_anonymous}
                 isReply={true}
                 postId={postId}
                 expandedReplies={expandedReplies}
@@ -1393,7 +1393,10 @@ const AboutPost = () => {
             <div className='post-user-profile'>
               <button type='button' className='back-btn-about-post' onClick={() => navigate(-1)}><LeftOutlined /></button>
 
-              <div id="author-pf-div" style={{ backgroundColor: post?.is_anonymous === 1 ? post.anonymous_bg_color : "" }}>
+              <div id="author-pf-div" 
+                   style={{ backgroundColor: post?.is_anonymous === 1 ? post.anonymous_bg_color : "" }}
+                    onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null} style= {{cursor: 'pointer'}}
+              >
                 <img src={post?.is_anonymous === 1 ? nahIdeaAuth : (post?.avatar_url || userProfilePic)} id="author-pf" alt="avatar" />
               </div>
 
@@ -1705,8 +1708,8 @@ const AboutPost = () => {
                         key={c.id}
                         c={c}
                         postType = {post?.post_type}
-                        is_annoymous = {c.is_annoymous}
-                        is_annoymous={c?.is_annoymous}
+                        is_anonymous = {c.is_anonymous}
+                        is_anonymous={c?.is_anonymous}
                         isReply={false}
                         postId={id}
                         expandedReplies={expandedReplies}
@@ -1749,7 +1752,7 @@ const AboutPost = () => {
                       key={c.id}
                       c={c}
                       postType = {post?.post_type}
-                      is_annoymous = {c.is_annoymous}
+                      is_anonymous = {c.is_anonymous}
                       isReply={false}
                       postId={id}
                       expandedReplies={expandedReplies}

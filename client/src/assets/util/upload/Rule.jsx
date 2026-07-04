@@ -11,35 +11,6 @@ import {
   SoundFilled
 } from "@ant-design/icons";
 
-// export default function Rule({ setRule }) {
-//   const [current, setCurrent] = useState("1");
-
-//   const onClick = (e) => {
-//     setCurrent(e.key);
-//   };
-
-//   return (
-   
-//       <>
-//         <p className="rule-title">{setRule.slice(0, 1).toUpperCase() + setRule.slice(1)} Rule</p>
-//           <Menu
-//             onClick={onClick}
-//             style={{ width: "100%" }}
-//             defaultOpenKeys={["sub2"]}
-//             selectedKeys={[current]}
-//             mode="inline"
-//             items={setRule === "content" ? contentItems : setRule === "confession" ? confessionItems : questionItems}
-//           />
-//           <div className='rule-agree-div'>
-//               <p className="rule-agree"><SoundFilled /> By posting, you agree to help keep the platform safe, useful, and enjoyable for everyone. Happy Posting </p>
-//           </div>
-   
-//       </>
-
-    
- 
-//   );
-// }
 
 export default function Rule({ setRule }) {
   const [current, setCurrent] = useState("1");
