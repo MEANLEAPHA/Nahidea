@@ -9,8 +9,8 @@ import { BorderOutlined, } from '@ant-design/icons';
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faPen} from "@fortawesome/free-solid-svg-icons";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faPen} from "@fortawesome/free-solid-svg-icons";
+import { faMessage, faCircle } from "@fortawesome/free-regular-svg-icons";
 
 // lucide
 import { Heart, Bookmark } from "lucide-react";
@@ -479,11 +479,15 @@ export default function Home() {
                       )}
                   
               </div>
-            <div className="post-thumbnail">
-              <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
-                <img src={data.media_url} className="preview-image"/>
-              </div>
-            </div>
+              {
+                post.post_type !== "question" && (
+                  <div className="post-thumbnail">
+                    <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+                      <img src={data.media_url} className="preview-image"/>
+                    </div>
+                  </div>
+                )
+              }
           </>
         );
 

@@ -5,11 +5,11 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 // antd
 import { List, Typography } from "antd";
 const { Text } = Typography;
-import { FolderOpenOutlined, SignatureOutlined } from "@ant-design/icons";
+import { BorderOutlined, FolderOpenOutlined, RiseOutlined, SignatureOutlined } from "@ant-design/icons";
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faMessage } from "@fortawesome/free-regular-svg-icons";
 import {
   faThumbsDown,
   faThumbsUp,
@@ -116,16 +116,6 @@ const Trending = () => {
     navigate(`/aboutpost/${post.id}`);
   };
 
-  // Direct "jump straight into answering" logic for question preview cards
-  const goToAnswer = (post, data, type, qaData) => {
-    try {
-      sessionStorage.setItem("QaStore", JSON.stringify(qaData));
-    } catch (err) {
-      console.error("Failed to cache QaStore:", err);
-    }
-    navigate(`/answer/${post.id}/${data.id}/${type}`);
-  };
-
   const renderPostContent = (post) => {
     const data = post.data;
     if (!data) return <Text type="secondary">No content</Text>;
@@ -163,276 +153,123 @@ const Trending = () => {
       case "question":
         return (
           <>
-            <div className="post-question-answer-preview">
+           <div className="post-caption" onClick={() => openPost(post)}>
+              <p>{data.title}</p>
+            </div>
+            <div className="post-question-answer-preview" onClick={() => openPost(post)}>
               {data.question_type === "closedend" && (
-                <div
-                  className="closed-preview-card question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "closedend", {
-                      question_id: data.id,
-                      title: data.title,
-                    })
-                  }
-                >
-                  <div className="question-preview-header">
-                    <span className="question-badge yesno-badge">
-                      <FontAwesomeIcon icon={faThumbsUp} /> Yes / No{" "}
-                      <FontAwesomeIcon icon={faThumbsDown} />
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
-                  </div>
-                  <div className="yesno-div">
-                    <div className="yes-chip">Yes</div>
-                    <div className="no-chip">No</div>
-                  </div>
-                </div>
-              )}
+
+                        <div className="yesno-div">
+                            <div className="yes-chip">
+                              Yes
+                            </div>
+
+                            <div className="no-chip">
+                              No
+                            </div>
+                        </div>
+                      )}
 
               {data.question_type === "range" && (
-                <div
-                  className="question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "range", {
-                      question_id: data.id,
-                      title: data.title,
-                      range_min: data.range_min,
-                      range_max: data.range_max,
-                      step: data.step,
-                      default_range_value: data.default_range_value,
-                    })
-                  }
-                >
-                  <div className="question-preview-header">
-                    <span className="question-badge range-badge">
-                      <FontAwesomeIcon icon={faLocationCrosshairs} /> Range
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
-                  </div>
-                  <div className="range-preview-option">
-                    <label id="min-label">{data.range_min}</label>
-                    <div className="range-wrapper">
-                      <input
-                        type="range"
-                        min={data.range_min}
-                        max={data.range_max}
-                        step={data.step}
-                        value={data.default_range_value}
-                        readOnly
-                      />
-                      <div
-                        className="custom-thumb"
-                        style={{
-                          left: `${
-                            ((data.default_range_value - data.range_min) /
-                              (data.range_max - data.range_min)) *
-                            100
-                          }%`,
-                        }}
-                      >
-                        {data.default_range_value}
-                      </div>
-                    </div>
-                    <label id="max-label">{data.range_max}</label>
-                  </div>
-                </div>
-              )}
-
-              {data.question_type === "singlechoice" && (
-                <div
-                  className="question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "singlechoice", {
-                      question_id: data.id,
-                      title: data.title,
-                      choice:
-                        data.choice?.map((c) => ({
-                          choice_text: c.choice_text,
-                          singlechoice_id: c.singlechoice_id,
-                          id: c.id,
-                          question_id: c.question_id,
-                        })) || [],
-                    })
-                  }
-                >
-                  <div className="question-preview-header">
-                    <span className="question-badge single-badge">
-                      <FontAwesomeIcon icon={faHandPointer} /> Pick One
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
-                  </div>
-                  <div className="question-preview-options two-grid">
-                    {data.choice
-                      ?.slice(0, data.choice?.length > 4 ? 3 : 4)
-                      .map((c, i) => (
-                        <div key={i} className="option-chip">
-                          {c.choice_text}
+                         <div className='range-preview-option'>
+                            <label id="min-label">{data.range_min}</label>
+                            <div className="range-wrapper">
+                                <input
+                                type="range"
+                                min={data.range_min}
+                                max={data.range_max}
+                                step={data.step}
+                                value={data.default_range_value}
+                                />
+                                    <div
+                                className="custom-thumb"
+                                style={{
+                                    left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
+                                }}
+                                >
+                                {data.default_range_value}
+                                </div>
+                            </div>
+                            <label id="max-label">{data.range_max}</label>
                         </div>
-                      ))}
-                    {data.choice?.length > 4 && (
-                      <div className="option-chip more-chip">
-                        +{data.choice.length - 3} more
-                      </div>
+                      )}
+
+              {data.question_type === "singlechoice" && ( 
+                <ul className='choice-ul'>
+                    {
+                      data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map(
+                        (c, i) => (
+                          <li key={i} className = 'choice-li'>
+                            <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/> {c.choice_text}
+                          </li>
+                        )
+                      )
+                    }
+                    {data.choices?.length > 4 && (
+                      <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                           +{data.choices?.length - 3} more
+                      </li>
                     )}
-                  </div>
-                </div>
+                </ul>
               )}
 
               {data.question_type === "multiplechoice" && (
-                <div
-                  className="question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "multiplechoice", {
-                      question_id: data.id,
-                      title: data.title,
-                      include_all_above: data.include_all_above,
-                      choices:
-                        data.choices?.map((c) => ({
-                          choice_text: c.choice_text,
-                          multiplechoice_id: c.multiplechoice_id,
-                          id: c.id,
-                          question_id: c.question_id,
-                        })) || [],
-                    })
-                  }
-                >
-                  <div className="question-preview-header">
-                    <span className="question-badge multiple-badge">
-                      <FontAwesomeIcon icon={faHandPeace} /> Pick Multiple
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
-                  </div>
-                  <div className="question-preview-options two-grid">
-                    {data.choices
-                      ?.slice(0, data.choices?.length > 4 ? 3 : 4)
-                      .map((c, i) => (
-                        <div key={i} className="option-chip">
-                          {c.choice_text}
-                        </div>
-                      ))}
-                    {data.choices?.length > 4 && (
-                      <div className="option-chip more-chip">
-                        +{data.choices.length - 3} more
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {data.question_type === "rankingorder" && (
-                <div
-                  className="question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "rankingorder", {
-                      question_id: data.id,
-                      title: data.title,
-                      items:
-                        data.items?.map((c) => ({
-                          item_text: c.item_text,
-                          position: c.position,
-                          id: c.id,
-                          ranking_id: c.ranking_id,
-                          question_id: c.question_id,
-                        })) || [],
-                    })
-                  }
-                >
-                  <div className="question-preview-header">
-                    <span className="question-badge rank-badge">
-                      <FontAwesomeIcon icon={faHand} /> Move the Rankings
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
-                  </div>
-                  <div className="question-preview-options two-grid">
-                    {data.items
-                      ?.slice(0, data.items?.length > 4 ? 3 : 4)
-                      .map((item, idx) => (
-                        <div key={idx} className="option-chip rank-chip">
-                          <span className="rank-number">#{idx + 1}</span>
-                          <span className="rank-text">{item.item_text}</span>
-                        </div>
-                      ))}
-                    {data.items?.length > 4 && (
-                      <div className="option-chip more-chip">
-                        +{data.items.length - 3} more
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+                         <ul className ='choice-ul'>
+                          {
+                            data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c,i) => (
+                              <li key={i} className ='choice-li'>
+                                <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                              </li> 
+                            ))
+                          }
+                          {data.choices?.length > 4 && (
+                            <div className ='choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                              +{data.choices?.length - 3} more
+                            </div>
+                            )}
+                        </ul>
+                )}
 
               {data.question_type === "rating" && (
-                <div
-                  className="question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "rating", {
-                      question_id: data.id,
-                      title: data.title,
-                      rating_icon_id: data.rating_icon_id,
-                    })
-                  }
-                >
-                  <div className="question-preview-header">
-                    <span className="question-badge rating-badge">
-                      <FontAwesomeIcon icon={faStar} /> Rate
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
-                  </div>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <FontAwesomeIcon
-                      key={i}
-                      icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
-                      style={{ fontSize: "24px", color: "grey" }}
-                    />
-                  ))}
+                <div className='render-qa-post'>
+                      {Array.from({length:5}).map((_,i)=>(
+                        <FontAwesomeIcon 
+                        key={i}
+                        icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
+                        style={{ fontSize: "24px", color: "grey" }}
+                        />
+                    ))}
                 </div>
               )}
-
-              {data.question_type === "openend" && (
-                <div
-                  className="question-preview-card"
-                  onClick={() =>
-                    goToAnswer(post, data, "openend", {
-                      question_id: data.id,
-                      title: data.title,
-                    })
-                  }
-                >
-                  <div className="question-preview-header question-preview-header-open-end">
-                    <span className="question-badge openend-badge">
-                      <SignatureOutlined /> Write Your Answer
-                    </span>
-                    <span className="case-unsolved">
-                      <FolderOpenOutlined /> Unsolved
-                    </span>
+              {data.question_type === "rankingorder" && (
+                        <ul className='choice-ul'>
+                              {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
+                                <li className = 'choice-li' key={i}>
+                                    {i + 1}. {item.item_text}
+                                </li>
+                              ))}
+                              {data.items?.length > 4 && (
+                                <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                                  +{data.items?.length - 3} more
+                                </li>
+                              )}
+                          </ul>
+                      )}
+              {data.question_type === "openend" && ( null
+                      )}
+            </div>
+            {
+              post.post_type !== 'question' && (
+                <div className="post-thumbnail">
+                  <div
+                    className="preview-wrapper"
+                    style={{ "--preview-url": `url(${data.media_url})` }}
+                  >
+                    <img src={data.media_url} className="preview-image" alt="img-post" />
                   </div>
                 </div>
-              )}
-            </div>
-
-            <div className="post-caption" onClick={() => openPost(post)}>
-              <p>{data.title}</p>
-            </div>
-
-            <div className="post-thumbnail">
-              <div
-                className="preview-wrapper"
-                style={{ "--preview-url": `url(${data.media_url})` }}
-              >
-                <img src={data.media_url} className="preview-image" alt="question" />
-              </div>
-            </div>
+              )
+            }
           </>
         );
 
@@ -513,7 +350,7 @@ const Trending = () => {
     <div className="home-container">
       <article id="feed-article">
         <div className="feed-header">
-          <p className="feed-title">Trending Posts</p>
+          <p className="feed-title"><RiseOutlined /> Trending Posts</p>
           <p className="feed-subtitle">Most popular posts of the day</p>
         </div>
         <br />
