@@ -967,9 +967,9 @@ const AboutPost = () => {
       );
       const data = res.data.data;
       setPost(data);
-      if (data && data.is_anonymous !== 1 && data.avatar_url) {
-        setUserProfilePic(data.avatar_url);
-      }
+      // if (data && data.is_anonymous !== 1 && data.avatar_url) {
+      //   setUserProfilePic(data.avatar_url);
+      // }
     } catch (err) {
       console.error(err);
       setPost(null);

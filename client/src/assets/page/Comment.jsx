@@ -109,6 +109,10 @@ const Comment = () => {
     };
   }, [missingState, state?.postId]);
 
+  useEffect(() => {
+    if (lockedAnon) setEnabled(true);
+  }, [lockedAnon]);
+
   // --- Restore content: prefer explicit nav content, else a saved draft
   useEffect(() => {
     if (missingState || hasRestoredDraft.current) return;
