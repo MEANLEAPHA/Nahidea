@@ -216,7 +216,7 @@ export default function Notifications() {
     }
   };
 
-  const followBack = async (senderId, notificationId) => {
+  const followBack = async (senderName, senderId, notificationId) => {
     try { 
       const res = await api.post(`/api/add-follow/${senderId}`, {});
       if (res.data.success) {
@@ -233,7 +233,7 @@ export default function Notifications() {
               ? { 
                   ...notif, 
                   type: res.data.mutual ? 'follow_back' : 'follow',
-                  content: res.data.mutual ? "followed you back" : "started following you"
+                  content: res.data.mutual ? `${senderName} followed you back` : `${senderName} started following you`
                 }
               : notif
           )
@@ -396,23 +396,25 @@ export default function Notifications() {
                           className='followbackBtn'
                           onClick={(e) => {
                             e.stopPropagation();
-                            followBack(notification.sender_id, notification.id);
+                            followBack(notification.sender_username,notification.sender_id, notification.id);
                           }}
                         >
                           Follow back
                         </button>
                       )}
                       
-                      {/* Show "Following" text if already following but not mutual */}
-                      {notification.type === 'follow' && !notification.is_viewed && 
+                   
+
+                      {/* {notification.type === 'follow' && !notification.is_viewed && 
                        followStatuses[notification.sender_id] === 'following' && (
                         <span className="already-following-badge">Following</span>
-                      )}
+                      )} */}
                       
-                      {/* Mutual badge for follow_back */}
+{/*                     
                       {notification.type === 'follow_back' && (
                         <span className="mutual-badge">Friends</span>
-                      )}
+                      )} */}
+
                     </div>
                     <div className="notification-title-time">
                       {formatTime(notification.created_at)}

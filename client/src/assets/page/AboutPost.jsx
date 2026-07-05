@@ -439,7 +439,7 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, highlightedAn
 
   return (
     <div 
-      className={`answer-card ${highlightedAnswerId === answer.id ? 'highlight-answer' : ''}`}
+      className={`answer-card ${highlightedAnswerId === answer.id ? 'highlight-comment' : ''}`}
       id={`answer-${answer.id}`}
     >
       <div className="answer-header">
