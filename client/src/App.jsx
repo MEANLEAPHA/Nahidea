@@ -47,7 +47,6 @@ import Rule from './assets/page/Rule';
 import Accessibility from './assets/page/Accessibility';
 import AboutPost from './assets/page/AboutPost';
 import AnswerPost from './assets/page/AnswerPost';
-import Notification from './assets/page/Notification';
 import Search from './assets/page/Search';
 import AnswerQa from './assets/page/AnswerQa';
 import Comment from './assets/page/Comment';
@@ -133,7 +132,6 @@ const App = () =>{
               <Route path='/help' element={<Help/>}></Route>
               
               {/* User Dashboard */}
-              <Route path='/notification' element={<Notification/>}></Route>
               <Route path='/notifications' element={<Notifications/>}></Route>
               {/* feedback */}
               <Route path='/reporthistory' element={<ReportHistory/>}></Route> 

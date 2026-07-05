@@ -52,6 +52,9 @@
  color: grey;
   font-size: 18px;
 }
+.refresh-btn:hover{
+  color: var(--font-color);
+}
 .mark-read-btn {
   border: none;
   background: transparent;
@@ -66,7 +69,7 @@
     display: none;
 }
 .mark-read-btn:hover{
-    color: yellowgreen;
+    color: var(--font-color);
 }
 
 
@@ -223,7 +226,7 @@
 @media (max-width: 768px) {
   .notification-panel {
     width: 100%;
-    padding: 20px;
+    padding: 0px 20px;
   }
 .notification-header{
 

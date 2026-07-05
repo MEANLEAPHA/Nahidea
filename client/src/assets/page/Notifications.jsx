@@ -450,9 +450,11 @@ import {
 } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelopeOpen, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { Dropdown, message } from "antd";
+import { Dropdown } from "antd";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axiosInstance";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -496,10 +498,7 @@ export default function Notifications() {
   // Check follow status for a specific user
   const checkFollowStatus = async (senderId) => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${senderId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.get(`/api/follow-status/${senderId}`);
       return res.data.state;
     } catch (err) {
       console.error("Error checking follow status:", err);
@@ -527,12 +526,7 @@ export default function Notifications() {
   const getNotifications = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/notifications/get-all`,
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+      const res = await api.get('/api/notifications/get-all');
       setNotifications(res.data.notifications);
       setUnreadCount(res.data.unreadCount);
       
@@ -540,24 +534,19 @@ export default function Notifications() {
       await checkAllFollowStatuses(res.data.notifications);
     } catch (err) {
       console.error(err);
-      message.error("Failed to load notifications");
+      toast.error("Failed to load notifications");
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     getNotifications();
   }, [getNotifications]);
 
   const markAsRead = async (notificationId) => {
-    try {
-      const res = await axios.patch(
-        `${import.meta.env.VITE_SERVER_URL}/api/notifications/${notificationId}/read`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
+    try {  
+      const res = await api.patch(`/api/notifications/${notificationId}/read`, {});
       setNotifications(prev => 
         prev.map(notif => 
           notif.id === notificationId 
@@ -566,63 +555,53 @@ export default function Notifications() {
         )
       );
       setUnreadCount(res.data.unreadCount);
-      message.success("Marked as read");
+      toast.success("Marked as read");
     } catch (err) {
       console.error(err);
-      message.error("Failed to mark as read");
+      toast.error("Failed to mark as read");
     }
   };
 
   const markAllAsRead = async () => {
     try {
-      const res = await axios.patch(
-        `${import.meta.env.VITE_SERVER_URL}/api/notifications/mark-all-read`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.patch(
+        `/api/notifications/mark-all-read`, {}
+      )
       
       setNotifications(prev => 
         prev.map(notif => ({ ...notif, is_viewed: 1 }))
       );
       setUnreadCount(res.data.unreadCount);
-      message.success("All notifications marked as read");
+      toast.success("All notifications marked as read");
     } catch (err) {
       console.error(err);
-      message.error("Failed to mark all as read");
+      toast.error("Failed to mark all as read");
     }
   };
 
   const deleteNotification = async (notificationId) => {
     try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/notifications/${notificationId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
+      const res = await api.delete(`/api/notifications/${notificationId}`); 
       setNotifications(prev => 
         prev.filter(notif => notif.id !== notificationId)
       );
       setUnreadCount(res.data.unreadCount);
-      message.success("Notification deleted");
+      toast.success("Notification deleted");
     } catch (err) {
       console.error(err);
-      message.error("Failed to delete notification");
+      toast.error("Failed to delete notification");
     }
   };
 
   const deleteAllNotifications = async () => {
     try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/notifications/delete-all`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
+      const res = await api.delete(`/api/notifications/delete-all`);
       setNotifications([]);
       setUnreadCount(res.data.unreadCount);
-      message.success("All notifications deleted");
+      toast.success("All notifications deleted");
     } catch (err) {
       console.error(err);
-      message.error("Failed to delete all notifications");
+      toast.error("Failed to delete all notifications");
     }
   };
 
@@ -674,13 +653,8 @@ export default function Notifications() {
   };
 
   const followBack = async (senderId, notificationId) => {
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${senderId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
+    try { 
+      const res = await api.post(`/api/add-follow/${senderId}`, {});
       if (res.data.success) {
         // Update follow status for this user
         setFollowStatuses(prev => ({
@@ -701,11 +675,11 @@ export default function Notifications() {
           )
         );
         
-        message.success(res.data.mutual ? "You are now friends!" : "Followed successfully!");
+        toast.success(res.data.mutual ? "You are now friends!" : "Followed successfully!");
       }
     } catch (err) {
       console.error(err);
-      message.error(err.response?.data?.message || "Failed to follow back");
+      toast.error(err.response?.data?.message || "Failed to follow back");
     }
   };
 
@@ -791,7 +765,7 @@ export default function Notifications() {
       {/* Header */}
       <div className="notification-header">
         <div className='head-left'>
-          <h3>Notifications</h3>
+          <h3><FontAwesomeIcon icon={faBell} /> Notifications</h3>
           {unreadCount > 0 && (
             <div id='unread-badge'>{unreadCount}</div>
           )}

@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axiosInstance";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 let debounceTimer = null;
 
@@ -44,10 +45,24 @@ const SearchBar = () => {
   const [historyData, setHistoryData] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef(null);
+   const wrapperRef = useRef(null);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("searchHistory")) || [];
     setHistoryData(data);
+  }, []);
+
+ 
+    useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   useEffect(() => {
@@ -112,7 +127,7 @@ const SearchBar = () => {
 
   return (
     <div className="header-middle header-children">
-      <div className="search-box not-mobile-tool" >
+      <div className="search-box not-mobile-tool" ref={wrapperRef}>
         {/* <FontAwesomeIcon icon={faMagnifyingGlass} className="search-bar-icon" /> */}
         <input
           ref={inputRef}
@@ -122,7 +137,6 @@ const SearchBar = () => {
           id="search-input"
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setShowDropdown(true)}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
           onKeyDown={handleKeyDown}
           className="search-bar-input"
         />
@@ -145,7 +159,7 @@ const SearchBar = () => {
           {suggestions.length > 0 && (
             <ul className="history-ul">
               <AnimatePresence mode="popLayout">
-                {suggestions.map((s) => (
+                {suggestions.slice(0, 6).map((s) => (
                   <motion.li
                     key={s}
                     layout
@@ -171,11 +185,11 @@ const SearchBar = () => {
           )}
 
           {/* User's own search history */}
-          {!query && historyData.length > 0 && (
+          {historyData.length > 0 && (
             <div className="recent-search dev-res">
               <div className="label-flex">
                 <label>Searches History</label>
-                <button onClick={handleClearAllHistory}>Clear All</button>
+                <button onClick={handleClearAllHistory} style={{cursor:"pointer"}} type="button">Clear All</button>
               </div>
               <ul className="history-ul">
                 {historyData.map((item, index) => (
@@ -186,10 +200,10 @@ const SearchBar = () => {
                         className="search-icon-query"
                         style={{ opacity: 0.7 }}
                       />
-                      <p className="query-title">{item}</p>
+                      <p className="query-title">{highlightMatch(item, query)}</p>
                     </div>
                     <FontAwesomeIcon
-                      icon={faXmark}
+                      icon={faTrashCan}
                       className="history-icon-trash"
                       onClick={(e) => {
                         handleDeleteHistory(item);
@@ -205,7 +219,7 @@ const SearchBar = () => {
             </div>
       )}
       </div>
-      <button className='search-button not-mobile-tool'  >
+      <button className='search-button not-mobile-tool' onClick={() => runSearch(query)} >
         <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
       </button>
     </div>
