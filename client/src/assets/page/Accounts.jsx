@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {useLocation, Outlet, useNavigate, useOutletContext} from 'react-router-dom';
-import axios from "axios";
-const token = localStorage.getItem("token");
 import "../style/page/Accounts.css";
 import gossiperlogo from "../img/gossiperlogo.png";
 // antd
@@ -13,6 +11,7 @@ import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,Search
           EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined,
           ToolOutlined,
           CalendarOutlined,
+          BorderOutlined,
       } from '@ant-design/icons';
 import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 
@@ -20,7 +19,7 @@ import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuoteLeft, faQuoteRight, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
-import { faBookmark, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import { faBookmark, faCircle, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
 
 // lucide
@@ -45,11 +44,14 @@ import Loader from "./util/loader";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-// import nahideaTran from "../img/nahidea-tran.png";
+
 
 
 // data
 import { iconOptions } from "../data/post_type_data";
+
+// api
+import api from "../api/axiosInstance";
 
 export default function Accounts() {
     const { state } = useLocation(); 
@@ -118,9 +120,8 @@ export default function Accounts() {
 
     const handleFetchProfile = async () => {
       try{
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-user-info/${state?.userId}`
-        )
+        const res = await api.get(`/api/get-user-info/${state?.userId}`);
+
         const data = res.data.userData;
         setUsernames(data.username);
         setUserId(data.id);
@@ -167,14 +168,7 @@ export default function Accounts() {
             setFetching(true);
             setLoading(true);
 
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/api/user/${userId}/posts?page=${nextPage}`,
-                {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                }
-            );
+            const res = await api.get(`/api/user/${userId}/posts?page=${nextPage}`);
             const payload = res.data;
             const newPosts = payload.data;
 
@@ -197,6 +191,32 @@ export default function Accounts() {
         }
     };
 
+    
+    const openPost = (post) => {
+      const HisData = {
+        id: post.id,
+        title: post.data?.title,
+        mediaSrc: post.data?.media_url,
+        author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+        authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+        isAnonymous: post.is_anonymous,
+        anonymousBg: post.anonymous_bg_color,
+      };
+  
+      let recentDataHis = [];
+      try {
+        recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+      } catch {
+        recentDataHis = [];
+      }
+  
+      const withoutCurrent = recentDataHis.filter((item) => item.id !== post.id);
+      const newList = [HisData, ...withoutCurrent].slice(0, 50);
+      localStorage.setItem("recentPostHis", JSON.stringify(newList));
+  
+      navigate(`/aboutpost/${post.id}`);
+    };
+
     const renderPostContent = (post) => {
 
     const data = post.data;
@@ -207,145 +227,42 @@ export default function Accounts() {
       case "content":
         return (
           <>
-                <div className='post-caption' onClick={ () => {
-                  const newPost = 
-                    { id: post.id,
-                      post_type: post.post_type,
-                      is_anonymous: post.is_anonymous || 0, anonymous_name: post.anonymous_name, anonymous_bg_color: post.anonymous_bg_color,
-                      likes_count: post.likes_count || 0,comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                      created_at:post.created_at,
-                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      tags:post.tags,
-                      data:{
-                        type:data.type,
-                        title:data.title,
-                        text_body:data.text_body,
-                        media_url:data.media_url
-                      }
-                    };
-
-                    sessionStorage.setItem("post", JSON.stringify(newPost));
-
-                    const HisData = {
-                      id: post.id,
-                      title: data.title,
-                      mediaSrc : data.media_url,
-                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                      isAnonymous: post.is_anonymous,
-                      anonymousBg: post.anonymous_bg_color,
-                    }
-                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                    let newList;
-                    if (recentDataHis.some(item => item.id === post.id)) {
-                      const raminData = recentDataHis.filter(item => item.id !== post.id);
-                      newList = [HisData, ...raminData].slice(0, 50);
-                    } else {
-                      newList = [HisData, ...recentDataHis].slice(0, 50);
-                    }
-
-                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
-
-                    navigate(`/aboutpost/${post.id}`);
-                  }}>
-                    <p>{data.title}</p>
-                </div>
-              <div  className='post-thumbnail'>         
-                <MediaPreview files={parseJSON(data.media_url)}/>
-              </div>
+            <div className="post-caption" onClick={() => openPost(post)}>
+              <p>{data.title}</p>
+            </div>
+            <div className="post-thumbnail">
+              <MediaPreview files={parseJSON(data.media_url)} />
+            </div>
           </>
         );
 
       case "confession":
         return (
           <>
-           
-                   <div className='post-caption' onClick={()=>{
-                      const newPost = 
-                        { id: post.id,
-                          post_type: post.post_type,
-                          anonymous_name: post.anonymous_name, is_anonymous: post.is_anonymous || 0,anonymous_bg_color: post.anonymous_bg_color,
-                          likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                          created_at: post.created_at,
-                          username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                          tags: post.tags,
-                          data:{
-                            type:data.type,
-                            title:data.title,
-                            media_url:data.media_url,
-                          }
-                        };
-                      sessionStorage.setItem("post", JSON.stringify(newPost));
-
-                        const HisData = {
-                          id: post.id,
-                          title: data.title,
-                          mediaSrc : data.media_url,
-                          author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                          authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                          isAnonymous: post.is_anonymous,
-                          anonymousBg: post.anonymous_bg_color,
-                        }
-                        const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                        let newList;
-                        if (recentDataHis.some(item => item.id === post.id)) {
-                          const raminData = recentDataHis.filter(item => item.id !== post.id);
-                          newList = [HisData, ...raminData].slice(0, 50);
-                        } else {
-                          newList = [HisData, ...recentDataHis].slice(0, 50);
-                        }
-
-                        localStorage.setItem("recentPostHis", JSON.stringify(newList));
-
-                      navigate(`/aboutpost/${post.id}`)
-                    }}>
-                    <p>{data.title}</p>
-                </div>
-             
-                  
-              <div className="post-thumbnail">
-                <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
-                  <img
-                    src={data.media_url}
-                    className="preview-image"
-                  />
-                </div>
-                {/* <MediaPreview files={parseJSON(data.media_url)}/> */}
+            <div className="post-caption" onClick={() => openPost(post)}>
+              <p>{data.title}</p>
+            </div>
+            <div className="post-thumbnail">
+              <div
+                className="preview-wrapper"
+                style={{ "--preview-url": `url(${data.media_url})` }}
+              >
+                <img src={data.media_url} className="preview-image" alt="confession" />
               </div>
-
+            </div>
           </>
         );
 
       case "question":
         return (
           <>
-      
-                 <div className="post-question-answer-preview">
+           <div className="post-caption" onClick={() => openPost(post)}>
+              <p>{data.title}</p>
+            </div>
+            <div className="post-question-answer-preview" onClick={() => openPost(post)}>
+              {data.question_type === "closedend" && (
 
-                      {data.question_type === "closedend" && (
-
-                        <div className="closed-preview-card question-preview-card" onClick={
-                              ()=>{
-                                const QaData = {
-                                    question_id : data.id,
-                                  title: data.title
-                                }
-                                sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                                navigate(`/answer/${post.id}/${data.id}/closedend`);
-                              }
-                            }>
-                        <div className="question-preview-header">
-                            <span className="question-badge yesno-badge">
-                             <FontAwesomeIcon icon={faThumbsUp}/> Yes / No <FontAwesomeIcon icon={faThumbsDown}/>
-                            </span>
-                            <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                          </div>
-
-                          <div className="yesno-div">
+                        <div className="yesno-div">
                             <div className="yes-chip">
                               Yes
                             </div>
@@ -354,357 +271,108 @@ export default function Accounts() {
                               No
                             </div>
                         </div>
-                    </div>
                       )}
 
-                      {data.question_type === "range" && (
-                         <div className= "question-preview-card" onClick={
-                          ()=>{
-                            const QaData = {
-                              
-                                  question_id : data.id,
-                                  title : data.title,
-                                  range_min : data.range_min,
-                                  range_max : data.range_max,
-                                  step : data.step,
-                                  default_range_value : data.default_range_value
-                            }
-                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/range`);
-                          }
-                        }>
-
-                <div className="question-preview-header">
-                            <span className="question-badge range-badge">
-                            <FontAwesomeIcon icon={faLocationCrosshairs} /> Range
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                          </div>
-                          <div className='range-preview-option'>
-                                  <label id="min-label">{data.range_min}</label>
-
-                <div className="range-wrapper">
-                    <input
-                    type="range"
-                    min={data.range_min}
-                    max={data.range_max}
-                    step={data.step}
-                    value={data.default_range_value}
-                    onChange={(e) => setRangeValue(Number(e.target.value))}
-                    />
-                        <div
-                    className="custom-thumb"
-                    style={{
-                        left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
-                    }}
-                    >
-                    {data.default_range_value}
-                    </div>
-                </div>
-                <label id="max-label">{data.range_max}</label>
-                          </div>
-              
-
-                </div>
-                      )}
-
-                      {data.question_type === "singlechoice" && (
-            
-                        <div className="question-preview-card" onClick={
-                          ()=>{        
-                            const QaData = {
-                                    question_id : data.id,
-                                  title : data.title,
-                                  choice: 
-                                    data.choice?.map(c => ({
-                                      choice_text: c.choice_text,
-                                      singlechoice_id: c.singlechoice_id,
-                                      id: c.id,
-                                      question_id: c.question_id
-                                    }))
-                                   || []
-                                  
-                                }
-                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/singlechoice`);
-                          }
-                        }>
-        
-                        <div className="question-preview-header">
-                        <span className="question-badge single-badge"><FontAwesomeIcon icon={faHandPointer} /> Pick One</span>
-                        <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                        </div>
-
-                        <div className="question-preview-options two-grid">
-                        {data.choice?.slice(0, data.choice?.length > 4 ? 3 : 4)
-                        .map((c, i) => (
-                            <div key={i} className="option-chip">
-                            {c.choice_text}
-                            </div>
-                        ))}
-
-                        {data.choice?.length > 4 && (
-                        <div className="option-chip more-chip">
-                            +{data.choice?.length - 3} more
-                        </div>
-                        )}
-
-                        </div>
-                    </div>
-                      )}
-
-                      {data.question_type === "multiplechoice" && (
-        
-                        <div className="question-preview-card" onClick={
-                          ()=>{
-                            const QaData = {
-                                     question_id : data.id,
-                                    title : data.title,
-                                    include_all_above : data.include_all_above,
-                                    choices: 
-                                      data.choices?.map(c => ({
-                                        choice_text: c.choice_text,
-                                        multiplechoice_id: c.multiplechoice_id,
-                                        id: c.id,
-                                        question_id: c.question_id
-                                      }))
-                                     || []
-                                  }
-                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/multiplechoice`);
-                          }
-                        }>
-        
-                        <div className="question-preview-header">
-                            <span className="question-badge multiple-badge">
-                             <FontAwesomeIcon icon={faHandPeace} /> Pick Multiple
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                          </div>
-
-                         <div className="question-preview-options two-grid">
-                            {data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4)
-                            .map((c, i) => (
-                                <div key={i} className="option-chip">
-                                {c.choice_text}
+              {data.question_type === "range" && (
+                         <div className='range-preview-option'>
+                            <label id="min-label">{data.range_min}</label>
+                            <div className="range-wrapper">
+                                <input
+                                type="range"
+                                min={data.range_min}
+                                max={data.range_max}
+                                step={data.step}
+                                value={data.default_range_value}
+                                />
+                                    <div
+                                className="custom-thumb"
+                                style={{
+                                    left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
+                                }}
+                                >
+                                {data.default_range_value}
                                 </div>
-                            ))}
+                            </div>
+                            <label id="max-label">{data.range_max}</label>
+                        </div>
+                      )}
 
-                            {data.choices?.length > 4 && (
-                            <div className="option-chip more-chip">
-                                +{data.choices?.length - 3} more
+              {data.question_type === "singlechoice" && ( 
+                <ul className='choice-ul'>
+                    {
+                      data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map(
+                        (c, i) => (
+                          <li key={i} className = 'choice-li'>
+                            <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/> {c.choice_text}
+                          </li>
+                        )
+                      )
+                    }
+                    {data.choices?.length > 4 && (
+                      <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                           +{data.choices?.length - 3} more
+                      </li>
+                    )}
+                </ul>
+              )}
+
+              {data.question_type === "multiplechoice" && (
+                         <ul className ='choice-ul'>
+                          {
+                            data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c,i) => (
+                              <li key={i} className ='choice-li'>
+                                <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                              </li> 
+                            ))
+                          }
+                          {data.choices?.length > 4 && (
+                            <div className ='choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                              +{data.choices?.length - 3} more
                             </div>
                             )}
+                        </ul>
+                )}
 
-                        </div>
-                    </div>
-                      )}
-
-                      {data.question_type === "rankingorder" && (
-                        <div className="question-preview-card" onClick={
-                          ()=>{
-                            const QaData = {
-                                    question_id : data.id,
-                                    title : data.title,
-                                    items: 
-                                      data.items?.map(c => ({
-                                        item_text: c.item_text,
-                                        position: c.position,
-                                        id: c.id,
-                                        ranking_id: c.ranking_id,
-                                        question_id: c.question_id
-                                      }))
-                                     || []
-                                  }
-                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/rankingorder`);
-                          }
-                        }>
-                    <div className="question-preview-header">
-                            <span className="question-badge rank-badge">
-                              <FontAwesomeIcon icon={faHand} /> Move the Rankings
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                          </div>
-
-                          <div className="question-preview-options two-grid">
-                                {data.items?.slice(0, data.items?.length > 4 ? 3 : 4)
-                                    .map((item, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="option-chip rank-chip"
-                                    >
-                                        <span className="rank-number">
-                                        #{idx + 1}
-                                        </span>
-
-                                        <span className="rank-text">
-                                        {item.item_text}
-                                        </span>
-                                    </div>
-                                    ))}
-
-                                {data.items?.length > 4 && (
-                                    <div className="option-chip more-chip">
-                                    +{data.items?.length - 3} more
-                                    </div>
-                                )}
-                            </div>
-                    </div>
-                      )}
-
-                      {data.question_type === "rating" && (
-
-                        <div className="question-preview-card" onClick={
-                          ()=>{
-                            const QaData = {
-                                    // id: data.id,
-                                     question_id : data.id,
-                                    title : data.title,
-                                    rating_icon_id: data.rating_icon_id
-                                  }
-                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/rating`);
-                          }
-                        }>
-                 <div className="question-preview-header">
-                            <span className="question-badge rating-badge">
-                              <FontAwesomeIcon icon={faStar} /> Rate
-                            </span>
-                              <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                          </div>
+              {data.question_type === "rating" && (
+                <div className='render-qa-post'>
                       {Array.from({length:5}).map((_,i)=>(
-                          <FontAwesomeIcon 
-                          key={i}
-                          icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
-                          style={{ fontSize: "24px", color: "grey" }}
-                          />
-                      ))}
-                  </div>
-                      )}
-
-                      {data.question_type === "openend" && (
-                        <div className="question-preview-card" onClick={
-                          ()=>{
-                            const QaData = {
-                                    question_id : data.id,
-                                    title : data.title
-                                  }
-                            sessionStorage.setItem("QaStore", JSON.stringify(QaData));
-                            navigate(`/answer/${post.id}/${data.id}/openend`);
-                          }
-                        }>
-                        <div className="question-preview-header question-preview-header-open-end">
-                            <span className="question-badge openend-badge">
-                               <SignatureOutlined /> Write Your Answer
-                            </span>
-                            <span className="case-unsolved">
-                                <FolderOpenOutlined /> Unsolved
-                            </span>
-                          </div>
-                    </div>
-                      )}
-                  
-              </div>
-                <div className='post-caption' onClick={ () => {
-                  const newPost = 
-                    { id: post.id,
-                      post_type: post.post_type,
-                      is_anonymous: post.is_anonymous || 0, anonymous_bg_color: post.anonymous_bg_color,
-                      likes_count: post.likes_count || 0, comments_count: post.comments_count || 0, views_count: post.views_count || 0,
-                      created_at: post.created_at,
-                      username: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      tags: post.tags,
-                      data:{
-                        question_id:data.id,
-                        question_type:data.question_type,
-                        question_related_to:data.question_related_to,
-                        title:data.title,
-                        media_url:data.media_url,
-
-                        // rating
-                        rating_icon_id:data.rating_icon_id || null,
-
-                        // range
-                        range_min:data.range_min || null,
-                        range_max:data.range_max || null,
-                        default_range_value: data.default_range_value || null,
-                        step: data.step || null,
-
-                        // munltiple choice
-                        choices: 
-                          data.choices?.map(c => ({
-                            choice_text: c.choice_text,
-                            multiplechoice_id: c.multiplechoice_id,
-                            id: c.id,
-                            question_id: c.question_id
-                          }))
-                        || [],
-
-                        // ranking
-                        items: 
-                          data.items?.map(c => ({
-                            item_text: c.item_text,
-                            position: c.position,
-                            id: c.id,
-                            ranking_id: c.ranking_id,
-                            question_id: c.question_id
-                          }))
-                         || [],
-
-                        // single choice
-                        choice: 
-                          data.choice?.map(c => ({
-                            choice_text: c.choice_text,
-                            singlechoice_id: c.singlechoice_id,
-                            id: c.id,
-                            question_id: c.question_id
-                          }))
-                        || [],
-                      }
-                    };
-                    sessionStorage.setItem("post", JSON.stringify(newPost));
-
-                       const HisData = {
-                      id: post.id,
-                      title: data.title,
-                      mediaSrc : data.media_url,
-                      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-                      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.authorPf,
-                      isAnonymous: post.is_anonymous,
-                      anonymousBg: post.anonymous_bg_color,
-                    }
-                    const recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-
-                    let newList;
-                    if (recentDataHis.some(item => item.id === post.id)) {
-                      const raminData = recentDataHis.filter(item => item.id !== post.id);
-                      newList = [HisData, ...raminData].slice(0, 50);
-                    } else {
-                      newList = [HisData, ...recentDataHis].slice(0, 50);
-                    }
-
-                    localStorage.setItem("recentPostHis", JSON.stringify(newList));
-                    navigate(`/aboutpost/${post.id}`)
-                  }}>
-                  <p>{data.title}</p>
+                        <FontAwesomeIcon 
+                        key={i}
+                        icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
+                        style={{ fontSize: "24px", color: "grey" }}
+                        />
+                    ))}
                 </div>
-            <div className="post-thumbnail">
-              <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
-                <img src={data.media_url} className="preview-image"/>
-              </div>
-              {/* <MediaPreview files={parseJSON(data.media_url)}/> */}
+              )}
+              {data.question_type === "rankingorder" && (
+                        <ul className='choice-ul'>
+                              {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
+                                <li className = 'choice-li' key={i}>
+                                    {i + 1}. {item.item_text}
+                                </li>
+                              ))}
+                              {data.items?.length > 4 && (
+                                <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                                  +{data.items?.length - 3} more
+                                </li>
+                              )}
+                          </ul>
+                      )}
+              {data.question_type === "openend" && ( null
+                      )}
             </div>
+            {
+              post.post_type !== 'question' && (
+                <div className="post-thumbnail">
+                  <div
+                    className="preview-wrapper"
+                    style={{ "--preview-url": `url(${data.media_url})` }}
+                  >
+                    <img src={data.media_url} className="preview-image" alt="img-post" />
+                  </div>
+                </div>
+              )
+            }
           </>
         );
 
@@ -734,15 +402,8 @@ export default function Accounts() {
 
         try {
 
-          await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/${ownerId}/like`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
+
+          await api.post(`/api/posts/${postId}/${ownerId}/like`, {});
 
         } catch (err) {
 
@@ -794,15 +455,8 @@ export default function Accounts() {
 
     try {
 
-        await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/favorite`,
-        {},
-        {
-            headers: {
-            Authorization: `Bearer ${token}`
-            }
-        }
-        );
+
+        await api.post(`/api/posts/${postId}/favorite`, {});
 
     } catch (err) {
 
@@ -847,16 +501,7 @@ export default function Accounts() {
           followState === "follows_you"
         ) {
 
-          const res = await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/add-follow/${state?.userId}`,
-            {},
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+          const res = await api.post(`/api/add-follow/${state?.userId}`, {})
 
           /*
           MUTUAL FOLLOW
@@ -881,25 +526,15 @@ export default function Accounts() {
           followState === "mutual"
         ) {
 
-          await axios.delete(
-            `${import.meta.env.VITE_SERVER_URL}/api/unfollow/${state?.userId}`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+            const confirmed = window.confirm(
+            `Are you sure you want to unfollow this user? This can't be undone.`
+           );
+          if (!confirmed) return;
 
-          const res = await axios.get(
-            `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${state?.userId}`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+          await api.delete(`/api/unfollow/${state?.userId}`);
+
+
+          const res = await api.get(`/api/follow-status/${state?.userId}`);
 
           setFollowState(
             res.data.state
@@ -917,15 +552,7 @@ export default function Accounts() {
 
         try {
 
-          const res = await axios.get(
-            `${import.meta.env.VITE_SERVER_URL}/api/follow-status/${state?.userId}`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+          const res = await api.get(`/api/follow-status/${state?.userId}`);
 
           setFollowState(
             res.data.state
@@ -941,12 +568,9 @@ export default function Accounts() {
     const Unfollow = () => {
       const handleUnfollow = async () => {
         try{
-          const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/unfollow/${state?.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
+
+          const response = await api.delete(`/api/unfollow/${state?.userId}`);
+
           const data = response.data;
           if(data.mutual === false){
             setFollowState("follow");
@@ -976,9 +600,7 @@ export default function Accounts() {
         <div id='acc-pf-info'>
             <div className='acc-pf-info-child acc-pf-info-child-left'>
                 <div id='acc-pf-div'>
-                     <div className="status-pf-online"></div>
-                    <img src={avatar || user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} id='acc-pf'/>
-                   
+                    <img src={avatar || user?.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"} id='acc-pf'/>
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
@@ -988,16 +610,22 @@ export default function Accounts() {
                 </div>
             </div>
             <div className='acc-pf-info-child acc-pf-info-child-right'>
-                <div style={{display:'flex', gap:'8px'}}>
-
+                <div style={{display:'flex', gap:'8px', alignItems: 'center'}}>
+                  {
+                    !isOwnProfile && (
+                    <span className='follow-status-info'>
+                      {followState === "following" ? 'Following' : followState === 'mutual' ? 'Friends' : null}
+                    </span>
+                    ) 
+                 } 
                   {
                     !isOwnProfile && (
                       <button className="pf-act-btn" type="button" onClick={()=> handleFollow()}>
                       { followState === "loading" && "Following..." }
                       { followState === "follow" && "Follow" }
-                      { followState === "following" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Following</span> | <Unfollow/> </div> )}
+                      { followState === "following" && "Unfollow"}
                       { followState === "follows_you" && "Follow Back" }
-                      { followState === "mutual" && ( <div style={{margin: 0, padding:0, height:'auto', display:'flex', gap:'10px'}}> <span style={{margin: 0}}>Friends</span> | <Unfollow/> </div>)}
+                      { followState === "mutual" && "Unfollow"}
                     </button>
                     ) 
                  } 
@@ -1066,230 +694,191 @@ export default function Accounts() {
                     : 
                     (
                         <>
-                            <List dataSource={posts} renderItem={(post) => (
-                                <List.Item key={post.id}>
-                                    <div className="posts" onMouseEnter={() => setHoveredPostId(post.id)} onMouseLeave={() => setHoveredPostId(null)}>
-                                        <div className='post-header'>
-                                            <div className='post-user-profile'>
-                                                <div id="author-pf-div" style={{backgroundColor : post.is_anonymous === 1 ? post.anonymous_bg_color : ""}}>
-                                                    <img src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url} id="author-pf"/>
-                                                </div>
-                                                <div className='user-post-info'>
-                                                    <p className='post-username'>
-                                                        {post.username} 
-                                                        <div className='category-post-div'>
-                                                            <span className="post-type-label">{post?.data?.type}</span> 
-                                                           {post?.data?.cate_icon && (
-                                                              <DisplayAnimatedIcon 
-                                                                src={post?.data?.cate_icon}
-                                                                isHovered={hoveredPostId === post.id}
-                                                              />
-                                                            )}
-                                                        </div>
-                                                    </p>
-                                                    <p className='post-at'>{post.created_at}</p>
-                                                </div> 
-                                            </div>
+                          <List
+              dataSource={posts}
+              renderItem={(post) => (
+                <List.Item key={post.id}>
+                  <div
+                    className="posts"
+                    onMouseEnter={() => setHoveredPostId(post.id)}
+                    onMouseLeave={() => setHoveredPostId(null)}
+                  >
+                    <div className="post-header">
+                      <div className="post-user-profile">
+                        <div
+                          id="author-pf-div"
+                          style={{
+                            backgroundColor: post.is_anonymous === 1 ? post.anonymous_bg_color : "grey",
+                            cursor: post.is_anonymous === 1 ? "none" : "pointer",
+                          }}
+                          onClick={
+                            Number(post.is_anonymous) !== 1
+                              ? () => navigate("/accounts", { state: { userId: post.user_id } })
+                              : null
+                          }
+                        >
+                          <img
+                            src={
+                              post.is_anonymous === 1
+                                ? nahIdeaAuth
+                                : post.avatar_url ||
+                                  "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+                            }
+                            id="author-pf"
+                            alt="avatar"
+                          />
+                        </div>
 
-                                            <DotDropDown 
-                                                ownerId={post.user_id} post_type={post.post_type} post_id={post.id}
-                                                text_body={post?.data?.text_body || ""} contentId={post?.data?.id || 1}
-                                            />
-                                        </div>
+                        <div className="user-post-info">
+                          <p className="post-username">
+                            <span
+                              style={{ cursor: post.is_anonymous === 1 ? "none" : "pointer" }}
+                              onClick={
+                                Number(post.is_anonymous) !== 1
+                                  ? () => navigate("/accounts", { state: { userId: post.user_id } })
+                                  : null
+                              }
+                            >
+                              {post.is_anonymous === 1 ? post.anonymous_name : post.username}
+                            </span>
+                            <div className="dot"></div>
+                            <div className="category-post-div">
+                              <span className="post-type-label">{post?.data?.type}</span>
+                              {post?.data?.cate_icon && (
+                                <DisplayAnimatedIcon
+                                  src={post.data.cate_icon}
+                                  isHovered={hoveredPostId === post.id}
+                                />
+                              )}
+                            </div>
+                          </p>
+                          <p className="post-at">{post.created_at}</p>
+                        </div>
+                      </div>
 
-                                        <div className='post-body'>
-                                            {renderPostContent(post)}
-                                        </div>
+                      <DotDropDown
+                        ownerId={post.user_id}
+                        post_type={post.post_type}
+                        post_id={post.id}
+                        text_body={post?.data?.text_body || ""}
+                        contentId={post?.data?.id || 1}
+                      />
+                    </div>
 
-                                        <div className='post-footer'>
-                                            <div className='post-footer-left'>
-                                                <button className={`button-action-footer like-button ${ post.is_liked ? "liked" : "" }`}
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            handleLike(post.id, post.user_id);
-                                                        }}
-                                                >
-                                                    <motion.div
-                                                        className="action-icon-wrapper"
-                                                        whileTap={{ scale: 0.75 }}
-                                                        animate={
-                                                        likingPosts.has(post.id)
-                                                            ? {
-                                                                scale: [1, 1.35, 1],
-                                                                rotate: [0, -15, 15, 0]
-                                                            }
-                                                            : {}
-                                                        }
-                                                        transition={{
-                                                        duration: 0.45,
-                                                        ease: "easeInOut"
-                                                        }}
-                                                    >
-                                                        <AnimatePresence mode="wait">
+                    <div className="post-body">{renderPostContent(post)}</div>
 
-                                                        {post.is_liked ? (
+                    <div className="post-footer">
+                      <div className="post-footer-left">
+                        <button
+                          className={`button-action-footer like-button ${post.is_liked ? "liked" : ""}`}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleLike(post.id, post.user_id);
+                          }}
+                        >
+                          <motion.div
+                            className="action-icon-wrapper"
+                            whileTap={{ scale: 0.75 }}
+                            animate={
+                              likingPosts.has(post.id)
+                                ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] }
+                                : { scale: 1, rotate: 0 }
+                            }
+                            transition={{ duration: 0.45, ease: "easeInOut" }}
+                          >
+                            <AnimatePresence mode="wait">
+                              {post.is_liked ? (
+                                <motion.div
+                                  key="liked"
+                                  initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
+                                  animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                                  exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
+                                  transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                                >
+                                  <Heart size={19} className="button-action-footer-icon liked-heart" fill="currentColor" />
+                                </motion.div>
+                              ) : (
+                                <motion.div
+                                  key="unliked"
+                                  initial={{ scale: 0.4, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0.4, opacity: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <Heart size={19} className="button-action-footer-icon" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                          <p>
+                            <span>{post.likes_count}</span>
+                            <span className="count-label"> Like</span>
+                          </p>
+                        </button>
 
-                                                            <motion.div
-                                                                key="liked"
-                                                                initial={{
-                                                                    scale: 0.4,
-                                                                    opacity: 0,
-                                                                    rotate: -25
-                                                                }}
-                                                                animate={{
-                                                                    scale: 1,
-                                                                    opacity: 1,
-                                                                    rotate: 0
-                                                                }}
-                                                                exit={{
-                                                                    scale: 0.4,
-                                                                    opacity: 0,
-                                                                    rotate: 25
-                                                                }}
-                                                                transition={{
-                                                                    type: "spring",
-                                                                    stiffness: 500,
-                                                                    damping: 22
-                                                                }}
-                                                            >
-                                                            <Heart
-                                                                size={19}
-                                                                className="button-action-footer-icon liked-heart"
-                                                                fill="currentColor"
-                                                            />
-                                                            </motion.div>
+                        <button
+                          className="button-action-footer"
+                          type="button"
+                          onClick={() => openPost(post)}
+                        >
+                          <FontAwesomeIcon icon={faMessage} className="button-action-footer-icon" />
+                          <p>
+                            <span>{post.comments_count}</span>
+                            <span className="count-label"> Comment</span>
+                          </p>
+                        </button>
+                      </div>
 
-                                                        ) : (
-
-                                                            <motion.div
-                                                                key="unliked"
-                                                                initial={{
-                                                                    scale: 0.4,
-                                                                    opacity: 0
-                                                                }}
-                                                                animate={{
-                                                                    scale: 1,
-                                                                    opacity: 1
-                                                                }}
-                                                                exit={{
-                                                                    scale: 0.4,
-                                                                    opacity: 0
-                                                                }}
-                                                                transition={{
-                                                                    duration: 0.2
-                                                                }}
-                                                            >
-                                                            <Heart
-                                                                size={19}
-                                                                className="button-action-footer-icon"
-                                                            />
-                                                            </motion.div>
-
-                                                        )}
-
-                                                        </AnimatePresence>
-                                                    </motion.div>
-                                                    <p>
-                                                        <span>{post.likes_count}</span>
-                                                        <span className="count-label"> Like</span>
-                                                    </p>
-                                                </button>
-                                                <button className='button-action-footer'><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon'/><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
-                                            </div>
-                                            <div className='post-footer-right'>
-                                                <button className={`button-action-footer button-action-footer-last favorite-button ${ post.is_favorited ? "favorited" : "" }`}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            handleFavorite(post.id);
-                                                        }}
-                                                >
-                                                    <motion.div
-                                                        className="action-icon-wrapper"
-                                                        whileTap={{ scale: 0.75 }}
-                                                        animate={
-                                                        favoritingPosts.has(post.id)
-                                                            ? {
-                                                                scale: [1, 1.25, 1],
-                                                                y: [0, -5, 0]
-                                                            }
-                                                            : {}
-                                                        }
-                                                        transition={{
-                                                        duration: 0.4,
-                                                        ease: "easeInOut"
-                                                        }}
-                                                    >
-                                                        <AnimatePresence mode="wait">
-
-                                                        {post.is_favorited ? (
-
-                                                            <motion.div
-                                                            key="favorited"
-                                                            initial={{
-                                                                scale: 0.4,
-                                                                opacity: 0,
-                                                                y: 10
-                                                            }}
-                                                            animate={{
-                                                                scale: 1,
-                                                                opacity: 1,
-                                                                y: 0
-                                                            }}
-                                                            exit={{
-                                                                scale: 0.4,
-                                                                opacity: 0,
-                                                                y: 10
-                                                            }}
-                                                            transition={{
-                                                                type: "spring",
-                                                                stiffness: 500,
-                                                                damping: 22
-                                                            }}
-                                                            >
-                                                            <Bookmark
-                                                                size={18}
-                                                                className="button-action-footer-icon favorited-bookmark"
-                                                                fill="currentColor"
-                                                            />
-                                                            </motion.div>
-
-                                                        ) : (
-
-                                                            <motion.div
-                                                            key="unfavorited"
-                                                            initial={{
-                                                                scale: 0.4,
-                                                                opacity: 0
-                                                            }}
-                                                            animate={{
-                                                                scale: 1,
-                                                                opacity: 1
-                                                            }}
-                                                            exit={{
-                                                                scale: 0.4,
-                                                                opacity: 0
-                                                            }}
-                                                            transition={{
-                                                                duration: 0.2
-                                                            }}
-                                                            >
-                                                            <Bookmark
-                                                                size={18}
-                                                                className="button-action-footer-icon"
-                                                            />
-                                                            </motion.div>
-
-                                                        )}
-
-                                                        </AnimatePresence>
-                                                    </motion.div>
-                                                </button>
-                                    
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </List.Item>
+                      <div className="post-footer-right">
+                        <button
+                          className={`button-action-footer button-action-footer-last favorite-button ${
+                            post.is_favorited ? "favorited" : ""
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFavorite(post.id);
+                          }}
+                        >
+                          <motion.div
+                            className="action-icon-wrapper"
+                            whileTap={{ scale: 0.75 }}
+                            animate={
+                              favoritingPosts.has(post.id)
+                                ? { scale: [1, 1.25, 1], y: [0, -5, 0] }
+                                : { scale: 1, y: 0 }
+                            }
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                          >
+                            <AnimatePresence mode="wait">
+                              {post.is_favorited ? (
+                                <motion.div
+                                  key="favorited"
+                                  initial={{ scale: 0.4, opacity: 0, y: 10 }}
+                                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                                  exit={{ scale: 0.4, opacity: 0, y: 10 }}
+                                  transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                                >
+                                  <Bookmark size={18} className="button-action-footer-icon favorited-bookmark" fill="currentColor" />
+                                </motion.div>
+                              ) : (
+                                <motion.div
+                                  key="unfavorited"
+                                  initial={{ scale: 0.4, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0.4, opacity: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <Bookmark size={18} className="button-action-footer-icon" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </List.Item>
                             )}/>
 
                             {loading && (
@@ -1394,15 +983,7 @@ const FriendList = ({targetUsername, tagetUserId}) => {
         return;
       }
 
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-friends-by-id/${targetUserId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+      const res = await api.get(`/api/get-friends-by-id/${targetUserId}`);
       
       if (res.data.success) {
         setFriendList(res.data.data || []);
@@ -1452,7 +1033,7 @@ const FriendList = ({targetUsername, tagetUserId}) => {
             style={{ cursor: 'pointer' }}
           >
             <img 
-              src={friend.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} 
+              src={friend.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"} 
               alt={friend.username}  
               className="fri-img" 
             />

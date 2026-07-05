@@ -72,7 +72,13 @@
     cursor: pointer;
     font-weight: 500;
 }
-
+.follow-status-info{
+    color: var(--font-color);
+    opacity: 0.9;
+    margin: 0;
+    font-family: monospace;
+    align-items: center;
+}
 #acc-pf-info{
     width: 100%;
     height:auto;
