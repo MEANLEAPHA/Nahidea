@@ -881,6 +881,7 @@ YES NO
  width: 100%;
  gap: 1px;
  height: auto;
+ margin-top: 5px;
 }
 .yes-chip{
     width: calc(100% /2);
@@ -891,7 +892,9 @@ YES NO
     border: 2px solid var(--secondary-color) !important;
     cursor: pointer;
     border-bottom-left-radius: 15px;
+    color: var(--font-color) !important;
 }
+
 .yes-chip:hover{
     background-color: rgba(172, 255, 47, 0.5) !important;
 
@@ -907,6 +910,7 @@ YES NO
     border: 2px solid var(--secondary-color) !important;
         border-bottom-right-radius: 15px;
        cursor: pointer;
+       color: var(--font-color) !important;
 }
 
 .no-chip:hover{

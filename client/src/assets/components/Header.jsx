@@ -16,6 +16,7 @@ import "../style/Header.css";
 
 const token = localStorage.getItem("token");
 import { useAuth } from '../context/AuthContext';
+import SearchForm from "../page/SearchForm";
 
 const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   const navigate = useNavigate();

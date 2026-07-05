@@ -74,6 +74,7 @@ import Spammy from './assets/page/Spammy';
 import EditAccount from './assets/page/EditAccount';
 import ReportPost from './assets/page/ReportPost';
 import ReportUser from './assets/page/ReportUser';
+import SearchForm from './assets/page/SearchForm';
 
 const App = () =>{
     return(
@@ -83,7 +84,8 @@ const App = () =>{
               {/* Action Upload page */}
               <Route index element={<Home/>} />
               <Route path='/home' element={<Home/>}></Route>
-              
+              <Route path='/searchform' element={<SearchForm/>}></Route>
+
               {/* Report&FeedBack */}
               <Route path='/report-conversation' element={<ReportConversation/>}></Route>
 
