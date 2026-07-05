@@ -163,7 +163,7 @@ export default function Notifications() {
     try {
       const res = await api.delete(`/api/notifications/delete-all`);
       setNotifications([]);
-      setUnreadCount(0);
+      setUnreadCount(res.data.unreadCount);
       toast.success("All notifications deleted");
     } catch (err) {
       console.error(err);
