@@ -104,6 +104,12 @@
 
   gap: 12px;
 }
+.avatar-icon-type-noti{
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+}
 .status-icon-unread{
   width: 8px;
   height: 8px;
