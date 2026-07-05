@@ -28,26 +28,29 @@ export default function Notifications() {
   
   const token = localStorage.getItem("token");
 
-  const getNotificationIcon = (type) => {
+  const getNotificationIcon = (type, avatar) => {
+    const img = () => {
+      return <img src={avatar || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"} className='avatar-icon-type-noti' />
+    }
     switch(type) {
       case 'comment_reply':
       case 'mention':
-        return <MessageOutlined className='noti-icon-type' />;
+        return img();
       case 'comment_like':
       case 'post_like':
-        return <HeartOutlined className='noti-icon-type' />;
+        return img();
       case 'answer_upvote':
-        return <ArrowUpOutlined className='noti-icon-type' style={{ color: '#ff4d4f' }} />;
+        return img();
       case 'answer_downvote':
-        return <ArrowDownOutlined className='noti-icon-type' style={{ color: '#4a90e2' }} />;
+        return img();
       case 'answer':
-        return <EditOutlined className='noti-icon-type' style={{ color: '#52c41a' }} />;
+        return img(); 
       case 'follow':
-        return <UserAddOutlined className='noti-icon-type' style={{ color: '#dd59e9' }}/>;
+        return img();
       case 'follow_back':
-        return <UserAddOutlined className='noti-icon-type' style={{ color: '#1f89e6' }} />;
+        return img();
       default:
-        return <MessageOutlined className='noti-icon-type' />;
+        return null;
     }
   };
 
@@ -233,7 +236,7 @@ export default function Notifications() {
               ? { 
                   ...notif, 
                   type: res.data.mutual ? 'follow_back' : 'follow',
-                  content: res.data.mutual ? `${senderName} followed you back` : `${senderName} started following you`
+                  content: res.data.mutual ? `You and ${senderName} are now friends` : `${senderName} started following you`
                 }
               : notif
           )
@@ -384,7 +387,7 @@ export default function Notifications() {
                 />
                 <div className="notification-body">
                   <div className="notification-title-avatar">
-                    {getNotificationIcon(notification.type)}
+                    {getNotificationIcon(notification.type, notification.sender_avatar)}
                   </div>
                   <div className="notification-title-div">
                     <div className="notification-title">
@@ -402,19 +405,6 @@ export default function Notifications() {
                           Follow back
                         </button>
                       )}
-                      
-                   
-
-                      {/* {notification.type === 'follow' && !notification.is_viewed && 
-                       followStatuses[notification.sender_id] === 'following' && (
-                        <span className="already-following-badge">Following</span>
-                      )} */}
-                      
-{/*                     
-                      {notification.type === 'follow_back' && (
-                        <span className="mutual-badge">Friends</span>
-                      )} */}
-
                     </div>
                     <div className="notification-title-time">
                       {formatTime(notification.created_at)}
