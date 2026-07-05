@@ -155,7 +155,7 @@ const calculateAverageAnswer = (answers, questionType) => {
     }
 
     case 'rankingorder': {
-      // Calculate average position for each item
+    
       const positionMap = {};
       answers.forEach(a => {
         const texts = parseJSON(a.ranking_position_value) || [];
@@ -1628,7 +1628,7 @@ const AboutPost = () => {
                       <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Answer this question
                     </button>
                     {/* Average Answer Display */}
-                    {averageData && post?.data?.question_type !== "openend" && (
+                    {averageData && post?.data?.question_type !== "openend" && post?.data?.question_type !== "rankingorder" && (
                       <AverageAnswerDisplay 
                         averageData={averageData} 
                         questionType={post?.data?.question_type}
