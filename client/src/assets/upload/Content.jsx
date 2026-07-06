@@ -2,8 +2,8 @@
 import React, { useState, useRef, useCallback, useEffect} from "react";
 import { useNavigate, useOutletContext  } from "react-router-dom";
 import Select from "react-select";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import api from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 // util import
 import {MoreFields} from "../util/moreFlieds";
@@ -113,17 +113,17 @@ export default function Content() {
       mediaFiles.forEach((f) => formData.append("contentFile", f));
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      // const res = await axios.post(
+      //   `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      const res = await api.post(`/api/create-posts`, formData, { headers: {"Content-Type": "multipart/form-data"}})
       if (res.status === 200 || res.status === 201) {
         toast.success("Post created");
         if (isAnonymous) consume();
@@ -137,7 +137,6 @@ export default function Content() {
       }
       finally{
         setLoading(false);
-        resetAll();
       };
   };
 
@@ -147,11 +146,6 @@ export default function Content() {
       <article id='tool-article' className={openPreview ? "hidden" : "flex-container"}>
         <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
         <form onSubmit={handleSubmit} id="content-form">
-
-          <div className="toast-feedback">
-            <ToastContainer position="top-center" autoClose={5000} />
-          </div>
-
           <div id='form-header-label'>
             <p id="content-label">Create Content</p> 
             <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>

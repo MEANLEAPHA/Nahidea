@@ -110,7 +110,7 @@ cursor: auto;
 /* Tag text */
 .tag-text {
   margin-right: 6px;
-  color: var(--font-color);
+  color: var(--font-color) !important;
   text-decoration: none;
 }
 

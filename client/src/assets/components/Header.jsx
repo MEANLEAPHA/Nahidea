@@ -81,11 +81,6 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   );
 };
 
-
-
-
-
-
 const useUploadItems = () => {
   const navigate = useNavigate();
   return [
@@ -206,7 +201,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
       <div style={{position: "relative"}} > 
         <Space>
           <img
-            src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+            src={avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
             className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
           />
@@ -223,5 +218,4 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
 };
 
 export default Header;
-
 

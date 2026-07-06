@@ -3,6 +3,7 @@ import React, { useState, useRef, useCallback, useEffect} from "react";
 import { useNavigate, useOutletContext  } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
+import api from "../api/axiosInstance";
 import { toast, ToastContainer } from "react-toastify";
 
 // data import
@@ -33,16 +34,10 @@ import "../style/upload/tag.css";
 import "../style/upload/Content.css";
 import "../style/upload/Postpreview.css";
 
- // get token
- const token = localStorage.getItem("token");
+
 
 
 export default function Confession() {
-
-   // if(!token) {
-  //   window.location.href = "/"; 
-  //   // login form
-  // }
 
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -103,24 +98,26 @@ export default function Confession() {
     }
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      // const res = await axios.post(
+      //   `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
          
-      );
+      // );
+
+      const res = await api.post(`/api/create-posts`, formData, { headers: {'Content-Type': 'multipart/form-data'}})
 
       if (res.status === 201 || res.status === 200) {
         toast.success(res.data.message || "Confession posted successfully");
         if (isAnonymous) consume();
         resetAll();
       } else {
-        toast.error(res.data.message || "Failed to post confession");
+        toast.error("Ops! Our server is Error. Please try again later.");
         resetAll();
       }
     } catch (err) {
@@ -132,7 +129,6 @@ export default function Confession() {
     }
     finally {
       setLoading(false);
-      resetAll();
     }
     
   };
@@ -199,6 +195,7 @@ export default function Confession() {
               tokens={tokens}
               conAndQuesFileValue={confessionFile}
               setConAndQuesFileValue={setFile}
+              fileInputRef={refFile}
             />
        
             <div id="form-footer">

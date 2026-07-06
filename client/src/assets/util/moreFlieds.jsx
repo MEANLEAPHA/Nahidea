@@ -379,7 +379,7 @@ export const MarkdownPreview = ({ content }) => {
   tags, setTags,
   setConAndQuesFileValue,
   isAnonymous, setIsAnonymous, tokens,
-  conAndQuesFileValue
+  conAndQuesFileValue, fileInputRef
 }) => {
   const [selected, setSelected] = useState(1);
 
@@ -412,6 +412,7 @@ export const MarkdownPreview = ({ content }) => {
                    
               
                   <input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   onChange={(e) => setConAndQuesFileValue(e.target.files[0])}

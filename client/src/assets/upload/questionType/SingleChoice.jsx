@@ -90,33 +90,3 @@ export default function SingleChoice ({ value, onChange}) {
   );
 };
 
-{/* <div className="single-choice-parent">
-        {value.map((choice, index) => (
-          <div key={index} style={{ display: "flex", marginBottom: "6px" }}>
-            <input
-              type="text"
-              className="single-choice-input"
-              value={choice}
-              onChange={(e) => handleChange(index, e.target.value)}
-            />
-            {value.length > 3 && (
-              <button
-                type='button'
-                className="btn-delete-single-choice"
-                onClick={() => deleteChoice(index)}
-              >
-                delete
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-      <hr />
-      <div>
-        <button onClick={addChoice} disabled={value.length >= maxChoices} type='button'>
-          Add more choice
-        </button>
-        {value.length > 3 && (
-          <button onClick={removeAll} type='button'>Remove all</button>
-        )}
-      </div> */}

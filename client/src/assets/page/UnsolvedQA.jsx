@@ -12,10 +12,11 @@ import {
   faLocationCrosshairs,
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
-import { SignatureOutlined, HeartFilled, LoadingOutlined } from "@ant-design/icons";
+import { SignatureOutlined, HeartFilled, LoadingOutlined, BorderOutlined } from "@ant-design/icons";
 import "../style/page/UnsolvedQA.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { faCircle } from "@fortawesome/free-regular-svg-icons";
 
 const UnsolvedQA = () => {
   const navigate = useNavigate();

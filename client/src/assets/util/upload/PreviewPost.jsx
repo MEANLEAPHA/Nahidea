@@ -57,7 +57,6 @@ export default function PreviewPost ({
     rankingChoices
 
 }){
-    const {username} = useOutletContext();
     const {user} = useAuth();
      const navigate = useNavigate();
     const [displayPostOpt, setDisplayPostOpt] = useState("none");
@@ -103,7 +102,7 @@ export default function PreviewPost ({
         case "singlechoice":
             return <ul className='choice-ul'>
                         {
-                            singleChoices.slice(0, singleChoices.length > 4 ? 3 : 4).map(
+                            singleChoices?.slice(0, singleChoices.length > 4 ? 3 : 4).map(
                             (c, i) => (
                                 <li key={i} className = 'choice-li'>
                                 <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/> {c}
@@ -143,7 +142,7 @@ export default function PreviewPost ({
                             max={max}
                             step={step}
                             value={rangeValue}
-                            onChange={(e) => setRangeValue(Number(e.target.value))}
+                            readOnly
                             />
                                 <div
                             className="custom-thumb"

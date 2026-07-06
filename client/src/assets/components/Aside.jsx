@@ -1,18 +1,14 @@
-
 import React, { useEffect, useState } from "react";
-
 import { VerticalLeftOutlined, VerticalRightOutlined, HomeOutlined,GifOutlined,SignatureOutlined, FireOutlined, TeamOutlined,UserAddOutlined,RiseOutlined , QuestionCircleOutlined, FlagOutlined, ExceptionOutlined, ReadOutlined, FileProtectOutlined, FileDoneOutlined, HeartOutlined, ClockCircleOutlined,BarChartOutlined, UserOutlined, UsergroupAddOutlined  } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBug, faFlagCheckered, faDatabase, faChartPie, faTowerBroadcast, faChildReaching, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {faBookmark, faNewspaper,faFaceGrinWink, faComments} from "@fortawesome/free-regular-svg-icons";
-import { faGlobaleaks } from "@fortawesome/free-brands-svg-icons";
 
 import gossiperlogo from "../img/gossiperlogo.png";
-import axios from "axios";
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
+import api from "../api/axiosInstance"
 
-const token = localStorage.getItem("token");
 
 const Aside = (props) => {
    
@@ -21,16 +17,9 @@ const Aside = (props) => {
 
     const fetchUnReadSpam = async () => {
         try{
-
-            const res = await axios.get(
-                `${process.env.VITE_SERVER_URL}/api/spam/unread-count`,
-                {
-                    headers : {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
+            const res = await api.get(
+                `/api/spam/unread-count`
             );
-
             setSpamUnreadCount(res.data.unread || 0)
 
         }catch(err){
@@ -39,17 +28,9 @@ const Aside = (props) => {
     }
      const fetchUnreadCount = async () => {
         try {
-            
-
-            const res = await axios.get(
-            `${process.env.VITE_SERVER_URL}/api/chat/unread-count`,
-            {
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            }
+            const res = await api.get(
+                `/api/chat/unread-count`
             );
-
             setChatUnreadCount(
             res.data.unreadCounts || 0
             );
