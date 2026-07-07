@@ -92,7 +92,7 @@ const Comment = () => {
 
     const fetchAnon = async () => {
    try {
-          const anonRes = await api.get(`/api/get-anon-identity/${missingState}`);
+          const anonRes = await api.get(`/api/get-anon-identity/${state.postId}`);
           if (!cancelled && anonRes.data?.exists) {
             setAnonIdentity({
               anonymous_name: anonRes.data.anonymous_name,
