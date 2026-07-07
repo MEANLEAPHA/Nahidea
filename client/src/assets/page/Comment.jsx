@@ -11,10 +11,10 @@ import { faFaceGrinWink } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMask, faUserSecret } from "@fortawesome/free-solid-svg-icons";
 
-import { AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
+import { AnonymousNameC, AnonymousProfileC } from "../util/anonymousTokens";
 
-const AnonymousPf = memo(AnonymousProfile);
-const AnonymousNm = memo(AnonymousName);
+const AnonymousPf = memo(AnonymousProfileC);
+const AnonymousNm = memo(AnonymousNameC);
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -65,6 +65,7 @@ const Comment = () => {
   const [selected, setSelected] = useState(1);
 
   const [lockedAnon, setLockedAnon] = useState(false);
+  const [anonIdentity, setAnonIdentity] = useState(null); 
   const [anonLoading, setAnonLoading] = useState(true);
   const [showAnnoy, setShowAnnoy] = useState(false);
   const [enabled, setEnabled] = useState(false);
@@ -88,20 +89,17 @@ const Comment = () => {
     if (missingState) return;
 
     let cancelled = false;
-    const fetchAnon = async () => {
-      setAnonLoading(true);
-      try {
-        const res = await api.get(`/api/get-anon-identity/${state.postId}`);
-        if (!cancelled && res.data?.exists) setLockedAnon(true);
-      } catch (err) {
-        if (!cancelled) {
-          console.error("Failed to load anonymous identity", err);
-          toast.error("Couldn't check anonymous status for this post.");
+   try {
+          const anonRes = await api.get(`/api/get-anon-identity/${missingState}`);
+          if (!cancelled && anonRes.data?.exists) {
+            setAnonIdentity({
+              anonymous_name: anonRes.data.anonymous_name,
+              anonymous_bg_color: anonRes.data.anonymous_bg_color,
+            });
+          }
+        } catch (anonErr) {
+          console.error("anon identity fetch failed:", anonErr);
         }
-      } finally {
-        if (!cancelled) setAnonLoading(false);
-      }
-    };
 
     fetchAnon();
     return () => {
@@ -280,14 +278,24 @@ const Comment = () => {
             </button>
           </div>
           <div className="comments-nav">
-            <div className="comms-avatar-div">
+            {/* <div className="comms-avatar-div">
               <AnonymousPf
                 enabled={enabled}
                 realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
               />
-            </div>
+            </div> */}
+            <AnonymousPf
+              enabled={enabled}
+              realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+              anonBg={anonIdentity?.anonymous_bg_color}
+            />
             <div className="comms-body">
-              <AnonymousNm enabled={enabled} realName={user?.username || "guest"} />
+              {/* <AnonymousNm enabled={enabled} realName={user?.username || "guest"} /> */}
+              <AnonymousNm
+                enabled={enabled}
+                realName={user?.username || "guest"}
+                anonName={anonIdentity?.anonymous_name}
+              />
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
