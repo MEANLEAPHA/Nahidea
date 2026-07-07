@@ -62,7 +62,7 @@ const AnswerQa = () => {
         }
         
         try {
-          const anonRes = await api.get(`/api/answers/get-anon-identity/${postId}`);
+          const anonRes = await api.get(`/api/get-anon-identity/${postId}`);
           if (!cancelled && anonRes.data?.exists) {
             setAnonIdentity({
               anonymous_name: anonRes.data.anonymous_name,
