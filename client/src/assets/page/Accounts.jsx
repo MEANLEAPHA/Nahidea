@@ -34,7 +34,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
-// import {DisplayAnimatedIcon} from "../util/upload/AnimatedIcon";
+
 
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
@@ -192,36 +192,61 @@ export default function Accounts() {
     };
 
     
-    const openPost = (post) => {
-      const HisData = {
-        id: post.id,
-        title: post.data?.title,
-        mediaSrc: post.data?.media_url,
-        author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-        authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
-        isAnonymous: post.is_anonymous,
-        anonymousBg: post.anonymous_bg_color,
+  
+      const openPost = (post) => {
+        const HisData = {
+          id: post.id,
+          title: post.data?.title,
+          mediaSrc: post.data?.media_url,
+          author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+          authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+          isAnonymous: post.is_anonymous,
+          anonymousBg: post.anonymous_bg_color,
+        };
+    
+        let recentDataHis = [];
+        try {
+          recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+        } catch {
+          recentDataHis = [];
+        }
+    
+        const withoutCurrent = recentDataHis.filter((item) => item.id !== post.id);
+        const newList = [HisData, ...withoutCurrent].slice(0, 50);
+        localStorage.setItem("recentPostHis", JSON.stringify(newList));
+    
+        navigate(`/aboutpost/${post.id}`);
       };
-  
-      let recentDataHis = [];
-      try {
-        recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-      } catch {
-        recentDataHis = [];
-      }
-  
-      const withoutCurrent = recentDataHis.filter((item) => item.id !== post.id);
-      const newList = [HisData, ...withoutCurrent].slice(0, 50);
-      localStorage.setItem("recentPostHis", JSON.stringify(newList));
-  
-      navigate(`/aboutpost/${post.id}`);
-    };
-
-    const renderPostContent = (post) => {
-
+        const openPostByComment = (post) => {
+            saveScroll("home", { y: window.scrollY, page: pageRef.current });
+      
+            const HisData = {
+              id: post.id,
+              title: post.data.title,
+              mediaSrc: post.data.media_url,
+              author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+              authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+              isAnonymous: post.is_anonymous,
+              anonymousBg: post.anonymous_bg_color,
+            };
+      
+            let recentDataHis = [];
+            try {
+              recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+            } catch {
+              recentDataHis = [];
+            }
+      
+            const withoutCurrent = recentDataHis.filter(item => item.id !== post.id);
+            const newList = [HisData, ...withoutCurrent].slice(0, 50);
+            localStorage.setItem("recentPostHis", JSON.stringify(newList));
+      
+            navigate(`/aboutpost/${post.id}#1`);
+          };
+    
+   const renderPostContent = (post) => {
     const data = post.data;
-
-    if (!data) return <Text type="secondary">No Post yet</Text>;
+    if (!data) return <Text type="secondary">No content</Text>;
 
     switch (post.post_type) {
       case "content":
@@ -379,8 +404,7 @@ export default function Accounts() {
       default:
         return null;
     }
-    };
-
+  };
     const handleLike = async (postId, ownerId) => {
       if (likingPosts.has(postId)) return;
       setLikingPosts(prev => new Set(prev).add(postId));
@@ -613,9 +637,9 @@ export default function Accounts() {
                 <div style={{display:'flex', gap:'8px', alignItems: 'center'}}>
                   {
                     !isOwnProfile && (
-                    <span className='follow-status-info'>
+                    <button className='pf-act-btn' type="button" disabled style={{background: 'none', border:'none', fontFamily: 'monospace'}} >
                       {followState === "following" ? 'Following' : followState === 'mutual' ? 'Friends' : null}
-                    </span>
+                    </button>
                     ) 
                  } 
                   {
@@ -634,7 +658,7 @@ export default function Accounts() {
                       <button className='pf-act-btn' type="button" 
                        onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: userId || state?.userId}}})}
                        >
-                      <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> Gossip</button>
+                      <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> <span className='label-brand'>Gossip</span></button>
                     )
                   }
                    {
@@ -645,7 +669,7 @@ export default function Accounts() {
                           id: userId || state?.userId,
                           avatar: avatar
                         }
-                      })}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> Send Spammy</button>
+                      })}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> <span className='label-brand'>Send Spammy</span></button>
                       )
                    } 
                   {
@@ -817,65 +841,56 @@ export default function Accounts() {
                           </p>
                         </button>
 
-                        <button
-                          className="button-action-footer"
-                          type="button"
-                          onClick={() => openPost(post)}
-                        >
-                          <FontAwesomeIcon icon={faMessage} className="button-action-footer-icon" />
-                          <p>
-                            <span>{post.comments_count}</span>
-                            <span className="count-label"> Comment</span>
-                          </p>
-                        </button>
-                      </div>
-
-                      <div className="post-footer-right">
-                        <button
-                          className={`button-action-footer button-action-footer-last favorite-button ${
-                            post.is_favorited ? "favorited" : ""
-                          }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleFavorite(post.id);
-                          }}
-                        >
-                          <motion.div
-                            className="action-icon-wrapper"
-                            whileTap={{ scale: 0.75 }}
-                            animate={
-                              favoritingPosts.has(post.id)
-                                ? { scale: [1, 1.25, 1], y: [0, -5, 0] }
-                                : { scale: 1, y: 0 }
-                            }
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
-                          >
-                            <AnimatePresence mode="wait">
-                              {post.is_favorited ? (
-                                <motion.div
-                                  key="favorited"
-                                  initial={{ scale: 0.4, opacity: 0, y: 10 }}
-                                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                                  exit={{ scale: 0.4, opacity: 0, y: 10 }}
-                                  transition={{ type: "spring", stiffness: 500, damping: 22 }}
-                                >
-                                  <Bookmark size={18} className="button-action-footer-icon favorited-bookmark" fill="currentColor" />
-                                </motion.div>
-                              ) : (
-                                <motion.div
-                                  key="unfavorited"
-                                  initial={{ scale: 0.4, opacity: 0 }}
-                                  animate={{ scale: 1, opacity: 1 }}
-                                  exit={{ scale: 0.4, opacity: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                >
-                                  <Bookmark size={18} className="button-action-footer-icon" />
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </motion.div>
-                        </button>
-                      </div>
+                         {post.post_type === "question" && <button className='button-action-footer' type='button' onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}><FontAwesomeIcon icon={faPen} className='button-action-footer-icon'/><p><span>{post.answers_count}</span><span className='count-label'> Answer</span></p></button>}
+                      <button className='button-action-footer' type='button' onClick={()=> openPostByComment(post)}><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' /><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
+                                             </div>
+                       
+                                             <div className="post-footer-right">
+                                               <button
+                                                 className={`button-action-footer button-action-footer-last favorite-button ${
+                                                   post.is_favorited ? "favorited" : ""
+                                                 }`}
+                                                 onClick={(e) => {
+                                                   e.preventDefault();
+                                                   handleFavorite(post.id);
+                                                 }}
+                                               >
+                                                 <motion.div
+                                                   className="action-icon-wrapper"
+                                                   whileTap={{ scale: 0.75 }}
+                                                   animate={
+                                                     favoritingPosts.has(post.id)
+                                                       ? { scale: [1, 1.25, 1], y: [0, -5, 0] }
+                                                       : { scale: 1, y: 0 }
+                                                   }
+                                                   transition={{ duration: 0.4, ease: "easeInOut" }}
+                                                 >
+                                                   <AnimatePresence mode="wait">
+                                                     {post.is_favorited ? (
+                                                       <motion.div
+                                                         key="favorited"
+                                                         initial={{ scale: 0.4, opacity: 0, y: 10 }}
+                                                         animate={{ scale: 1, opacity: 1, y: 0 }}
+                                                         exit={{ scale: 0.4, opacity: 0, y: 10 }}
+                                                         transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                                                       >
+                                                         <Bookmark size={18} className="button-action-footer-icon favorited-bookmark" fill="currentColor" />
+                                                       </motion.div>
+                                                     ) : (
+                                                       <motion.div
+                                                         key="unfavorited"
+                                                         initial={{ scale: 0.4, opacity: 0 }}
+                                                         animate={{ scale: 1, opacity: 1 }}
+                                                         exit={{ scale: 0.4, opacity: 0 }}
+                                                         transition={{ duration: 0.2 }}
+                                                       >
+                                                         <Bookmark size={18} className="button-action-footer-icon" />
+                                                       </motion.div>
+                                                     )}
+                                                   </AnimatePresence>
+                                                 </motion.div>
+                                               </button>
+                                             </div>
                     </div>
                   </div>
                 </List.Item>

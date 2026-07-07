@@ -378,6 +378,9 @@
         justify-content: center;
         gap:0px;
     }
+    .label-brand{
+        display: none;
+    }
     #acc-pf-div{
     height: 75px;
     width: 75px;

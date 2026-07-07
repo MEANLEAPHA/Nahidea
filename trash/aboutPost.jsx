@@ -2886,3 +2886,38 @@ export default AboutPost;
 //     setLoadingAnswers(false);
 //   }
 // };
+
+             {/* <div className="search-result dev-res ">
+                <label>
+                  <FontAwesomeIcon icon={faUser} /> People
+                </label>
+                <ul className="query-result-ul">
+                 
+                    <li key={1} className="query-card" >
+                      <img
+                        src="https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+                        alt='meanleapha'
+                        className="search-icon-query"
+                        style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
+                      />
+                      <div className="dev-info">
+                        <p className="query-title">Meanleap Ha</p>
+                      <p className="query-description">@iloveu</p>
+                      </div>
+                    </li>
+           
+                </ul>
+
+                  {/* <div className="see-all-container">
+                     <button className="see-all-btn" onClick={seeAllUsers}>
+                          See all people
+                     </button>
+                  </div>
+               */}
+                      <div className="see-all-container">
+                          <button className="see-all-btn" onClick={loadMoreUsers}>
+                          Load more
+                        </button>
+                      </div>
+
+              </div> */}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams, useOutletContext } from "react-router-dom";
 import "../style/page/Trending.css"; // reuse same post styles
-
+import "../style/page/SearchForm.css";
 import { List, Typography } from "antd";
 const { Text } = Typography;
-import { BorderOutlined, RiseOutlined } from "@ant-design/icons";
+import { BorderOutlined, LeftOutlined, RiseOutlined } from "@ant-design/icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faMessage } from "@fortawesome/free-regular-svg-icons";
@@ -22,12 +22,18 @@ import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import { iconOptions } from "../data/post_type_data";
 
 import api from "../api/axiosInstance";
+import RecentHistory from "../util/recentHistory";
+import MutualFriend from "../util/mutualFriend";
+import Rule from "./util/rule";
 
 const USER_LIMIT = 5;
 const POST_LIMIT = 5;
 
 const SearchForm = () => {
   const navigate = useNavigate();
+   const { user, onlineUsers } = useOutletContext();
+  
+
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
 
@@ -142,36 +148,63 @@ const SearchForm = () => {
     fetchInitial();
   };
 
-  const openPost = (post) => {
-    const HisData = {
-      id: post.id,
-      title: post.data?.title,
-      mediaSrc: post.data?.media_url,
-      author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
-      authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
-      isAnonymous: post.is_anonymous,
-      anonymousBg: post.anonymous_bg_color,
-    };
 
-    let recentDataHis = [];
-    try {
-      recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
-    } catch {
-      recentDataHis = [];
-    }
-
-    const withoutCurrent = recentDataHis.filter((item) => item.id !== post.id);
-    const newList = [HisData, ...withoutCurrent].slice(0, 50);
-    localStorage.setItem("recentPostHis", JSON.stringify(newList));
-
-    navigate(`/aboutpost/${post.id}`);
-  };
 
   const openUser = (userId) => {
     navigate("/accounts", { state: { userId } });
   };
 
-  const renderPostContent = (post) => {
+     const openPost = (post) => {
+          const HisData = {
+            id: post.id,
+            title: post.data?.title,
+            mediaSrc: post.data?.media_url,
+            author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+            authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+            isAnonymous: post.is_anonymous,
+            anonymousBg: post.anonymous_bg_color,
+          };
+      
+          let recentDataHis = [];
+          try {
+            recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+          } catch {
+            recentDataHis = [];
+          }
+      
+          const withoutCurrent = recentDataHis.filter((item) => item.id !== post.id);
+          const newList = [HisData, ...withoutCurrent].slice(0, 50);
+          localStorage.setItem("recentPostHis", JSON.stringify(newList));
+      
+          navigate(`/aboutpost/${post.id}`);
+        };
+          const openPostByComment = (post) => {
+              saveScroll("home", { y: window.scrollY, page: pageRef.current });
+        
+              const HisData = {
+                id: post.id,
+                title: post.data.title,
+                mediaSrc: post.data.media_url,
+                author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+                authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+                isAnonymous: post.is_anonymous,
+                anonymousBg: post.anonymous_bg_color,
+              };
+        
+              let recentDataHis = [];
+              try {
+                recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+              } catch {
+                recentDataHis = [];
+              }
+        
+              const withoutCurrent = recentDataHis.filter(item => item.id !== post.id);
+              const newList = [HisData, ...withoutCurrent].slice(0, 50);
+              localStorage.setItem("recentPostHis", JSON.stringify(newList));
+        
+              navigate(`/aboutpost/${post.id}#1`);
+            };
+   const renderPostContent = (post) => {
     const data = post.data;
     if (!data) return <Text type="secondary">No content</Text>;
 
@@ -208,112 +241,123 @@ const SearchForm = () => {
       case "question":
         return (
           <>
-            <div className="post-caption" onClick={() => openPost(post)}>
+           <div className="post-caption" onClick={() => openPost(post)}>
               <p>{data.title}</p>
             </div>
             <div className="post-question-answer-preview" onClick={() => openPost(post)}>
               {data.question_type === "closedend" && (
-                <div className="yesno-div">
-                  <div className="yes-chip">Yes</div>
-                  <div className="no-chip">No</div>
-                </div>
-              )}
+
+                        <div className="yesno-div">
+                            <div className="yes-chip">
+                              Yes
+                            </div>
+
+                            <div className="no-chip">
+                              No
+                            </div>
+                        </div>
+                      )}
 
               {data.question_type === "range" && (
-                <div className="range-preview-option">
-                  <label id="min-label">{data.range_min}</label>
-                  <div className="range-wrapper">
-                    <input
-                      type="range"
-                      min={data.range_min}
-                      max={data.range_max}
-                      step={data.step}
-                      value={data.default_range_value}
-                    />
-                    <div
-                      className="custom-thumb"
-                      style={{
-                        left: `${
-                          ((data.default_range_value - data.range_min) /
-                            (data.range_max - data.range_min)) *
-                          100
-                        }%`,
-                      }}
-                    >
-                      {data.default_range_value}
-                    </div>
-                  </div>
-                  <label id="max-label">{data.range_max}</label>
-                </div>
-              )}
+                         <div className='range-preview-option'>
+                            <label id="min-label">{data.range_min}</label>
+                            <div className="range-wrapper">
+                                <input
+                                type="range"
+                                min={data.range_min}
+                                max={data.range_max}
+                                step={data.step}
+                                value={data.default_range_value}
+                                />
+                                    <div
+                                className="custom-thumb"
+                                style={{
+                                    left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
+                                }}
+                                >
+                                {data.default_range_value}
+                                </div>
+                            </div>
+                            <label id="max-label">{data.range_max}</label>
+                        </div>
+                      )}
 
-              {data.question_type === "singlechoice" && (
-                <ul className="choice-ul">
-                  {data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c, i) => (
-                    <li key={i} className="choice-li">
-                      <FontAwesomeIcon icon={faCircle} className="tool-answer-icon" /> {c.choice_text}
-                    </li>
-                  ))}
-                  {data.choices?.length > 4 && (
-                    <li className="choice-li" style={{ color: "grey", fontSize: "smaller" }}>
-                      +{data.choices?.length - 3} more
-                    </li>
-                  )}
+              {data.question_type === "singlechoice" && ( 
+                <ul className='choice-ul'>
+                    {
+                      data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map(
+                        (c, i) => (
+                          <li key={i} className = 'choice-li'>
+                            <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/> {c.choice_text}
+                          </li>
+                        )
+                      )
+                    }
+                    {data.choices?.length > 4 && (
+                      <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                           +{data.choices?.length - 3} more
+                      </li>
+                    )}
                 </ul>
               )}
 
               {data.question_type === "multiplechoice" && (
-                <ul className="choice-ul">
-                  {data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c, i) => (
-                    <li key={i} className="choice-li">
-                      <BorderOutlined className="tool-answer-icon" /> {c.choices_text}
-                    </li>
-                  ))}
-                  {data.choices?.length > 4 && (
-                    <div className="choice-li" style={{ color: "grey", fontSize: "smaller" }}>
-                      +{data.choices?.length - 3} more
-                    </div>
-                  )}
-                </ul>
-              )}
+                         <ul className ='choice-ul'>
+                          {
+                            data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c,i) => (
+                              <li key={i} className ='choice-li'>
+                                <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                              </li> 
+                            ))
+                          }
+                          {data.choices?.length > 4 && (
+                            <div className ='choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                              +{data.choices?.length - 3} more
+                            </div>
+                            )}
+                        </ul>
+                )}
 
               {data.question_type === "rating" && (
-                <div className="render-qa-post">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <FontAwesomeIcon
-                      key={i}
-                      icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
-                      style={{ fontSize: "24px", color: "grey" }}
-                    />
-                  ))}
+                <div className='render-qa-post'>
+                      {Array.from({length:5}).map((_,i)=>(
+                        <FontAwesomeIcon 
+                        key={i}
+                        icon={iconOptions.find((opt) => opt.id === data.rating_icon_id)?.icon}
+                        style={{ fontSize: "24px", color: "grey" }}
+                        />
+                    ))}
                 </div>
               )}
-
               {data.question_type === "rankingorder" && (
-                <ul className="choice-ul">
-                  {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
-                    <li className="choice-li" key={i}>
-                      {i + 1}. {item.item_text}
-                    </li>
-                  ))}
-                  {data.items?.length > 4 && (
-                    <li className="choice-li" style={{ color: "grey", fontSize: "smaller" }}>
-                      +{data.items?.length - 3} more
-                    </li>
-                  )}
-                </ul>
-              )}
+                        <ul className='choice-ul'>
+                              {data.items?.slice(0, data.items?.length > 4 ? 3 : 4).map((item, i) => (
+                                <li className = 'choice-li' key={i}>
+                                    {i + 1}. {item.item_text}
+                                </li>
+                              ))}
+                              {data.items?.length > 4 && (
+                                <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                                  +{data.items?.length - 3} more
+                                </li>
+                              )}
+                          </ul>
+                      )}
+              {data.question_type === "openend" && ( null
+                      )}
             </div>
-            {post.post_type !== "question" && (
-              <div className="post-thumbnail">
-                <div
-                  className="preview-wrapper"
-                  style={{ "--preview-url": `url(${data.media_url})` }}
-                >
-                  <img src={data.media_url} className="preview-image" alt="img-post" />
+            {
+              post.post_type !== 'question' && (
+                <div className="post-thumbnail">
+                  <div
+                    className="preview-wrapper"
+                    style={{ "--preview-url": `url(${data.media_url})` }}
+                  >
+                    <img src={data.media_url} className="preview-image" alt="img-post" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            }
           </>
         );
 
@@ -398,14 +442,21 @@ const SearchForm = () => {
       <article id="feed-article">
         <div className="feed-header">
           <p className="feed-title">
-            <FontAwesomeIcon icon={faMagnifyingGlass} /> Search results for "{q}"
+            <FontAwesomeIcon icon={faMagnifyingGlass} /> Search results for ' {q} '
           </p>
+        
           {expandMode !== "none" && (
-            <p className="feed-subtitle" onClick={backToBoth} style={{ cursor: "pointer" }}>
-              ← Back to all results
-            </p>
+            <>
+              <br />
+              <span className="feed-subtitle" onClick={backToBoth} style={{ cursor: "pointer" }}>
+                <LeftOutlined /> Back to all results
+              </span>
+            </>
           )}
         </div>
+
+        
+
         <br />
 
         {loading ? (
@@ -415,7 +466,7 @@ const SearchForm = () => {
         ) : error ? (
           <div className="error-container">
             <p>Opps! Failed to load</p>
-            <button onClick={fetchInitial} className="retry-btn">
+            <button onClick={fetchInitial} className="retry-btn see-all-btn">
               Retry
             </button>
           </div>
@@ -449,18 +500,24 @@ const SearchForm = () => {
                 </ul>
 
                 {expandMode === "none" && hasMoreUsers && (
-                  <button className="see-all-btn" onClick={seeAllUsers}>
-                    See all people
-                  </button>
+                  <div className="see-all-container">
+                     <button className="see-all-btn" onClick={seeAllUsers}>
+                          See all people
+                     </button>
+                  </div>
+                 
                 )}
 
                 {expandMode === "users" && (
                   <>
                     {expandLoading && <Loader />}
                     {hasMoreUsers && !expandLoading && (
-                      <button className="see-all-btn" onClick={loadMoreUsers}>
-                        Load more
-                      </button>
+                      <div className="see-all-container">
+                          <button className="see-all-btn" onClick={loadMoreUsers}>
+                          Load more
+                        </button>
+                      </div>
+
                     )}
                   </>
                 )}
@@ -537,145 +594,131 @@ const SearchForm = () => {
                         </div>
 
                         <div className="post-body">{renderPostContent(post)}</div>
-
                         <div className="post-footer">
                           <div className="post-footer-left">
-                            <button
-                              className={`button-action-footer like-button ${
-                                post.is_liked ? "liked" : ""
-                              }`}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleLike(post.id, post.user_id);
-                              }}
-                            >
-                              <motion.div
-                                className="action-icon-wrapper"
-                                whileTap={{ scale: 0.75 }}
-                                animate={
-                                  likingPosts.has(post.id)
-                                    ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] }
-                                    : { scale: 1, rotate: 0 }
-                                }
-                                transition={{ duration: 0.45, ease: "easeInOut" }}
-                              >
-                                <AnimatePresence mode="wait">
-                                  {post.is_liked ? (
-                                    <motion.div
-                                      key="liked"
-                                      initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
-                                      animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                                      exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
-                                      transition={{ type: "spring", stiffness: 500, damping: 22 }}
-                                    >
-                                      <Heart
-                                        size={19}
-                                        className="button-action-footer-icon liked-heart"
-                                        fill="currentColor"
-                                      />
-                                    </motion.div>
-                                  ) : (
-                                    <motion.div
-                                      key="unliked"
-                                      initial={{ scale: 0.4, opacity: 0 }}
-                                      animate={{ scale: 1, opacity: 1 }}
-                                      exit={{ scale: 0.4, opacity: 0 }}
-                                      transition={{ duration: 0.2 }}
-                                    >
-                                      <Heart size={19} className="button-action-footer-icon" />
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
-                              </motion.div>
-                              <p>
-                                <span>{post.likes_count}</span>
-                                <span className="count-label"> Like</span>
-                              </p>
-                            </button>
+                        <button
+                          className={`button-action-footer like-button ${post.is_liked ? "liked" : ""}`}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleLike(post.id, post.user_id);
+                          }}
+                        >
+                          <motion.div
+                            className="action-icon-wrapper"
+                            whileTap={{ scale: 0.75 }}
+                            animate={
+                              likingPosts.has(post.id)
+                                ? { scale: [1, 1.35, 1], rotate: [0, -15, 15, 0] }
+                                : { scale: 1, rotate: 0 }
+                            }
+                            transition={{ duration: 0.45, ease: "easeInOut" }}
+                          >
+                            <AnimatePresence mode="wait">
+                              {post.is_liked ? (
+                                <motion.div
+                                  key="liked"
+                                  initial={{ scale: 0.4, opacity: 0, rotate: -25 }}
+                                  animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                                  exit={{ scale: 0.4, opacity: 0, rotate: 25 }}
+                                  transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                                >
+                                  <Heart size={19} className="button-action-footer-icon liked-heart" fill="currentColor" />
+                                </motion.div>
+                              ) : (
+                                <motion.div
+                                  key="unliked"
+                                  initial={{ scale: 0.4, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0.4, opacity: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <Heart size={19} className="button-action-footer-icon" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                          <p>
+                            <span>{post.likes_count}</span>
+                            <span className="count-label"> Like</span>
+                          </p>
+                        </button>
 
-                            <button
-                              className="button-action-footer"
-                              type="button"
-                              onClick={() => openPost(post)}
-                            >
-                              <FontAwesomeIcon icon={faMessage} className="button-action-footer-icon" />
-                              <p>
-                                <span>{post.comments_count}</span>
-                                <span className="count-label"> Comment</span>
-                              </p>
-                            </button>
-                          </div>
-
-                          <div className="post-footer-right">
-                            <button
-                              className={`button-action-footer button-action-footer-last favorite-button ${
-                                post.is_favorited ? "favorited" : ""
-                              }`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleFavorite(post.id);
-                              }}
-                            >
-                              <motion.div
-                                className="action-icon-wrapper"
-                                whileTap={{ scale: 0.75 }}
-                                animate={
-                                  favoritingPosts.has(post.id)
-                                    ? { scale: [1, 1.25, 1], y: [0, -5, 0] }
-                                    : { scale: 1, y: 0 }
-                                }
-                                transition={{ duration: 0.4, ease: "easeInOut" }}
-                              >
-                                <AnimatePresence mode="wait">
-                                  {post.is_favorited ? (
-                                    <motion.div
-                                      key="favorited"
-                                      initial={{ scale: 0.4, opacity: 0, y: 10 }}
-                                      animate={{ scale: 1, opacity: 1, y: 0 }}
-                                      exit={{ scale: 0.4, opacity: 0, y: 10 }}
-                                      transition={{ type: "spring", stiffness: 500, damping: 22 }}
-                                    >
-                                      <Bookmark
-                                        size={18}
-                                        className="button-action-footer-icon favorited-bookmark"
-                                        fill="currentColor"
-                                      />
-                                    </motion.div>
-                                  ) : (
-                                    <motion.div
-                                      key="unfavorited"
-                                      initial={{ scale: 0.4, opacity: 0 }}
-                                      animate={{ scale: 1, opacity: 1 }}
-                                      exit={{ scale: 0.4, opacity: 0 }}
-                                      transition={{ duration: 0.2 }}
-                                    >
-                                      <Bookmark size={18} className="button-action-footer-icon" />
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
-                              </motion.div>
-                            </button>
-                          </div>
-                        </div>
+                         {post.post_type === "question" && <button className='button-action-footer' type='button' onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}><FontAwesomeIcon icon={faPen} className='button-action-footer-icon'/><p><span>{post.answers_count}</span><span className='count-label'> Answer</span></p></button>}
+                      <button className='button-action-footer' type='button' onClick={()=> openPostByComment(post)}><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' /><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
+                                             </div>
+                       
+                                             <div className="post-footer-right">
+                                               <button
+                                                 className={`button-action-footer button-action-footer-last favorite-button ${
+                                                   post.is_favorited ? "favorited" : ""
+                                                 }`}
+                                                 onClick={(e) => {
+                                                   e.preventDefault();
+                                                   handleFavorite(post.id);
+                                                 }}
+                                               >
+                                                 <motion.div
+                                                   className="action-icon-wrapper"
+                                                   whileTap={{ scale: 0.75 }}
+                                                   animate={
+                                                     favoritingPosts.has(post.id)
+                                                       ? { scale: [1, 1.25, 1], y: [0, -5, 0] }
+                                                       : { scale: 1, y: 0 }
+                                                   }
+                                                   transition={{ duration: 0.4, ease: "easeInOut" }}
+                                                 >
+                                                   <AnimatePresence mode="wait">
+                                                     {post.is_favorited ? (
+                                                       <motion.div
+                                                         key="favorited"
+                                                         initial={{ scale: 0.4, opacity: 0, y: 10 }}
+                                                         animate={{ scale: 1, opacity: 1, y: 0 }}
+                                                         exit={{ scale: 0.4, opacity: 0, y: 10 }}
+                                                         transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                                                       >
+                                                         <Bookmark size={18} className="button-action-footer-icon favorited-bookmark" fill="currentColor" />
+                                                       </motion.div>
+                                                     ) : (
+                                                       <motion.div
+                                                         key="unfavorited"
+                                                         initial={{ scale: 0.4, opacity: 0 }}
+                                                         animate={{ scale: 1, opacity: 1 }}
+                                                         exit={{ scale: 0.4, opacity: 0 }}
+                                                         transition={{ duration: 0.2 }}
+                                                       >
+                                                         <Bookmark size={18} className="button-action-footer-icon" />
+                                                       </motion.div>
+                                                     )}
+                                                   </AnimatePresence>
+                                                 </motion.div>
+                                               </button>
+                                             </div>
+                    </div>
                       </div>
                     </List.Item>
                   )}
                 />
 
                 {expandMode === "none" && hasMorePosts && (
-                  <button className="see-all-btn" onClick={seeAllPosts}>
+                          <div className="see-all-container">
+                                <button className="see-all-btn" onClick={seeAllPosts}>
                     See all posts
                   </button>
+                          </div>
+              
                 )}
 
                 {expandMode === "posts" && (
                   <>
                     {expandLoading && <Loader />}
                     {hasMorePosts && !expandLoading && (
-                      <button className="see-all-btn" onClick={loadMorePosts}>
+                          <div className="see-all-container">
+                               <button className="see-all-btn" onClick={loadMorePosts}>
                         Load more
                       </button>
+                          </div>
+                   
                     )}
                   </>
                 )}
@@ -683,6 +726,11 @@ const SearchForm = () => {
             )}
           </>
         )}
+      </article>
+      <article id="his-article">
+        <RecentHistory />
+        <MutualFriend onlineUsers={onlineUsers} />
+        <Rule />
       </article>
     </div>
   );

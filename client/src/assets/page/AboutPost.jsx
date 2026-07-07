@@ -155,32 +155,33 @@ const calculateAverageAnswer = (answers, questionType) => {
     }
 
     case 'rankingorder': {
+      null
     
-      const positionMap = {};
-      answers.forEach(a => {
-        const texts = parseJSON(a.ranking_position_value) || [];
-        const positions = parseJSON(a.ranking_positions) || [];
-        texts.forEach((text, idx) => {
-          if (!positionMap[text]) {
-            positionMap[text] = { sum: 0, count: 0 };
-          }
-          positionMap[text].sum += positions[idx] || idx + 1;
-          positionMap[text].count += 1;
-        });
-      });
-      const sorted = Object.keys(positionMap).sort((a, b) => {
-        const avgA = positionMap[a].sum / positionMap[a].count;
-        const avgB = positionMap[b].sum / positionMap[b].count;
-        return avgA - avgB;
-      });
-      return {
-        type: 'rankingorder',
-        total: answers.length,
-        items: sorted.map(key => ({
-          label: key,
-          avgPosition: (positionMap[key].sum / positionMap[key].count).toFixed(1)
-        }))
-      };
+      // const positionMap = {};
+      // answers.forEach(a => {
+      //   const texts = parseJSON(a.ranking_position_value) || [];
+      //   const positions = parseJSON(a.ranking_positions) || [];
+      //   texts.forEach((text, idx) => {
+      //     if (!positionMap[text]) {
+      //       positionMap[text] = { sum: 0, count: 0 };
+      //     }
+      //     positionMap[text].sum += positions[idx] || idx + 1;
+      //     positionMap[text].count += 1;
+      //   });
+      // });
+      // const sorted = Object.keys(positionMap).sort((a, b) => {
+      //   const avgA = positionMap[a].sum / positionMap[a].count;
+      //   const avgB = positionMap[b].sum / positionMap[b].count;
+      //   return avgA - avgB;
+      // });
+      // return {
+      //   type: 'rankingorder',
+      //   total: answers.length,
+      //   items: sorted.map(key => ({
+      //     label: key,
+      //     avgPosition: (positionMap[key].sum / positionMap[key].count).toFixed(1)
+      //   }))
+      // };
     }
 
     case 'range': {
@@ -199,15 +200,16 @@ const calculateAverageAnswer = (answers, questionType) => {
     }
 
     case 'openend': {
-      const total = answers.length;
-      // For open-ended, show count of answers and word count stats
-      const wordCounts = answers.map(a => (a.text_answer || '').split(' ').length);
-      const avgWords = (wordCounts.reduce((a, b) => a + b, 0) / total).toFixed(1);
-      return {
-        type: 'openend',
-        total,
-        avgWords: parseFloat(avgWords)
-      };
+      // const total = answers.length;
+   
+      // const wordCounts = answers.map(a => (a.text_answer || '').split(' ').length);
+      // const avgWords = (wordCounts.reduce((a, b) => a + b, 0) / total).toFixed(1);
+      // return {
+      //   type: 'openend',
+      //   total,
+      //   avgWords: parseFloat(avgWords)
+      // };
+      null
     }
 
     default:
@@ -310,18 +312,19 @@ const AverageAnswerDisplay = ({ averageData, questionType, ratingIcon }) => {
 
       case 'rankingorder':
         return (
-          <div className="average-ranking">
-            {averageData.items.map((item, idx) => (
-              <div key={idx} className="ranking-item">
-                <span className="ranking-position">{idx + 1}. </span>
-                <span className="ranking-label"> {item.label}</span>
-                <span className="ranking-avg">Avg: {item.avgPosition}</span>
-              </div>
-            ))}
-            <div className="average-total-votes">
-              {averageData.total} total ranking{averageData.total > 1 ? 's' : ''}
-            </div>
-          </div>
+          null
+          // <div className="average-ranking">
+          //   {averageData.items.map((item, idx) => (
+          //     <div key={idx} className="ranking-item">
+          //       <span className="ranking-position">{idx + 1}. </span>
+          //       <span className="ranking-label"> {item.label}</span>
+          //       <span className="ranking-avg">Avg: {item.avgPosition}</span>
+          //     </div>
+          //   ))}
+          //   <div className="average-total-votes">
+          //     {averageData.total} total ranking{averageData.total > 1 ? 's' : ''}
+          //   </div>
+          // </div>
         );
 
       case 'range':
@@ -881,6 +884,21 @@ const AboutPost = () => {
         }, 500);
       }
     }
+    else {
+    // ✅ Handle plain # fragment (like #comments)
+    const hash = window.location.hash.replace("#", "");
+    if (hash === "comments") {
+      setSelectedTab(2);
+      setTimeout(() => {
+        const el = document.getElementById("comments-section");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          hasScrolledToHash.current = true;
+        }
+      }, 500);
+    }
+  }
+    
   }, [answers, comments]);
 
   // Infinite scroll for comments
@@ -1294,11 +1312,15 @@ const AboutPost = () => {
                 )}
               </div>
             </div>
-            <div className="post-thumbnail">
-              <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
-                <img src={data.media_url} className="preview-image" alt="question" />
-              </div>
-            </div>
+            {
+                post.post_type !== "question" && (
+                  <div className="post-thumbnail">
+                    <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+                      <img src={data.media_url} className="preview-image"/>
+                    </div>
+                  </div>
+                )
+              }
           </>
         );
 
@@ -1628,7 +1650,7 @@ const AboutPost = () => {
                       <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Answer this question
                     </button>
                     {/* Average Answer Display */}
-                    {averageData && post?.data?.question_type !== "openend" && post?.data?.question_type !== "rankingorder" && (
+                    {averageData && post?.data?.question_type !== "openend" && post?.data?.question_type !== "rankingorder" && post?.data?.question_type !== "rankingorder" && (
                       <AverageAnswerDisplay 
                         averageData={averageData} 
                         questionType={post?.data?.question_type}
@@ -1758,13 +1780,3 @@ const AboutPost = () => {
 };
 
 export default AboutPost;
-
-
-
-
-
-
-
-    // onAnswerClick={(answerId) => {
-                          //   navigate(`/aboutpost/${id}#answer-${answerId}`);
-                          // }} 
