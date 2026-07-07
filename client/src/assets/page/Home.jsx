@@ -328,6 +328,32 @@ export default function Home() {
       navigate(`/aboutpost/${post.id}`);
     };
 
+     const openPostByComment = (post) => {
+      saveScroll("home", { y: window.scrollY, page: pageRef.current });
+
+      const HisData = {
+        id: post.id,
+        title: post.data.title,
+        mediaSrc: post.data.media_url,
+        author: post.is_anonymous === 1 ? post.anonymous_name : post.username,
+        authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
+        isAnonymous: post.is_anonymous,
+        anonymousBg: post.anonymous_bg_color,
+      };
+
+      let recentDataHis = [];
+      try {
+        recentDataHis = JSON.parse(localStorage.getItem("recentPostHis")) || [];
+      } catch {
+        recentDataHis = [];
+      }
+
+      const withoutCurrent = recentDataHis.filter(item => item.id !== post.id);
+      const newList = [HisData, ...withoutCurrent].slice(0, 50);
+      localStorage.setItem("recentPostHis", JSON.stringify(newList));
+
+      navigate(`/aboutpost/${post.id}#1`);
+    };
   // Render post style
   const renderPostContent = (post) => {
 
@@ -373,7 +399,7 @@ export default function Home() {
                  <div className='post-caption' onClick={ () => { openPost(post) }}>
                   <p>{data.title}</p>
                 </div>
-                 <div className="post-question-answer-preview" onClick={ () => { openPost(post) }}>
+                 <div className="post-question-answer-preview" onClick={ () => { openPost(post) }} style={{cursor: "pointer"}}>
 
                       {data.question_type === "closedend" && (
 
@@ -766,7 +792,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                       </p>
                              </button>
                              {post.post_type === "question" && <button className='button-action-footer' type='button' onClick={() => navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}><FontAwesomeIcon icon={faPen} className='button-action-footer-icon'/><p><span>{post.answers_count}</span><span className='count-label'> Answer</span></p></button>}
-                             <button className='button-action-footer' type='button' onClick={()=> openPost(post)}><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' /><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
+                             <button className='button-action-footer' type='button' onClick={()=> openPostByComment(post)}><FontAwesomeIcon icon={faMessage} className='button-action-footer-icon' /><p><span>{post.comments_count}</span><span className='count-label'> Comment</span></p></button>
                             </div>
                             <div className='post-footer-right'>
                               <button
