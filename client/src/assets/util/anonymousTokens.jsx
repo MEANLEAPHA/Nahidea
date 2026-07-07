@@ -238,3 +238,38 @@ export function AnonymousTokensCoolDown({tokens, countdown}){
     </>
   );
 }
+
+export function AnonymousNameC({ enabled, realName, anonName }) {
+  const generateNum = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join("");
+  const fallbackName = `An${generateNum}nymous`;
+
+  const name = enabled ? (anonName ?? fallbackName) : realName;
+
+  return <span className="anonymous-name">{name}</span>;
+}
+
+export function AnonymousProfileC({ enabled, realPf, anonBg }) {
+  const colors = [
+    "#8B5CF6", "#EC4899", "#38BDF8", "#818CF8", "#EAB308",
+    "#4ADE80", "#F87171", "#FB923C", "#22D3EE", "#2DD4BF",
+    "#F472B6", "#A78BFA", "#FCA5A5", "#FACC15", "#60A5FA",
+    "#34D399", "#FB7185", "#6366F1", "#A855F7", "#3B82F6",
+  ];
+
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  const fallbackColor = colors[randomIndex];
+  const colorName = anonBg ?? fallbackColor;
+
+  const pf = enabled ? (
+    <img
+      src={nahIdeaAuth}
+      alt="anon icon"
+      className="user-profile"
+      style={{ width: "35px", backgroundColor: colorName }}
+    />
+  ) : (
+    <img src={realPf} className="user-profile" alt="profile" />
+  );
+
+  return pf;
+}

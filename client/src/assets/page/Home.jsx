@@ -424,8 +424,8 @@ export default function Home() {
                               )
                             }
                             {data.choices?.length > 4 && (
-                              <li className = 'choice-li'>
-                                 <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/>  +{data.choices?.length - 3} more
+                              <li className = 'choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                                 +{data.choices?.length - 3} more
                               </li>
                             )}
                         </ul>
@@ -436,13 +436,13 @@ export default function Home() {
                           {
                             data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c,i) => (
                               <li key={i} className ='choice-li'>
-                                <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                                <BorderOutlined className='tool-answer-icon'/>  {c.choice_text}
                               </li> 
                             ))
                           }
                           {data.choices?.length > 4 && (
-                            <div className ='choice-li'>
-                                <BorderOutlined className='tool-answer-icon'/> +{data.choices?.length - 3} more
+                            <div className ='choice-li' style={{color:'grey', fontSize:'smaller'}}>
+                              +{data.choices?.length - 3} more
                             </div>
                             )}
                         </ul>

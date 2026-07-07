@@ -14,11 +14,11 @@ import { iconOptions } from "../data/post_type_data";
 import { SignatureOutlined, FolderOpenOutlined, LeftOutlined, CloseCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import "../style/page/AnswerQa.css";
 
-import { AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
+import { AnonymousNameC, AnonymousProfileC } from "../util/anonymousTokens";
 import api from "../api/axiosInstance";
 
-const AnonymousPf = memo(AnonymousProfile);
-const AnonymousNm = memo(AnonymousName);
+const AnonymousPf = memo(AnonymousProfileC);
+const AnonymousNm = memo(AnonymousNameC);
 
 const AnswerQa = () => {
   const { user } = useOutletContext();
@@ -41,6 +41,7 @@ const AnswerQa = () => {
   const [lockedAnon, setLockedAnon] = useState(false);
   const [anonLoading, setAnonLoading] = useState(true);
   const [showAnnoy, setShowAnnoy] = useState(false);
+  const [anonIdentity, setAnonIdentity] = useState(null); 
   const [enabled, setEnabled] = useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -58,6 +59,19 @@ const AnswerQa = () => {
           toast.warning("You've already answered this question.");
           navigate(-1);
           return;
+        }
+        
+        try {
+          const anonRes = await api.get(`/api/answers/get-anon-identity/${postId}`);
+          if (!cancelled && anonRes.data?.exists) {
+            setAnonIdentity({
+              anonymous_name: anonRes.data.anonymous_name,
+              anonymous_bg_color: anonRes.data.anonymous_bg_color,
+            });
+          }
+        } catch (anonErr) {
+          console.error("anon identity fetch failed:", anonErr);
+          // non-fatal — just falls back to a freshly generated identity
         }
 
         const QaStoreRaw = sessionStorage.getItem("QaStore");
@@ -440,13 +454,23 @@ const AnswerQa = () => {
 
         <div className="comments-header" style={{ alignItems: "center" }}>
           <div className="answer-author-div">
-            <div className="comms-avatar-div">
-              <AnonymousPf
+            {/* <div className="comms-avatar-div"> */}
+              {/* <AnonymousPf
                 enabled={enabled}
                 realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+              /> */}
+            {/* </div> */}
+            {/* <AnonymousNm enabled={enabled} realName={user?.username || "guest"} /> */}
+            <AnonymousPf
+                enabled={enabled}
+                realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+                anonBg={anonIdentity?.anonymous_bg_color}
               />
-            </div>
-            <AnonymousNm enabled={enabled} realName={user?.username || "guest"} />
+              <AnonymousNm
+                enabled={enabled}
+                realName={user?.username || "guest"}
+                anonName={anonIdentity?.anonymous_name}
+              />
           </div>
 
           <div className="anonymous-toggle-div">

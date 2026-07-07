@@ -1261,7 +1261,7 @@ const AboutPost = () => {
                     {
                       data.choices?.map((c,i) => (
                         <li key={i} className ='choice-li'>
-                         <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                         <BorderOutlined className='tool-answer-icon'/>  {c.choice_text}
                         </li> 
                       ))
                     }
