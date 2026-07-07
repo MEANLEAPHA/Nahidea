@@ -140,15 +140,17 @@ export default function Questiion(){
   const compactChoices = (arr) => arr.map((c) => c.trim()).filter(Boolean);
 
   // Validates a choice/ranking list: rejects gaps, trims trailing blanks,
-  // and requires at least 2 real entries. Returns the compacted array, or null if invalid.
+  // and requires all 3 default entries to be filled (2 options is reserved
+  // for Closed End yes/no questions only). Returns the compacted array, or
+  // null if invalid.
   const validateChoiceList = (arr, label) => {
     if (hasGapInMiddle(arr)) {
       toast.warning(`Please fill in ${label} without leaving empty fields in between`);
       return null;
     }
     const compacted = compactChoices(arr);
-    if (compacted.length < 2) {
-      toast.warning(`Please fill in at least 2 ${label}`);
+    if (compacted.length < 3) {
+      toast.warning(`Please fill in all 3 ${label}`);
       return null;
     }
     return compacted;
@@ -203,94 +205,95 @@ export default function Questiion(){
     if(loading) return;
     setLoading(true);
 
-    if (!title.trim()) {
-      toast.warning("Please enter question title");
-      setLoading(false);
-      return;
-    }
-    if(selectType === null) {
-          toast.warning("Please select question type");
-          setLoading(false);
-          return;
-    }
-    if(tags.length === 0 ) {
-          toast.warning("Please add some #hashtags");
-          setLoading(false);
-          return;
-    }
-    if(questionType === null) {
-          toast.warning("Please select question type");
-          setLoading(false);
-          return;
-    }
-
-    // --- Type-specific integrity checks (gap protection) ---
-    let compactedSingleChoices, compactedMultipleChoices, compactedRankingChoices;
-
-    if (questionType?.value === "singlechoice") {
-      compactedSingleChoices = validateChoiceList(singleChoices, "choices");
-      if (!compactedSingleChoices) { setLoading(false); return; }
-    }
-    if (questionType?.value === "multiplechoice") {
-      compactedMultipleChoices = validateChoiceList(multipleChoices, "choices");
-      if (!compactedMultipleChoices) { setLoading(false); return; }
-    }
-    if (questionType?.value === "rankingorder") {
-      compactedRankingChoices = validateChoiceList(rankingChoices, "ranking items");
-      if (!compactedRankingChoices) { setLoading(false); return; }
-    }
-    if (questionType?.value === "range" && Number(min) >= Number(max)) {
-      toast.warning("Range minimum must be less than maximum");
-      setLoading(false);
-      return;
-    }
-    
-    const formData = new FormData();
-    tags.forEach((t) => formData.append("tags[]", t));
-    formData.append("post_type", "question");
-    formData.append("question_related_to", selectType?.value ?? "general");
-    formData.append("question_related_to_icon", selectedIcon);
-    formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
-    if(anonymousName) formData.append("anonymousName", anonymousName);
-    formData.append("question_title", title);
-
-    switch(questionType?.value){
-      case "openend":
-        formData.append("question_type", "openend");
-        break;
-      case "closedend":
-        formData.append("question_type", "closedend");
-        break;
-      case "range": 
-        formData.append("question_type", "range");
-        formData.append("rangeMin", min);
-        formData.append("rangeMax", max);
-        formData.append("rangeStep", step);
-        formData.append("defaultRangeValue", rangeValue);
-        break;
-      case "singlechoice":
-        formData.append("question_type", "singlechoice");
-        compactedSingleChoices.forEach((c) => formData.append("choices", c));
-        break;
-      case "multiplechoice": 
-        formData.append("question_type", "multiplechoice");
-        compactedMultipleChoices.forEach((c) => formData.append("choices", c));
-        formData.append("include_all_above", includeAllAbove);
-        break;
-      case "rankingorder":
-        formData.append("question_type", "rankingorder");
-        compactedRankingChoices.forEach((c, i) => formData.append(`ranking[${i+1}]`, c));
-        break;
-      case "rating":
-        formData.append("question_type", "rating");
-        formData.append("rating_icon_id", ratingIconId);
-        break;
-      default:
-        formData.append("question_type", "openend");
-        break;
-    }
-
+    // Everything — validation, formData building, and the network call — now
+    // lives inside this single try/finally. Previously the validation checks
+    // sat OUTSIDE the try block: if any of them threw an unexpected error,
+    // setLoading(false) in the old finally block never ran, leaving the
+    // submit button stuck on "Uploading..." forever with no toast and no way
+    // to recover except a page refresh. Now, no matter what breaks, the
+    // button always re-enables and the user always sees a message.
     try {
+      if (!title.trim()) {
+        toast.warning("Please enter question title");
+        return;
+      }
+      if(selectType === null) {
+            toast.warning("Please select question type");
+            return;
+      }
+      if(tags.length === 0 ) {
+            toast.warning("Please add some #hashtags");
+            return;
+      }
+      if(questionType === null) {
+            toast.warning("Please select question type");
+            return;
+      }
+
+      // --- Type-specific integrity checks (gap protection) ---
+      let compactedSingleChoices, compactedMultipleChoices, compactedRankingChoices;
+
+      if (questionType?.value === "singlechoice") {
+        compactedSingleChoices = validateChoiceList(singleChoices, "choices");
+        if (!compactedSingleChoices) return;
+      }
+      if (questionType?.value === "multiplechoice") {
+        compactedMultipleChoices = validateChoiceList(multipleChoices, "choices");
+        if (!compactedMultipleChoices) return;
+      }
+      if (questionType?.value === "rankingorder") {
+        compactedRankingChoices = validateChoiceList(rankingChoices, "ranking items");
+        if (!compactedRankingChoices) return;
+      }
+      if (questionType?.value === "range" && Number(min) >= Number(max)) {
+        toast.warning("Range minimum must be less than maximum");
+        return;
+      }
+
+      const formData = new FormData();
+      tags.forEach((t) => formData.append("tags[]", t));
+      formData.append("post_type", "question");
+      formData.append("question_related_to", selectType?.value ?? "general");
+      formData.append("question_related_to_icon", selectedIcon);
+      formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
+      if(anonymousName) formData.append("anonymousName", anonymousName);
+      formData.append("question_title", title);
+
+      switch(questionType?.value){
+        case "openend":
+          formData.append("question_type", "openend");
+          break;
+        case "closedend":
+          formData.append("question_type", "closedend");
+          break;
+        case "range": 
+          formData.append("question_type", "range");
+          formData.append("rangeMin", min);
+          formData.append("rangeMax", max);
+          formData.append("rangeStep", step);
+          formData.append("defaultRangeValue", rangeValue);
+          break;
+        case "singlechoice":
+          formData.append("question_type", "singlechoice");
+          compactedSingleChoices.forEach((c) => formData.append("choices", c));
+          break;
+        case "multiplechoice": 
+          formData.append("question_type", "multiplechoice");
+          compactedMultipleChoices.forEach((c) => formData.append("choices", c));
+          formData.append("include_all_above", includeAllAbove);
+          break;
+        case "rankingorder":
+          formData.append("question_type", "rankingorder");
+          compactedRankingChoices.forEach((c, i) => formData.append(`ranking[${i+1}]`, c));
+          break;
+        case "rating":
+          formData.append("question_type", "rating");
+          formData.append("rating_icon_id", ratingIconId);
+          break;
+        default:
+          formData.append("question_type", "openend");
+          break;
+      }
 
       const res = await api.post(
         `/api/create-posts`,
@@ -313,7 +316,7 @@ export default function Questiion(){
     } 
     catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Server error, please try again later");
+      toast.error(err?.response?.data?.message || "Something went wrong. Please try again.");
     }
     finally{
       setLoading(false);
