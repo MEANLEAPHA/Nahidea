@@ -98,7 +98,7 @@ const Comment = () => {
               anonymous_name: anonRes.data.anonymous_name,
               anonymous_bg_color: anonRes.data.anonymous_bg_color,
             });
-            setEnabled(true);
+            setLockedAnon(true);
           }
         } catch (anonErr) {
           console.error("anon identity fetch failed:", anonErr);
