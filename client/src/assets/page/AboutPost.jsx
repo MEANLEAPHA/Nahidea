@@ -885,7 +885,7 @@ const AboutPost = () => {
       }
     }
     else {
-    // ✅ Handle plain # fragment (like #comments)
+  
     const hash = window.location.hash.replace("#", "");
     if (hash === "comments") {
       setSelectedTab(2);

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import toast from "react-hot-toast"
+import api from "../api/axiosInstance";
 import { Input, Popconfirm, Tag, Empty, Spin } from "antd";
 import {
   SearchOutlined,
@@ -41,15 +42,15 @@ export default function YourPosts() {
 
       setLoading(true);
 
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-post-by-user?page=${page}`,
-        {
-          headers : {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
+      // const res = await axios.get(
+      //   `${import.meta.env.VITE_SERVER_URL}/api/get-post-by-user?page=${page}`,
+      //   {
+      //     headers : {
+      //       Authorization: `Bearer ${token}`
+      //     }
+      //   }
+      // );
+    const res = await api.get(`/api/user/${userId}/posts?page=${nextPage}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
       setHasMore(res.data.hasMore);
@@ -98,14 +99,9 @@ export default function YourPosts() {
 
     try {
 
-      await axios.patch(
-        `${import.meta.env.VITE_SERVER_URL}/api/posts/${postId}/solve`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+      await api.patch(
+        `/api/posts/${postId}/solve`,
+        {}
       );
 
       setPosts(prev =>
@@ -123,14 +119,18 @@ export default function YourPosts() {
       console.error(err);
     }
   };
+
   const handleDeletePost = async (postId) => {
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this post? This can't be undone."
+    );
+  if (!confirmed) return;
   try {
-    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`,
-       { headers: { Authorization: `Bearer ${token}` } });
-    message.success("Post deleted successfully");
+    await api.delete(`/api/delete-post/${postId}`);
+    toast.success("Post deleted successfully");
   } catch (err) {
     console.error(err);
-    message.error("Failed to delete post");
+    toast.error("Failed to delete post");
   }
 };
 
@@ -321,24 +321,17 @@ export default function YourPosts() {
                       </button>
                     )}
 
-                  <Popconfirm
-                    title="Delete post?"
-                    onConfirm={(e) => {
-                        e.stopPropagation();
-                        handleDeletePost(post.id)
-                      }
-                    }
-                  >
                     <button
                       className="delete-btn"
                       onClick={(e) => {
                         e.stopPropagation();
+                        handleDeletePost(post.id);
                       }}
                     >
                       <DeleteOutlined />
                       Delete
                     </button>
-                  </Popconfirm>
+                  
 
                 </div>
 

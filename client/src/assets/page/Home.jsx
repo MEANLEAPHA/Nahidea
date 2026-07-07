@@ -352,7 +352,7 @@ export default function Home() {
       const newList = [HisData, ...withoutCurrent].slice(0, 50);
       localStorage.setItem("recentPostHis", JSON.stringify(newList));
 
-      navigate(`/aboutpost/${post.id}#1`);
+     navigate(`/aboutpost/${post.id}#comments`);
     };
   // Render post style
   const renderPostContent = (post) => {

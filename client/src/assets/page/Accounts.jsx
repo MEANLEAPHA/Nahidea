@@ -241,7 +241,7 @@ export default function Accounts() {
             const newList = [HisData, ...withoutCurrent].slice(0, 50);
             localStorage.setItem("recentPostHis", JSON.stringify(newList));
       
-            navigate(`/aboutpost/${post.id}#1`);
+           navigate(`/aboutpost/${post.id}#comments`);
           };
     
    const renderPostContent = (post) => {

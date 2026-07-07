@@ -16,6 +16,7 @@ import { SignatureOutlined, HeartFilled, LoadingOutlined, BorderOutlined } from 
 import "../style/page/UnsolvedQA.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../api/axiosInstance";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 
 const UnsolvedQA = () => {
@@ -27,7 +28,6 @@ const UnsolvedQA = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Fetch unsolved questions from API
   const fetchUnsolvedQuestions = async (pageNum = 1, isLoadMore = false) => {
     try {
       if (isLoadMore) {
@@ -36,15 +36,17 @@ const UnsolvedQA = () => {
         setLoading(true);
       }
 
-      const token = localStorage.getItem("token"); // Adjust based on your auth storage
-      const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/questions/unsolved?page=${pageNum}&limit=20`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // const token = localStorage.getItem("token");
+      // const response = await axios.get(
+      //   `${import.meta.env.VITE_SERVER_URL}/api/questions/unsolved?page=${pageNum}&limit=20`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+
+      const response = await api.get(`/api/questions/unsolved?page=${pageNum}&limit=20`);
 
       if (response.data && response.data.data) {
         if (isLoadMore) {
@@ -128,22 +130,8 @@ const UnsolvedQA = () => {
         );
 
       case "singlechoice":
-        // const choices = qData.choices || [];
-        // const displayChoices = choices.slice(0, choices.length > 4 ? 3 : 4);
         return (
           <div className="question-preview-card singlechoice">
-         
-            {/* <div className="question-preview-options two-grid">
-              {displayChoices.map((c, i) => (
-                <div key={i} className="option-chip">
-                  {c.choice_text}
-                </div>
-              ))}
-              {choices.length > 4 && (
-                <div className="option-chip more-chip">+{choices.length - 3} more</div>
-              )}
-            </div> */}
-
               <ul className='choice-ul'>
                   {
                     qData.choices?.slice(0, qData.choices?.length > 4 ? 3 : 4).map(
@@ -156,7 +144,7 @@ const UnsolvedQA = () => {
                   }
                   {qData.choices?.length > 4 && (
                     <li className = 'choice-li'>
-                        <FontAwesomeIcon icon={faCircle} className='tool-answer-icon'/>  +{qData.choices?.length - 3} more
+                         +{qData.choices?.length - 3} more
                     </li>
                   )}
               </ul>
@@ -164,33 +152,21 @@ const UnsolvedQA = () => {
         );
 
       case "multiplechoice":
-        // const multiChoices = qData.choices || [];
-        // const displayMulti = multiChoices.slice(0, multiChoices.length > 4 ? 3 : 4);
+
         return (
           <div className="question-preview-card multiplechoice">
-           
-            {/* <div className="question-preview-options two-grid">
-              {displayMulti.map((c, i) => (
-                <div key={i} className="option-chip">
-                  {c.choice_text}
-                </div>
-              ))}
-              {multiChoices.length > 4 && (
-                <div className="option-chip more-chip">+{multiChoices.length - 3} more</div>
-              )}
-            </div> */}
 
             <ul className ='choice-ul'>
               {
                 qData.choices?.slice(0, qData.choices?.length > 4 ? 3 : 4).map((c,i) => (
                   <li key={i} className ='choice-li'>
-                    <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                    <BorderOutlined className='tool-answer-icon'/>  {c.choice_text}
                   </li> 
                 ))
               }
               {qData.choices?.length > 4 && (
                 <div className ='choice-li'>
-                    <BorderOutlined className='tool-answer-icon'/> +{qData.choices?.length - 3} more
+                    +{qData.choices?.length - 3} more
                 </div>
                 )}
             </ul>
@@ -198,27 +174,10 @@ const UnsolvedQA = () => {
         );
 
       case "rankingorder":
-        // const items = qData.items || [];
-        // const displayItems = items.slice(0, items.length > 4 ? 3 : 4);
+
         return (
           <div className="question-preview-card rankingorder">
-            {/* <div className="question-preview-header">
-              <span className="question-badge rank-badge">
-                <FontAwesomeIcon icon={faHand} /> Move the Rankings
-              </span>
-            </div> */}
-            {/* <div className="question-preview-options two-grid">
-              {displayItems.map((item, idx) => (
-                <div key={idx} className="option-chip rank-chip">
-                  <span className="rank-number">#{idx + 1}</span>
-                  <span className="rank-text">{item.item_text}</span>
-                </div>
-              ))}
-              {items.length > 4 && (
-                <div className="option-chip more-chip">+{items.length - 3} more</div>
-              )}
-            </div> */}
-
+         
                <ul className='choice-ul'>
                     {qData.items?.slice(0, qData.items?.length > 4 ? 3 : 4).map((item, i) => (
                       <li className = 'choice-li'>
@@ -235,18 +194,10 @@ const UnsolvedQA = () => {
         );
 
       case "rating":
-        // const ratingIcon = iconOptions.find((opt) => opt.id === qData.rating_icon_id)?.icon || faStar;
+
         return (
           <div className="question-preview-card rating">
             <div className="rating-preview-icons">
-              {/* {Array.from({ length: 5 }).map((_, i) => (
-                <FontAwesomeIcon 
-                  key={i}
-                  icon={ratingIcon}
-                  style={{ fontSize: "24px", color: "#ffc107" }}
-                />
-              ))} */}
-
               {Array.from({length:5}).map((_,i)=>(
                   <FontAwesomeIcon 
                   key={i}
@@ -341,12 +292,13 @@ const UnsolvedQA = () => {
               className="question-card"
               onClick={() => handleCardClick(post)}
             >
-              {renderQuestionPreview(post)}
-              
               <div className="question-title">
                 <p>{post.title || post.data?.question_text}</p>
               </div>
               
+              {renderQuestionPreview(post)}
+              
+           
               <div className="tags">
                 <div className="user-info">
                   <div
@@ -390,7 +342,7 @@ const UnsolvedQA = () => {
 };
 
 export default UnsolvedQA;
-// import React, { useState, useEffect } from "react";
+
 // import nahIdeaAuth from "../img/nahIdeaAuth.png";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { iconOptions } from "../data/post_type_data";

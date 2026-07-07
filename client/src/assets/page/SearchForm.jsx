@@ -8,7 +8,7 @@ import { BorderOutlined, LeftOutlined, RiseOutlined } from "@ant-design/icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faMessage } from "@fortawesome/free-regular-svg-icons";
-import { faUser, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faMagnifyingGlass, faPen } from "@fortawesome/free-solid-svg-icons";
 
 import { Heart, Bookmark } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -202,7 +202,7 @@ const SearchForm = () => {
               const newList = [HisData, ...withoutCurrent].slice(0, 50);
               localStorage.setItem("recentPostHis", JSON.stringify(newList));
         
-              navigate(`/aboutpost/${post.id}#1`);
+              navigate(`/aboutpost/${post.id}#comments`);
             };
    const renderPostContent = (post) => {
     const data = post.data;

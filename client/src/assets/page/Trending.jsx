@@ -18,6 +18,7 @@ import {
   faHand,
   faLocationCrosshairs,
   faStar,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 
 // lucide
@@ -139,7 +140,7 @@ const Trending = () => {
         const newList = [HisData, ...withoutCurrent].slice(0, 50);
         localStorage.setItem("recentPostHis", JSON.stringify(newList));
   
-        navigate(`/aboutpost/${post.id}#1`);
+        navigate(`/aboutpost/${post.id}#comments`);
       };
 
   const renderPostContent = (post) => {
