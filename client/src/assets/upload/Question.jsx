@@ -145,12 +145,12 @@ export default function Questiion(){
   // null if invalid.
   const validateChoiceList = (arr, label) => {
     if (hasGapInMiddle(arr)) {
-      toast.warning(`Please fill in ${label} without leaving empty fields in between`);
+      toast.error(`Please fill in ${label} without leaving empty fields in between`);
       return null;
     }
     const compacted = compactChoices(arr);
     if (compacted.length < 3) {
-      toast.warning(`Please fill in all 3 ${label}`);
+      toast.error(`Please fill in all 3 ${label}`);
       return null;
     }
     return compacted;
@@ -214,19 +214,19 @@ export default function Questiion(){
     // button always re-enables and the user always sees a message.
     try {
       if (!title.trim()) {
-        toast.warning("Please enter question title");
+        toast.error("Please enter question title");
         return;
       }
       if(selectType === null) {
-            toast.warning("Please select question type");
+            toast.error("Please select question type");
             return;
       }
       if(tags.length === 0 ) {
-            toast.warning("Please add some #hashtags");
+            toast.error("Please add some #hashtags");
             return;
       }
       if(questionType === null) {
-            toast.warning("Please select question type");
+            toast.error("Please select question type");
             return;
       }
 
