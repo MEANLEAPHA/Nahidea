@@ -89,6 +89,8 @@ const Comment = () => {
     if (missingState) return;
 
     let cancelled = false;
+
+    const fetchAnon = async () => {
    try {
           const anonRes = await api.get(`/api/get-anon-identity/${missingState}`);
           if (!cancelled && anonRes.data?.exists) {
@@ -101,6 +103,7 @@ const Comment = () => {
           console.error("anon identity fetch failed:", anonErr);
         }
 
+      }
     fetchAnon();
     return () => {
       cancelled = true;
