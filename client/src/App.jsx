@@ -317,14 +317,11 @@ const Layout = () => {
                   },
                }}
       />
-      <main style={{ position: "relative" }}>
-        <Aside append={showMaxAside} />
-        <section aria-hidden={isBlocked}
-                  style={{
-                    pointerEvents: isBlocked ? "none" : "auto",
+      <main aria-hidden={isBlocked} style={{ position: "relative",   pointerEvents: isBlocked ? "none" : "auto",
                     filter: isBlocked ? "blur(4px)" : "none",
-                    userSelect: isBlocked ? "none" : "auto",
-                  }}>
+                    userSelect: isBlocked ? "none" : "auto",}}>
+        <Aside append={showMaxAside} />
+        <section>
           <Outlet
             context={{
               user,
