@@ -23,6 +23,10 @@ import './assets/style/Section.css';
 //util
 import getToken from './assets/util/auth';
 
+import AuthRequiredModal from './assets/components/AuthRequiredModal';
+import BannedModal from './assets/components/BannedModal';
+import { useBanStatus } from './assets/hooks/useBanStatus';
+
 // Component Page
 import Aside from './assets/components/Aside';
 import Header from '../src/assets/components/Header'; 
@@ -166,8 +170,7 @@ const App = () =>{
     )
 };
 
-// Registered once, at the top level, independent of which page/layout is
-// mounted — fixes the "interceptor gets ejected on /chat or /login" gap.
+
 const AuthRedirectListener = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -185,6 +188,8 @@ const Layout = () => {
 
   const { user, token, loading, logout, } = useAuth();
   const [onlineUsers, setOnlineUsers] = useState([]);
+
+
 
   // SOCKET
   useEffect(() => {
@@ -273,6 +278,10 @@ const Layout = () => {
   };
 
   // AFTER ALL HOOKS
+  useEffect(() => {
+      const isBlocked = !loading && (!token || !user);
+      document.body.style.overflow = isBlocked ? "hidden" : "";
+  }, [loading, token, user]);
   
   // if (loading) {
   //   return <div>Loading...</div>;
@@ -281,6 +290,16 @@ const Layout = () => {
   // if (!token || !user) {
   //   return <Navigate to="/login" replace />;
   // }
+
+    // inside Layout
+  const banInfo = useBanStatus(token);
+
+  const isBlockedByAuth = !loading && (!token || !user);
+  const isBlockedByBan = banInfo.checked && banInfo.banned;
+  const isBlocked = isBlockedByAuth || isBlockedByBan;
+  useEffect(() => {
+    document.body.style.overflow = isBlocked ? "hidden" : "";
+  }, [isBlocked]);
 
 
   // ONLINE
@@ -300,7 +319,12 @@ const Layout = () => {
       />
       <main style={{ position: "relative" }}>
         <Aside append={showMaxAside} />
-        <section>
+        <section aria-hidden={isBlocked}
+                  style={{
+                    pointerEvents: isBlocked ? "none" : "auto",
+                    filter: isBlocked ? "blur(4px)" : "none",
+                    userSelect: isBlocked ? "none" : "auto",
+                  }}>
           <Outlet
             context={{
               user,
@@ -310,6 +334,10 @@ const Layout = () => {
           />
         </section>
       </main>
+      {!loading && (!token || !user) && <AuthRequiredModal />}
+      {!isBlockedByAuth && isBlockedByBan && (
+        <BannedModal reason={banInfo.reason} bannedAt={banInfo.banned_at} />
+      )}
     </>
   );
 

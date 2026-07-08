@@ -1,0 +1,46 @@
+/* AuthRequiredModal.css */
+.auth-required-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-required-modal {
+  background: var(--bg-color, #fff);
+  padding: 32px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.auth-required-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.btn-auth-primary, .btn-auth-secondary {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-auth-primary {
+  background: #fd7648;
+  color: #fff;
+}
+
+.btn-auth-secondary {
+  background: transparent;
+  border: 1px solid #fd7648;
+  color: #fd7648;
+}

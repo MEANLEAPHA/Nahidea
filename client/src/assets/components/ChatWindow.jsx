@@ -221,7 +221,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       socket.off('user_typing', handleUserTyping);
       socket.off('reply_preview_update', handleReplyPreviewUpdate);
     };
-  }, [socket, activeChat, conversationId, user.id]);
+  }, [socket, activeChat, conversationId, user?.id]);
 
   useEffect(() => {
     if (activeChat) fetchMessages();
