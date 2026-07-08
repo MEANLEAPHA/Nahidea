@@ -17,7 +17,7 @@ import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuoteLeft, faQuoteRight, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import { faPen, faQuoteLeft, faQuoteRight, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCircle, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";

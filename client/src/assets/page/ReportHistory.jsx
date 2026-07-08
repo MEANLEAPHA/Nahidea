@@ -1,41 +1,108 @@
-// ReportHistory.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation,  } from "@fortawesome/free-solid-svg-icons";
-import {faBloggerB} from "@fortawesome/free-brands-svg-icons"
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import {
+  MessageOutlined,
+  FileTextOutlined,
+  UserOutlined,
+  CommentOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
+
+import api from "../api/axiosInstance";
 import "../style/page/ReportHistory.css";
+
+// map raw `type` column -> icon (falls back to a generic icon if NULL/unknown)
+const getTypeIcon = (type) => {
+  switch (type) {
+    case "comment":
+      return <MessageOutlined />;
+    case "post":
+      return <FileTextOutlined />;
+    case "user":
+      return <UserOutlined />;
+    case "conversation":
+      return <CommentOutlined />;
+    default:
+      return <QuestionCircleOutlined />;
+  }
+};
+
+// map report_type enum -> human readable label
+const formatReportType = (reportType) => {
+  if (!reportType) return "Other";
+  return reportType
+    .split("_")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+};
+
+// map real status enum -> css class
+const getStatusClass = (status) => {
+  switch (status) {
+    case "resolved":
+      return "status-resolved";
+    case "dismissed":
+      return "status-dismissed";
+    case "reviewing":
+      return "status-reviewing";
+    case "pending":
+    default:
+      return "status-pending";
+  }
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+};
 
 function ReportItem({ item }) {
   return (
     <div className="report-item">
       <div className="report-type">
         <div className="report-video-icon">
-          <span className="material-symbols-outlined"><FontAwesomeIcon icon={faBloggerB} /></span>
+          <span className="material-symbols-outlined">
+            {getTypeIcon(item.type)}
+          </span>
         </div>
 
         <div className="report-type-text">
-          <span>Video</span>
+          <span>{item.type ? item.type : "Unknown"}</span>
         </div>
       </div>
 
       <div className="report-content">
-        <div className="report-title">{item.title}</div>
-        <div className="report-channel">{item.channel}</div>
+        <img
+          src={
+            item.reported_avatar_url ||
+            "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
+          }
+          alt=""
+          className="report-user-avatar"
+        />
+        <div className="report-title">
+          {item.reported_username || "Unknown user"}
+        </div>
       </div>
 
       <div className="report-reason">
-        <div className="report-reason-title">{item.reason}</div>
-        <div className="report-date">{item.date}</div>
+        <div className="report-reason-title">
+          {formatReportType(item.report_type)}
+        </div>
+        {item.reason && (
+          <div className="report-reason-text">{item.reason}</div>
+        )}
+        <div className="report-date">{formatDate(item.created_at)}</div>
       </div>
 
-      <div
-        className={`report-status ${
-          item.status.toLowerCase() === "live"
-            ? "status-live"
-            : "status-removed"
-        }`}
-      >
+      <div className={`report-status ${getStatusClass(item.status)}`}>
         {item.status}
       </div>
     </div>
@@ -43,51 +110,24 @@ function ReportItem({ item }) {
 }
 
 export default function ReportHistory() {
-  /*
-    Replace this with your API later.
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    Example:
-    useEffect(() => {
-      fetch("YOUR_API")
-        .then(res => res.json())
-        .then(data => setReports(data))
-    }, [])
-  */
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const res = await api.get("/api/get-all-report-by-user-id");
+        setReports(res.data);
+      } catch (err) {
+        setError("Failed to load report history");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const reports = [
-    {
-      id: 1,
-      title: "Top 5 Shark Tank AI Moments ft. Down-Z's Friends",
-      channel: "NooodleGG",
-      reason: "Harassment or bullying",
-      date: "Oct 16, 2025",
-      status: "Live",
-    },
-    {
-      id: 2,
-      title: "X-Mobile Under 4000",
-      channel: "Edit Zone",
-      reason: "Sexual content",
-      date: "Aug 23, 2025",
-      status: "Live",
-    },
-    {
-      id: 3,
-      title: "First Combat Use of Saab Gripen in Cambodia-Thailand Conflict",
-      channel: "Defense News",
-      reason: "Misinformation",
-      date: "Jul 29, 2025",
-      status: "Live",
-    },
-    {
-      id: 4,
-      title: "Rules Of Survival Gold Mode",
-      channel: "CHANMUNY",
-      reason: "Harmful dangerous acts",
-      date: "Jul 12, 2025",
-      status: "Removed",
-    },
-  ];
+    fetchReports();
+  }, []);
 
   return (
     <div className="report-history-page">
@@ -106,13 +146,13 @@ export default function ReportHistory() {
             </div>
 
             <div className="report-history-note">
-             Reporting does not guarantee automatic remova!
+              Reporting does not guarantee automatic removal!
             </div>
           </div>
 
           <div className="report-history-illustration">
             <div className="report-blob">
-                <FontAwesomeIcon icon={faTriangleExclamation} />
+              <FontAwesomeIcon icon={faTriangleExclamation} />
             </div>
           </div>
         </div>
@@ -120,16 +160,21 @@ export default function ReportHistory() {
         {/* TABLE HEADER */}
         <div className="report-table-header">
           <div>Type</div>
-          <div>Content</div>
+          <div>Reported user</div>
           <div>Reporting reason</div>
           <div>Status</div>
         </div>
 
         {/* DATA */}
         <div className="report-table-body">
-          {reports.map((item) => (
-            <ReportItem key={item.id} item={item} />
-          ))}
+          {loading && <div className="report-loading">Loading reports...</div>}
+          {error && <div className="report-error">{error}</div>}
+          {!loading && !error && reports.length === 0 && (
+            <div className="report-empty">You haven't reported anything yet.</div>
+          )}
+          {!loading &&
+            !error &&
+            reports.map((item) => <ReportItem key={item.id} item={item} />)}
         </div>
       </div>
     </div>
