@@ -202,6 +202,7 @@ export default function Accounts() {
           authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
           isAnonymous: post.is_anonymous,
           anonymousBg: post.anonymous_bg_color,
+          localTime: new Date().toLocaleString()
         };
     
         let recentDataHis = [];
@@ -228,6 +229,7 @@ export default function Accounts() {
               authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
               isAnonymous: post.is_anonymous,
               anonymousBg: post.anonymous_bg_color,
+              localTime: new Date().toLocaleString()
             };
       
             let recentDataHis = [];

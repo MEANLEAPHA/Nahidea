@@ -304,8 +304,10 @@
 }
 
 .markdown-preview blockquote {
-  margin: 10px 0px 10px 0px !important;
-  padding: 0 !important;
+border-left: 3px solid #fd7648;
+  padding-left: 12px;
+  color: #aaa;
+  font-style: italic;
 
 }
 .markdown-preview blockquote p{
@@ -334,13 +336,13 @@
   vertical-align: bottom;
 }
 
-.markdown-preview pre {
-  background: var(--back-con); /* light mode */
+/* .markdown-preview pre {
+  background: var(--back-con);
   padding: 1em;
   border-radius: 6px;
   line-height: 1.5;
-  white-space: pre-wrap;   /* allow wrapping */
-  word-wrap: break-word;   /* break long words if needed */
+  white-space: pre-wrap;  
+  word-wrap: break-word;   
    margin: 10px 0px 20px 0px !important;
 }
 
@@ -349,17 +351,33 @@
    font-size: 0.9rem;
   color:var(--font-color);
   opacity: 0.8;
+} */
+ /* Code */
+.ProseMirror pre {
+ background: var(--secondary-color);
+  padding: 12px;
+  border-radius: 5px;
+  overflow-x: auto;
+  white-space: pre-wrap;  
+  word-wrap: break-word;   
 }
+.ProseMirror code {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--font-color);
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .markdown-preview h1 {
-    font-size: 1.4rem;  /* ~22px */
+    font-size: 1.2rem;  /* ~22px */
   }
   .markdown-preview h2 {
-    font-size: 1.2rem;  /* ~19px */
+    font-size: 1.0rem;  /* ~19px */
   }
   .markdown-preview h3 {
-    font-size: 1.1rem;  /* ~17px */
+    font-size: 9rem;  /* ~17px */
   }
   .markdown-preview p {
     font-size: 14px !important;
@@ -1085,6 +1103,10 @@ RESPONSIVE
         border-radius: 0px;
     }
 
+    .about-posts{
+    padding: 15px 0px;
+  
+}
     /* POST-HEADER */
     .post-header{
         padding: 0px;
@@ -1172,10 +1194,6 @@ RESPONSIVE
 }
 @media screen and (max-width: 520px) {
  
-.about-posts{
-    padding: 25px 0px;
-  
-}
     .user-profile{
         width: 30px;
         height: 30px;

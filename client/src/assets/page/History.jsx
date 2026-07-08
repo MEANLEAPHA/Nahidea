@@ -122,6 +122,9 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
         <div id="title-divs">
           <p id="titles">{item.title}</p>
         </div>
+        <div id="title-divs">
+          <p id="titles">{item.localTime}</p>
+        </div>
         <button
           id="history-card-deletes"
           onClick={(e) => {

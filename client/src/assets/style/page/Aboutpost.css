@@ -142,7 +142,6 @@
   margin-top: 5px;
  
 }
-
 .comment-actions-left{
   display: flex;
   align-items: center;
@@ -265,11 +264,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 90px 20px;
 }
 .no-com-p{
   color: grey;
   font-size: large;
+  text-align: center;
   font-weight: 500;
 }
 

@@ -312,6 +312,7 @@ export default function Home() {
         authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
         isAnonymous: post.is_anonymous,
         anonymousBg: post.anonymous_bg_color,
+        localTime: new Date().toLocaleString()
       };
 
       let recentDataHis = [];
@@ -339,6 +340,7 @@ export default function Home() {
         authurPf: post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url,
         isAnonymous: post.is_anonymous,
         anonymousBg: post.anonymous_bg_color,
+        localTime: new Date().toLocaleString()
       };
 
       let recentDataHis = [];
@@ -906,8 +908,8 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
   );
 };
 
-let scriptLoaded = false;
 
+let scriptLoaded = false;
 function DisplayAnimatedIcon({ src, isHovered }) {
   const [isValid, setIsValid] = useState(false);
   const [iconLoaded, setIconLoaded] = useState(false);

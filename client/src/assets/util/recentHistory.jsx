@@ -103,6 +103,9 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
         <div id="title-div">
           <p id="title">{item.title}</p>
         </div>
+        <div id="title-div">
+          <p id="title">{item.localTime}</p>
+        </div>
       </div>
 
       {safeImg && (
