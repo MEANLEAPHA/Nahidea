@@ -22,8 +22,6 @@ import "../style/page/YourPosts.css";
 
 export default function YourPosts() {
 
-  const { user} = useAuth();
-
 
   const [posts, setPosts] = useState([]);
 
@@ -44,7 +42,7 @@ export default function YourPosts() {
     try {
     setLoading(true);
 
-    const res = await api.get(`/api/user/${user?.id}/posts?page=${page}`);
+    const res = await api.get(`/api/user/posts?page=${page}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
       console.log(user?.id);
