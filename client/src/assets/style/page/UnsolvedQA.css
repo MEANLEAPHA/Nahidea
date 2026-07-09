@@ -152,7 +152,7 @@
 
 /* Question title */
 .question-title {
-  padding: 0 1rem;
+  padding: 0 15px;
   margin-bottom: 0;
   font-weight: 500;
   line-height: 1.4;
@@ -196,9 +196,10 @@
 .question-preview-card {
   
   border-radius: 16px;
-  padding: 5px 10px !important;
+  padding: 5px 15px !important;
   background:transparent;
   border:none;
+  margin: 0 !important;
   background-color:transparent !important;
 }
 

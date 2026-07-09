@@ -77,7 +77,7 @@ const UnsolvedQA = () => {
 
       case "closedend":
         return (
-          <div className="question-preview-card closedend">
+          <div className="question-preview-card ">
             <div className="yesno-div">
               <div className="yes-chip">Yes</div>
               <div className="no-chip">No</div>
@@ -87,7 +87,7 @@ const UnsolvedQA = () => {
 
       case "range":
         return (
-          <div className="question-preview-card range">
+          <div className="question-preview-card">
              <div className='range-preview-option'>
                   <label id="min-label">{qData.range_min ?? 0}</label>
                   <div className="range-wrapper">
@@ -119,7 +119,7 @@ const UnsolvedQA = () => {
 
       case "singlechoice":
         return (
-          <div className="question-preview-card singlechoice">
+          <div className="question-preview-card ">
               <ul className='choice-ul'>
                   {
                     qData.choices?.slice(0, qData.choices?.length > 4 ? 3 : 4).map(
@@ -142,7 +142,7 @@ const UnsolvedQA = () => {
       case "multiplechoice":
 
         return (
-          <div className="question-preview-card multiplechoice">
+          <div className="question-preview-card">
 
             <ul className ='choice-ul'>
               {
@@ -164,7 +164,7 @@ const UnsolvedQA = () => {
       case "rankingorder":
 
         return (
-          <div className="question-preview-card rankingorder">
+          <div className="question-preview-card ">
          
                <ul className='choice-ul'>
                     {qData.items?.slice(0, qData.items?.length > 4 ? 3 : 4).map((item, i) => (
@@ -184,7 +184,7 @@ const UnsolvedQA = () => {
       case "rating":
 
         return (
-          <div className="question-preview-card rating">
+          <div className="question-preview-card">
             <div className="rating-preview-icons">
               {Array.from({length:5}).map((_,i)=>(
                   <FontAwesomeIcon 

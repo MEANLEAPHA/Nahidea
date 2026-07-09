@@ -528,9 +528,12 @@ const SearchForm = () => {
             {/* ================= POSTS SECTION ================= */}
             {(expandMode === "none" || expandMode === "posts") && !noPosts && (
               <>
-              <label>
+              <div className="search-result dev-res">
+                 <label style={{color: 'var(--font-color)'}}>
                   <FontAwesomeIcon icon={faBloggerB} /> Posts
                 </label>
+              </div>
+
                 <List
                   dataSource={posts}
                   renderItem={(post) => (

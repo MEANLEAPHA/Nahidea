@@ -1037,7 +1037,7 @@ const AboutPost = () => {
         return {
           ...a,
           user_vote_type: newVoteType,
-          vote_score: (a.vote_score || 0) + voteDelta
+          vote_score: Number(a.vote_score || 0) + voteDelta
         };
       }
       return a;
@@ -1065,7 +1065,7 @@ const AboutPost = () => {
         return {
           ...a,
           user_vote_type: newVoteType,
-          vote_score: (a.vote_score || 0) + voteDelta
+          vote_score: Number(a.vote_score || 0) + voteDelta
         };
       }
       return a;
