@@ -218,9 +218,7 @@ export default function Accounts() {
     
         navigate(`/aboutpost/${post.id}`);
       };
-        const openPostByComment = (post) => {
-            saveScroll("home", { y: window.scrollY, page: pageRef.current });
-      
+        const openPostByComment = (post) => {    
             const HisData = {
               id: post.id,
               title: post.data.title,

@@ -8,6 +8,7 @@ import { BorderOutlined, LeftOutlined, RiseOutlined } from "@ant-design/icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faBloggerB } from "@fortawesome/free-brands-svg-icons";
 import { faUser, faMagnifyingGlass, faPen } from "@fortawesome/free-solid-svg-icons";
 
 import { Heart, Bookmark } from "lucide-react";
@@ -179,9 +180,7 @@ const SearchForm = () => {
       
           navigate(`/aboutpost/${post.id}`);
         };
-          const openPostByComment = (post) => {
-              saveScroll("home", { y: window.scrollY, page: pageRef.current });
-        
+          const openPostByComment = (post) => {  
               const HisData = {
                 id: post.id,
                 title: post.data.title,
@@ -529,6 +528,9 @@ const SearchForm = () => {
             {/* ================= POSTS SECTION ================= */}
             {(expandMode === "none" || expandMode === "posts") && !noPosts && (
               <>
+              <label>
+                  <FontAwesomeIcon icon={faBloggerB} /> Posts
+                </label>
                 <List
                   dataSource={posts}
                   renderItem={(post) => (

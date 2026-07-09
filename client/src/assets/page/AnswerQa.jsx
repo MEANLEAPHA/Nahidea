@@ -55,7 +55,7 @@ const AnswerQa = () => {
         if (cancelled) return;
 
         if (alreadyRes.data.alreadyAnswered) {
-          toast.warning("You've already answered this question.");
+          toast("You've already answered this question.");
           navigate(-1);
           return;
         }

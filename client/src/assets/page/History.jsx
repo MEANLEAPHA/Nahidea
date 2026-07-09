@@ -123,7 +123,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
           <p id="titles">{item.title}</p>
         </div>
         <div id="title-divs">
-          <p id="titles">{item.localTime}</p>
+          <p id="titles" style={{fontSize:'x-small', color:'gray'}}>{item.localTime}</p>
         </div>
         <button
           id="history-card-deletes"

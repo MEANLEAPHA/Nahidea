@@ -371,13 +371,13 @@ border-left: 3px solid #fd7648;
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .markdown-preview h1 {
-    font-size: 1.2rem;  /* ~22px */
+    font-size: 1.2rem !important; 
   }
   .markdown-preview h2 {
-    font-size: 1.0rem;  /* ~19px */
+    font-size: 1.0rem !important;  /* ~19px */
   }
   .markdown-preview h3 {
-    font-size: 9rem;  /* ~17px */
+    font-size: 9rem !important;  /* ~17px */
   }
   .markdown-preview p {
     font-size: 14px !important;

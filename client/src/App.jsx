@@ -50,7 +50,6 @@ import UserAgreement from './assets/page/UserAgreement';
 import Rule from './assets/page/Rule';
 import Accessibility from './assets/page/Accessibility';
 import AboutPost from './assets/page/AboutPost';
-import AnswerPost from './assets/page/AnswerPost';
 import Search from './assets/page/Search';
 import AnswerQa from './assets/page/AnswerQa';
 import Comment from './assets/page/Comment';

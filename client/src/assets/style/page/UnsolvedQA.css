@@ -196,7 +196,7 @@
 .question-preview-card {
   
   border-radius: 16px;
-  padding: 10px;
+  padding: 5px 10px !important;
   background:transparent;
   border:none;
   background-color:transparent !important;

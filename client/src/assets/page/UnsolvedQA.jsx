@@ -15,7 +15,6 @@ import {
 import { SignatureOutlined, HeartFilled, LoadingOutlined, BorderOutlined } from "@ant-design/icons";
 import "../style/page/UnsolvedQA.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import api from "../api/axiosInstance";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 
@@ -35,17 +34,6 @@ const UnsolvedQA = () => {
       } else {
         setLoading(true);
       }
-
-      // const token = localStorage.getItem("token");
-      // const response = await axios.get(
-      //   `${import.meta.env.VITE_SERVER_URL}/api/questions/unsolved?page=${pageNum}&limit=20`,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-
       const response = await api.get(`/api/questions/unsolved?page=${pageNum}&limit=20`);
 
       if (response.data && response.data.data) {

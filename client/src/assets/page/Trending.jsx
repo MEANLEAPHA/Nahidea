@@ -118,8 +118,6 @@ const Trending = () => {
     navigate(`/aboutpost/${post.id}`);
   };
     const openPostByComment = (post) => {
-        saveScroll("home", { y: window.scrollY, page: pageRef.current });
-  
         const HisData = {
           id: post.id,
           title: post.data.title,

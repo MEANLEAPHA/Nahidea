@@ -104,7 +104,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
           <p id="title">{item.title}</p>
         </div>
         <div id="title-div">
-          <p id="title">{item.localTime}</p>
+          <p id="title" style={{fontSize:'x-small', color:'gray'}}>{item.localTime}</p>
         </div>
       </div>
 
