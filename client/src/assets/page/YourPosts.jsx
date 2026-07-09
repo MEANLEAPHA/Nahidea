@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast"
 import api from "../api/axiosInstance";
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { Input, Popconfirm, Tag, Empty, Spin } from "antd";
 import {
   SearchOutlined,
