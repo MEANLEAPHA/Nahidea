@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast"
 import api from "../api/axiosInstance";
 import { Input, Popconfirm, Tag, Empty, Spin } from "antd";
@@ -22,6 +22,9 @@ import "../style/page/YourPosts.css";
 const token = localStorage.getItem("token");
 export default function YourPosts() {
 
+  const { user} = useOutletContext();
+
+
   const [posts, setPosts] = useState([]);
 
   const navigate = useNavigate();
@@ -39,18 +42,9 @@ export default function YourPosts() {
     if (loading || !hasMore) return;
 
     try {
-
-      setLoading(true);
-
-      // const res = await axios.get(
-      //   `${import.meta.env.VITE_SERVER_URL}/api/get-post-by-user?page=${page}`,
-      //   {
-      //     headers : {
-      //       Authorization: `Bearer ${token}`
-      //     }
-      //   }
-      // );
-    const res = await api.get(`/api/user/${userId}/posts?page=${nextPage}`);
+    setLoading(true);
+    
+    const res = await api.get(`/api/user/${user?.id}/posts?page=${page}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
       setHasMore(res.data.hasMore);

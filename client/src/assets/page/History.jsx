@@ -45,7 +45,7 @@ const History = () => {
             className='clear-all-history-btn'
             onClick={clearAllHistory}
           >
-            <ClearOutlined /> Clear All
+           Clear All
           </button>
         </div>
       </div>

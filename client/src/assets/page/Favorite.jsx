@@ -7,7 +7,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 
-const token = localStorage.getItem('token');
+
+import api from "../api/axiosInstance";
 
 const Favorite = () => {
   const [searchHistory, setSearchHistory] = useState('');
@@ -33,9 +34,7 @@ const Favorite = () => {
     if (loading || !hasMorePosts) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/favorites?page=${nextPage}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/api/posts/favorites?page=${nextPage}`);
       const json = await res.json();
       if (json.data) {
         setRecentPosts(prev => [...prev, ...json.data]);
@@ -54,9 +53,7 @@ const Favorite = () => {
     if (loading || !hasMoreGifs) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/feed?page=${nextPage}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/api/gifs/favorites/feed?page=${nextPage}`);
       const json = await res.json();
       if (json.data) {
         setRecentGifs(prev => [...prev, ...json.data]);

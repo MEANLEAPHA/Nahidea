@@ -387,7 +387,7 @@ const AnswerQa = () => {
     setSubmitting(true);
 
     try {
-      await api.post(`/api/answers/answer-qa/${postId}/${questionId}/${questionType}`, payload);
+    const res = await api.post(`/api/answers/answer-qa/${postId}/${questionId}/${questionType}`, payload);
 
       // this question is now answered — don't let a stale cache serve it again
       const QaStoreRaw = sessionStorage.getItem("QaStore");
@@ -398,11 +398,16 @@ const AnswerQa = () => {
         }
       }
 
-      toast.success("Answer submitted!");
-      navigate(-1);
+      
+      if(res.status === 200) {
+        const resData = res.data;
+          toast.success("Answer submitted!");
+          navigate(`/aboutpost/${postId}#answers-${answer_id}`);
+      }
+    
     } catch (err) {
       if (err.response?.status === 409) {
-        toast.warning("You can't answer this question twice.");
+        toast.warning("Oops! You can't answer this question twice.");
         navigate(-1);
         return;
       }
