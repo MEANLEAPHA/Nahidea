@@ -459,7 +459,7 @@ export const MarkdownPreview = ({ content }) => {
 
  export const MoreFieldsConAndQues = memo(({
   tags, setTags,
-  isAnonymous, setIsAnonymous, tokens,
+  isAnonymous, setIsAnonymous, tokens, countdown
 }) => {
   const [selected, setSelected] = useState(1);
 

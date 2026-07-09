@@ -303,7 +303,7 @@ const UnsolvedQA = () => {
                   </div>
                   <div id='user-info-p'>
                     <span className="username">
-                      {post.is_anonymous ? (pist?.anonymous_name || "Anonymous") : post.username}
+                      {post.is_anonymous ? (post?.anonymous_name || "Anonymous") : post.username}
                     </span>
                     <span className="created-at">{post.created_at}</span>
                   </div>

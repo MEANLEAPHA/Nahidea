@@ -320,8 +320,6 @@ export default function Questiion(){
     <div id="content-container">
       <article id='tool-article' className={openPreview ? "hidden" : "flex-container"}>
 
-        <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
-
         <form onSubmit={handleSubmit} id="content-form">
           <div id='form-header-label'>
             <p id="content-label">Create Question</p> 

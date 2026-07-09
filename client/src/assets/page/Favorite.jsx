@@ -199,7 +199,7 @@ const PostHistoryCard = ({ item }) => {
             <img
               src={
                 item.isAnonymous === 1
-                  ? "https://api.dicebear.com/9.x/adventurer/svg?seed=Anon"
+                  ? nahIdeaAuth 
                   : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
               }
               alt="user-profile"

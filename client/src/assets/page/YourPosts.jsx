@@ -19,7 +19,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faNewspaper, faMessage} from '@fortawesome/free-regular-svg-icons'
 import "../style/page/YourPosts.css";
 
-const token = localStorage.getItem("token");
 export default function YourPosts() {
 
   const { user} = useOutletContext();
@@ -44,7 +43,7 @@ export default function YourPosts() {
     try {
     setLoading(true);
 
-    const res = await api.get(`/api/user/${user.id}/posts?page=${page}`);
+    const res = await api.get(`/api/user/${Number(user.id)}/posts?page=${page}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
       setHasMore(res.data.hasMore);
@@ -110,7 +109,7 @@ export default function YourPosts() {
       );
 
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load your posts:",err);
     }
   };
 

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../style/page/History.css";
 import { Input } from 'antd';
 import { SearchOutlined, ClearOutlined, DeleteOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
 
 const History = () => {
 
@@ -110,7 +111,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
             <img
               src={
                 item.isAnonymous === 1
-                  ? "https://api.dicebear.com/9.x/adventurer/svg?seed=Anon"
+                  ? nahIdeaAuth 
                   : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
               }
               alt="user-profile"

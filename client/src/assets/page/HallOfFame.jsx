@@ -29,31 +29,7 @@ export default function HallOfFame() {
       if (append) setLoadingMore(true);
       else setLoading(true);
 
-      if (USE_MOCK_DATA) {
-        // Mock behavior – simulate pagination from MOCK_ITEMS
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        const limit = 20;
-        const start = (pageNum - 1) * limit;
-        const paginated = MOCK_ITEMS.slice(start, start + limit);
-        const total = MOCK_ITEMS.length;
-        const totalPages = Math.ceil(total / limit);
-        const newItems = paginated.map((item, idx) => ({
-          ...item,
-          rank: start + idx + 1,
-        }));
-        if (append) {
-          setItems(prev => [...prev, ...newItems]);
-        } else {
-          setItems(newItems);
-        }
-        setTotalPages(totalPages);
-      } else {
-       
-        // const res = await axios.get(
-        //   `${import.meta.env.VITE_SERVER_URL}/api/hof`,
-        //   { params: { page: pageNum, limit: 20 } }
-        // );
-        const res = await api.get(
+       const res = await api.get(
           `/api/hof`,
           { params: { page: pageNum, limit: 20 } }
         )
@@ -64,7 +40,6 @@ export default function HallOfFame() {
           setItems(newItems);
         }
         setTotalPages(totalPagesFromServer);
-      }
     } catch (err) {
       console.error("Failed to load Hall of Fame:", err);
     } finally {

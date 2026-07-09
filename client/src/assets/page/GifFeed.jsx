@@ -308,7 +308,7 @@ function GifCard({ gif }) {
       <div className="gif-overlay">
         <span className="gif-name">{gif.gif_label}</span>
         <span className="gif-fav" onClick={toggleFavorite}>
-          {fav ? <HeartFilled /> : <HeartOutlined />}
+          {fav ? <HeartFilled style={{color: "rgb(255, 0, 0)"}}/> : <HeartOutlined />}
         </span>
       </div>
     </div>
