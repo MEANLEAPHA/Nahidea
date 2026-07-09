@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast"
 import api from "../api/axiosInstance";
+import { useAuth } from '../../context/AuthContext';
 import { Input, Popconfirm, Tag, Empty, Spin } from "antd";
 import {
   SearchOutlined,
@@ -21,7 +22,7 @@ import "../style/page/YourPosts.css";
 
 export default function YourPosts() {
 
-  const { user} = useOutletContext();
+  const { user} = useAuth();
 
 
   const [posts, setPosts] = useState([]);
@@ -43,7 +44,7 @@ export default function YourPosts() {
     try {
     setLoading(true);
 
-    const res = await api.get(`/api/user/${user.id}/posts?page=${page}`);
+    const res = await api.get(`/api/user/${user?.id}/posts?page=${page}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
       setHasMore(res.data.hasMore);
