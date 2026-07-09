@@ -31,22 +31,22 @@ const Favorite = () => {
 
   // Fetch posts
   const fetchPosts = async (nextPage = 1) => {
-    if (loading || !hasMorePosts) return;
-    setLoading(true);
-    try {
-      const res = await api.get(`/api/posts/favorites?page=${nextPage}`);
-      const json = await res.json();
-      if (json.data) {
-        setRecentPosts(prev => [...prev, ...json.data]);
-        setPagePosts(nextPage);
-        setHasMorePosts(json.data.length === 25);
-      }
-    } catch (err) {
-      console.error("Failed to fetch liked posts", err);
-    } finally {
-      setLoading(false);
+  if (loading || !hasMorePosts) return;
+  setLoading(true);
+  try {
+    const res = await api.get(`/api/posts/favorites?page=${nextPage}`);
+    const json = res.data; // axios already parses JSON
+    if (json.data) {
+      setRecentPosts(prev => [...prev, ...json.data]);
+      setPagePosts(nextPage);
+      setHasMorePosts(json.data.length === 25);
     }
-  };
+  } catch (err) {
+    console.error("Failed to fetch favorite posts", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Fetch gifs
   const fetchGifs = async (nextPage = 1) => {
@@ -54,7 +54,7 @@ const Favorite = () => {
     setLoading(true);
     try {
       const res = await api.get(`/api/gifs/favorites/feed?page=${nextPage}`);
-      const json = await res.json();
+      const json = res.data;
       if (json.data) {
         setRecentGifs(prev => [...prev, ...json.data]);
         setPageGifs(nextPage);

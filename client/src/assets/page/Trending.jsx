@@ -376,7 +376,7 @@ const Trending = () => {
   return (
     <div className="home-container">
       <article id="feed-article">
-        <div className="feed-header">
+        <div className="feed-header" style={{maarginTop: '15px'}}>
           <p className="feed-title"><RiseOutlined /> Trending Posts</p>
           <p className="feed-subtitle">Most popular posts of the day</p>
         </div>
