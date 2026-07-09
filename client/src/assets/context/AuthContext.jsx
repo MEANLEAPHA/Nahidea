@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
 
         const data = res.data.userData || res.data;
         setUser({
-          id: data.id,
+          id: Number(data.id),
           email: data.email,
           username: data.username,
           avatar_url: data.avatar_url,
