@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext  } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
 import api from "../api/axiosInstance";
-import { toast, ToastContainer } from "react-toastify";
+import toast from "react-hot-toast";
 
 // data import
 import { confession_options } from "../data/post_type_data";
@@ -76,12 +76,12 @@ export default function Confession() {
       return;
     }
     if(selectType === null) {
-              toast.warning("Please select confession topic");
+              toast("Please select confession topic");
               setLoading(false);
               return;
     }
     if(tags.length === 0 ) {
-          toast.warning("Please add some #hashtags");
+          toast("Please add some #hashtags");
           setLoading(false);
           return;
     }
@@ -98,18 +98,6 @@ export default function Confession() {
     }
 
     try {
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-         
-      // );
-
       const res = await api.post(`/api/create-posts`, formData, { headers: {'Content-Type': 'multipart/form-data'}})
 
       if (res.status === 201 || res.status === 200) {
@@ -136,13 +124,7 @@ export default function Confession() {
   return (
     <div id="content-container">
       <article id='tool-article' className={openPreview ? "hidden" : "flex-container"}>
-        <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
         <form onSubmit={handleSubmit} id="content-form">
-
-          <div className="toast-feedback">
-            <ToastContainer position="top-right" autoClose={2000} />
-          </div>
-
           <div id='form-header-label'>
             <p id="content-label">Create Confession</p> 
             <button id='preview-toggle' type="button" onClick={() => setOpenPreview(true)} ><LayoutOutlined /> Preview</button>
@@ -151,10 +133,9 @@ export default function Confession() {
           <Select
               options={confession_options}
               value={selectType}
-              // onChange={setSelectType}
               onChange={(option) => {
-                setSelectType(option);        // store the whole option
-                setSelectedIcon(option?.icon); // store icon string
+                setSelectType(option);       
+                setSelectedIcon(option?.icon); 
               }}
               classNamePrefix="custom"
               placeholder="Select Confession Topic"
@@ -193,6 +174,7 @@ export default function Confession() {
               isAnonymous={isAnonymous}
               setIsAnonymous={setIsAnonymous}
               tokens={tokens}
+              countdown={countdown}
               conAndQuesFileValue={confessionFile}
               setConAndQuesFileValue={setFile}
               fileInputRef={refFile}

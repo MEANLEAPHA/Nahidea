@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import api from "../api/axiosInstance";
+import toast from "react-hot-toast";
 import "../style/upload/GifUpload.css";
 import { gif_category } from "../data/post_type_data";
 
@@ -16,24 +18,25 @@ export default function GifUpload() {
     const gif_type = formData.get("gif_type");
 
     if (!gif_url.toLowerCase().endsWith(".gif")) {
-      alert("Only .gif links are allowed.");
+      toast.error("Only .gif links are allowed.");
       return;
     }
 
     try {
       setLoading(true);
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/upload`,
+
+      const res = await api.post(
+        `/api/gifs/upload`,
         { gif_name, gif_label, gif_url, gif_type }
       );
       if (res.data.success) {
-        alert("Uploaded");
+        toast.success("Thanks for your contribution :)");
       } else {
-        alert(res.data.error);
+        toast.error(res.data.error);
       }
     } catch (err) {
       console.error(err);
-      alert("Upload failed");
+      toast.error("Upload failed :(");
     } finally {
       setLoading(false);
     }
@@ -45,7 +48,7 @@ export default function GifUpload() {
       document.querySelector("input[name='gif_url']").value = text;
       setPreviewUrl(text);
     } catch {
-      alert("Failed to paste from clipboard");
+      toast.error("Failed to paste from clipboard");
     }
   };
 
@@ -70,7 +73,7 @@ export default function GifUpload() {
         </div>
 
         <div className="form-row">
-          <input name="gif_label" placeholder="Tags (e.g. funny, cartoon, party)" required />
+          <input name="gif_label" placeholder="Describe:(e.g. SpongeBob dancing in the ocean)" required />
           <div className="url-input">
             <input
               name="gif_url"

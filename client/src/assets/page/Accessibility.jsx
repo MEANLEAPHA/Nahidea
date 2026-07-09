@@ -1,4 +1,3 @@
-
 import "../style/page/Accessibility.css";
 
 function Card({ className = "", delay = 0, children }) {
@@ -26,24 +25,16 @@ function TechPill({ name }) {
   return <div className="a11y-tech-pill">{name}</div>;
 }
 const SHORTCUTS = [
-  { label: "Global search", keys: "⌘ K" },
   { label: "Cycle navigation forward", keys: "TAB" },
   { label: "Cycle navigation backward", keys: "SHIFT + TAB" },
-  { label: "Skip to main content", keys: "ALT + S" },
-  { label: "Toggle theme", keys: "ALT + T" },
-  { label: "Open command palette", keys: "⌘ /" },
 ];
 const VISUAL_ITEMS = [
-  "Responsive layouts for any viewport size",
-  "Contrast-tested light & dark themes",
-  "Scalable typography up to 200% zoom",
-  "Reduced motion system preferences",
+  "Responsive layouts for common screen sizes",
+  "Readable light & dark themes",
 ];
-const TECH = ["NVDA", "JAWS", "VoiceOver", "TalkBack", "Narrator", "Orca"];
+const TECH = ["NVDA", "VoiceOver"];
 const LIMITS = [
-  { title: "Rich-text editor", body: "Some toolbar controls lack discoverable keyboard shortcuts." },
-  { title: "Embedded media", body: "User-uploaded videos may not yet include captions or transcripts." },
-  { title: "Legacy charts", body: "Older dashboard visualizations lack accessible data table fallbacks." },
+  { title: "Rich-text editor", body: "Some toolbar controls don't yet have keyboard shortcuts." },
 ];
 export default function Accessibility() {
   return (
@@ -62,8 +53,8 @@ export default function Accessibility() {
             Access<em>ibility</em>
           </h1>
           <p>
-            Nahidea is built to be usable by everyone. We treat accessibility not as a
-            compliance checkbox, but as the fundamental architecture of our interface.
+            We're working to make Nahidea usable for everyone. Accessibility is
+            something we're actively improving, not something we've fully solved.
           </p>
         </div>
       </div>
@@ -71,18 +62,15 @@ export default function Accessibility() {
         <Card className="span-8 a11y-commitment" delay={100}>
           <div className="a11y-commitment-body">
             <Eyebrow tone="brand">01 — Our Commitment</Eyebrow>
-            <h2>Inclusive by Default</h2>
+            <h2>Working Toward Inclusive Design</h2>
             <p>
-              Our goal is to ensure that everyone — regardless of ability, device, or
-              context — can read, write, and engage with content without barriers. We align
-              our design system with WCAG 2.1 AA standards and treat inclusive design as a
-              prerequisite to shipping, not an afterthought.
+              We want everyone to be able to read, write, and engage with content
+              on Nahidea. We're gradually improving our design to be more inclusive,
+              with WCAG guidelines as our reference point.
             </p>
           </div>
           <div className="a11y-tags">
-            <span className="a11y-tag brand">WCAG 2.1 AA</span>
-            <span className="a11y-tag">Verified 2026</span>
-            <span className="a11y-tag">Section 508 aligned</span>
+            <span className="a11y-tag brand">In Progress</span>
           </div>
         </Card>
         <Card className="span-4 dark" delay={150}>
@@ -98,13 +86,13 @@ export default function Accessibility() {
           </ul>
         </Card>
         <Card className="span-4" delay={200}>
-          <Eyebrow>03 — Assistive Tech</Eyebrow>
-          <h3>Compatibility</h3>
+          <Eyebrow>03 — Screen Readers</Eyebrow>
+          <h3>Basic Support</h3>
           <div className="a11y-tech-grid">
             {TECH.map((name) => <TechPill key={name} name={name} />)}
           </div>
           <p className="a11y-tech-note">
-            Tested on latest stable releases across macOS, Windows, iOS, Android, and Linux.
+            Basic testing done with common screen readers.
           </p>
         </Card>
         <Card className="span-8 secondary" delay={250}>
@@ -113,7 +101,6 @@ export default function Accessibility() {
               <Eyebrow>04 — Navigation</Eyebrow>
               <h3>Keyboard Shortcuts</h3>
             </div>
-            <span className="a11y-badge">Terminal Mode</span>
           </div>
           <div>
             {SHORTCUTS.map((s) => <ShortcutRow key={s.label} {...s} />)}
@@ -121,25 +108,18 @@ export default function Accessibility() {
         </Card>
         <Card className="span-6" delay={300}>
           <Eyebrow>05 — Future</Eyebrow>
-          <h3>Ongoing Roadmap</h3>
+          <h3>What We're Working On</h3>
           <p style={{ marginBottom: 24, fontSize: 14 }}>
-            We are currently refining focus indicators across complex data tables,
-            expanding alt-text coverage for user-generated media, and auditing color
-            contrast on legacy surfaces.
+            We're planning improvements to focus indicators and expanding alt-text
+            support for images over time.
           </p>
-          <div className="a11y-progress"><div className="a11y-progress-bar" /></div>
-          <div className="a11y-progress-meta">
-            <span>75% of Q1 roadmap complete</span>
-            <span>v2.4.0</span>
-          </div>
         </Card>
         <Card className="span-6 brand" delay={350}>
           <div id="feedback" />
           <Eyebrow tone="on-brand">06 — Help</Eyebrow>
           <h3>Found a barrier?</h3>
           <p>
-            If you experience any accessibility issue or need assistance using Nahidea, our
-            team will respond within 2 business days and prioritize remediation.
+            If something isn't accessible for you, let us know and we'll look into it.
           </p>
           <a href="mailto:support@nahidea.com">support@nahidea.com</a>
         </Card>
@@ -147,8 +127,7 @@ export default function Accessibility() {
           <Eyebrow>07 — Transparency</Eyebrow>
           <h3>Known Limitations</h3>
           <p style={{ marginBottom: 24, fontSize: 14, maxWidth: 720 }}>
-            We believe in being honest about gaps. The following areas are actively being
-            worked on and may not yet fully conform to WCAG 2.1 AA.
+            We're being upfront about what still needs work.
           </p>
           <ul className="a11y-limits">
             {LIMITS.map((item) => (
@@ -163,8 +142,7 @@ export default function Accessibility() {
       </div>
       <div className="a11y-footer">
         <div className="a11y-footer-note">
-          Nahidea Accessibility Statement. Built with intent. Conforms to WCAG 2.1 Level
-          AA standards. Last updated January 2026.
+          Nahidea Accessibility Statement. Last updated January 2026.
         </div>
         <div className="a11y-footer-status">
           <div className="a11y-status-dot" />

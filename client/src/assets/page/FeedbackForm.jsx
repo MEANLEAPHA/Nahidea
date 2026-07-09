@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import '../style/page/FeedbackForm.css';
-const token = localStorage.getItem('token');
+import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {FlagOutlined, StarOutlined, MessageOutlined, SmileOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 
@@ -34,15 +33,10 @@ export default function FeedbackForm() {
                 page_url: window.location.href
             };
 
-            // If no message/category, don't send empty strings
             if (!payload.message) delete payload.message;
             if (!payload.category) delete payload.category;
 
-            await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/feedback`, payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            await api.post(`/api/feedback`, payload);
             setSubmitStatus('success');
             // Reset form after 3 seconds
             setTimeout(() => {
@@ -163,6 +157,13 @@ export default function FeedbackForm() {
         );
     }
 
+   if(submitStatus === 'success'){
+    toast.success('Thank you! Your feedback has been recorded.');
+   }
+   if(submitStatus === 'error'){
+    toast.error('Something went wrong. Please try again.');
+   }
+
     // Follow-up / message step (applies to all feedback types)
     return (
         <div className="feedback-root">
@@ -212,17 +213,6 @@ export default function FeedbackForm() {
                         {isSubmitting ? 'Submitting...' : 'Send Feedback'}
                     </button>
                 </div>
-
-                {submitStatus === 'success' && (
-                    <div className="feedback-success">
-                        ✅ Thank you! Your feedback has been recorded.
-                    </div>
-                )}
-                {submitStatus === 'error' && (
-                    <div className="feedback-error">
-                        ❌ Something went wrong. Please try again later.
-                    </div>
-                )}
             </div>
         </div>
     );

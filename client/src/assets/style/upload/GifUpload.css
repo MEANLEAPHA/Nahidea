@@ -129,8 +129,8 @@
 
 .url-input button {
   width: 80px;
-  background: var(--primary-color);
-  color: #fff;
+  background: var(--back-con);
+  color: var(--font-color);
   border: none;
   padding: 0 1rem;
   border-radius: 0 8px 8px 0;
@@ -182,7 +182,7 @@
 /* ========== RESPONSIVE ========== */
 @media (max-width: 700px) {
   .gif-upload-container {
-    padding: 1.5rem;
+    padding: 10px 20px;
   }
 
   .gif-upload-header .p-head {

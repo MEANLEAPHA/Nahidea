@@ -3,7 +3,7 @@
 
 @media (min-width: 1024px) {
   .hof-root {
-    padding: 4rem;
+    padding: 20px 30px;
   }
 }
 
@@ -11,9 +11,7 @@
 .hof-header {
   max-width: 72rem;
   margin: 0 auto 4rem;
-
   display: flex;
-
   gap: 1.5rem;
   padding: 20px;
   align-items: center;

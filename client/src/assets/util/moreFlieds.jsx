@@ -317,7 +317,7 @@ const MemoEditor = memo(TiptapEditor);
  export const MoreFields = memo(({
   tags, setTags,
   mediaFiles, setMediaFiles,
-  isAnonymous, setIsAnonymous, tokens,
+  isAnonymous, setIsAnonymous, tokens, countdown,
   setTextBodyValue, textBodyValue
 }) => {
   const [selected, setSelected] = useState(1);
@@ -349,7 +349,7 @@ const MemoEditor = memo(TiptapEditor);
       </div>
       {selected === 2 && <MediaUploader maxFiles={5} value={mediaFiles} onChange={setMediaFiles}/>}
       {selected === 3 && <TagInput value={tags} onChange={setTags} />}
-      {selected === 4 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
+      {selected === 4 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens}  countdown={ countdown}/>}
       </div>
       </>
   );
@@ -378,7 +378,7 @@ export const MarkdownPreview = ({ content }) => {
  export const MoreFieldsCon = memo(({
   tags, setTags,
   setConAndQuesFileValue,
-  isAnonymous, setIsAnonymous, tokens,
+  isAnonymous, setIsAnonymous, tokens,countdown,
   conAndQuesFileValue, fileInputRef
 }) => {
   const [selected, setSelected] = useState(1);
@@ -451,7 +451,7 @@ export const MarkdownPreview = ({ content }) => {
           }
       </div>)}
       {selected === 2 && <TagInput value={tags} onChange={setTags} />}
-      {selected === 3 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
+      {selected === 3 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} countdown={countdown} />}
       </div>
       </>
   );
@@ -483,7 +483,7 @@ export const MarkdownPreview = ({ content }) => {
     </div>
       <div style={{ marginTop: "10px", color: "#555", fontSize: "14px", overflow: "hidden", width: "100%"}}>
       {selected === 1 && <TagInput value={tags} onChange={setTags} />}
-      {selected === 2 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} />}
+      {selected === 2 && <AnonymousToggle enabled={isAnonymous} setEnabled={setIsAnonymous} tokens={tokens} countdown={countdown}/>}
       </div>
       </>
   );

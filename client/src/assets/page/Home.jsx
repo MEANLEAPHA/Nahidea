@@ -537,8 +537,8 @@ setLikingPosts(prev => new Set(prev).add(postId));
         ...post,
         is_liked: !post.is_liked,
         likes_count: post.is_liked
-          ? post.likes_count - 1
-          : post.likes_count + 1
+          ? Number(post.likes_count) - 1
+          : Number(post.likes_count) + 1
       };
     })
   );
@@ -559,8 +559,8 @@ setLikingPosts(prev => new Set(prev).add(postId));
           ...post,
           is_liked: !post.is_liked,
           likes_count: post.is_liked
-            ? post.likes_count - 1
-            : post.likes_count + 1
+            ? Number(post.likes_count) - 1
+            : Number(post.likes_count) + 1
         };
       })
     );

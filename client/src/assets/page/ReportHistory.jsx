@@ -170,7 +170,7 @@ export default function ReportHistory() {
           {loading && <div className="report-loading">Loading reports...</div>}
           {error && <div className="report-error">{error}</div>}
           {!loading && !error && reports.length === 0 && (
-            <div className="report-empty">You haven't reported anything yet.</div>
+            <div className="report-empty" style={{ textAlign: "center", margin: "20px auto", color:'grey'}}>You haven't reported anything yet.</div>
           )}
           {!loading &&
             !error &&

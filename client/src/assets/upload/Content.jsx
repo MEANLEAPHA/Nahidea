@@ -42,12 +42,6 @@ const token = localStorage.getItem("token");
 
 // Content component start here
 export default function Content() {
-
-  // if(!token) {
-  //   window.location.href = "/"; 
-  //   // login form
-  // }
-
   const [loading, setLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
 
@@ -82,22 +76,22 @@ export default function Content() {
     setLoading(true);
 
     if (!title.trim()) {
-      toast.warning("Please enter content title");
+      toast("Please enter content title");
       setLoading(false);
       return;
     }
     if(!textBody.trim()) {
-      toast.warning("Please enter content body");
+      toast("Please enter content body");
       setLoading(false);
       return;
     }
     if(tags.length === 0 ) {
-      toast.warning("Please add some #hashtags");
+      toast("Please add some #hashtags");
       setLoading(false);
       return;
     }
     if(selectType === null) {
-      toast.warning("Please select content type");
+      toast("Please select content type");
       setLoading(false);
       return;
     }
@@ -113,16 +107,6 @@ export default function Content() {
       mediaFiles.forEach((f) => formData.append("contentFile", f));
 
     try {
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SERVER_URL}/api/create-posts`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
       const res = await api.post(`/api/create-posts`, formData, { headers: {"Content-Type": "multipart/form-data"}})
       if (res.status === 200 || res.status === 201) {
         toast.success("Post created");
@@ -144,7 +128,7 @@ export default function Content() {
 
     <div id="content-container">
       <article id='tool-article' className={openPreview ? "hidden" : "flex-container"}>
-        <AnonymousTokensCoolDown tokens={tokens} countdown={countdown} />
+   
         <form onSubmit={handleSubmit} id="content-form">
           <div id='form-header-label'>
             <p id="content-label">Create Content</p> 
@@ -199,6 +183,7 @@ export default function Content() {
             isAnonymous={isAnonymous}
             setIsAnonymous={setIsAnonymous}
             tokens={tokens}
+            countdown={countdown}
             textBodyValue={textBody}
             setTextBodyValue = {setTextBody}
           />

@@ -167,7 +167,8 @@ export function AnonymousProfile({ enabled, realPf }) {
 export function AnonymousToggle({
   enabled,
   setEnabled,
-  tokens
+  tokens,
+  countdown
 }) {
    const [visible, setVisible] = useState(enabled);
 
@@ -208,7 +209,7 @@ export function AnonymousToggle({
         You have <span>{tokens}</span> token{tokens !== 1 && "s"} remaining
       </>
     ) : (
-      <span className="no-token">No tokens left</span>
+      AnonymousTokensCoolDown({tokens, countdown})
     )}
   </p>
 
@@ -231,8 +232,6 @@ export function AnonymousTokensCoolDown({tokens, countdown}){
   return(
     <>
        {tokens === 0 && (<div>
-        <span>Tokens exhausted. Reset at midnight.</span>
-        <div>Remaining: {tokens}</div>
         <div>Time left: {formatSeconds(countdown)}</div>
       </div>)}
     </>

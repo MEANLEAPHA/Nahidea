@@ -43,8 +43,8 @@ export default function YourPosts() {
 
     try {
     setLoading(true);
-    
-    const res = await api.get(`/api/user/${user?.id}/posts?page=${page}`);
+
+    const res = await api.get(`/api/user/${user.id}/posts?page=${page}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
       setHasMore(res.data.hasMore);

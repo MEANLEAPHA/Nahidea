@@ -330,10 +330,10 @@ const Layout = () => {
           />
         </section>
       </main>
-      {!loading && (!token || !user) && <AuthRequiredModal />}
+      {/* {!loading && (!token || !user) && <AuthRequiredModal />}
       {!isBlockedByAuth && isBlockedByBan && (
         <BannedModal reason={banInfo.reason} bannedAt={banInfo.banned_at} />
-      )}
+      )} */}
     </>
   );
 
