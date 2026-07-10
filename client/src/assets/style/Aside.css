@@ -52,7 +52,7 @@ aside{
      /* Firefox - hidden by default */
     scrollbar-width: none;
 }
-
+chat-aside-badge
 .min-ul{
     justify-content: start;
 }
@@ -203,8 +203,8 @@ aside{
 .chat-aside-badge {
   position: absolute;
 
-  top: 50%;
-  right: 10px;
+  top: 12px!important;
+  right: 10px !important;
 
   min-width: 18px;
   height: 18px;

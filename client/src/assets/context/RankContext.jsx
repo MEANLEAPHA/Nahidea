@@ -1,21 +1,29 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import api from "../api/axiosInstance";
+import { useAuth } from "./AuthContext"; // adjust path to match your structure
+
 const RankingContext = createContext(null);
 
+const INITIAL_STATE = {
+  rank: null,
+  score: 0,
+  badgeTier: null,
+  loadings: true,
+  error: null,
+};
+
 export const RankingProvider = ({ children }) => {
-  const [ranking, setRanking] = useState({
-    rank: null,
-    score: 0,
-    badgeTier: null,
-    loadings: true,
-    error: null,
-  });
+  const { token, user } = useAuth(); // re-fetch whenever auth identity changes
+  const [ranking, setRanking] = useState(INITIAL_STATE);
+  const requestIdRef = useRef(0); // guard against out-of-order responses, same pattern as AuthContext
 
   const fetchMyRanking = useCallback(async () => {
+    const myRequestId = ++requestIdRef.current;
     try {
       setRanking((prev) => ({ ...prev, loadings: true, error: null }));
-      const {data} = await api.get(`/api/ranking/me`);
+      const { data } = await api.get(`/api/ranking/me`);
+
+      if (myRequestId !== requestIdRef.current) return; // a newer call superseded this one
 
       setRanking({
         rank: data.rank,
@@ -25,6 +33,7 @@ export const RankingProvider = ({ children }) => {
         error: null,
       });
     } catch (err) {
+      if (myRequestId !== requestIdRef.current) return;
       setRanking((prev) => ({
         ...prev,
         loadings: false,
@@ -34,8 +43,14 @@ export const RankingProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (!token || !user) {
+      // logged out — wipe any previous user's ranking immediately
+      requestIdRef.current++; // invalidate any in-flight request from the previous user
+      setRanking(INITIAL_STATE);
+      return;
+    }
     fetchMyRanking();
-  }, [fetchMyRanking]);
+  }, [token, user?.id, fetchMyRanking]); // refetch whenever the logged-in identity changes
 
   return (
     <RankingContext.Provider value={{ ...ranking, refresh: fetchMyRanking }}>
@@ -44,7 +59,6 @@ export const RankingProvider = ({ children }) => {
   );
 };
 
-// Usage anywhere: const { rank, badgeTier, score, loading } = useRanking();
 export const useRanking = () => {
   const ctx = useContext(RankingContext);
   if (!ctx) throw new Error("useRanking must be used within a RankingProvider");

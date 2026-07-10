@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     safeStorage.remove("token");
     safeStorage.remove("tokenExpiry");
+    sessionStorage.removeItem("profileUserId");
     authStore.setToken(null);
 
     if (logoutTimerRef.current) {

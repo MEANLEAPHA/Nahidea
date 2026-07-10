@@ -97,7 +97,6 @@ export default function Accounts() {
     const [isOwnProfile, setIsOwnProfile] = useState(false);
 
     useEffect(() => {
-
       if (state?.userId) {
         sessionStorage.setItem("profileUserId", state.userId);
       }
@@ -109,13 +108,28 @@ export default function Accounts() {
       fetchPosts(1, Number(targetId));
       setPage(1);
       fetchFollowStatus();
-      handleFetchProfile(targetId);
+      handleFetchProfile(targetId); // pass it through
     }, [state?.userId, user?.id]);
 
+    const handleFetchProfile = async (targetId) => {
+      if (!targetId) return;
 
-    const handleFetchProfile = async () => {
-      try{
-        const res = await api.get(`/api/get-user-info/${state?.userId}`);
+      // Reset immediately so a slow/failed fetch can never show the PREVIOUS profile's data
+      setUsernames("");
+      setUserId("");
+      setNicknames("");
+      setAvatar("");
+      setBanner("");
+      setWorkplace("");
+      setBios("");
+      setProfessions("");
+      setFollowings(0);
+      setFollowers(0);
+      setPostCount(0);
+      setJoinAt("");
+
+      try {
+        const res = await api.get(`/api/get-user-info/${targetId}`); // use the param, not state?.userId
 
         const data = res.data.userData;
         setUsernames(data.username);
@@ -128,14 +142,13 @@ export default function Accounts() {
         setProfessions(data.profession);
         setFollowings(data.following_count);
         setFollowers(data.followers_count);
-        setPostCount(data.post_count || 0); 
+        setPostCount(data.post_count || 0);
         setJoinAt(data.created_at);
-      }
-      catch (err) {
+      } catch (err) {
         console.error(err);
+        toast.error("Failed to load profile"); // surface it instead of silently failing
       }
     };
-
     useEffect(() => {
       const handleScroll = () => {
         if (

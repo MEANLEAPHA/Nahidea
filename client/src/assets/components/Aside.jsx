@@ -156,7 +156,7 @@ const MinInfo = [
     },
 ]
 
-const MinCard = ({a, icon, unreadCount}) => {
+const MinCard = ({a, icon, unreadCount, unreadSpam}) => {
     const navigate = useNavigate();
     return(
         <li className="nav-item">
@@ -164,6 +164,11 @@ const MinCard = ({a, icon, unreadCount}) => {
                 {unreadCount > 0 && (
                     <span className="chat-aside-badge">
                         {unreadCount}
+                    </span>
+                )}
+                {unreadSpam > 0 && (
+                    <span className="chat-aside-badge">
+                        {unreadSpam}
                     </span>
                 )}
                 {icon}
