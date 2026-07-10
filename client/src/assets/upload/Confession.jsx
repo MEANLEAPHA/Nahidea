@@ -21,7 +21,8 @@ import {AnimatedIcon} from "../util/upload/AnimatedIcon";
 import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, 
           FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled,
           SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
-          EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+          EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined,
+          LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Dropdown, Space, Skeleton, Menu, Switch  } from 'antd';
 
 // fontAwesome import
@@ -182,7 +183,7 @@ export default function Confession() {
        
             <div id="form-footer">
               <button type="submit" disabled={loading} id="content-post-button">
-                {loading ? "Confessing..." : "Confess"}
+                {loading ? <LoadingOutlined spin style={{ fontSize: 16 }} /> : "Confess"}
               </button>
             </div>
         

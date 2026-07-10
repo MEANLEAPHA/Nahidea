@@ -31,6 +31,8 @@ import {iconOptions} from "../data/post_type_data";
 import { MediaPreview } from "../util/mediaUploader";
 import DotDropDown from './util/dotDropDown';
 import Rule from "../util/upload/Rule";
+import { useRanking } from "../context/RankContext";
+import RankBadge from "../components/RankBadge";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
@@ -768,6 +770,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, postT
 const AboutPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { badgeTier, loadings} = useRanking();
 
   const { user } = useOutletContext();
   const { id } = useParams();
@@ -1393,7 +1396,7 @@ const AboutPost = () => {
                    onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null}
                    style= {{ cursor: post?.is_anonymous === 1 ? 'none' : 'pointer'}}
                 >
-                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} 
+                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} {!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
                   <div className='dot'></div>
                   <div className='category-post-div'>
                     <span className="post-type-label">{post?.data?.type}</span> 

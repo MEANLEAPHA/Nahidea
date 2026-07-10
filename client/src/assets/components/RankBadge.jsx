@@ -32,7 +32,7 @@ const DEFAULT_STYLE = {
 };
 
 const SIZE_MAP = {
-  sm: { icon: "0.85rem", pad: "3px" },
+  sm: { icon: "0.8rem", pad: "3px" },
   md: { icon: "1.1rem", pad: "4px" },
   lg: { icon: "1.4rem", pad: "6px" },
 };

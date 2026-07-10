@@ -13,6 +13,7 @@ import PreviewRadio from "../util/upload/PreviewRadio";
 import NahideaInfo from "../util/upload/NahideaInfo";
 import {AnimatedIcon} from "../util/upload/AnimatedIcon";
 
+
 // data import
 import { content_options } from "../data/post_type_data";
 
@@ -23,7 +24,8 @@ import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,
           SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined,
           QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
           EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,
-          AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+          AppstoreOutlined, MailOutlined, SettingOutlined,
+          LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 
 // fontAwesome import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -190,7 +192,7 @@ export default function Content() {
 
           <div id="form-footer">
               <button type="submit" disabled={loading} id="content-post-button">
-                    {loading ? "Posting..." : "Post"}
+                    {loading ? <LoadingOutlined spin style={{ fontSize: 16 }} /> : "Post"}
             </button>
           </div>
 

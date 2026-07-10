@@ -25,6 +25,8 @@ import RecentHistory from "../util/recentHistory";
 import parseJSON from './util/parseJson';
 import DotDropDown from "./util/dotDropDown";
 import Loader from "./util/loader";
+import { useRanking } from "../context/RankContext";
+import RankBadge from "../components/RankBadge";
 
 // style
 import "../style/page/Home.css";
@@ -49,6 +51,7 @@ export default function Home() {
 
   const navigate = useNavigate();
   const { onlineUsers } = useOutletContext();
+  const { badgeTier, loadings} = useRanking();
 
   // posts
   const [posts, setPosts] = useState([]);
@@ -664,7 +667,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                   style={{cursor: post.is_anonymous === 1 ? 'none' : 'pointer'}}
                                   onClick={Number(post.is_anonymous) !== 1 ? () => {navigate('/accounts', {state: {userId: post.user_id}})} : null}
                                 > 
-                                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} 
+                                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} {!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
                                 </span>
                                 <div className='dot'></div>
                                 <div className='category-post-div'>

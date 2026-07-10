@@ -18,6 +18,9 @@ import { MediaPreview } from "../util/mediaUploader";
 import parseJSON from "./util/parseJson";
 import DotDropDown from "./util/dotDropDown";
 import Loader from "./util/loader";
+import { useRanking } from "../context/RankContext";
+import RankBadge from "../components/RankBadge";
+
 
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import { iconOptions } from "../data/post_type_data";
@@ -33,7 +36,7 @@ const POST_LIMIT = 5;
 const SearchForm = () => {
   const navigate = useNavigate();
    const { user, onlineUsers } = useOutletContext();
-  
+    const { badgeTier, loadings} = useRanking();
 
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
@@ -493,7 +496,7 @@ const SearchForm = () => {
                         style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
                       />
                       <div className="dev-info">
-                        <p className="query-title">{u.username}</p>
+                        <p className="query-title">{u.username} {!loadings && <RankBadge rank={badgeTier} size="sm" />}</p>
                         {u.nickname && <p className="query-description">{u.nickname}</p>}
                       </div>
                     </li>
@@ -580,7 +583,7 @@ const SearchForm = () => {
                                       : null
                                   }
                                 >
-                                  {post.is_anonymous === 1 ? post.anonymous_name : post.username}
+                                  {post.is_anonymous === 1 ? post.anonymous_name : post.username} {!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
                                 </span>
                                 <div className="dot"></div>
                                 <div className="category-post-div">

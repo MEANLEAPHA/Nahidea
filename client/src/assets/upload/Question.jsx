@@ -34,7 +34,7 @@ import Rating from './questionType/Rating';
 import { Skeleton, Menu, Switch, Dropdown, Space  } from 'antd';
 import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined,ArrowLeftOutlined,AppstoreOutlined, MailOutlined, SettingOutlined,
          PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined,
-         LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined
+         LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, QuestionCircleOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined, LeftOutlined, LoadingOutlined
         } from '@ant-design/icons';
 
 
@@ -392,7 +392,7 @@ export default function Questiion(){
 
           <div id="form-footer">
             <button type="submit" disabled={loading} id="content-post-button">
-              {loading ? "Uploading..." : "Upload"}
+              {loading ? <LoadingOutlined spin style={{ fontSize: 16 }} /> : "Upload"}
             </button>
           </div>
 
