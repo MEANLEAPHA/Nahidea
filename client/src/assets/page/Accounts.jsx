@@ -623,7 +623,7 @@ export default function Accounts() {
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
-                        {usernames || user?.username || "N/A"} {!loadings && <RankBadge rank={badgeTier} size="sm" />}
+                        {usernames || user?.username || "N/A"}{!loadings && <RankBadge rank={badgeTier} size="sm" />}
                     </p>
                     <p id='user-profession-pf'>{professions || user?.profession || "N/A"} at {workplace || user?.work_location || "N/A"}</p>
                 </div>

@@ -583,7 +583,7 @@ const SearchForm = () => {
                                       : null
                                   }
                                 >
-                                  {post.is_anonymous === 1 ? post.anonymous_name : post.username} {!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
+                                  {post.is_anonymous === 1 ? post.anonymous_name : post.username}{!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
                                 </span>
                                 <div className="dot"></div>
                                 <div className="category-post-div">

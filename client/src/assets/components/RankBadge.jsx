@@ -32,18 +32,11 @@ const DEFAULT_STYLE = {
 };
 
 const SIZE_MAP = {
-  sm: { icon: "0.8rem", pad: "3px" },
+  sm: { icon: "0.78rem", pad: "3px" },
   md: { icon: "1.1rem", pad: "4px" },
   lg: { icon: "1.4rem", pad: "6px" },
 };
 
-/**
- * RankBadge — shows a medal icon next to a username for top-10 ranked users.
- * Returns null for rank > 10 or no rank, so it's safe to render unconditionally.
- *
- * Usage:
- *   <RankBadge rank={badgeTier} size="md" />
- */
 const RankBadge = ({ rank, size = "sm", showTooltip = true }) => {
   if (!rank || rank > 10) return null;
 

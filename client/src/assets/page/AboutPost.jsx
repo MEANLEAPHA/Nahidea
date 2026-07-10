@@ -1396,7 +1396,7 @@ const AboutPost = () => {
                    onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null}
                    style= {{ cursor: post?.is_anonymous === 1 ? 'none' : 'pointer'}}
                 >
-                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username} {!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
+                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username}{!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
                   <div className='dot'></div>
                   <div className='category-post-div'>
                     <span className="post-type-label">{post?.data?.type}</span> 
