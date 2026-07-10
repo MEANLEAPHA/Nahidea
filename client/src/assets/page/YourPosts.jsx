@@ -132,7 +132,7 @@ export default function YourPosts() {
   );
 
   return (
-    <div className="history-page" onClick={() => navigate(`/aboutpost/${item.id}`)}>
+    <div className="history-page" >
 
       <div className="history-header">
           <h3 className='history-title'><FontAwesomeIcon icon={faNewspaper} /> Your Posts</h3>
