@@ -16,6 +16,7 @@ import {
 } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faNewspaper, faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faPen} from "@fortawesome/free-solid-svg-icons";
 import "../style/page/YourPosts.css";
 
 export default function YourPosts() {
@@ -39,6 +40,8 @@ export default function YourPosts() {
       // --- Normalize: backend nests type-specific fields inside `data` ---
       const normalized = (res.data.data || []).map((post) => ({
         ...post,
+        contentId: post.data?.id ?? null,
+        test_body: post.data?.test_body ?? null,
         title: post.data?.title ?? "",
         media_url: post.data?.media_url ?? null,
         // status comes back as "'open'" (literal quotes baked in from SQL) — strip them
@@ -83,6 +86,10 @@ export default function YourPosts() {
   }, [loading, hasMore]);
 
   const handleSolved = async (postId) => {
+    const confirmed = window.confirm(
+      "By marking this post as solved, Which mean the your question is solved."
+    );
+    if (!confirmed) return;
     try {
       await api.patch(`/api/posts/${postId}/solve`, {});
 
@@ -200,6 +207,12 @@ export default function YourPosts() {
                       <HeartOutlined />
                       {post.likes_count}
                     </span>
+                    {post.post_type === "question" && (
+                      <span>
+                       <FontAwesomeIcon icon={faPen} />
+                        {post.answers_count}
+                      </span>
+                    )}
                     <span>
                       <FontAwesomeIcon icon={faMessage} />
                       {post.comments_count}
@@ -213,8 +226,8 @@ export default function YourPosts() {
                       className="edit-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate("/edit/content", {
-                          state: { postId: post.id },
+                         navigate("/edit/content", {
+                          state: { postId:  post.id, contentId: post.contentId, bodyText: post.text_body, mode: "edit" },
                         });
                       }}
                     >
@@ -237,6 +250,12 @@ export default function YourPosts() {
                           handleSolved(post.id);
                         }
                       }}
+                    style={
+                          post.question_status === "solved" 
+                            ? { background: "#E2F0D9", color: "#385723" } // Soft Pastel Green
+                            : { background: "#FFF2CC", color: "#7F6000" } // Soft Pastel Yellow
+                        }
+
                     >
                       <CheckCircleOutlined />
                       {post.question_status === "solved"
