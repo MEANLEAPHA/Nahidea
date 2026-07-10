@@ -93,6 +93,9 @@ export default function Accounts() {
     const [followers, setFollowers] = useState(0);
     const [postCount, setPostCount] = useState(0);
     const [joinAt, setJoinAt] = useState("");
+    const [profRank, setProfRank] = useState(null);
+    const [profScore, setProfScore] = useState(0);
+    const [profBadgeTier, setProfBadgeTier] = useState(null);
 
     const [isOwnProfile, setIsOwnProfile] = useState(false);
 
@@ -127,6 +130,10 @@ export default function Accounts() {
       setFollowers(0);
       setPostCount(0);
       setJoinAt("");
+      setProfRank(null);      // reset rank too, same reasoning as the other fields
+      setProfScore(0);
+      setProfBadgeTier(null);
+      
 
       try {
         const res = await api.get(`/api/get-user-info/${targetId}`); // use the param, not state?.userId
@@ -144,6 +151,9 @@ export default function Accounts() {
         setFollowers(data.followers_count);
         setPostCount(data.post_count || 0);
         setJoinAt(data.created_at);
+        setProfRank(data.rank);
+        setProfScore(data.score);
+        setProfBadgeTier(data.badgeTier);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load profile"); // surface it instead of silently failing
@@ -636,7 +646,7 @@ export default function Accounts() {
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
-                        {usernames || user?.username || "N/A"}{!loadings && <RankBadge rank={badgeTier} size="sm" />}
+                        {usernames || user?.username || "N/A"}{ isOwnProfile && !loadings && <RankBadge rank={badgeTier} size="sm" />}{profBadgeTier && <RankBadge rank={profBadgeTier} size="sm" />}
                     </p>
                     <p id='user-profession-pf'>{professions || user?.profession || "N/A"} at {workplace || user?.work_location || "N/A"}</p>
                 </div>
@@ -644,7 +654,7 @@ export default function Accounts() {
             <div className='acc-pf-info-child acc-pf-info-child-right'>
                 <div style={{display:'flex', gap:'8px', alignItems: 'center'}}>
                   {
-                    !isOwnProfile && (
+                    !isOwnProfile && followState && (
                     <button className='pf-act-btn' type="button" disabled style={{background: 'none', border:'none', fontFamily: 'monospace'}} >
                       {followState === "following" ? 'Following' : followState === 'mutual' ? 'Friends' : null}
                     </button>
@@ -666,7 +676,7 @@ export default function Accounts() {
                       <button className='pf-act-btn' type="button" 
                        onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: userId || state?.userId}}})}
                        >
-                      <img src={gossiperlogo} className='sub-icon sub-icon-logo'/> <span className='label-brand'>Gossip</span></button>
+                      <img src={gossiperlogo} className='sub-icon sub-icon-logo' style={{width: '25px'}}/> <span className='label-brand'>Gossip</span></button>
                     )
                   }
                    {
@@ -677,7 +687,7 @@ export default function Accounts() {
                           id: userId || state?.userId,
                           avatar: avatar
                         }
-                      })}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> <span className='label-brand'>Send Spammy</span></button>
+                      })}><FontAwesomeIcon icon={faTriangleExclamation} fade style={{color: "rgb(255, 212, 59)",}} className='sub-icon'/> <span className='label-brand'>Spammy</span></button>
                       )
                    } 
                   {
@@ -941,7 +951,15 @@ export default function Accounts() {
           </div>
              
             <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
-            <p id='join-at'>  <FontAwesomeIcon icon={faRankingStar} /> Rank: {rank}, Score: {score} </p>
+            
+            {
+              isOwnProfile ? 
+              <p id='join-at'>  <FontAwesomeIcon icon={faRankingStar} /> Rank: {rank}, Score: {score} </p>
+              :
+              <p id='join-at'>
+                <FontAwesomeIcon icon={faRankingStar} /> Rank: {profRank ?? "Unranked"}, Score: {profScore}
+              </p>
+            }
             <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
           <FriendList targetUsername={usernames} tagetUserId={state?.userId || user?.id}/>

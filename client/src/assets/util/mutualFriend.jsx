@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-const token = localStorage.getItem("token");
+import api from "../api/axiosInstance"
+
 const MutualFriend = ({ onlineUsers }) => {
   const [friends, setFriends] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchMutualFriends = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-mutuals`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const res = await api.get(
+          `/api/get-mutuals`
         );
         setFriends(res.data.data);
       } catch (err) {
