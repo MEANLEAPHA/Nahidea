@@ -34,7 +34,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
-
+import { useRanking } from "../context/RankContext";
+import RankBadge from "../components/RankBadge";
 
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
