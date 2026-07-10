@@ -41,7 +41,7 @@ export default function YourPosts() {
       const normalized = (res.data.data || []).map((post) => ({
         ...post,
         contentId: post.data?.id ?? null,
-        test_body: post.data?.test_body ?? null,
+        text_body: post.data?.text_body ?? null,
         title: post.data?.title ?? "",
         media_url: post.data?.media_url ?? null,
         // status comes back as "'open'" (literal quotes baked in from SQL) — strip them
