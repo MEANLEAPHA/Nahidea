@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {AuthProvider} from "./assets/context/AuthContext.jsx";
 import {NotificationProvider} from "./assets/context/NotificationContext.jsx";
+import {RankingProvider} from "./assets/context/RankContext.jsx";
 import App from './App.jsx'
 
 
@@ -12,7 +13,9 @@ root.render(
   <StrictMode>
     <AuthProvider>
       <NotificationProvider>
-        <App />
+        <RankingProvider>
+          <App />
+        </RankingProvider>
       </NotificationProvider>
     </AuthProvider>
   </StrictMode>

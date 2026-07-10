@@ -17,7 +17,7 @@ import{SignatureOutlined, FolderOpenOutlined} from '@ant-design/icons';
 
 // fontAwesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faQuoteLeft, faQuoteRight, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import { faPen, faQuoteLeft, faQuoteRight, faRankingStar, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import { faCircleDot,faEllipsisVertical, faRetweet} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faCircle, faCopy, faFlag, faHeart, faMessage, faPenToSquare, faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown, faThumbsUp,  faHandPointer, faHandPeace, faHand, faLocationCrosshairs, faStar} from "@fortawesome/free-solid-svg-icons";
@@ -56,6 +56,7 @@ import api from "../api/axiosInstance";
 export default function Accounts() {
     const { state } = useLocation(); 
     const navigate = useNavigate();
+    const { badgeTier, rank, loadings, score } = useRanking();
 
     const { user, onlineUsers } = useOutletContext();
 
@@ -95,19 +96,12 @@ export default function Accounts() {
     const [isOwnProfile, setIsOwnProfile] = useState(false);
 
     useEffect(() => {
-      // if state.userId exists, store it
+
       if (state?.userId) {
         sessionStorage.setItem("profileUserId", state.userId);
       }
 
-      // fallback: use session value if state is missing
       const targetId = state?.userId || sessionStorage.getItem("profileUserId") || user?.id;
-
-      // if (!targetId) {
-        
-      //   navigate(-1);
-      //   return;
-      // }
 
       setIsOwnProfile(String(targetId) === String(user?.id));
 
@@ -628,7 +622,7 @@ export default function Accounts() {
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
-                        {usernames || user?.username || "N/A"}
+                        {usernames || user?.username || "N/A"} {!loadings && <RankBadge rank={badgeTier} size="md" />}
                     </p>
                     <p id='user-profession-pf'>{professions || user?.profession || "N/A"} at {workplace || user?.work_location || "N/A"}</p>
                 </div>
@@ -933,6 +927,7 @@ export default function Accounts() {
           </div>
              
             <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
+            <p id='join-at'>  <FontAwesomeIcon icon={faRankingStar} /> Rank: {rank}, Score: {score} </p>
             <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
           <FriendList targetUsername={usernames} tagetUserId={state?.userId || user?.id}/>
@@ -1063,7 +1058,6 @@ const FriendList = ({targetUsername, tagetUserId}) => {
 };
 
 let scriptLoaded = false;
-
 function DisplayAnimatedIcon({ src, isHovered }) {
   const [isValid, setIsValid] = useState(false);
   const [iconLoaded, setIconLoaded] = useState(false);

@@ -282,14 +282,6 @@ const Layout = () => {
       document.body.style.overflow = isBlocked ? "hidden" : "";
   }, [loading, token, user]);
   
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (!token || !user) {
-  //   return <Navigate to="/login" replace />;
-  // }
-
     // inside Layout
   const banInfo = useBanStatus(token);
 

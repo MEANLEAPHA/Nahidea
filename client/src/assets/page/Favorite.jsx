@@ -6,7 +6,8 @@ import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
-
+// img
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
 
 import api from "../api/axiosInstance";
 
