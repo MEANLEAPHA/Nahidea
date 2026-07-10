@@ -308,9 +308,10 @@ const Layout = () => {
                   },
                }}
       />
-      <main aria-hidden={isBlocked} style={{ position: "relative",   pointerEvents: isBlocked ? "none" : "auto",
+      {/* <main aria-hidden={isBlocked} style={{ position: "relative",   pointerEvents: isBlocked ? "none" : "auto",
                     filter: isBlocked ? "blur(4px)" : "none",
-                    userSelect: isBlocked ? "none" : "auto",}}>
+                    userSelect: isBlocked ? "none" : "auto",}}> */}
+                    <main>
         <Aside append={showMaxAside} />
         <section>
           <Outlet

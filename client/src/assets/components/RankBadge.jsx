@@ -44,7 +44,7 @@ const SIZE_MAP = {
  * Usage:
  *   <RankBadge rank={badgeTier} size="md" />
  */
-const RankBadge = ({ rank, size = "md", showTooltip = true }) => {
+const RankBadge = ({ rank, size = "sm", showTooltip = true }) => {
   if (!rank || rank > 10) return null;
 
   const style = TIER_STYLES[rank] || DEFAULT_STYLE;

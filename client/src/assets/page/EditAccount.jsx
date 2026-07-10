@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import api from "../api/axiosInstance";
+import  toast from "react-hot-toast";
 import { Save, Check, RotateCw, Plus, ArrowLeft } from "lucide-react";
 import "../style/Authentication/SetUpAccount.css";
 
@@ -71,6 +71,8 @@ const EditAccount = () => {
     useState(false);
   const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [avatar, setAvatar] = useState(
     "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
   );
@@ -122,11 +124,11 @@ const EditAccount = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setIsSubmitting(true);
 
   try {
     const formData = new FormData();
-   
-    // Text fields
+
     formData.append('profession', profession);
     formData.append('location', location);
     formData.append('nickname', nickname);
@@ -134,53 +136,42 @@ const handleSubmit = async (e) => {
     formData.append('email', email);
     formData.append('bio', bio);
     formData.append('avatarType', avatarType);
-    
-    // Avatar
+
     if (avatarType === 'file' && avatarFile) {
       formData.append('avatar', avatarFile);
     } else {
       formData.append('avatar', avatar);
     }
-    
-    // Banner - just the file if it exists
+
     if (bannerFile) {
       formData.append('banner', bannerFile);
     }
 
-    const res = await axios.put(
-      `${import.meta.env.VITE_SERVER_URL}/api/update-user`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+    const res = await api.put(`/api/update-user`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-    if(res.status === 409){
-      toast.warning('Nickname already exists! Please try new one.');
+    if (res.status === 409) {
+      toast.error('Nickname already exists! Please try new one.');
     }
 
     if (res.status === 200) {
-      toast.success('Edit successful!');
+      toast.success('Edit Account Successful!');
       setTimeout(() => {
         navigate("/accounts", {
-            state: {
-                userId: userId
-            }
+          state: { userId: userId },
         });
       }, 500);
     }
   } catch (err) {
     console.log(err);
+    toast.error("Something went wrong. Please try again.");
+  } finally {
+    setIsSubmitting(false);
   }
 };
   return (
     <div className="setup-page">
-
-      <div className='toast-feedback'>
-        <ToastContainer position="top-right" autoClose={2000}/>
-      </div>
 
       {/* AVATAR STUDIO */}
       {showAvatarStudio && (
@@ -397,8 +388,13 @@ const handleSubmit = async (e) => {
                 type="submit"
                 className="submit-btns"
                 title="Enter to complete setup"
+                disabled={isSubmitting}
               >
-                <span>Finish Edit</span>
+                {isSubmitting ? (
+                  <LoadingOutlined spin style={{ fontSize: 16 }} />
+                ) : (
+                  <span>Finish Edit</span>
+                )}
               </button>
             </form>
           </div>
