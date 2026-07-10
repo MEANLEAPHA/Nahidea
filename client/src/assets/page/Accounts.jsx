@@ -646,7 +646,7 @@ export default function Accounts() {
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
-                        {usernames || user?.username || "N/A"}{ isOwnProfile && !loadings && <RankBadge rank={badgeTier} size="sm" />}{profBadgeTier && <RankBadge rank={profBadgeTier} size="sm" />}
+                      {usernames || user?.username || "N/A"}{ isOwnProfile && !loadings && <RankBadge rank={badgeTier} size="sm" />}{ isOwnProfile === false && profBadgeTier && <RankBadge rank={profBadgeTier} size="sm" />}
                     </p>
                     <p id='user-profession-pf'>{professions || user?.profession || "N/A"} at {workplace || user?.work_location || "N/A"}</p>
                 </div>
@@ -654,7 +654,7 @@ export default function Accounts() {
             <div className='acc-pf-info-child acc-pf-info-child-right'>
                 <div style={{display:'flex', gap:'8px', alignItems: 'center'}}>
                   {
-                    !isOwnProfile && followState && (
+                    !isOwnProfile && !followState && followState !== "Follow Back" && (
                     <button className='pf-act-btn' type="button" disabled style={{background: 'none', border:'none', fontFamily: 'monospace'}} >
                       {followState === "following" ? 'Following' : followState === 'mutual' ? 'Friends' : null}
                     </button>
@@ -676,7 +676,7 @@ export default function Accounts() {
                       <button className='pf-act-btn' type="button" 
                        onClick={() => navigate('/chat', {state:{selected: followState === "mutual" ? 1 : 2, activeChat: {avatar_url: avatar, username: usernames, id: userId || state?.userId}}})}
                        >
-                      <img src={gossiperlogo} className='sub-icon sub-icon-logo' style={{width: '25px'}}/> <span className='label-brand'>Gossip</span></button>
+                      <img src={gossiperlogo} className='sub-icon-logo' style={{width: '25px'}}/> <span className='label-brand'>Gossip</span></button>
                     )
                   }
                    {
@@ -1027,7 +1027,7 @@ const FriendList = ({targetUsername, tagetUserId}) => {
 
       const res = await api.get(`/api/get-friends-by-id/${targetUserId}`);
       
-      if (res.data.success) {
+      if (res.data) {
         setFriendList(res.data.data || []);
       }
     } catch (err) {

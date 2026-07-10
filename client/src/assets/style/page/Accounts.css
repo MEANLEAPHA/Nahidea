@@ -136,8 +136,9 @@
 }
 .pf-act-btn{
     cursor: pointer;
-    margin-top: 35px;
+    margin-top: 30px;
     padding: 8px 15px;
+    height: 35px !important;
     height: auto;
     display: flex;
     align-items: center;
@@ -195,6 +196,12 @@
     font-weight: 400;
     cursor: pointer;
 }
+.sub-icon-logo{
+    width: 22px;
+    height: 22px;
+    margin: 0;
+}
+
 #data-full-info{
    
     border-radius: 10px;
