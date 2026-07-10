@@ -45,7 +45,6 @@ export default function YourPosts() {
     const res = await api.get(`/api/user/yourposts?page=${page}`);
       setPosts(prev => [...prev, ...res.data.data]);
 
-      console.log(user?.id);
       setHasMore(res.data.hasMore);
 
       setPage(prev => prev + 1);
