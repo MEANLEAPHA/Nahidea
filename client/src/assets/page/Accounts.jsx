@@ -137,7 +137,7 @@ export default function Accounts() {
         setNicknames(data.nickname);
         setAvatar(data.avatar_url);
         setBanner(data.banner_url);
-        setWorkplace(data.work_location);
+        setWorkplace(data.work_place);
         setBios(data.bio);
         setProfessions(data.profession);
         setFollowings(data.following_count);
