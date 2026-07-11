@@ -7,6 +7,7 @@ import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-desig
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import api from '../services/api';
+import { sameId } from '../page/util/sameId';
 import {
   connectSocket,
   disconnectSocket,
@@ -147,18 +148,15 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     };
 
     const handleMessagesSeen = ({ conversationId: seenConvId }) => {
-    const currentConvId = Number(conversationId);
-    const eventConvId = Number(seenConvId);
-
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.sender_id === user.id &&
-        Number(msg.conversation_id) === eventConvId
-          ? { ...msg, status: "seen" }
-          : msg
-      )
-    );
-  };
+      const eventConvId = Number(seenConvId);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          sameId(msg.sender_id, user.id) && Number(msg.conversation_id) === eventConvId
+            ? { ...msg, status: "seen" }
+            : msg
+        )
+      );
+    };
     const handleMessageEdited = (updatedMsg) => {
       setMessages((prev) =>
         prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m))

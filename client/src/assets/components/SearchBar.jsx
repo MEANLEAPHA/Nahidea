@@ -13,8 +13,7 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 let debounceTimer = null;
 
-// Splits a suggestion string around the typed query (case-insensitive) and
-// wraps the matching part so it can be styled with the primary color.
+
 const highlightMatch = (text, query) => {
   if (!query) return text;
 

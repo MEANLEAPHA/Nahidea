@@ -1,5 +1,3 @@
-
-
 import React, { useEffect } from 'react';
 import { EnterOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +5,7 @@ import { faCheck, faCheckDouble } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, Popconfirm, message, Spin } from 'antd';
 import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { faPenToSquare, faTrashCan, faShareFromSquare } from '@fortawesome/free-regular-svg-icons';
+import { sameId } from '../page/util/sameId';
 
 const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, onDeleteMessage, onReportMessage, scrollToBottomRef, loadingHistoryRef }) => {
   const getStatusIcon = (status) => {
@@ -34,7 +33,7 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
   return (
     <>
       {messages.map((msg) => {
-        const isMe = msg.sender_id === currentUserId;
+        const isMe = sameId(msg.sender_id, currentUserId);
         const isDeleted = msg.deleted_by_sender === 1;
         if (msg.deleted_by_sender && msg.deleted_by_recipient) return null;
 

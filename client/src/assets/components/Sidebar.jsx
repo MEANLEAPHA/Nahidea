@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext, useLocation } from 'react-router-dom';
 import { Avatar, Badge, Typography, Input, message } from 'antd';
 import { Divider, Dropdown, Space } from 'antd';
-
+import { sameId } from '../page/util/sameId';
 import {MenuOutlined,LeftOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, FormOutlined, SoundOutlined, LogoutOutlined, MoonFilled, SunFilled, ExceptionOutlined, SettingOutlined, PlusSquareOutlined, SunOutlined, MoonOutlined,
         HomeOutlined,SignatureOutlined,BarChartOutlined,ClockCircleOutlined,HeartOutlined, RiseOutlined, FireOutlined, QuestionCircleOutlined, FlagOutlined, ReadOutlined, FileProtectOutlined,FileDoneOutlined, 
 } from '@ant-design/icons';
@@ -218,10 +218,9 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
 
   const handleSelectChat = (chatUser) => {
     setActiveChat(chatUser);
-    // Immediately clear unread badge locally (optimistic)
     setUsers(prev =>
       prev.map(u =>
-        u.id === chatUser.id ? { ...u, unread_count: 0 } : u
+        sameId(u.id, chatUser.id) ? { ...u, unread_count: 0 } : u
       )
     );
   };
