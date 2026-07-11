@@ -21,7 +21,6 @@
 }
 
 
-
 #side-bar-gossip{
   width: 45%;
   height: 100vh ;
@@ -279,12 +278,14 @@ padding: 0 !important;
 }
 .btn-restore-chat{
   font-size: small;
-  background:var(--back-con);
-   padding: 5px 10px;
+  background:var(--back-con) !important;
+   padding: 5px 10px !important;
+   width: auto !important;
   border-radius: 8px;
   color: var(--font-color);
   cursor: pointer;
   border: none;
+
   opacity: 0.9;
 }
 .btn-restore-chat:hover{

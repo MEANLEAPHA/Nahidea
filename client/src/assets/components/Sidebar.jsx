@@ -209,9 +209,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
     );
   };
 
-  // =========================================
-    // THEME
-    // =========================================
     const [darkMode, setDarkMode] = useState(() => {
       return localStorage.getItem("darkMode") === "true";
     });
