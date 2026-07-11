@@ -34,8 +34,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // util
 import {MediaPreview} from "../util/mediaUploader";
-import { useRanking } from "../context/RankContext";
+
 import RankBadge from "../components/RankBadge";
+import { useUserRanking } from "../util/useUserRanking";
+
 
 import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
@@ -57,9 +59,13 @@ import api from "../api/axiosInstance";
 export default function Accounts() {
     const { state } = useLocation(); 
     const navigate = useNavigate();
-    const { badgeTier, rank, loadings, score } = useRanking();
+ 
+    
 
     const { user, onlineUsers } = useOutletContext();
+
+    const targetId = state?.userId || sessionStorage.getItem("profileUserId") || user?.id;
+    const { rank, score, badgeTier, loadings: rankLoading } = useUserRanking(targetId);
 
     // follow
     const [followState, setFollowState] =useState("follow");
@@ -93,9 +99,7 @@ export default function Accounts() {
     const [followers, setFollowers] = useState(0);
     const [postCount, setPostCount] = useState(0);
     const [joinAt, setJoinAt] = useState("");
-    const [profRank, setProfRank] = useState(null);
-    const [profScore, setProfScore] = useState(0);
-    const [profBadgeTier, setProfBadgeTier] = useState(null);
+ 
 
     const [isOwnProfile, setIsOwnProfile] = useState(false);
 
@@ -130,9 +134,6 @@ export default function Accounts() {
       setFollowers(0);
       setPostCount(0);
       setJoinAt("");
-      setProfRank(null);      // reset rank too, same reasoning as the other fields
-      setProfScore(0);
-      setProfBadgeTier(null);
       
 
       try {
@@ -151,9 +152,6 @@ export default function Accounts() {
         setFollowers(data.followers_count);
         setPostCount(data.post_count || 0);
         setJoinAt(data.created_at);
-        setProfRank(data.rank);
-        setProfScore(data.score);
-        setProfBadgeTier(data.badgeTier);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load profile"); // surface it instead of silently failing
@@ -646,7 +644,8 @@ export default function Accounts() {
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
-                      {usernames || user?.username || "N/A"}{ isOwnProfile && !loadings && <RankBadge rank={badgeTier} size="sm" />}{ isOwnProfile === false && profBadgeTier && <RankBadge rank={profBadgeTier} size="sm" />}
+                      {usernames || user?.username || "N/A"}
+                      {!rankLoading && badgeTier && <RankBadge rank={badgeTier} size="sm" />}
                     </p>
                     <p id='user-profession-pf'>{professions || user?.profession || "N/A"} at {workplace || user?.work_location || "N/A"}</p>
                 </div>
@@ -654,7 +653,7 @@ export default function Accounts() {
             <div className='acc-pf-info-child acc-pf-info-child-right'>
                 <div style={{display:'flex', gap:'8px', alignItems: 'center'}}>
                   {
-                    !isOwnProfile && !followState && followState !== "Follow Back" && (
+                    !isOwnProfile && !followState && followState !== "follows_you" && (
                     <button className='pf-act-btn' type="button" disabled style={{background: 'none', border:'none', fontFamily: 'monospace'}} >
                       {followState === "following" ? 'Following' : followState === 'mutual' ? 'Friends' : null}
                     </button>
@@ -952,14 +951,9 @@ export default function Accounts() {
              
             <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
             
-            {
-              isOwnProfile ? 
-              <p id='join-at'>  <FontAwesomeIcon icon={faRankingStar} /> Rank: {rank}, Score: {score} </p>
-              :
-              <p id='join-at'>
-                <FontAwesomeIcon icon={faRankingStar} /> Rank: {profRank ?? "Unranked"}, Score: {profScore}
-              </p>
-            }
+            <p id='join-at'>
+              <FontAwesomeIcon icon={faRankingStar} /> Rank: {rank ?? "Unranked"}, Score: {score}
+            </p>
             <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
           <FriendList targetUsername={usernames} tagetUserId={state?.userId || user?.id}/>

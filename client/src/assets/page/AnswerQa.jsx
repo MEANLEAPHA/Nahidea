@@ -402,7 +402,7 @@ const AnswerQa = () => {
       if(res.status === 200) {
         const resData = res.data;
           toast.success("Answer submitted!");
-          navigate(`/aboutpost/${postId}#answers-${answer_id}`);
+          navigate(`/aboutpost/${postId}#answers-${resData.answer_id}`);
       }
     
     } catch (err) {
