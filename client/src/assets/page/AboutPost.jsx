@@ -31,7 +31,7 @@ import {iconOptions} from "../data/post_type_data";
 import { MediaPreview } from "../util/mediaUploader";
 import DotDropDown from './util/dotDropDown';
 import Rule from "../util/upload/Rule";
-import { useRanking } from "../context/RankContext";
+import { useUserRanking } from "./util/useUserRanking";
 import RankBadge from "../components/RankBadge";
 
 // img
@@ -770,7 +770,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, postT
 const AboutPost = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { badgeTier, loadings} = useRanking();
+
 
   const { user } = useOutletContext();
   const { id } = useParams();
@@ -1393,10 +1393,14 @@ const AboutPost = () => {
 
               <div className='user-post-info'>
                 <p className='post-username' 
-                   onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null}
-                   style= {{ cursor: post?.is_anonymous === 1 ? 'none' : 'pointer'}}
                 >
-                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username}{!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
+                   <span 
+                                  style={{cursor: post.is_anonymous === 1 ? 'none' : 'pointer'}}
+                                  onClick={Number(post.is_anonymous) !== 1 ? () => {navigate('/accounts', {state: {userId: post.user_id}})} : null}
+                                > 
+                                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username}
+                                  <PostAuthorBadge userId={post.user_id} isAnonymous={post.is_anonymous === 1} />
+                                </span>
                   <div className='dot'></div>
                   <div className='category-post-div'>
                     <span className="post-type-label">{post?.data?.type}</span> 
@@ -1783,3 +1787,11 @@ const AboutPost = () => {
 };
 
 export default AboutPost;
+
+function PostAuthorBadge({ userId, isAnonymous }) {
+  const { badgeTier, loadings } = useUserRanking(isAnonymous ? null : userId);
+
+  if (isAnonymous || loadings || !badgeTier) return null;
+
+  return <RankBadge rank={badgeTier} size="sm" />;
+}

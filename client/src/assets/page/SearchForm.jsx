@@ -18,7 +18,7 @@ import { MediaPreview } from "../util/mediaUploader";
 import parseJSON from "./util/parseJson";
 import DotDropDown from "./util/dotDropDown";
 import Loader from "./util/loader";
-import { useRanking } from "../context/RankContext";
+import { useUserRanking } from "./util/useUserRanking";
 import RankBadge from "../components/RankBadge";
 
 
@@ -36,7 +36,6 @@ const POST_LIMIT = 5;
 const SearchForm = () => {
   const navigate = useNavigate();
    const { user, onlineUsers } = useOutletContext();
-    const { badgeTier, loadings} = useRanking();
 
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
@@ -583,7 +582,8 @@ const SearchForm = () => {
                                       : null
                                   }
                                 >
-                                  {post.is_anonymous === 1 ? post.anonymous_name : post.username}{!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
+                                  {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username}
+                                  <PostAuthorBadge userId={post.user_id} isAnonymous={post.is_anonymous === 1} />
                                 </span>
                                 <div className="dot"></div>
                                 <div className="category-post-div">
@@ -747,3 +747,10 @@ const SearchForm = () => {
 };
 
 export default SearchForm;
+function PostAuthorBadge({ userId, isAnonymous }) {
+  const { badgeTier, loadings } = useUserRanking(isAnonymous ? null : userId);
+
+  if (isAnonymous || loadings || !badgeTier) return null;
+
+  return <RankBadge rank={badgeTier} size="sm" />;
+}

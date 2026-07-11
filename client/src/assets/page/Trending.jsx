@@ -32,7 +32,7 @@ import RecentHistory from "../util/recentHistory";
 import parseJSON from "./util/parseJson";
 import DotDropDown from "./util/dotDropDown";
 import Loader from "./util/loader";
-import { useRanking } from "../context/RankContext";
+import { useUserRanking } from "./util/useUserRanking";
 import RankBadge from "../components/RankBadge";
 
 // img
@@ -48,7 +48,7 @@ import api from "../api/axiosInstance";
 const Trending = () => {
   const navigate = useNavigate();
   const { onlineUsers } = useOutletContext();
-  const { badgeTier, loadings} = useRanking();
+
 
   // loading
   const [loading, setLoading] = useState(false);
@@ -449,7 +449,8 @@ const Trending = () => {
                                   : null
                               }
                             >
-                              {post.is_anonymous === 1 ? post.anonymous_name : post.username}{!loadings && post?.is_anonymous !== 1 && <RankBadge rank={badgeTier} size="sm" />}
+                              {post?.is_anonymous === 1 ? post?.anonymous_name : post?.username}
+                                  <PostAuthorBadge userId={post.user_id} isAnonymous={post.is_anonymous === 1} />
                             </span>
                             <div className="dot"></div>
                             <div className="category-post-div">
@@ -649,4 +650,11 @@ function DisplayAnimatedIcon({ src, isHovered }) {
   return (
     <lord-icon src={src} trigger="loop" delay="3000" style={{ width: "20px", height: "20px" }} />
   );
+}
+function PostAuthorBadge({ userId, isAnonymous }) {
+  const { badgeTier, loadings } = useUserRanking(isAnonymous ? null : userId);
+
+  if (isAnonymous || loadings || !badgeTier) return null;
+
+  return <RankBadge rank={badgeTier} size="sm" />;
 }
