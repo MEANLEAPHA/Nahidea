@@ -495,7 +495,7 @@ const SearchForm = () => {
                         style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
                       />
                       <div className="dev-info">
-                        <p className="query-title">{u.username} {!loadings && <RankBadge rank={badgeTier} size="sm" />}</p>
+                        <p className="query-title">{u.username}<PostAuthorBadge userId={u.user_id} isAnonymous={u.is_anonymous === 1} /></p>
                         {u.nickname && <p className="query-description">{u.nickname}</p>}
                       </div>
                     </li>

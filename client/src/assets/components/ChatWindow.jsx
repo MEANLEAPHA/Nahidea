@@ -250,8 +250,8 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 
   const confirmDeleteConversation = async () => {
     try {
-      const token = localStorage.getItem('token');
       await api.delete(`/api/delete-conversation/${activeChat.id}`);
+      localStorage.removeItem('sidebar_active_chat');
       toast.success('Conversation deleted');
       setActiveChat(null);
       window.location.reload();

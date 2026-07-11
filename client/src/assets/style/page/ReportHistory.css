@@ -9,8 +9,11 @@ margin: auto;
   color: var(--font-color);
 
 }
-.report-video-icon{
-    
+.report-user-avatar{
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    object-fit: cover;
 }
 .report-history-container {
   width: 100%;
