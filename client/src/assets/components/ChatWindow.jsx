@@ -128,19 +128,19 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewMessage = (msg) => {
-      if (!conversationId && msg.conversation_id) {
-        setConversationId(Number(msg.conversation_id));
+  const handleNewMessage = (msg) => {
+    if (!conversationId && msg.conversation_id) {
+      setConversationId(Number(msg.conversation_id));
+    }
+    if (String(msg.sender_id) === String(activeChat.id) || String(msg.sender_id) === String(user.id)) {
+      setMessages((prev) => [...prev, msg]);
+      if (String(msg.sender_id) !== String(user.id) && (conversationId || msg.conversation_id)) {
+        const convId = conversationId || msg.conversation_id;
+        socket.emit('message_delivered', { messageId: msg.id });
+        socket.emit('mark_seen', { conversationId: convId });
       }
-      if (msg.sender_id === activeChat.id || msg.sender_id === user.id) {
-        setMessages((prev) => [...prev, msg]);
-        if (msg.sender_id !== user.id && (conversationId || msg.conversation_id)) {
-          const convId = conversationId || msg.conversation_id;
-          socket.emit('message_delivered', { messageId: msg.id });
-          socket.emit('mark_seen', { conversationId: convId });
-        }
-      }
-    };
+    }
+  };
 
     const handleMessageSent = (msg) => {
       setMessages((prev) => [...prev, msg]);

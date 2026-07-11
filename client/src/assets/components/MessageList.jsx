@@ -30,9 +30,6 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
   });
 
 }, [messages]);
-  // useEffect(() => {
-  //   scrollToBottomRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  // }, [messages, scrollToBottomRef]);
 
   return (
     <>
