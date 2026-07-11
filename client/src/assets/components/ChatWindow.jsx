@@ -19,7 +19,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const navigate = useNavigate();
   const loadingHistoryRef = useRef(false);
-  const { user, loading: authLoading } = useAuth();
+  const { user} = useAuth();
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(null);
   const [loadingOlder, setLoadingOlder] = useState(false);
@@ -33,9 +33,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const [editMessage, setEditMessage] = useState(null);
 
   const token = localStorage.getItem('token');
-  if (authLoading || !user) {
-      return <Spin />;
-    }
+
 
     useEffect(() => {
       if (!token || !user) return;

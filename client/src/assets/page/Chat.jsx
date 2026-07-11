@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
 import ChatWindow from '../components/ChatWindow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments} from '@fortawesome/free-regular-svg-icons';
 import '../style/page/chat.css';
+import { Spin } from 'antd';
 
 const useMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -18,9 +20,14 @@ const useMediaQuery = (query) => {
 };
 
 export default function Chat() {
+  const { user, loading: authLoading } = useAuth();
   const [activeChat, setActiveChat] = useState(null);
   const isMobile = useMediaQuery('(max-width: 1000px)');
   const handleBack = () => setActiveChat(null);
+
+    if (authLoading || !user) {
+        return <Spin />;
+      }
 
   if (isMobile) {
     return (
