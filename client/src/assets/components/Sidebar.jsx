@@ -105,7 +105,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
 
   const fetchChatUsers = async () => {
     try {
-      const token = localStorage.getItem('token');
       const res = await api.get('/api/get-chat-user');
       setUsers(res.data);
     } catch (err) {
@@ -116,13 +115,10 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
     useEffect(() => {
     const initChat = async () => {
       if (state?.selected === 2 && state?.activeChat) {
-        // Call backend to get or create conversation
-        const response = await fetch('/api/conversations/get-or-create', {
-          method: 'POST',
-          body: JSON.stringify({ otherUserId: state.activeChat.id })
+        const { data: conversation } = await api.post('/api/conversations/get-or-create', {
+          otherUserId: state.activeChat.id,
         });
-        const conversation = await response.json();
-        
+
         setActiveChat({
           id: conversation.user_id || state.activeChat.id,
           username: state.activeChat.username,
@@ -130,9 +126,8 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
           conversation_id: conversation.id
         });
         setSelected(2);
-      } 
+      }
       else if (state?.selected === 1 && state?.activeChat) {
-        // Friend mode - conversation already exists
         setActiveChat(state.activeChat);
         setSelected(1);
       }
@@ -147,7 +142,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
 
   const fetchChatUserSpam = async () => {
     try {
-      const token = localStorage.getItem('token');
       const res = await api.get('/api/get-chat-spam-user');
       setUserSpam(res.data);
     } catch (err) {
@@ -161,7 +155,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
 
   const handleRestoreChat = async (userId) => {
     try {
-      const token = localStorage.getItem('token');
       await api.put(`/api/open-conversation/${userId}`, null);
       fetchChatUsers();
       fetchChatUserArchive();
@@ -172,7 +165,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
 
   const fetchChatUserArchive = async () => {
     try {
-      const token = localStorage.getItem('token');
       const res = await api.get('/api/get-chat-archived-user');
       setUserArchive(res.data);
     } catch (err) {
