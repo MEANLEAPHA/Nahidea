@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, List, Image, Spin, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import api from '../services/api';
+import api from '../api/axiosInstance';
 
 const GifPicker = ({ onSelect }) => {
   const [gifs, setGifs] = useState([]);

@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { Button, Dropdown, Popconfirm, message, Spin } from 'antd';
+import { Button, Dropdown, Popconfirm, Spin } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarsStaggered, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { DeleteOutlined, FlagOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import MessageList from './MessageList';
+import toast from 'react-hot-toast';
 import MessageInput from './MessageInput';
-import api from '../services/api';
+
+import api from "../api/axiosInstance"
 import { sameId } from '../page/util/sameId';
 import {
   connectSocket,
@@ -15,7 +17,7 @@ import {
 } from "../../socket";
 import { useAuth } from '../context/AuthContext';
 
-const ChatWindow = ({ activeChat, setActiveChat }) => {
+const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const navigate = useNavigate();
   const loadingHistoryRef = useRef(false);
@@ -70,9 +72,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const fetchMessages = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get(`/api/get-message/${activeChat.id}?limit=30`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/api/get-message/${activeChat.id}?limit=30`);
       const convId = Number(res.data.conversationId);
       setConversationId(convId);
       setMessages(res.data.messages);
@@ -84,7 +84,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         socket.emit('mark_seen', { conversationId: convId });
       }
     } catch (err) {
-      message.error('Failed to load messages');
+      toast.error('Failed to load messages');
     }
   };
 
@@ -94,9 +94,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
     setLoadingOlder(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get(`/api/get-message/${activeChat.id}?limit=30&beforeId=${oldestMessageId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/api/get-message/${activeChat.id}?limit=30&beforeId=${oldestMessageId}`);
       if (res.data.messages.length > 0) {
         setMessages(prev => [...res.data.messages, ...prev]);
         setOldestMessageId(res.data.messages[0].id);
@@ -108,7 +106,7 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         setHasMore(false);
       }
     } catch (err) {
-      message.error('Failed to load older messages');
+      toast.error('Failed to load older messages');
     } finally {
       setLoadingOlder(false);
     }
@@ -253,14 +251,12 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
   const confirmDeleteConversation = async () => {
     try {
       const token = localStorage.getItem('token');
-      await api.delete(`/api/delete-conversation/${activeChat.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      message.success('Conversation deleted');
+      await api.delete(`/api/delete-conversation/${activeChat.id}`);
+      toast.success('Conversation deleted');
       setActiveChat(null);
       window.location.reload();
     } catch (err) {
-      message.error('Failed to delete');
+      toast.error('Failed to delete');
     }
   };
    const handleReportConversation = () => {
@@ -274,12 +270,11 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
       const token = localStorage.getItem('token');
       await api.post(
         '/api/report-message',
-        { messageId: msgId, reason },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { messageId: msgId, reason }
       );
-      message.success('Message reported');
+      toast.success('Message reported');
     } catch (err) {
-      message.error('Failed to report');
+      toast.error('Failed to report');
     }
   };
 
@@ -332,7 +327,10 @@ const ChatWindow = ({ activeChat, setActiveChat }) => {
         <div className="chat-header-left">
           {window.innerWidth <= 1000 && (
             <button className="back-button" onClick={() => {
-              setActiveChat(null)}
+              setActiveChat(null);
+              onBack();
+              localStorage.removeItem('sidebar_active_chat');
+            }
               }>
               <FontAwesomeIcon icon={faAngleLeft} />
             </button>

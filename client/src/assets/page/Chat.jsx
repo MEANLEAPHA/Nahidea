@@ -48,7 +48,6 @@ export default function Chat() {
         <ChatWindow activeChat={activeChat} setActiveChat={setActiveChat} />
       ) : (
         <div className="empty-div">
-        
           <FontAwesomeIcon icon={faComments}  id="empty-glass"/>
           Select a chat to start gossiping
         </div>

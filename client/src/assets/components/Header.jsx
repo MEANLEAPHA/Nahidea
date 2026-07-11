@@ -12,7 +12,7 @@ import { useNotifications} from "../context/NotificationContext";
 // style
 import "../style/Header.css";
 
-import api from "../api/axiosInstance"
+import api from "../api/axiosInstance";
 
   // iconcd client
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

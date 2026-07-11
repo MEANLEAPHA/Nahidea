@@ -189,25 +189,25 @@ const MinCard = ({a, icon, unreadCount, unreadSpam}) => {
             ? chatUnreadCount
             : 0
         }
-        chatUnreadSpam = {
+        unreadSpam = {  
             item.a === "/spammy"
             ? chatUnreadSpam 
             : 0
         }
         />
     ));
-    };
+};
 
-    const MinAside = ({  a, icon, unreadCount, chatUnreadSpam }) => {
+    const MinAside = ({  a, icon, unreadCount, unreadSpam }) => {  
     return (
         <MinCard
         a = { a }
         icon = { icon }
         unreadCount = { unreadCount }
-        chatUnreadSpam = { chatUnreadSpam }
+        unreadSpam = { unreadSpam }  
         />
     );
-    };
+};
     const Card = ({
     a,
     icon,

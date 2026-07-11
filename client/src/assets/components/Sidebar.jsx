@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
 
   import { faArrowRightFromBracket, } from "@fortawesome/free-solid-svg-icons";
-import api from '../services/api';
+import api from '../api/axiosInstance';
 import { useAuth } from '../context/AuthContext';
 
 import {
@@ -106,9 +106,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   const fetchChatUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get('/api/get-chat-user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get('/api/get-chat-user');
       setUsers(res.data);
     } catch (err) {
       message.error('Failed to load contacts');
@@ -150,9 +148,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   const fetchChatUserSpam = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get('/api/get-chat-spam-user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get('/api/get-chat-spam-user');
       setUserSpam(res.data);
     } catch (err) {
       message.error('Failed to load contacts');
@@ -166,9 +162,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   const handleRestoreChat = async (userId) => {
     try {
       const token = localStorage.getItem('token');
-      await api.put(`/api/open-conversation/${userId}`, null, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.put(`/api/open-conversation/${userId}`, null);
       fetchChatUsers();
       fetchChatUserArchive();
     } catch (err) {
@@ -179,9 +173,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   const fetchChatUserArchive = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await api.get('/api/get-chat-archived-user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get('/api/get-chat-archived-user');
       setUserArchive(res.data);
     } catch (err) {
       message.error('Failed to load contacts');
@@ -265,7 +257,10 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
     <div id='side-bar-gossip'>
       <div id='side-bar-header'>
         <div className='side-bar-header-child'>
-          <LeftOutlined className="btn-out-gossiper" onClick={()=> navigate(-1)}/>
+          <LeftOutlined className="btn-out-gossiper" onClick={()=> {
+            localStorage.removeItem('sidebar_active_chat');
+            navigate(-1)}
+            }/>
           <img src={gossiperlogo} id='gossiper-logo'/>
           <p id='gossip-label-chat'>Gossiper</p>
         </div>

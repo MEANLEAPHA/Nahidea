@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFaceGrinWink } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EnterOutlined, EditOutlined } from '@ant-design/icons';
-import api from '../services/api';
+import api from '../api/axiosInstance';
 
 const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setEditMessage, onEditMessage }) => {
   const [text, setText] = useState('');
@@ -31,13 +31,10 @@ const MessageInput = ({ onSend, onTyping, replyTo, setReplyTo, editMessage, setE
   useEffect(() => {
     const fetchGifs = async () => {
       try {
-        const token = localStorage.getItem('token');
         const endpoint = selected === 1
           ? `/api/search-gif?q=${encodeURIComponent(gifSearch)}`
           : `/api/search-gif-fav?q=${encodeURIComponent(gifSearch)}`;
-        const res = await api.get(endpoint, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get(endpoint);
         setGifs(res.data);
       } catch (err) {
         console.error('GIF fetch failed', err);

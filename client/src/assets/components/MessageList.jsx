@@ -79,7 +79,7 @@ const MessageList = ({ messages, currentUserId, onReplyMessage, onEditMessage, o
                 )}
               </div>
             </div>
-            {!isMe && (
+            {!isMe && !isDeleted && (
               <div className="message-actions">
                 <button className="message-action-btn" onClick={() => onReplyMessage(msg)}>
                   <FontAwesomeIcon icon={faShareFromSquare} /> <small>Reply</small>
