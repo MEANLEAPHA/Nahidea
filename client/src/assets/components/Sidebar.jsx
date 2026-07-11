@@ -275,7 +275,12 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
             {darkMode ? <MoonOutlined className="bar-icon"/> : <SunOutlined className=" bar-icon"/>}
             
           </button>
-          <ProfileDropDown theme={darkMode} toggleTheme={toggleTheme} avatar_url={user?.avatar_url} />
+          <img
+            src={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+            className="profile-div-img button-bar-icon button-bar-icon-pf"
+            alt="profile"
+            style={{backgroundColor: 'var(--secondary-color)'}}
+          />
         </div>
       </div>
 
@@ -446,134 +451,6 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
       }
       
     </div>
-  );
-};
-
-const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
-   
-  const navigate = useNavigate();
-  
- const {user} = useAuth();
-
-  const userId = user?.id;
-  const username = user?.username;
-  const nickname = user?.nickname;
-  const avatar = user?.avatar_url;
-  const work_location = user?.work_location;
-  const bio = user?.bio;
-  const profession = user?.profession;
-
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
-
-  const menuItems = [
-    {
-      label: (
-        <li onClick={() => navigate("/account", {
-          state: {
-            userId: userId,
-            username: username,
-            nickname: nickname,
-            avatar_url: avatar,
-            work_location: work_location,
-            bio: bio,
-            profession: profession
-          }
-        })}>
-          <UserOutlined /> View Account
-        </li>
-      ),
-      key: "0",
-    },
-    {
-      label: (
-        <li
-          onClick={(e) => {
-            toggleTheme();
-            e.stopPropagation();
-          }}
-        >
-          {theme ? <MoonOutlined /> : <SunOutlined />}{" "}
-          {theme ? <span>Dark Mode</span> : <span>Light Mode</span>} 
-        </li>
-      ),
-      key: "1",
-    },
-    {
-      label: (
-        <li onClick={() => navigate("/help")}>
-          <SettingOutlined /> <span>Setting</span>
-        </li>
-      ),
-      key: "2",
-    },
-    {
-      label: (
-        <li onClick={() => navigate("/help")}>
-          <QuestionCircleOutlined /> <span>Help</span>
-        </li>
-      ),
-      key: "3",
-    },
-    {
-      label: (
-        <li onClick={() => navigate("/feedback")}>
-          <ExceptionOutlined /> <span>Feedback</span>
-        </li>
-      ),
-      key: "4",
-    },
-    {  label: (
-     
-         <hr />
-     
-      ),
-      key: "5" },
-    {
-      label: (
-        <li onClick={() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("tokenExpiry");
-          navigate("/login");
-        }}>
-          <FontAwesomeIcon icon={faArrowRightFromBracket} /> <span>Logout</span>
-        </li>
-      ),
-      key: "6",
-    },
-  ];
-
-  return (
-    <Dropdown menu={{ items: menuItems }} trigger={["click"]} classNames={{ root: "profile-dropdown"}}>
-      <div style={{position: "relative"}} > 
-        <Space>
-          <img
-            src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
-            className="profile-div-img button-bar-icon button-bar-icon-pf"
-            alt="profile"
-            style={{backgroundColor: 'var(--secondary-color)'}}
-          />
-          <div id="user-status">
-            <div
-              id="user-status-dot"
-              style={{ backgroundColor:"yellowgreen" }}
-            ></div>
-          </div>
-        </Space>
-   </div>
-    </Dropdown>
   );
 };
 

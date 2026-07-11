@@ -31,6 +31,9 @@ export default function GifUpload() {
       );
       if (res.data.success) {
         toast.success("Thanks for your contribution :)");
+        setPreviewUrl("");
+        e.target.reset();
+        setLoading(false);
       } else {
         toast.error(res.data.error);
       }
