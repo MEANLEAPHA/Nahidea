@@ -36,7 +36,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {MediaPreview} from "../util/mediaUploader";
 
 import RankBadge from "../components/RankBadge";
-import { useUserRanking } from "../util/useUserRanking";
+import { useUserRanking } from "../page/util/useUserRanking";
 
 
 import MutualFriend from "../util/mutualFriend";
