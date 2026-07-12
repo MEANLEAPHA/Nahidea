@@ -186,7 +186,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     };
 
     const handleMessageStatusUpdated = ({ messageId, status }) => {
-      console.log('[CP5 - frontend] received message_status_updated:', messageId, status)
       setMessages((prev) =>
         prev.map((m) => (m.id === messageId ? { ...m, status } : m))
       );
@@ -199,7 +198,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 };
 
     const handleReplyPreviewUpdate = ({ replyMessageId, newReplyPreview, newReplyGifPreview, deleted }) => {
-      console.log('reply preview update', replyMessageId, newReplyPreview, newReplyGifPreview, deleted);
       setMessages((prev) =>
         prev.map((m) =>
           m.id === replyMessageId
