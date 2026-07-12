@@ -37,6 +37,7 @@
 
 }
 
+
 .gif-header p{
   margin: 0;
   color: var(--font-color);
@@ -51,8 +52,7 @@
   justify-content: end;
   margin: 0;
 }
- .btn-upload-gif{
-
+.btn-upload-gif{
   background: var(--back-con);
   color: var(--font-color);
   padding: 8px ;
@@ -63,11 +63,13 @@
   display: flex;
   gap: 5px;
   align-items: center;
+  height: 30px;
   opacity: 0.9;
 }
  .btn-upload-gif:hover{
   opacity: 1;
 }
+
 /* 🔍 Search */
 .gif-searchs {
   margin-bottom: 16px;

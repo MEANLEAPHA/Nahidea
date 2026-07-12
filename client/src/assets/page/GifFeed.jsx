@@ -3,7 +3,8 @@ import { Input, Spin, Empty } from "antd";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Button, Dropdown, Space } from 'antd';
-import axios from "axios";
+
+import api from "../api/axiosInstance";
 import "../style/page/GifFeed.css";
 
 import nahideaTran from "../img/nahidea-tran.png";
@@ -68,9 +69,8 @@ export default function GifFeed() {
     try {
       setFetching(true);
       setLoading(true);
-
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/getGifs?page=${nextPage}`
+      const res = await api.get(
+        `/api/gifs/getGifs?page=${nextPage}`
       );
 
       const newPosts = res.data.data;
@@ -102,8 +102,8 @@ export default function GifFeed() {
 
     setLoading(true);
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/search?name=${value}&page=${pageNum}`
+      const res = await api.get(
+        `/api/gifs/search?name=${value}&page=${pageNum}`
       );
       const newPosts = res.data.data || [];
 
@@ -128,8 +128,10 @@ export default function GifFeed() {
     setActiveCategory(category);
     setLoading(true);
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/category?category=${category}&page=${pageNum}`
+
+
+      const res = await api.get(
+        `/api/gifs/category?category=${category}&page=${pageNum}`
       );
       const newPosts = res.data.data || [];
 
@@ -226,14 +228,10 @@ const hydrateFavorites = async (pageNum = 1) => {
   }
 
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/feed?page=${pageNum}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+
+    const res = await api.get(
+      `/api/gifs/favorites/feed?page=${pageNum}`
+    )
     const newPosts = res.data.data || [];
 
     if (pageNum === 1) {
@@ -271,32 +269,25 @@ function GifCard({ gif }) {
       // Unfavorite
       stored = stored.filter((f) => f.gif_id !== gif.id);
       localStorage.setItem("favorites_gif", JSON.stringify(stored));
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/remove`, {
-        gif_id: gif.id,
-      },
-      {
+      
+      await api.post(`/api/gifs/favorites/remove`, {gif_id: gif.id},{
         headers: {
           'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${token}`,
+          
         }
-      }
-    
-    );
+      } );
+ 
       setFav(false);
     } else {
       // Favorite
       const newFav = { gif_id: gif.id, gif_name: gif.gif_label, gif_url: gif.gif_url };
       stored.push(newFav);
       localStorage.setItem("favorites_gif", JSON.stringify(stored));
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/add`, {
-        gif_id: gif.id,
-      },
-     {
+      await api.post(`/api/gifs/favorites/add`, {gif_id: gif.id}, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${token}`,
         }
-      });
+      })
       setFav(true);
     }
   };
