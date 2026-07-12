@@ -93,7 +93,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     if (loadingOlder || !hasMore || !oldestMessageId) return;
     setLoadingOlder(true);
     try {
-      const token = localStorage.getItem('token');
+      
       const res = await api.get(`/api/get-message/${activeChat.id}?limit=30&beforeId=${oldestMessageId}`);
       if (res.data.messages.length > 0) {
         setMessages(prev => [...res.data.messages, ...prev]);

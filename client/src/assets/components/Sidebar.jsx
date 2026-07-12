@@ -31,6 +31,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   
   const navigate = useNavigate();
   const {state} = useLocation();
+  const hasConsumedNavState = useRef(false);
 
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useAuth();
@@ -113,6 +114,11 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
   };
 
     useEffect(() => {
+
+    if (hasConsumedNavState.current) return;
+    if (!state?.selected || !state?.activeChat) return;
+
+    hasConsumedNavState.current = true;
     const initChat = async () => {
       if (state?.selected === 2 && state?.activeChat) {
         const { data: conversation } = await api.post('/api/conversations/get-or-create', {
@@ -122,7 +128,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
         setActiveChat({
           id: conversation.user_id || state.activeChat.id,
           username: state.activeChat.username,
-          avatar: state.activeChat.avatar_url,
+          avatar_url: state.activeChat.avatar_url,
           conversation_id: conversation.id
         });
         setSelected(2);
@@ -131,10 +137,11 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
         setActiveChat(state.activeChat);
         setSelected(1);
       }
+       navigate(location.pathname, { replace: true, state: null });
     };
     
     initChat();
-  }, [state?.selected, state?.userId]);
+  }, [state]);
 
   useEffect(() => {
     fetchChatUsers();
@@ -426,7 +433,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
                     </div>
                     <button onClick={() => handleRestoreChat(item.id)} type='button'
                      className='btn-restore-chat'
-                     style={{background: 'var(--back-con)',color: 'var(--font-color)'}}>Restore Chat</button>
+                     style={{background: 'var(--secondary-color)',color: 'var(--font-color)'}}>Restore Chat</button>
                   </div>
                 </div>
               </div>

@@ -32,7 +32,6 @@
   background-color:var(--back-con);
 }
 
-
 #side-bar-header{
   padding: 0px 16px;
   height: 50px;
@@ -278,7 +277,7 @@ padding: 0 !important;
 }
 .btn-restore-chat{
   font-size: small;
-  background:var(--back-con) !important;
+  background:var(--secondary-con) !important;
    padding: 5px 10px !important;
    width: auto !important;
   border-radius: 8px;
