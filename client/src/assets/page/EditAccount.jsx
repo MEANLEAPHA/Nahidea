@@ -642,7 +642,7 @@ function AvatarPlayground({
 
             <div className="switch-row">
 
-              <span className='avatar-labels'>
+              <span className='avatar-labels' style={{color: 'var(--font-color)'}}>
                 Flip Avatar
               </span>
 
@@ -663,7 +663,7 @@ function AvatarPlayground({
               
             <div className="rotate-header">
 
-              <span className='avatar-labels'>
+              <span className='avatar-labels' style={{color: 'var(--font-color)'}}>
                 Rotate
               </span>
 

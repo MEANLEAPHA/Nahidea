@@ -351,7 +351,7 @@ const AnswerQa = () => {
 
     const validationError = validateBeforeSubmit();
     if (validationError) {
-      toast.warning(validationError);
+      toast.error(validationError);
       return;
     }
 
@@ -402,7 +402,7 @@ const AnswerQa = () => {
       if(res.status === 200) {
         const resData = res.data;
           toast.success("Answer submitted!");
-          navigate(`/aboutpost/${postId}#answers-${resData.answer_id}`);
+          navigate(`/aboutpost/${postId}#answers-${Number(resData.answer_id)}`);
       }
     
     } catch (err) {

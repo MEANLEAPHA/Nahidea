@@ -9,8 +9,9 @@ export default function Range({
   SetMin,
   SetStep,
 }) {
-  const percentage =
-    ((value - (min || 0)) / ((max || 100) - (min || 0))) * 100;
+  // const percentage =
+  //   ((value - (min || 0)) / ((max || 100) - (min || 0))) * 100;
+  const percentage = Math.min(Math.max(((value - (min || 0)) / ((max || 100) - (min || 0))) * 100, 0), 100);
 
   const handleMin = (e) => {
     const val = e.target.value;
@@ -36,7 +37,7 @@ export default function Range({
           {min || 0}
         </div>
 
-        <div className="custom-range-slider-wrap">
+        <div className="custom-range-slider-wrap" style={{ position: "relative" }}>
 
           {/* VALUE BUBBLE */}
           <div
@@ -48,7 +49,7 @@ export default function Range({
             {value}
           </div>
 
-          <input
+          {/* <input
             type="range"
             className="custom-range-slider"
             min={min || 0}
@@ -56,7 +57,16 @@ export default function Range({
             step={step || 1}
             value={value}
             onChange={onChange}
-          />
+          /> */}
+          <input
+              type="range"
+              className="custom-range-slider"
+              min={min || 0}
+              max={max || 100}
+              step={step || 1}
+              value={Math.min(Math.max(value, min || 0), max || 100)}
+              onChange={onChange}
+            />
 
         </div>
 
@@ -66,13 +76,6 @@ export default function Range({
 
       </div>
 
-      {/* CURRENT */}
-      {/* <div className="custom-range-current">
-        Current value:
-        <span className="custom-range-current-value">
-          {value}
-        </span>
-      </div> */}
 
       {/* CONFIG */}
       <div className="custom-range-config">
