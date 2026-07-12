@@ -80,7 +80,7 @@ header{
 }
 
 
-.header-middle{
+.header-middle, .header-middles{
     width: 37%;
     border: 2px solid var(--secondary-color);
     border-radius: 20px;
@@ -89,6 +89,11 @@ header{
     justify-content:start;
     align-items: center;
     z-index: 100;
+}
+.header-middles{
+    width: 50% !important;
+    margin: auto;
+    margin-top: 40px;
 }
 .search-box{
     width: 90%;
@@ -191,6 +196,11 @@ color:var(--font-color)
 }
 
 .header-middle:focus-within .search-button{
+   
+  
+   border-left: none;
+}
+.header-middles:focus-within .search-button{
    
   
    border-left: none;
@@ -574,14 +584,15 @@ display: flex;
     }
     
      .header-middle{
-       
         border: none;  
-        height: 80%;
+  
         justify-content: center;
         align-items: center;
-          display: none;
-        
-     
+        display: none;
+    }
+
+    .header-middles{ 
+        width: 80% !important;
     }
    
     .header-right{

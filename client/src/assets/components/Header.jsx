@@ -7,8 +7,6 @@ import {MenuOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutl
 import { Divider, Dropdown, Space } from 'antd';
 import { useNotifications} from "../context/NotificationContext";
 
-
-
 // style
 import "../style/Header.css";
 
@@ -22,7 +20,7 @@ import api from "../api/axiosInstance";
 
 import { useAuth } from '../context/AuthContext';
 import SearchForm from "../page/SearchForm";
-import SearchBar from "./SearchBar";
+import {SearchBar} from "./SearchBar";
 
 const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
   const { unreadCount } = useNotifications();
@@ -45,18 +43,6 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
      
 
       <div className="header-right header-children">
-{/*         
-        {
-          token === null ? (
-            <>
-              <button className='btn-no-token btn-signup'>
-                <span>Sign Up</span>
-              </button>
-              <button className='btn-no-token btn-login'>
-                <span>Log In</span>
-              </button>
-            </>
-          ):( */}
             <>
               <button className='button-bar-icon not-mobile-tool' onClick={onToggleTheme}>{currentTheme ? <MoonOutlined className="not-mobile-tool bar-icon"/> : <SunOutlined className="not-mobile-tool bar-icon"/>}</button>
               <CreateDropDown />
@@ -72,7 +58,6 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
               </button>
               <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
             </>
-           {/* )}  */}
          
       </div>
 

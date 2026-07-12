@@ -153,9 +153,9 @@ const UnsolvedQA = () => {
                 ))
               }
               {qData.choices?.length > 4 && (
-                <div className ='choice-li'>
+                <li className ='choice-li' style={{color:'grey', fontSize:'smaller'}}>
                     +{qData.choices?.length - 3} more
-                </div>
+                </li>
                 )}
             </ul>
           </div>
