@@ -209,12 +209,12 @@ const Trending = () => {
                                 min={data.range_min}
                                 max={data.range_max}
                                 step={data.step}
-                                value={data.default_range_value}
+                                value={Math.min(Math.max(data.default_range_value, data.range_min), data.range_max)}
                                 />
                                     <div
                                 className="custom-thumb"
                                 style={{
-                                    left: `${((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100}%`
+                                    left: `${Math.min(Math.max(((data.default_range_value - data.range_min) / (data.range_max - data.range_min)) * 100, 0), 100)}%`
                                 }}
                                 >
                                 {data.default_range_value}
