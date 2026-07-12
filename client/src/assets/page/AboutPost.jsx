@@ -1340,7 +1340,7 @@ const AboutPost = () => {
     setPost({
       ...post,
       is_liked: !post.is_liked,
-      likes_count: post.is_liked ? post.likes_count - 1 : post.likes_count + 1
+      likes_count: post.is_liked ? Number(post.likes_count) - 1 : Number(post.likes_count) + 1
     });
 
     try {

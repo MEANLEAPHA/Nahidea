@@ -433,8 +433,8 @@ export default function Accounts() {
               ...post,
               is_liked: !post.is_liked,
               likes_count: post.is_liked
-                ? post.likes_count - 1
-                : post.likes_count + 1
+                ? Number(post.likes_count) - 1
+                : Number(post.likes_count) + 1
             };
           })
         );
@@ -456,8 +456,8 @@ export default function Accounts() {
                 ...post,
                 is_liked: !post.is_liked,
                 likes_count: post.is_liked
-                  ? post.likes_count - 1
-                  : post.likes_count + 1
+                  ? Number(post.likes_count) - 1
+                  : Number(post.likes_count) + 1
               };
             })
           );

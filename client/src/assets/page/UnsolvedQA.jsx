@@ -90,7 +90,7 @@ const UnsolvedQA = () => {
           <div className="question-preview-card">
              <div className='range-preview-option'>
                   <label id="min-label">{qData.range_min ?? 0}</label>
-                  <div className="range-wrapper">
+                  <div className="range-wrapper" style={{width: '80%', margin: 'auto'}}>
                       <input
                       type="range"
                       min={qData.range_min ?? 0}
@@ -98,7 +98,6 @@ const UnsolvedQA = () => {
                       step={qData.step ?? 1}
                       value={qData.default_range_value ?? 50}
                       readOnly
-                      style={{width: '80%', margin: 'auto'}}
                       />
                           <div
                       className="custom-thumb"
