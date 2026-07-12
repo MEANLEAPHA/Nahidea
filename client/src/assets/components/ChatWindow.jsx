@@ -93,7 +93,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     if (loadingOlder || !hasMore || !oldestMessageId) return;
     setLoadingOlder(true);
     try {
-      
+
       const res = await api.get(`/api/get-message/${activeChat.id}?limit=30&beforeId=${oldestMessageId}`);
       if (res.data.messages.length > 0) {
         setMessages(prev => [...res.data.messages, ...prev]);
@@ -128,20 +128,33 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
   useEffect(() => {
     if (!socket) return;
 
-  const handleNewMessage = (msg) => {
-    if (!conversationId && msg.conversation_id) {
-      setConversationId(Number(msg.conversation_id));
-    }
-    if (String(msg.sender_id) === String(activeChat.id) || String(msg.sender_id) === String(user.id)) {
-      setMessages((prev) => [...prev, msg]);
-      if (String(msg.sender_id) !== String(user.id) && (conversationId || msg.conversation_id)) {
-        const convId = conversationId || msg.conversation_id;
-        socket.emit('message_delivered', { messageId: msg.id });
-        socket.emit('mark_seen', { conversationId: convId });
+  // const handleNewMessage = (msg) => {
+  //   if (!conversationId && msg.conversation_id) {
+  //     setConversationId(Number(msg.conversation_id));
+  //   }
+  //   if (String(msg.sender_id) === String(activeChat.id) || String(msg.sender_id) === String(user.id)) {
+  //     setMessages((prev) => [...prev, msg]);
+  //     if (String(msg.sender_id) !== String(user.id) && (conversationId || msg.conversation_id)) {
+  //       const convId = conversationId || msg.conversation_id;
+  //       socket.emit('message_delivered', { messageId: msg.id });
+  //       socket.emit('mark_seen', { conversationId: convId });
+  //     }
+  //   }
+  // };
+    const handleNewMessage = (msg) => {
+      if (!conversationId && msg.conversation_id) {
+        setConversationId(Number(msg.conversation_id));
       }
-    }
-  };
-
+      if (String(msg.sender_id) === String(activeChat.id) || String(msg.sender_id) === String(user.id)) {
+        setMessages((prev) => [...prev, msg]);
+        if (String(msg.sender_id) !== String(user.id) && (conversationId || msg.conversation_id)) {
+          const convId = conversationId || msg.conversation_id;
+          console.log('[CP1 - frontend] emitting message_delivered, messageId:', msg.id, 'typeof:', typeof msg.id);
+          socket.emit('message_delivered', { messageId: msg.id });
+          socket.emit('mark_seen', { conversationId: convId });
+        }
+      }
+    };
     const handleMessageSent = (msg) => {
       setMessages((prev) => [...prev, msg]);
     };
@@ -173,6 +186,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     };
 
     const handleMessageStatusUpdated = ({ messageId, status }) => {
+      console.log('[CP5 - frontend] received message_status_updated:', messageId, status)
       setMessages((prev) =>
         prev.map((m) => (m.id === messageId ? { ...m, status } : m))
       );
