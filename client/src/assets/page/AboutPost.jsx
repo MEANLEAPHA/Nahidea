@@ -157,41 +157,51 @@ const calculateAverageAnswer = (answers, questionType) => {
     }
 
     case 'rankingorder': {
-      null
-    
-      // const positionMap = {};
-      // answers.forEach(a => {
-      //   const texts = parseJSON(a.ranking_position_value) || [];
-      //   const positions = parseJSON(a.ranking_positions) || [];
-      //   texts.forEach((text, idx) => {
-      //     if (!positionMap[text]) {
-      //       positionMap[text] = { sum: 0, count: 0 };
-      //     }
-      //     positionMap[text].sum += positions[idx] || idx + 1;
-      //     positionMap[text].count += 1;
-      //   });
-      // });
-      // const sorted = Object.keys(positionMap).sort((a, b) => {
-      //   const avgA = positionMap[a].sum / positionMap[a].count;
-      //   const avgB = positionMap[b].sum / positionMap[b].count;
-      //   return avgA - avgB;
-      // });
-      // return {
-      //   type: 'rankingorder',
-      //   total: answers.length,
-      //   items: sorted.map(key => ({
-      //     label: key,
-      //     avgPosition: (positionMap[key].sum / positionMap[key].count).toFixed(1)
-      //   }))
-      // };
+      if (!answers.length) {
+        return { type: 'rankingorder', total: 0, items: [] };
+      }
+
+      const positionMap = {}; // keyed by item id
+
+      answers.forEach(a => {
+        const ids = parseJSON(a.ranking_positions) || [];
+        const labels = parseJSON(a.ranking_position_value) || [];
+
+        ids.forEach((id, idx) => {
+          const position = idx + 1; // array order IS the ranked position, 1-based
+          const label = labels[idx] ?? id; // fall back to id if label missing for some reason
+
+          if (!positionMap[id]) {
+            positionMap[id] = { sum: 0, count: 0, label };
+          }
+          positionMap[id].sum += position;
+          positionMap[id].count += 1;
+        });
+      });
+
+      const sorted = Object.keys(positionMap).sort((a, b) => {
+        const avgA = positionMap[a].sum / positionMap[a].count;
+        const avgB = positionMap[b].sum / positionMap[b].count;
+        return avgA - avgB;
+      });
+
+      return {
+        type: 'rankingorder',
+        total: answers.length,
+        items: sorted.map(id => ({
+          label: positionMap[id].label,
+          avgPosition: (positionMap[id].sum / positionMap[id].count).toFixed(1)
+        }))
+      };
     }
 
-    case 'range': {
+   case 'range': {
       const total = answers.length;
-      const sum = answers.reduce((acc, a) => acc + (a.range_value || 0), 0);
-      const average = (sum / total).toFixed(1);
-      const min = Math.min(...answers.map(a => a.range_value || 0));
-      const max = Math.max(...answers.map(a => a.range_value || 0));
+      const values = answers.map(a => Number(a.range_value) || 0); // normalize once, reuse everywhere
+      const sum = values.reduce((acc, v) => acc + v, 0);
+      const average = total > 0 ? (sum / total).toFixed(1) : "0.0";
+      const min = total > 0 ? Math.min(...values) : 0;
+      const max = total > 0 ? Math.max(...values) : 0;
       return {
         type: 'range',
         average: parseFloat(average),
@@ -314,19 +324,18 @@ const AverageAnswerDisplay = ({ averageData, questionType, ratingIcon }) => {
 
       case 'rankingorder':
         return (
-          null
-          // <div className="average-ranking">
-          //   {averageData.items.map((item, idx) => (
-          //     <div key={idx} className="ranking-item">
-          //       <span className="ranking-position">{idx + 1}. </span>
-          //       <span className="ranking-label"> {item.label}</span>
-          //       <span className="ranking-avg">Avg: {item.avgPosition}</span>
-          //     </div>
-          //   ))}
-          //   <div className="average-total-votes">
-          //     {averageData.total} total ranking{averageData.total > 1 ? 's' : ''}
-          //   </div>
-          // </div>
+          <div className="average-ranking">
+            {averageData.items.map((item, idx) => (
+              <div key={idx} className="ranking-item">
+                <span className="ranking-position">{idx + 1}. </span>
+                <span className="ranking-label"> {item.label}</span>
+                <span className="ranking-avg">Avg: {item.avgPosition}</span>
+              </div>
+            ))}
+            <div className="average-total-votes">
+              {averageData.total} total ranking{averageData.total > 1 ? 's' : ''}
+            </div>
+          </div>
         );
 
       case 'range':
@@ -1158,7 +1167,7 @@ const AboutPost = () => {
     return (
       <div className="loading-page">
         <Spin />
-        <p>Loading...</p>
+        <p style={{color: 'var(--font-color'}}>Loading</p>
       </div>
     );
   }
@@ -1654,7 +1663,7 @@ const AboutPost = () => {
                       <FontAwesomeIcon icon={faPen} style={{fontSize:'12px'}}/> Answer this question
                     </button>
                     {/* Average Answer Display */}
-                    {averageData && post?.data?.question_type !== "openend" && post?.data?.question_type !== "rankingorder" && post?.data?.question_type !== "rankingorder" && (
+                    {averageData && post?.data?.question_type !== "openend"  && (
                       <AverageAnswerDisplay 
                         averageData={averageData} 
                         questionType={post?.data?.question_type}
