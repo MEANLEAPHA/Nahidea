@@ -113,10 +113,6 @@ export default function Questiion(){
   const handlePostType = () => {
     (resetMap[questionType?.value] || []).forEach(fn => fn());
   };
-
-  // --- Choice / order integrity helpers ---
-  // Detects a filled entry appearing AFTER a blank one, e.g. ["one", "", "three"].
-  // Trailing blanks (e.g. ["one", "two", ""]) are fine and are simply trimmed off later.
   const hasGapInMiddle = (arr) => {
     let seenEmpty = false;
     for (const item of arr) {
@@ -132,10 +128,6 @@ export default function Questiion(){
 
   const compactChoices = (arr) => arr.map((c) => c.trim()).filter(Boolean);
 
-  // Validates a choice/ranking list: rejects gaps, trims trailing blanks,
-  // and requires all 3 default entries to be filled (2 options is reserved
-  // for Closed End yes/no questions only). Returns the compacted array, or
-  // null if invalid.
   const validateChoiceList = (arr, label) => {
     if (hasGapInMiddle(arr)) {
       toast.error(`Please fill in ${label} without leaving empty fields in between`);
@@ -197,14 +189,6 @@ export default function Questiion(){
 
     if(loading) return;
     setLoading(true);
-
-    // Everything — validation, formData building, and the network call — now
-    // lives inside this single try/finally. Previously the validation checks
-    // sat OUTSIDE the try block: if any of them threw an unexpected error,
-    // setLoading(false) in the old finally block never ran, leaving the
-    // submit button stuck on "Uploading..." forever with no toast and no way
-    // to recover except a page refresh. Now, no matter what breaks, the
-    // button always re-enables and the user always sees a message.
     try {
       if (!title.trim()) {
         toast.error("Please enter question title");

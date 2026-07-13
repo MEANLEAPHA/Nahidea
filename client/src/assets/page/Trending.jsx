@@ -3,7 +3,7 @@ import "../style/page/Trending.css";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 // antd
-import { List, Typography } from "antd";
+import { List, Spin, Typography } from "antd";
 const { Text } = Typography;
 import { BorderOutlined, FolderOpenOutlined, RiseOutlined, SignatureOutlined } from "@ant-design/icons";
 
@@ -31,7 +31,6 @@ import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
 import parseJSON from "./util/parseJson";
 import DotDropDown from "./util/dotDropDown";
-import Loader from "./util/loader";
 import { useUserRanking } from "./util/useUserRanking";
 import RankBadge from "../components/RankBadge";
 
@@ -391,7 +390,7 @@ const Trending = () => {
 
         {error && posts.length === 0 ? (
           <div className="error-container">
-            <Loader />
+            <Spin />
             <p>Opps! Failed to load</p>
             <button onClick={fetchPosts} className="retry-btn">
               Retry
@@ -399,7 +398,7 @@ const Trending = () => {
           </div>
         ) : posts.length === 0 && !loading ? (
           <div className="error-container">
-            <Loader />
+            <Spin />
             <p>No posts found</p>
           </div>
         ) : (
@@ -586,7 +585,7 @@ const Trending = () => {
 
             {loading && (
               <div className="nextPost-load-div">
-                <Loader />
+                <Spin />
               </div>
             )}
           </>

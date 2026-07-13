@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useOutletContext, useLocation } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import "../style/page/AllFriends.css";
 
 const AllFriends = () => {
@@ -54,12 +54,9 @@ const AllFriends = () => {
     setError(null);
     
     try {
-      const token = getToken();
-      if (!token) return;
-      
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/friends/${targetUserId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+
+      const res = await api.get(
+        `/api/friends/${targetUserId}`
       );
       setFriends(res.data || []);
     } catch (err) {
@@ -78,12 +75,8 @@ const AllFriends = () => {
     setError(null);
     
     try {
-      const token = getToken();
-      if (!token) return;
-      
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/followers/${targetUserId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+      const res = await api.get(
+        `/api/followers/${targetUserId}`
       );
       setFollowers(res.data || []);
     } catch (err) {
@@ -101,13 +94,9 @@ const AllFriends = () => {
     setLoading(true);
     setError(null);
     
-    try {
-      const token = getToken();
-      if (!token) return;
-      
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/followings/${targetUserId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+    try { 
+      const res = await api.get(
+        `/api/followings/${targetUserId}`
       );
       setFollowings(res.data || []);
     } catch (err) {

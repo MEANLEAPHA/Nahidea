@@ -14,19 +14,20 @@
 .banned-modal {
   background: var(--bg-color, #fff);
   color: var(--text-color, #1f1f1f);
-  padding: 32px;
+  padding: 50px;
   border-radius: 12px;
-  max-width: 420px;
+  max-width: 500px;
   width: 100%;
   text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  border-top: 4px solid #e0433d;
+
 }
 
 .banned-modal h2 {
-  margin: 0 0 16px;
+  margin: 10 0 16px;
   font-size: 20px;
   font-weight: 700;
+
   color: #e0433d;
 }
 
@@ -43,6 +44,7 @@
   margin: 0 0 16px;
   font-size: 15px;
   font-weight: 500;
+  color:orange;
   line-height: 1.4;
 }
 
@@ -54,8 +56,8 @@
 
 .banned-note {
   margin: 0;
-  font-size: 13px;
-  color: #777;
+  font-size: 12px;
+  color: grey;
   line-height: 1.5;
 }
 

@@ -6,16 +6,7 @@ import { CloseOutlined, WarningOutlined, LoadingOutlined, FlagOutlined } from "@
 import toast from "react-hot-toast";
 
 import "../style/page/ReportComment.css";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL,
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+import api from "../api/axiosInstance";
 
 const STATE_KEY = "report_nav_state";
 const MIN_REASON_LENGTH = 10;
@@ -184,7 +175,7 @@ const ReportComment = () => {
 
         {alreadyReported ? (
           <div className="report-done">
-            <p>You've already reported this comment. Our team will review it.</p>
+            <p style={{color: 'var(--font-color)'}}>You've already reported this comment. Our team will review it.</p>
             <button type="button" className="report-submit-btn" onClick={() => navigate(-1)}>
               Close
             </button>

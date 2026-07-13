@@ -16,18 +16,7 @@ import { AnonymousNameC, AnonymousProfileC } from "../util/anonymousTokens";
 const AnonymousPf = memo(AnonymousProfileC);
 const AnonymousNm = memo(AnonymousNameC);
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_URL,
-});
-
-// Attach the auth token per-request instead of reading it once at module
-// load time — a stale closure over `token` meant a re-login mid-session
-// never took effect until a full page reload.
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+import api from "../api/axiosInstance";
 
 const STATE_KEY = "comment_nav_state";
 const draftKey = (postId, mode, commentId) =>

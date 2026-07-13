@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { Empty } from "antd";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import "../style/page/GifFeed.css";
 import { HeartFilled, HeartOutlined, LeftOutlined } from "@ant-design/icons";
 import { useNavigate } from 'react-router-dom';
 
-const token = localStorage.getItem("token");
+
 
 export default function FavoritesFeed() {
   const [gifs, setGifs] = useState([]);
@@ -51,14 +51,7 @@ export default function FavoritesFeed() {
 
     // ✅ DB fallback with pagination
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/feed?page=${nextPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res= await api.get(`/api/gifs/favorites/feed?page=${nextPage}`);
       const newPosts = res.data.data || [];
 
       if (nextPage === 1) {
@@ -89,16 +82,11 @@ export default function FavoritesFeed() {
       // Unfavorite
       stored = stored.filter((f) => f.gif_id !== gif.gif_id);
       localStorage.setItem("favorites_gif", JSON.stringify(stored));
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/remove`,
-        { gif_id: gif.gif_id },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await api.post(`/api/gifs/favorites/remove`, { gif_id: gif.gif_id }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       setGifs((prev) => prev.filter((f) => f.gif_id !== gif.gif_id));
     } else {
       // Add back
@@ -109,16 +97,16 @@ export default function FavoritesFeed() {
       };
       stored.push(newFav);
       localStorage.setItem("favorites_gif", JSON.stringify(stored));
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/gifs/favorites/add`,
+      await api.post(
+        `/api/gifs/favorites/add`,
         { gif_id: gif.gif_id },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         }
       );
+  
       setGifs((prev) => [newFav, ...prev]);
     }
   };

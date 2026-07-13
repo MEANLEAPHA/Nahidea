@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/components/AuthRequiredModal.css";
+import nahideaIcon from '../img/nahideaIcon.png';
 
 export default function AuthRequiredModal() {
   const navigate = useNavigate();
@@ -9,8 +10,8 @@ export default function AuthRequiredModal() {
   return (
     <div className="auth-required-overlay" role="dialog" aria-modal="true">
       <div className="auth-required-modal">
-        <h2>You need an account to continue</h2>
-        <p>Log in or create a free account to keep using Nahidea.</p>
+        <img src = {nahideaIcon} alt="Nahidea Icon" className="auth-required-icon"/>
+        <p className="auth-required-message">Log in or Create a free account to keep using Nahidea :)</p>
 
         <div className="auth-required-actions">
           <button

@@ -9,7 +9,7 @@ const Rule = () => {
             <p onClick={()=>{navigate('/useragreement')}}>User Agreement</p>
             <p onClick={()=>{navigate('/accessibility')}}>Accessibility</p>
             <div>
-                <p>Nahidea. © 2026. All rights reserved </p>
+                <p>Nahidea. © 2026. All rights reserved. v0.9.0-beta</p> 
             </div>
         </div>
     );
