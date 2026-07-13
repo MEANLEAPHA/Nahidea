@@ -468,6 +468,7 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, highlightedAn
             <span className="answer-author-name" 
               onClick ={answer.is_anonymous !== 1 ? () => navigate(`/accounts`, { state: {userId: answer.user_id}}) : null} style= {{cursor: answer.is_anonymous === 1 ? 'none' : 'pointer'}}>
                 {answer.author_name || 'Anonymous'}
+                <PostAuthorBadgeCm userId={answer.user_id} isAnonymous={answer.is_anonymous === 1} />
             </span>
             <span className="answer-time">{timeAgo(answer.created_at)}</span>
           </div>
@@ -577,7 +578,7 @@ const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expanded
       <div className="comment-body">
         <div className="comment-header">
           <div className="comment-name-wrapper">
-            <b className="comment-name" onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: is_anonymous === 1 ? 'none' : 'pointer'}}>{renderNameFn(c)}</b>
+            <b className="comment-name" onClick = {Number(is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: c.user_id}}) : null} style= {{cursor: is_anonymous === 1 ? 'none' : 'pointer'}}>{renderNameFn(c)}</b><PostAuthorBadgeCm userId={c.user_id} isAnonymous={is_anonymous === 1} />
           </div>
           <CommentDropDown 
             ownerId={c.user_id} 
@@ -711,7 +712,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, postT
     },
     {
       label: (
-        <li onClick={() => navigate('/report', { state: { commentId: comm_id } })}>
+        <li onClick={() => navigate('/report', { state: { commentId: comm_id, userId: ownerId } })}>
           <FlagOutlined /> Report
         </li>
       ),
@@ -753,7 +754,7 @@ const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, postT
     },
     {
       label: (
-        <li onClick={() => navigate('/report', { state: { commentId: comm_id } })}>
+        <li onClick={() => navigate('/report', { state: { commentId: comm_id, userId: ownerId } })}>
           <FlagOutlined /> Report
         </li>
       ),
@@ -1110,7 +1111,7 @@ const AboutPost = () => {
           return {
             ...comment,
             is_liked: !comment.is_liked,
-            likes_count: comment.is_liked ? comment.likes_count - 1 : comment.likes_count + 1
+            likes_count: comment.is_liked ? Number(comment.likes_count) - 1 : Number(comment.likes_count) + 1
           };
         }
         if (comment.replies) {
@@ -1800,4 +1801,12 @@ function PostAuthorBadge({ userId, isAnonymous }) {
   if (isAnonymous || loadings || !badgeTier) return null;
 
   return <RankBadge rank={badgeTier} size="sm" />;
+}
+
+function PostAuthorBadgeCm({ userId, isAnonymous }) {
+  const { badgeTier, loadings } = useUserRanking(isAnonymous ? null : userId);
+
+  if (isAnonymous || loadings || !badgeTier) return null;
+
+  return <RankBadge rank={badgeTier} size="s" />;
 }

@@ -129,7 +129,7 @@ const ReportPost = () => {
 
     setSubmitting(true);
     try {
-      await api.post(`/api/reports/${state.conversationId}/conversation`, {
+      await api.post(`/api/reports/${state.conversationId}/conversation/${state.conversationId}`, {
         report_type: type,
         reason: trimmedReason,
       });

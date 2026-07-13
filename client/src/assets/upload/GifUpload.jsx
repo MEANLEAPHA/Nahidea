@@ -4,6 +4,8 @@ import api from "../api/axiosInstance";
 import toast from "react-hot-toast";
 import "../style/upload/GifUpload.css";
 import { gif_category } from "../data/post_type_data";
+import { LeftOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function GifUpload() {
   const [loading, setLoading] = useState(false);
@@ -54,9 +56,10 @@ export default function GifUpload() {
       toast.error("Failed to paste from clipboard");
     }
   };
-
+  const navigate = useNavigate();
   return (
     <div className="gif-upload-container">
+       <button type='button' className='back-btn-about-post' onClick={() => navigate(-1)}><LeftOutlined /></button>
       <div className="gif-upload-header">
         <p className="p-head">Upload Your Favorite GIF Is Very Easy</p>
         <p>Support only .gif</p>

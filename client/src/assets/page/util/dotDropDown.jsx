@@ -36,7 +36,8 @@ const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
           e.stopPropagation();
           navigate("/reportPost", {
             state: {
-              postId: post_id
+              postId: post_id,
+              userId: ownerId
             }
           })
         }}>
@@ -85,7 +86,8 @@ const DotDropDown = ({ ownerId, post_type, post_id, text_body, contentId }) => {
           e.stopPropagation();
           navigate("/reportPost", {
             state: {
-              postId: post_id
+              postId: post_id,
+              userId: ownerId
             }
           })
         }}>

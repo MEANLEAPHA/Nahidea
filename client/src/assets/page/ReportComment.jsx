@@ -129,7 +129,7 @@ const ReportComment = () => {
 
     setSubmitting(true);
     try {
-      await api.post(`/api/reports/${state.commentId}/comment`, {
+      await api.post(`/api/reports/${state.userId}/comment/${state.commentId}`, {
         report_type: type,
         reason: trimmedReason,
       });

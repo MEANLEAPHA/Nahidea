@@ -129,7 +129,7 @@ const ReportUser = () => {
 
     setSubmitting(true);
     try {
-      await api.post(`/api/reports/${state.userId}/post`, {
+      await api.post(`/api/reports/${state.userId}/post/${state.userId}`, {
         report_type: type,
         reason: trimmedReason,
       });

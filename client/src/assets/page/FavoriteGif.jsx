@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, memo } from 'react';
 import { Empty } from "antd";
 import axios from "axios";
 import "../style/page/GifFeed.css";
-import { HeartFilled, HeartOutlined } from "@ant-design/icons";
+import { HeartFilled, HeartOutlined, LeftOutlined } from "@ant-design/icons";
+import { useNavigate } from 'react-router-dom';
 
 const token = localStorage.getItem("token");
 
@@ -121,10 +122,12 @@ export default function FavoritesFeed() {
       setGifs((prev) => [newFav, ...prev]);
     }
   };
-
+const navigate = useNavigate();
   return (
     <div className="gif-feed-container">
-      <h2>Your Favorites</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button type='button' className='back-btn-about-post' onClick={() => navigate(-1)}><LeftOutlined /></button><h2>Your Favorites</h2>
+      </div>
       {loading && <p>Loading...</p>}
       {!loading && gifs.length === 0 && <Empty description="No favorites yet" />}
       <div className="masonry">

@@ -127,20 +127,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
 
   useEffect(() => {
     if (!socket) return;
-
-  // const handleNewMessage = (msg) => {
-  //   if (!conversationId && msg.conversation_id) {
-  //     setConversationId(Number(msg.conversation_id));
-  //   }
-  //   if (String(msg.sender_id) === String(activeChat.id) || String(msg.sender_id) === String(user.id)) {
-  //     setMessages((prev) => [...prev, msg]);
-  //     if (String(msg.sender_id) !== String(user.id) && (conversationId || msg.conversation_id)) {
-  //       const convId = conversationId || msg.conversation_id;
-  //       socket.emit('message_delivered', { messageId: msg.id });
-  //       socket.emit('mark_seen', { conversationId: convId });
-  //     }
-  //   }
-  // };
     const handleNewMessage = (msg) => {
       if (!conversationId && msg.conversation_id) {
         setConversationId(Number(msg.conversation_id));
@@ -149,7 +135,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
         setMessages((prev) => [...prev, msg]);
         if (String(msg.sender_id) !== String(user.id) && (conversationId || msg.conversation_id)) {
           const convId = conversationId || msg.conversation_id;
-          console.log('[CP1 - frontend] emitting message_delivered, messageId:', msg.id, 'typeof:', typeof msg.id);
           socket.emit('message_delivered', { messageId: msg.id });
           socket.emit('mark_seen', { conversationId: convId });
         }
@@ -272,23 +257,9 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
     }
   };
    const handleReportConversation = () => {
-     navigate('/report-conversation', { state: { conversationId: activeChat.id } });
+     navigate('/report-conversation', { state: { conversationId: activeChat.id, userId: activeChat.id } });
   };
 
-  const handleReportMessage = async (msgId) => {
-    const reason = prompt('Reason for reporting this message (optional):');
-    if (reason === null) return;
-    try {
-      const token = localStorage.getItem('token');
-      await api.post(
-        '/api/report-message',
-        { messageId: msgId, reason }
-      );
-      toast.success('Message reported');
-    } catch (err) {
-      toast.error('Failed to report');
-    }
-  };
 
   const handleTyping = (isUserTyping) => {
     if (!socket) return;
@@ -379,7 +350,6 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
           onReplyMessage={handleReply}
           onEditMessage={handleEdit}
           onDeleteMessage={handleDeleteMessage}
-          onReportMessage={handleReportMessage}
           scrollToBottomRef={messagesEndRef}
           loadingHistoryRef={loadingHistoryRef}
         />

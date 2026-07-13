@@ -340,7 +340,7 @@ export default function Notifications() {
             onClick={deleteAllNotifications}
             disabled={notifications.length === 0}
           >
-            <ClearOutlined /> Clear all
+           Clear all
           </button>
           |
           <button 
@@ -348,7 +348,7 @@ export default function Notifications() {
             onClick={markAllAsRead}
             disabled={unreadCount === 0}
           >
-            <FontAwesomeIcon icon={faEnvelopeOpen} /> Mark all as read
+            Mark all as read
           </button>
           |
           <button 
