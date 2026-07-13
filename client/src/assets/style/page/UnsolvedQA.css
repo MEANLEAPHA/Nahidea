@@ -73,7 +73,6 @@
   grid-template-columns: 1fr;
 }
 
-
 @media (min-width: 640px) {
   .questions-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -400,8 +399,8 @@
 
 .load-more-btn {
   padding: 12px 32px;
-  background: var(--primary-color);
-  color: white;
+  background: var(--back-con);
+  color:var(--font-color);
   border: none;
   border-radius: 30px;
   cursor: pointer;

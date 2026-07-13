@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams, useOutletContext } from "react-router-dom";
 import "../style/page/Trending.css"; // reuse same post styles
 import "../style/page/SearchForm.css";
-import { List, Typography } from "antd";
+import { List, Typography, Spin } from "antd";
 const { Text } = Typography;
 import { BorderOutlined, LeftOutlined, RiseOutlined } from "@ant-design/icons";
 
@@ -17,7 +17,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MediaPreview } from "../util/mediaUploader";
 import parseJSON from "./util/parseJson";
 import DotDropDown from "./util/dotDropDown";
-import Loader from "./util/loader";
 import { useUserRanking } from "./util/useUserRanking";
 import RankBadge from "../components/RankBadge";
 
@@ -464,7 +463,7 @@ const SearchForm = () => {
 
         {loading ? (
           <div className="error-container">
-            <Loader />
+            <Spin />
           </div>
         ) : error ? (
           <div className="error-container">
@@ -513,7 +512,9 @@ const SearchForm = () => {
 
                 {expandMode === "users" && (
                   <>
-                    {expandLoading && <Loader />}
+                     {expandLoading && <div className="see-all-container">
+                               <Spin />
+                          </div>}
                     {hasMoreUsers && !expandLoading && (
                       <div className="see-all-container">
                           <button className="see-all-btn" onClick={loadMoreUsers}>
@@ -721,7 +722,9 @@ const SearchForm = () => {
 
                 {expandMode === "posts" && (
                   <>
-                    {expandLoading && <Loader />}
+                    {expandLoading && <div className="see-all-container">
+                               <Spin />
+                          </div>}
                     {hasMorePosts && !expandLoading && (
                           <div className="see-all-container">
                                <button className="see-all-btn" onClick={loadMorePosts}>

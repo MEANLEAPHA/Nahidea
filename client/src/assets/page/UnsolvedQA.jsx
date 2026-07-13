@@ -241,7 +241,7 @@ const UnsolvedQA = () => {
     return (
       <div className="unsolved-loading">
         <LoadingOutlined style={{ fontSize: 48 }} />
-        <p>Loading unsolved questions...</p>
+        <p style={{color: 'grey'}}>Loading unsolved questions...</p>
       </div>
     );
   }

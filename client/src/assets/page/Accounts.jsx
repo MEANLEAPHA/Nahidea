@@ -361,7 +361,7 @@ export default function Accounts() {
                           {
                             data.choices?.slice(0, data.choices?.length > 4 ? 3 : 4).map((c,i) => (
                               <li key={i} className ='choice-li'>
-                                <BorderOutlined className='tool-answer-icon'/>  {c.choices_text}
+                                <BorderOutlined className='tool-answer-icon'/>  {c.choice_text}
                               </li> 
                             ))
                           }
@@ -956,7 +956,6 @@ export default function Accounts() {
             <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
           <FriendList targetUsername={usernames} tagetUserId={state?.userId || user?.id}/>
-
         </div>
       </div>
     </div>

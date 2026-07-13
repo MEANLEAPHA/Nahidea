@@ -336,22 +336,6 @@ border-left: 3px solid #fd7648;
   vertical-align: bottom;
 }
 
-/* .markdown-preview pre {
-  background: var(--back-con);
-  padding: 1em;
-  border-radius: 6px;
-  line-height: 1.5;
-  white-space: pre-wrap;  
-  word-wrap: break-word;   
-   margin: 10px 0px 20px 0px !important;
-}
-
-.markdown-preview code {
-  font-family: monospace;
-   font-size: 0.9rem;
-  color:var(--font-color);
-  opacity: 0.8;
-} */
  /* Code */
 .ProseMirror pre {
  background: var(--secondary-color);
@@ -1032,8 +1016,8 @@ RANGE
 
   transform: translate(-50%, -50%);
 
-  min-width: 36px;
-  height: 36px;
+  min-width: 32px;
+  height: 32px;
 
   padding: 0 12px;
 

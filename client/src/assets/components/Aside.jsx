@@ -146,13 +146,10 @@ const MinInfo = [
         id:5, a: '/friends', icon: <UsergroupAddOutlined className='sub-icon' />
     },
     {
-        id:6, a: '/you', icon: <UserOutlined className='sub-icon'/>
+        id:6, a: '/trending', icon:  <RiseOutlined  className='sub-icon'/>
     },
     {
-        id:7, a: '/trending', icon:  <RiseOutlined  className='sub-icon'/>
-    },
-    {
-        id:8, a: '/halloffame', icon: <FireOutlined className='sub-icon'/>
+        id:7, a: '/halloffame', icon: <FireOutlined className='sub-icon'/>
     },
 ]
 

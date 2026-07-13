@@ -21,7 +21,7 @@ import { faAngleDown, faAngleUp, faMartiniGlassEmpty, faPen, faEllipsis } from '
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 // antd
-import { Typography, Dropdown } from "antd";
+import { Typography, Dropdown, Spin } from "antd";
 import { BorderOutlined, CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, EnterOutlined, FlagOutlined, LeftOutlined, LinkOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
@@ -669,7 +669,6 @@ const CommentCard = memo(({ c, postType, is_anonymous, isReply, postId, expanded
 const CommentDropDown = ({ ownerId, comm_id, comm_text, comm_gif, post_id, postType, onDelete }) => {
   const { user } = useOutletContext();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
@@ -966,7 +965,6 @@ const AboutPost = () => {
 
  
   const handleView = async () => {
-    // if (!token) return;
     try {
       await api.post(`/api/record-view-post/${id}`, {});
     } catch (err) {
@@ -975,7 +973,6 @@ const AboutPost = () => {
   };
 
   const handleHistory = async () => {
-    // if (!token) return;
     try {
       await api.post(`/api/history-post/${id}`, {});
     } catch (err) {
@@ -1159,8 +1156,8 @@ const AboutPost = () => {
 
   if (!post) {
     return (
-      <div className="aboutPost">
-        <h1>Post {id}</h1>
+      <div className="loading-page">
+        <Spin />
         <p>Loading...</p>
       </div>
     );
