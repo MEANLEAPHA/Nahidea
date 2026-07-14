@@ -1157,8 +1157,8 @@ const AboutPost = () => {
   if (!post) {
     return (
       <div className="loading-page">
-        <Spin style="var(--primary-color)"/>
-        <p style={{color: 'var(--font-color'}}>Loading</p>
+       <Spin style={{ color: "var(--primary-color)" }}/>
+        <p style={{color: 'var(--font-color)'}}>Loading</p>
       </div>
     );
   }
