@@ -30,7 +30,7 @@ body {
 /* PAGE */
 
 .setup-page {
-  min-height: 100vh;
+   /* min-height: 100vh; */
   background: var(--background-color);
 }
 
@@ -38,7 +38,7 @@ body {
 
 .setup-container {
   display: flex;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 /* LEFT */
