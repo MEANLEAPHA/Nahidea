@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Save, Check, RotateCw, Plus, ArrowLeft } from "lucide-react";
 import "../style/Authentication/SetUpAccount.css";
+import { Spin } from "antd";
 
 const AVATAR_STYLES = [ "adventurer", "avataaars", "big-smile", "bottts", "croodles", "fun-emoji", "icons", "identicon", "initials",
                         "lorelei", "micah", "miniavs", "notionists", "open-peeps", "personas", "pixel-art", "rings", "shapes", "thumbs" ];
@@ -62,7 +63,7 @@ const SetupAccount = () => {
   const navigate = useNavigate();
 
   const { state } = useLocation();
-
+const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (!state?.Email || !state?.UserId) {
       navigate("/login", { replace: true });
@@ -112,11 +113,11 @@ const SetupAccount = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setIsSubmitting(true);
 
   try {
     const formData = new FormData();
-   
-    // Text fields
+
     formData.append('profession', profession);
     formData.append('location', location);
     formData.append('nickname', nickname);
@@ -124,15 +125,13 @@ const handleSubmit = async (e) => {
     formData.append('email', email);
     formData.append('bio', bio);
     formData.append('avatarType', avatarType);
-    
-    // Avatar
+
     if (avatarType === 'file' && avatarFile) {
       formData.append('avatar', avatarFile);
     } else {
       formData.append('avatar', avatar);
     }
-    
-    // Banner - just the file if it exists
+
     if (bannerFile) {
       formData.append('banner', bannerFile);
     }
@@ -149,14 +148,16 @@ const handleSubmit = async (e) => {
 
     if (res.status === 200) {
       toast.success('Setup successful! Please log in.');
-      setTimeout(() => {      
+      setTimeout(() => {
         navigate("/login");
       }, 3000);
+      // note: isSubmitting intentionally stays true here — see note below
     }
- } catch (err) {
-  console.error(err);
-  toast.error("Something went wrong, please try again.");
-}
+  } catch (err) {
+    console.error(err);
+    toast.error("Something went wrong, please try again.");
+    setIsSubmitting(false); // only reset on failure, so the button doesn't flash back before navigating away
+  }
 };
   return (
     <div className="setup-page">
@@ -380,8 +381,10 @@ const handleSubmit = async (e) => {
                 type="submit"
                 className="submit-btns"
                 title="Enter to complete setup"
+                disabled={isSubmitting}
               >
-                <span>Complete Setup</span>
+                {isSubmitting && <Spin size="small" style={{ marginRight: 8 }} />}
+                <span>{isSubmitting ? "Setting up..." : "Complete Setup"}</span>
               </button>
             </form>
           </div>
