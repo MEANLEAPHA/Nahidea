@@ -14,7 +14,7 @@ export default function TiptapEditor({ onChange }) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit, // includes bold, italic, lists, code, etc :contentReference[oaicite:0]{index=0}
+      StarterKit, 
       Markdown,
       Underline,
       Link.configure({
@@ -28,7 +28,7 @@ export default function TiptapEditor({ onChange }) {
     content: "# Start writing...",
     contentType: "markdown",
     onUpdate: ({ editor }) => {
-      const md = editor.getMarkdown(); // 🔥 IMPORTANT :contentReference[oaicite:1]{index=1}
+      const md = editor.getMarkdown();
       onChange(md);
     },
   });

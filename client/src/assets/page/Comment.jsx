@@ -5,7 +5,7 @@ import { DeleteOutlined, LeftOutlined, LoadingOutlined, RetweetOutlined } from "
 import toast from "react-hot-toast";
 import Rule from "../util/upload/Rule";
 import Masonry from "react-masonry-css";
-
+import nahideaIcon from '../img/nahideaIcon.png';
 import "../style/page/Comment.css";
 import { faFaceGrinWink } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -271,19 +271,12 @@ const Comment = () => {
             </button>
           </div>
           <div className="comments-nav">
-            {/* <div className="comms-avatar-div">
-              <AnonymousPf
-                enabled={enabled}
-                realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
-              />
-            </div> */}
             <AnonymousPf
               enabled={enabled}
-              realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+              realPf={user?.avatar_url || nahideaIcon}
               anonBg={anonIdentity?.anonymous_bg_color}
             />
             <div className="comms-body">
-              {/* <AnonymousNm enabled={enabled} realName={user?.username || "guest"} /> */}
               <AnonymousNm
                 enabled={enabled}
                 realName={user?.username || "guest"}

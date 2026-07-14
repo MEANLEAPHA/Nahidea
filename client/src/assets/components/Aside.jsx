@@ -8,10 +8,10 @@ import gossiperlogo from "../img/gossiperlogo.png";
 import "../style/Aside.css";
 import {useNavigate} from "react-router-dom";
 import api from "../api/axiosInstance"
-
+import { useAuth } from "../context/AuthContext";
 
 const Aside = (props) => {
-   
+    const { token, user } = useAuth();
     const [spamUnreadCount, setSpamUnreadCount] = useState(0);
     const [chatUnreadCount, setChatUnreadCount] = useState(0);
 
@@ -40,21 +40,24 @@ const Aside = (props) => {
         };
 
 
-        useEffect(() => {
+       useEffect(() => {
+        if (!token || !user) {
+            setSpamUnreadCount(0);
+            setChatUnreadCount(0);
+            return;
+        }
+
         fetchUnreadCount();
         fetchUnReadSpam();
-        const intervalChat = setInterval(
-            fetchUnreadCount, 100000
-        );
-        const intervalSpam = setInterval(
-            fetchUnReadSpam, 100000
-        );
+
+        const intervalChat = setInterval(fetchUnreadCount, 100000);
+        const intervalSpam = setInterval(fetchUnReadSpam, 100000);
 
         return () => {
             clearInterval(intervalChat);
             clearInterval(intervalSpam);
-        }
-        }, []);
+        };
+    }, [token, user?.id]);
 
         
     // Mobile responsive on Aside

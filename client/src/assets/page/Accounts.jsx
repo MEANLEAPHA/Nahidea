@@ -42,11 +42,10 @@ import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
 import parseJSON from './util/parseJson';
 import DotDropDown from "./util/dotDropDown";
-import Loader from "./util/loader";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-
+import nahideaIcon from '../img/nahideaIcon.png';
 
 
 // data
@@ -639,7 +638,7 @@ export default function Accounts() {
         <div id='acc-pf-info'>
             <div className='acc-pf-info-child acc-pf-info-child-left'>
                 <div id='acc-pf-div'>
-                    <img src={avatar || user?.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"} id='acc-pf'/>
+                    <img src={avatar || user?.avatar_url || nahideaIcon} id='acc-pf'/>
                 </div>
                 <div id="user-pf-iden">
                     <p id='username-pf'>
@@ -719,7 +718,7 @@ export default function Accounts() {
          {error ?
                     (  
                       <div className='error-container'>
-                          <Loader />
+                          <Spin style="var(--primary-color)"/>
                           <p>Opps! Failed to load</p>
                       </div>
                     ) 
@@ -727,7 +726,7 @@ export default function Accounts() {
                     posts.length === 0 && !loading ? 
                     (
                         <div className='error-container'>
-                            <Loader />
+                            <Spin style="var(--primary-color)"/>
                             <p>No posts found</p>
                         </div>
                     ) 
@@ -762,7 +761,7 @@ export default function Accounts() {
                               post.is_anonymous === 1
                                 ? nahIdeaAuth
                                 : post.avatar_url ||
-                                  "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+                                  nahideaIcon
                             }
                             id="author-pf"
                             alt="avatar"
@@ -914,7 +913,7 @@ export default function Accounts() {
 
                             {loading && (
                                 <div className="nextPost-load-div">
-                                    <Loader />
+                                    <Spin style="var(--primary-color)"/>
                                 </div>
                             )}
                         </>
@@ -1072,7 +1071,7 @@ const FriendList = ({targetUsername, tagetUserId}) => {
             style={{ cursor: 'pointer' }}
           >
             <img 
-              src={friend.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"} 
+              src={friend.avatar_url || nahideaIcon} 
               alt={friend.username}  
               className="fri-img" 
             />

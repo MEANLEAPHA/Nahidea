@@ -50,9 +50,8 @@ export const VerifyEmailForgetPassword = () => {
       if (res.ok) {
         toast.success("PIN verified successfully");
 
-        setTimeout(() => {
           navigate("/newpassword");
-        }, 1000);
+   
 
       } else {
         switch (res.status) {

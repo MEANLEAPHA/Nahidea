@@ -5,7 +5,8 @@ import api from "../api/axiosInstance";
 import  toast from "react-hot-toast";
 import { Save, Check, RotateCw, Plus, ArrowLeft } from "lucide-react";
 import "../style/Authentication/SetUpAccount.css";
-
+import { Spin } from "antd";
+import nahideaIcon from '../img/nahideaIcon.png';
 const AVATAR_STYLES = [ "adventurer", "avataaars", "big-smile", "bottts", "croodles", "fun-emoji", "icons", "identicon", "initials",
                         "lorelei", "micah", "miniavs", "notionists", "open-peeps", "personas", "pixel-art", "rings", "shapes", "thumbs" ];
 const COLORS = [
@@ -234,7 +235,7 @@ const handleSubmit = async (e) => {
   <div className="profile-card">
     <div className="avatar-wrapper">
       <img
-        src={avatar || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
+        src={avatar || nahideaIcon}
         alt="avatar"
         className="profile-avatar"
       />
@@ -391,7 +392,7 @@ const handleSubmit = async (e) => {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
-                  <LoadingOutlined spin style={{ fontSize: 16 }} />
+                  <Spin style={{ marginRight: '6px', color: 'var(--primary-color)' }} />
                 ) : (
                   <span>Finish Edit</span>
                 )}
@@ -405,10 +406,6 @@ const handleSubmit = async (e) => {
 };
 
 export default EditAccount;
-
-/* ------------------ */
-/* AVATAR PLAYGROUND */
-/* ------------------ */
 
 function AvatarPlayground({
   setAvatar,

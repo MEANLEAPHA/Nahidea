@@ -12,7 +12,7 @@ import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
   import { faArrowRightFromBracket, } from "@fortawesome/free-solid-svg-icons";
 import api from '../api/axiosInstance';
 import { useAuth } from '../context/AuthContext';
-
+import nahideaIcon from '../img/nahideaIcon.png';
 import {
   connectSocket,
   disconnectSocket,
@@ -267,7 +267,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
             
           </button>
           <img
-            src={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+            src={user?.avatar_url || nahideaIcon}
             className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
             style={{backgroundColor: 'var(--secondary-color)'}}
@@ -324,7 +324,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
                 >
                   <div className="user-list-item-meta" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div className="user-list-item-meta-avatar">
-                      <img src={item.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt="" className='user-chat-avatar' />
+                      <img src={item.avatar_url || nahideaIcon} alt="" className='user-chat-avatar' />
                       {onlineUsers.includes(String(item.id)) ? (
                         <div className='online-status-chat'></div>
                       ) : (
@@ -372,7 +372,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
               >
                 <div className="user-list-item-meta" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div className="user-list-item-meta-avatar">
-                    <img src={item.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt="" className='user-chat-avatar' />
+                    <img src={item.avatar_url || nahideaIcon} alt="" className='user-chat-avatar' />
                     {onlineUsers.includes(String(item.id)) ? (
                       <div className='online-status-chat'></div>
                     ) : (
@@ -419,7 +419,7 @@ const Sidebar = ({ activeChat, setActiveChat }) => {
               >
                 <div className="user-list-item-meta" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div className="user-list-item-meta-avatar">
-                    <img src={item.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt="" className='user-chat-avatar' />
+                    <img src={item.avatar_url || nahideaIcon} alt="" className='user-chat-avatar' />
                     {onlineUsers.includes(String(item.id)) ? (
                       <div className='online-status-chat'></div>
                     ) : (

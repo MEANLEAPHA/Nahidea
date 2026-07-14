@@ -125,9 +125,9 @@ export const NewPassword = () => {
       if (res.ok) {
         res.status === 200 && toast.success(data.message);
         localStorage.removeItem("resetEmail");
-        setTimeout(() => {
+     
           navigate("/login");
-        }, 1000);
+ 
       } else {
         switch (res.status) {
                   case 400:

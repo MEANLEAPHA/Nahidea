@@ -43,7 +43,7 @@ export default function PreviewRadio ({
          <div id="select-radio">
           <button type="button" onClick={() => setOpenPreview(false)} id="preview-closed-arrow"><ArrowLeftOutlined /></button>
         <div  className='radio-button-div'>
-             {[{id: 1, label: "Preview"}, {id: 2, label: "Tutorial"}, {id: 3, label: `${post_type.slice(0, 1).toUpperCase() + post_type.slice(1)} Rule`}].map((opt) => (
+             {[{id: 1, label: "Preview"}, {id: 2, label: `${post_type.slice(0, 1).toUpperCase() + post_type.slice(1)} Rule`}].map((opt) => (
           <button
             key={opt.id}
             onClick={() => setSelected(opt.id)}
@@ -90,15 +90,8 @@ export default function PreviewRadio ({
 
           />
           }
+      
          {selected === 2 && (
-           <div id="tutorial-div">
-             {post_type === "content" && <ContentTutorial />}
-             {post_type === "confession" && <ConfessionTutorial />}
-             {post_type === "question" && <QuestionTutorial />}
-           </div>
-           
-         ) }
-         {selected === 3 && (
           <div id="content-rule-div">
             <Rule setRule={post_type}/>
           </div>
@@ -113,29 +106,3 @@ export default function PreviewRadio ({
 };
 
 
-const ContentTutorial = () => {
-  return (
-    <div className="tutorial-div">
-      <iframe src="https://www.youtube.com/embed/lfxEbZr8Tjo?si=fwpdkOrQ1TFQz7-r" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen className="tutorial-video"></iframe>
-      <p className="tutorial-title">Upload Content Tutorial</p>
-    </div>
-  );
-}
-
-const ConfessionTutorial = () => {
-  return (
-    <div className="tutorial-div">
-      <iframe src="https://www.youtube.com/embed/lfxEbZr8Tjo?si=fwpdkOrQ1TFQz7-r" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen className="tutorial-video"></iframe>
-      <p className="tutorial-title">Upload Confession Tutorial</p>
-    </div>
-  );
-}
-
-const QuestionTutorial = () => {
-  return (
-    <div className="tutorial-div">
-      <iframe src="https://www.youtube.com/embed/lfxEbZr8Tjo?si=fwpdkOrQ1TFQz7-r" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen className="tutorial-video"></iframe>
-      <p className="tutorial-title">Upload Question Tutorial</p>
-    </div>
-  );
-}

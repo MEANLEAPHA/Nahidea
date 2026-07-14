@@ -1,14 +1,12 @@
 import toast from "react-hot-toast";
-
-
 const handleCopyLink = async (postId) => {
   try {
-    const postUrl = `https://nahidea.onrender.com/aboutpost/${postId}`;
+    const postUrl = `https://nahidea.com/aboutpost/${postId}`;
     await navigator.clipboard.writeText(postUrl);
     toast.success("Copied");
   } catch (err) {
     console.error(err);
-    message.error("Failed to copy link");
+    toast.error("Failed to copy link");
   }
 };
 

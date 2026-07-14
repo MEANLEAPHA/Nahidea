@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../style/page/Trending.css";
 import { useNavigate, useOutletContext } from "react-router-dom";
-
+import nahideaIcon from '../img/nahideaIcon.png';
 // antd
 import { List, Spin, Typography } from "antd";
 const { Text } = Typography;
@@ -390,7 +390,7 @@ const Trending = () => {
 
         {error && posts.length === 0 ? (
           <div className="error-container">
-            <Spin />
+            <Spin style={{color: 'var(--primary-color)'}}/>
             <p>Opps! Failed to load</p>
             <button onClick={fetchPosts} className="retry-btn">
               Retry
@@ -398,7 +398,7 @@ const Trending = () => {
           </div>
         ) : posts.length === 0 && !loading ? (
           <div className="error-container">
-            <Spin />
+            <Spin style={{color: 'var(--primary-color)'}}/>
             <p>No posts found</p>
           </div>
         ) : (
@@ -431,7 +431,7 @@ const Trending = () => {
                               post.is_anonymous === 1
                                 ? nahIdeaAuth
                                 : post.avatar_url ||
-                                  "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+                                  nahideaIcon
                             }
                             id="author-pf"
                             alt="avatar"
@@ -585,7 +585,7 @@ const Trending = () => {
 
             {loading && (
               <div className="nextPost-load-div">
-                <Spin />
+                <Spin style={{color: 'var(--primary-color)'}}/>
               </div>
             )}
           </>

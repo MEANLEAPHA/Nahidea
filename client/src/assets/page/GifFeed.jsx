@@ -7,7 +7,7 @@ import { Button, Dropdown, Space } from 'antd';
 import api from "../api/axiosInstance";
 import "../style/page/GifFeed.css";
 
-import nahideaTran from "../img/nahidea-tran.png";
+
 import {gif_category} from "../data/post_type_data";
 
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

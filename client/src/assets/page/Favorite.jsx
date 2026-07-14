@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../style/page/History.css";
@@ -8,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-
+import nahideaIcon from '../img/nahideaIcon.png';
 import api from "../api/axiosInstance";
 
 const Favorite = () => {
@@ -201,7 +200,7 @@ const PostHistoryCard = ({ item }) => {
               src={
                 item.isAnonymous === 1
                   ? nahIdeaAuth 
-                  : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
+                  : item.authurPf || nahideaIcon
               }
               alt="user-profile"
               id="author-pfs"

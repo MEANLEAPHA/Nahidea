@@ -285,7 +285,7 @@ export default function YourPosts() {
 
       {loading && (
         <div className="loading">
-          <Spin />
+          <Spin style={{color: 'var(--primary-color)'}}/>
         </div>
       )}
     </div>

@@ -26,7 +26,7 @@ export default function Chat() {
   const handleBack = () => setActiveChat(null);
 
     if (authLoading || !user) {
-        return <Spin />;
+        return <Spin style={{color: 'var(--primary-color)'}}/>;
       }
 
   if (isMobile) {

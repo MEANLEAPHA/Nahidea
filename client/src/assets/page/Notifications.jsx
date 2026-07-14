@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { useNotifications } from "../context/NotificationContext";
+import nahideaIcon from '../img/nahideaIcon.png';
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -28,7 +29,7 @@ export default function Notifications() {
 
   const getNotificationIcon = (type, avatar) => {
     const img = () => {
-      return <img src={avatar || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"} className='avatar-icon-type-noti' />
+      return <img src={avatar || nahideaIcon} className='avatar-icon-type-noti' />
     }
     switch(type) {
       case 'comment_reply':

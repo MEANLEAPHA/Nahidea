@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_SERVER_URL;
 
 import "../style/Authentication/SignPage.css";
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
-import nahideaTren from "../img/nahidea-tran.png"
+
 
 export const VerifyEmail = () => {
   const [pin, setPin] = useState("");
@@ -44,10 +44,10 @@ export const VerifyEmail = () => {
       if (res.ok) {
         toast.success("Email verified!");
 
-        setTimeout(() => {
+   
           navigate("/setupaccount", {state :{ Email: data.email, UserId: data.userId }});
           localStorage.removeItem("verifyEmail");
-        }, 1000);
+     
       } else {
         switch (res.status) {
           case 400:

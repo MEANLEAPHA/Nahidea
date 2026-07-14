@@ -148,9 +148,7 @@ const handleSubmit = async (e) => {
 
     if (res.status === 200) {
       toast.success('Setup successful! Please log in.');
-      setTimeout(() => {
         navigate("/login");
-      }, 3000);
       // note: isSubmitting intentionally stays true here — see note below
     }
   } catch (err) {
@@ -383,7 +381,7 @@ const handleSubmit = async (e) => {
                 title="Enter to complete setup"
                 disabled={isSubmitting}
               >
-                {isSubmitting && <Spin size="small" style={{ marginRight: 8 }} />}
+                {isSubmitting && <Spin size="small" style={{ marginRight: 8, color: 'var(--primary-color)' }} />}
                 <span>{isSubmitting ? "Setting up..." : "Complete Setup"}</span>
               </button>
             </form>

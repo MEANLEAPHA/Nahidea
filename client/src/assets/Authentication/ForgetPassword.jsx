@@ -35,9 +35,7 @@ export const ForgetPassword = () => {
       if (res.ok) {
        res.status === 200 && toast.success(data.message);
        localStorage.setItem("resetEmail", email);
-        setTimeout(() => {
           navigate("/verifyemailforgetpassword");
-        }, 1000);
       } else {
         switch (res.status) {
                   case 401:

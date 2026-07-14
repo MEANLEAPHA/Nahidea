@@ -148,9 +148,9 @@ const Register = () => {
       if (res.ok) {
         res.status === 200 && toast.success(data.message);
         localStorage.setItem("verifyEmail", data.email);
-        setTimeout(() => {
+   
           navigate("/verifyemail");
-        }, 1000);
+  
       } else {
         switch (res.status) {
                           case 400:

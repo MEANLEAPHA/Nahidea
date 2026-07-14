@@ -16,6 +16,7 @@ import "../style/page/AnswerQa.css";
 
 import { AnonymousName, AnonymousProfile } from "../util/anonymousTokens";
 import api from "../api/axiosInstance";
+import nahideaIcon from '../img/nahideaIcon.png';
 
 const AnonymousPf = memo(AnonymousProfile);
 const AnonymousNm = memo(AnonymousName);
@@ -389,7 +390,6 @@ const AnswerQa = () => {
     try {
     const res = await api.post(`/api/answers/answer-qa/${postId}/${questionId}/${questionType}`, payload);
 
-      // this question is now answered — don't let a stale cache serve it again
       const QaStoreRaw = sessionStorage.getItem("QaStore");
       if (QaStoreRaw) {
         const cached = JSON.parse(QaStoreRaw);
@@ -448,7 +448,7 @@ const AnswerQa = () => {
             {/* <div className="comms-avatar-div"> */}
               <AnonymousPf
                 enabled={enabled}
-                realPf={user?.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+                realPf={user?.avatar_url || nahideaIcon}
               />
             {/* </div> */}
             <AnonymousNm enabled={enabled} realName={user?.username || "guest"} />

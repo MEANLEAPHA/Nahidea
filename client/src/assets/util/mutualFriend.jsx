@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance"
-
+import nahideaIcon from '../img/nahideaIcon.png';
 const MutualFriend = ({ onlineUsers }) => {
   const [friends, setFriends] = useState([]);
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const FriendCard = ({ username, avatar_url, isOnline, userId }) => {
         }
     })}>
       <div className="friend-pf-div">
-        <img src={avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"} alt={username} className="friend-pf" />
+        <img src={avatar_url || nahideaIcon} alt={username} className="friend-pf" />
         {isOnline ? (
           <div className="online-dot status-fri-dot"></div>
         ) : (

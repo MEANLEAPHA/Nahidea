@@ -13,7 +13,7 @@ import {
 import api from "../api/axiosInstance";
 import "../style/page/ReportHistory.css";
 
-// map raw `type` column -> icon (falls back to a generic icon if NULL/unknown)
+import nahideaIcon from '../img/nahideaIcon.png';
 const getTypeIcon = (type) => {
   switch (type) {
     case "comment":
@@ -82,7 +82,7 @@ function ReportItem({ item }) {
         <img
           src={
             item.reported_avatar_url ||
-            "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
+            nahideaIcon
           }
           alt=""
           className="report-user-avatar"

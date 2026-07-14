@@ -1,6 +1,4 @@
-
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CloseOutlined, WarningOutlined, LoadingOutlined, FlagOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
@@ -8,6 +6,7 @@ import toast from "react-hot-toast";
 import "../style/page/ReportComment.css";
 
 import api from "../api/axiosInstance";
+import { Spin } from "antd";
 
 const STATE_KEY = "report_nav_state";
 const MIN_REASON_LENGTH = 10;
@@ -266,7 +265,7 @@ const ReportUser = () => {
                 disabled={submitting || reasonTooShort}
                 aria-busy={submitting}
               >
-                {submitting ? <LoadingOutlined spin /> : "Submit report"}
+                {submitting ? <Spin  style={{color: 'var(--primary-color)'}}/> : "Submit report"}
               </button>
             </div>
           </>

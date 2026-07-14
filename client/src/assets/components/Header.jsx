@@ -6,7 +6,7 @@ import {MenuOutlined,PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutl
 } from '@ant-design/icons';
 import { Divider, Dropdown, Space } from 'antd';
 import { useNotifications} from "../context/NotificationContext";
-
+import nahideaIcon from '../img/nahideaIcon.png';
 // style
 import "../style/Header.css";
 
@@ -186,7 +186,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
       <div style={{position: "relative"}} > 
         <Space>
           <img
-            src={avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
+            src={avatar_url || nahideaIcon}
             className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
           />

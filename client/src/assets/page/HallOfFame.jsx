@@ -5,7 +5,7 @@ import  toast  from "react-hot-toast";
 import "../style/page/HallOfFame.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRankingStar } from "@fortawesome/free-solid-svg-icons";
-
+import nahideaIcon from '../img/nahideaIcon.png';
 const fmt = (n) => Number(n ?? 0).toLocaleString("en-US");
 
 
@@ -16,12 +16,9 @@ export default function HallOfFame() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [showCelebration, setShowCelebration] = useState(false);
 
-  const triggerButterflies = () => {
-    setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 10000);
-  };
+
+
 
   // Fetch a specific page (replaces or appends)
   const fetchPage = async (pageNum, append = false) => {
@@ -49,7 +46,7 @@ export default function HallOfFame() {
   };
 
   useEffect(() => {
-    triggerButterflies();
+   
     fetchPage(1, false);
   }, []);
 
@@ -70,8 +67,6 @@ export default function HallOfFame() {
 
   return (
     <div className="hof-root">
-      {showCelebration && <div className="celebration-overlay"></div>}
-
       {/* Header */}
       <div className="hof-header">
         <div>
@@ -105,7 +100,7 @@ export default function HallOfFame() {
                 {String(user.rank).padStart(2, "0")}
               </div>
               <img
-                src={user.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+                src={user.avatar_url || nahideaIcon}
                 alt={user.username}
                 className="hof-row-avatar"
                 loading="lazy"
@@ -140,7 +135,7 @@ function PodiumCard({ user, variant }) {
     return (
       <div className="hof-podium-card hof-podium-first">
         <div className="hof-podium-avatar-wrap">
-          <img src={user.avatar_url} alt={user.username} className="hof-podium-avatar-first" />
+          <img src={user.avatar_url || nahideaIcon} alt={user.username} className="hof-podium-avatar-first" />
           <div className="hof-podium-badge">1</div>
         </div>
         <div className="hof-podium-meta">
@@ -158,7 +153,7 @@ function PodiumCard({ user, variant }) {
     <div className={`hof-podium-card hof-podium-${variant}`}>
       <div className="hof-podium-avatar-wrap">
         <img
-          src={user.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+          src={user.avatar_url || nahideaIcon}
           alt={user.username}
           className={`hof-podium-avatar hof-podium-avatar-${variant}`}
         />

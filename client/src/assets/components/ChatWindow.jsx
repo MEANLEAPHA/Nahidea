@@ -341,7 +341,7 @@ const ChatWindow = ({ activeChat, setActiveChat, onBack }) => {
       <div className="message-list" onScroll={handleScroll}>
         {loadingOlder && (
           <div style={{ textAlign: 'center', padding: '10px' }}>
-            <Spin size="small" />
+            <Spin size="small" style={{color: 'var(--primary-color)'}}/>
           </div>
         )}
         <MessageList

@@ -36,6 +36,7 @@ import RankBadge from "../components/RankBadge";
 
 // img
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import nahideaIcon from '../img/nahideaIcon.png';
 
 // token api
 import api from "../api/axiosInstance";
@@ -212,15 +213,6 @@ const calculateAverageAnswer = (answers, questionType) => {
     }
 
     case 'openend': {
-      // const total = answers.length;
-   
-      // const wordCounts = answers.map(a => (a.text_answer || '').split(' ').length);
-      // const avgWords = (wordCounts.reduce((a, b) => a + b, 0) / total).toFixed(1);
-      // return {
-      //   type: 'openend',
-      //   total,
-      //   avgWords: parseFloat(avgWords)
-      // };
       null
     }
 
@@ -228,7 +220,6 @@ const calculateAverageAnswer = (answers, questionType) => {
       return null;
   }
 };
-
 
 // render component
 const AverageAnswerDisplay = ({ averageData, questionType, ratingIcon }) => {
@@ -462,7 +453,7 @@ const AnswerCard = memo(({ answer, onUpvote, onDownvote, isVoting, highlightedAn
             className="answer-avatar" 
             style={{ background: answer.author_bg_color || '#999' }}
           >
-            <img src={answer.is_anonymous === 1 ? nahIdeaAuth : (answer.avatar_url || 'https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp')} alt="avatar" className="avatar-image"  style= {{cursor: answer.is_anonymous === 1 ? 'none' : 'pointer'}}/>
+            <img src={answer.is_anonymous === 1 ? nahIdeaAuth : (answer.avatar_url || nahideaIcon)} alt="avatar" className="avatar-image"  style= {{cursor: answer.is_anonymous === 1 ? 'none' : 'pointer'}}/>
           </div>
           <div className="answer-author-info">
             <span className="answer-author-name" 
@@ -793,7 +784,6 @@ const AboutPost = () => {
   const [answers, setAnswers] = useState([]);
   const [averageData, setAverageData] = useState(null);
   const [votingAnswerId, setVotingAnswerId] = useState(null);
-  const [userProfilePic, setUserProfilePic] = useState("https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp");
 
   const [page, setPage] = useState(1);
   const [answerPage, setAnswerPage] = useState(1);
@@ -1161,13 +1151,13 @@ const AboutPost = () => {
   const renderAvatar = (c) => {
     if (c.is_deleted === 1) return null;
     if (c.is_anonymous === 1) return nahIdeaAuth;
-    return c.avatar_url || userProfilePic;
+    return c.avatar_url ;
   };
 
   if (!post) {
     return (
       <div className="loading-page">
-        <Spin />
+        <Spin style="var(--primary-color)"/>
         <p style={{color: 'var(--font-color'}}>Loading</p>
       </div>
     );
@@ -1395,7 +1385,7 @@ const AboutPost = () => {
                   style={{ backgroundColor: post?.is_anonymous === 1 ? post.anonymous_bg_color : "", cursor: post?.is_anonymous === 1 ? 'none' : 'pointer' }}
                   onClick = {Number( post.is_anonymous) !== 1 ? () => navigate('/accounts', { state: {userId: post.user_id}}) : null}
               >
-                <img src={post?.is_anonymous === 1 ? nahIdeaAuth : (post?.avatar_url || userProfilePic)} id="author-pf" alt="avatar" />
+                <img src={post?.is_anonymous === 1 ? nahIdeaAuth : (post?.avatar_url || nahideaIcon)} id="author-pf" alt="avatar" />
               </div>
 
               <div className='user-post-info'>

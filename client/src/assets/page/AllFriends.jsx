@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useOutletContext, useLocation } from "react-router-dom";
 import api from "../api/axiosInstance";
 import "../style/page/AllFriends.css";
+import nahideaIcon from '../img/nahideaIcon.png';
 
 const AllFriends = () => {
   const navigate = useNavigate();
@@ -144,11 +145,11 @@ const AllFriends = () => {
       onClick={() => navigate(`/accounts`, { state: { userId: user.id } })}
     >
       <img 
-        src={user.avatar_url || `https://api.dicebear.com/9.x/adventurer/svg?seed=${user.username || 'default'}`} 
+        src={user.avatar_url || nahideaIcon} 
         alt={user.username || 'profile'} 
         className='fris-pf'
         onError={(e) => {
-          e.target.src = `https://api.dicebear.com/9.x/adventurer/svg?seed=default`;
+          e.target.src = nahideaIcon;
         }}
       />
       <div className='friend-info'>

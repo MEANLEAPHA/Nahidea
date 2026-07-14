@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-const token = localStorage.getItem("token");
+import nahideaIcon from '../img/nahideaIcon.png';
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 const RecentHistory = () => {
     const navigate = useNavigate();
@@ -93,7 +92,7 @@ const PostHistoryCard = ({ item, deletePostHistory }) => {
             }}
           >
             <img
-              src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+              src={item.isAnonymous === 1 ? nahIdeaAuth : item.authurPf || nahideaIcon}
               alt="user-profile"
               id="author-pf"
             />

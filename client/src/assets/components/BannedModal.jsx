@@ -1,4 +1,3 @@
-// components/BannedModal.jsx
 import React from "react";
 import "../style/component/BannedModal.css";
 import { ExclamationCircleFilled } from "@ant-design/icons";

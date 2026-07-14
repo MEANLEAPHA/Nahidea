@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "../style/page/History.css";
 import { Input } from 'antd';
 import { SearchOutlined, HeartOutlined } from '@ant-design/icons';
-
+import nahideaIcon from '../img/nahideaIcon.png';
+import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import api from "../api/axiosInstance"
 const token = localStorage.getItem('token');
 
 const LikePost = () => {
@@ -22,10 +24,12 @@ const LikePost = () => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/likes?page=${nextPage}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
+      // const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/likes?page=${nextPage}`, {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // });
+      // const json = await res.json();
+      const res = await api.get(`/api/posts/likes?page=${nextPage}`);
+      const json = res.data;
       if (json.data) {
         setRecentDataHis(prev => [...prev, ...json.data]);
         setPage(nextPage);
@@ -124,8 +128,8 @@ const PostHistoryCard = ({ item }) => {
             <img
               src={
                 item.isAnonymous === 1
-                  ? "https://api.dicebear.com/9.x/adventurer/svg?seed=Anon"
-                  : item.authurPf || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"
+                  ? nahIdeaAuth
+                  : item.authurPf || nahideaIcon 
               }
               alt="user-profile"
               id="author-pfs"

@@ -24,7 +24,7 @@ import MutualFriend from "../util/mutualFriend";
 import RecentHistory from "../util/recentHistory";
 import parseJSON from './util/parseJson';
 import DotDropDown from "./util/dotDropDown";
-import Loader from "./util/loader";
+
 
 import RankBadge from "../components/RankBadge";
 import { useUserRanking } from "./util/useUserRanking";

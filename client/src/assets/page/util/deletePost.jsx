@@ -1,5 +1,4 @@
-import axios from "axios";
-import { message } from "antd";
+import api from '../../api/axiosInstance';
 import toast from "react-hot-toast";
 const token = localStorage.getItem("token");
 
@@ -9,8 +8,7 @@ const handleDeletePost = async (postId) => {
     );
   if (!confirmed) return;
   try {
-    await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/delete-post/${postId}`,
-       { headers: { Authorization: `Bearer ${token}` } });
+    await api.delete(`/api/delete-post/${postId}`);
     toast.success("Post deleted successfully");
   } catch (err) {
     console.error(err);

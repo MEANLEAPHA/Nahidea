@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import nahideaIcon from '../img/nahideaIcon.png';
 import { iconOptions } from "../data/post_type_data";
 import {
   faThumbsUp,
@@ -17,6 +18,7 @@ import "../style/page/UnsolvedQA.css";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { Spin } from "antd";
 
 const UnsolvedQA = () => {
   const navigate = useNavigate();
@@ -296,7 +298,7 @@ const UnsolvedQA = () => {
                     }}
                   >
                     <img
-                      src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url || "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix"}
+                      src={post.is_anonymous === 1 ? nahIdeaAuth : post.avatar_url || nahideaIcon}
                       alt="user-profile"
                       id="author-pf"
                     />
@@ -321,7 +323,7 @@ const UnsolvedQA = () => {
             disabled={loadingMore}
             className="load-more-btn"
           >
-            {loadingMore ? <LoadingOutlined /> : "Load More"}
+            {loadingMore ? <Spin style={{color: 'var(--primary-color)'}} /> : "Load More"}
           </button>
         </div>
       )}

@@ -1,4 +1,3 @@
-// components/AuthRequiredModal.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/components/AuthRequiredModal.css";

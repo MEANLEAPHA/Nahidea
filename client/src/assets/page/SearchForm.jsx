@@ -22,6 +22,7 @@ import RankBadge from "../components/RankBadge";
 
 
 import nahIdeaAuth from "../img/nahIdeaAuth.png";
+import nahideaIcon from '../img/nahideaIcon.png';
 import { iconOptions } from "../data/post_type_data";
 
 import api from "../api/axiosInstance";
@@ -463,7 +464,7 @@ const SearchForm = () => {
 
         {loading ? (
           <div className="error-container">
-            <Spin />
+            <Spin style={{color: 'var(--primary-color)'}}/>
           </div>
         ) : error ? (
           <div className="error-container">
@@ -488,7 +489,7 @@ const SearchForm = () => {
                   {users.map((u) => (
                     <li key={u.id} className="query-card" onClick={() => openUser(u.id)}>
                       <img
-                        src={u.avatar_url || nahIdeaAuth}
+                        src={u.avatar_url || nahideaIcon}
                         alt={u.username}
                         className="search-icon-query"
                         style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
@@ -513,7 +514,7 @@ const SearchForm = () => {
                 {expandMode === "users" && (
                   <>
                      {expandLoading && <div className="see-all-container">
-                               <Spin />
+                               <Spin style={{color: 'var(--primary-color)'}}/>
                           </div>}
                     {hasMoreUsers && !expandLoading && (
                       <div className="see-all-container">
@@ -566,7 +567,7 @@ const SearchForm = () => {
                                   post.is_anonymous === 1
                                     ? nahIdeaAuth
                                     : post.avatar_url ||
-                                      "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+                                      nahideaIcon
                                 }
                                 id="author-pf"
                                 alt="avatar"
@@ -723,7 +724,7 @@ const SearchForm = () => {
                 {expandMode === "posts" && (
                   <>
                     {expandLoading && <div className="see-all-container">
-                               <Spin />
+                               <Spin style={{color: 'var(--primary-color)'}}/>
                           </div>}
                     {hasMorePosts && !expandLoading && (
                           <div className="see-all-container">

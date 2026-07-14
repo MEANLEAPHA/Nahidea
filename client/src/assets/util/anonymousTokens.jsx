@@ -1,6 +1,5 @@
-// src/utils/anonymousTokens.js
- import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-  import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserSecret, faMask} from "@fortawesome/free-solid-svg-icons";
 
   import nahIdeaAuth from "../img/nahIdeaAuth.png";
 

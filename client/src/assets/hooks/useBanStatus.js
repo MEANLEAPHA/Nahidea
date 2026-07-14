@@ -1,4 +1,3 @@
-// hooks/useBanStatus.js
 import { useState, useEffect } from "react";
 import api from "../api/axiosInstance";
 

@@ -5,7 +5,6 @@ import {NotificationProvider} from "./assets/context/NotificationContext.jsx";
 import {RankingProvider} from "./assets/context/RankContext.jsx";
 import App from './App.jsx'
 
-
 const main = document.getElementById('root');
 const root = createRoot(main);
 

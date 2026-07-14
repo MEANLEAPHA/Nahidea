@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import nahideaIcon from '../img/nahideaIcon.png';
+import api from "../api/axiosInstance";
 import Select from "react-select";
 import toast from "react-hot-toast";
 import "../style/page/Spammy.css";
@@ -138,10 +139,9 @@ export default function Spammy() {
 
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/searchUser?q=${encodeURIComponent(query)}`,
-          getAuthHeaders()
-        );
+        const res = await api.get(
+          `/api/searchUser?q=${encodeURIComponent(query)}` );
+        
 
         if (requestId === searchRequestIdRef.current) {
           setSearchResults(res.data);
@@ -164,10 +164,8 @@ export default function Spammy() {
 
   const fetchSentSpam = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/sent`,
-        getAuthHeaders()
-      );
+      const res = await api.get(
+        `/api/spam/sent`);
       setSentSpam(res.data);
     } catch (err) {
       console.error(err);
@@ -177,10 +175,8 @@ export default function Spammy() {
 
   const fetchInbox = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/inbox`,
-        getAuthHeaders()
-      );
+      const res = await api.get(
+        `/api/spam/inbox`);
       setInbox(res.data);
     } catch (err) {
       console.error(err);
@@ -190,10 +186,8 @@ export default function Spammy() {
 
   const fetchUnreadCount = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/unread-count`,
-        getAuthHeaders()
-      );
+      const res = await api.get(
+        `/api/spam/unread-count`);
       setUnreadCount(res.data.unread);
     } catch (err) {
       console.error(err);
@@ -213,10 +207,9 @@ export default function Spammy() {
 
     setSending(true);
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/send`,
-        { receiver_id: receiverId, spam_type: spamType.value },
-        getAuthHeaders()
+      await api.post(
+        `/api/spam/send`,
+        { receiver_id: receiverId, spam_type: spamType.value }
       );
 
       toast.success("Spam Sent");
@@ -235,10 +228,9 @@ export default function Spammy() {
 
   const openSpam = async (spam) => {
     try {
-      await axios.put(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/view/${spam.spam_id}`,
-        {},
-        getAuthHeaders()
+      await api.put(
+        `/api/spam/view/${spam.spam_id}`,
+        {}
       );
 
       setActiveSpam(spam);
@@ -263,8 +255,8 @@ export default function Spammy() {
 
     setMarkingAllViewed(true);
     try {
-      await axios.put(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/view-all`,
+      await api.put(
+        `/api/spam/view-all`,
         {},
         getAuthHeaders()
       );
@@ -295,8 +287,8 @@ export default function Spammy() {
     else setDeletingAllSent(true);
 
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/delete-all?type=${type}`,
+      await api.delete(
+        `/api/spam/delete-all?type=${type}`,
         getAuthHeaders()
       );
 
@@ -323,9 +315,8 @@ export default function Spammy() {
 
     setDeletingSpamId(spam.spam_id);
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/api/spam/delete/${spam.spam_id}`,
-        getAuthHeaders()
+      await api.delete(
+        `/api/spam/delete/${spam.spam_id}`
       );
 
       if (type === "sent") {
@@ -491,7 +482,7 @@ export default function Spammy() {
                     }}
                   >
                     <img
-                      src={user.avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
+                      src={user.avatar_url || nahideaIcon}
                       alt="avatar"
                       className="avatar"
                       onError={(e) => {
@@ -566,7 +557,7 @@ export default function Spammy() {
               <div className="inbox-spam-div">
                 <img
                   className="inbox-user-img"
-                  src={spam.sender_avatar_url || "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"}
+                  src={spam.sender_avatar_url || nahideaIcon}
                   alt=""
                   onError={(e) => {
                     e.target.onerror = null;

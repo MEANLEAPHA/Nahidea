@@ -1,5 +1,3 @@
-// src/assets/util/scrollStore.js
-
 const STORAGE_KEY = "home_scroll_data";
 
 export function saveScroll(key, value) {

@@ -42,7 +42,7 @@ const GifPicker = ({ onSelect }) => {
         style={{ marginBottom: 12 }}
       />
       {loading ? (
-        <Spin style={{ display: 'block', margin: '20px auto' }} />
+        <Spin style={{ display: 'block', margin: '20px auto',color: 'var(--primary-color)' }} />
       ) : gifs.length === 0 ? (
         <Empty description="No GIFs found" />
       ) : (
