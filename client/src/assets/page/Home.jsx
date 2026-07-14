@@ -131,7 +131,6 @@ export default function Home() {
   useLayoutEffect(() => {
     if (initialLoadDone && posts.length > 0 && !hasRestoredScroll.current) {
       const saved = getScroll("home");
-      console.log('Restoring scroll - Target Y:', saved.y, 'Target Page:', saved.page);
 
       const attemptScroll = (attempts = 0) => {
         if (attempts > 5) return;
@@ -256,11 +255,6 @@ export default function Home() {
         const next = pageRef.current + 1;
         setPage(next);
         fetchPosts(next);
-        // setPage((prev) => {
-        //   const next = prev + 1;
-        //   fetchPosts(next);
-        //   return next;
-        // });
       }
     };
 
@@ -638,9 +632,9 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
         <DailyNews/>
   
             {error && posts.length === 0 ? (
-                <div className='error-container'><Loader /><p>Opps! Failed to load</p></div>
+                <div className='error-container'><Spin style={{color: 'var(--primary-color'}}/> <br /><p>Opps! Failed to load</p></div>
               ) : posts.length === 0 && !loading ? (
-                <div className='error-container'><Loader /><p>No posts found</p></div>
+                <div className='error-container'><Spin style={{color: 'var(--primary-color'}}/> <br /><p>No posts found</p></div>
               ) : (
               <>
                 <List

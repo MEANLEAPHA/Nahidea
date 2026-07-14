@@ -108,8 +108,29 @@ export const AuthProvider = ({ children }) => {
         });
       } catch (err) {
         if (myRequestId !== requestIdRef.current) return;
-        console.error(err);
-        logout();
+
+        const status = err.response?.status;
+        const isNetworkError = !err.response; // no response = network/offline/timeout, NOT an auth rejection
+
+        if (status === 401) {
+          // Server explicitly rejected the token — genuinely invalid/expired
+          console.error("Session invalid, logging out:", err);
+          logout();
+          return;
+        }
+
+        if (isNetworkError) {
+          // Likely Safari waking up before network reconnects — don't destroy a valid session.
+          // Retry once after a short delay instead of giving up immediately.
+          console.warn("Network error verifying session, retrying shortly...", err);
+          setTimeout(() => {
+            if (myRequestId === requestIdRef.current) run();
+          }, 1500);
+          return;
+        }
+
+        // Some other server error (500, etc.) — also don't nuke a valid session over this
+        console.error("Unexpected error verifying session:", err);
       } finally {
         if (myRequestId === requestIdRef.current) setLoading(false);
       }

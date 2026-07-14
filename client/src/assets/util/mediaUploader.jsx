@@ -200,7 +200,7 @@ export function MediaUploader({ maxFiles = 5, value = [], onChange }) {
                 className="remove-all-btn"
                 style={filledCount > 1 ? { display: "block" } : { display: "none" }}
               >
-                <ClearOutlined /> Remove all
+                Remove all
               </button>
               <div className="media-count">
                 {filledCount} / {maxFiles}

@@ -3,9 +3,9 @@ import{TagInput} from "../util/tagInput";
 import {MediaUploader} from "../util/mediaUploader";
 import { AnonymousToggle } from "../util/anonymousTokens";
 import { EditOutlined ,TagsOutlined,CloudUploadOutlined,LayoutOutlined   } from '@ant-design/icons';
- import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-  import { faUserSecret, faMask, faBold, faItalic, faUnderline, faStrikethrough, faHeading, faSubscript, faSuperscript, faQuoteLeft, faLink, faCode, faList, faList12} from "@fortawesome/free-solid-svg-icons";
-  import { faImages} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserSecret, faMask, faBold, faItalic, faUnderline, faStrikethrough, faHeading, faSubscript, faSuperscript, faQuoteLeft, faLink, faCode, faList, faList12} from "@fortawesome/free-solid-svg-icons";
+import { faImages} from "@fortawesome/free-regular-svg-icons";
 
 import {DeleteOutlined} from '@ant-design/icons';
 
@@ -359,10 +359,6 @@ const MemoEditor = memo(TiptapEditor);
 
 
 export const MarkdownPreview = ({ content }) => {
-// const normalized = (content || "")
-//   .replace(/^\s*\n+/, "")
-//   .replace(/\n+\s*$/, "")
-//   .replace(/\n{3,}/g, "\n\n"); 
 
 
   return (

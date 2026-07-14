@@ -215,7 +215,7 @@ export default function DailyNews() {
     },
     {
       id: "didyouknow",
-      title: "Did You Know",
+      title: "",
       icon: faLightbulb,
       fetcher: fetchFact,
       bg: bgImages.didyouknow,
@@ -223,7 +223,7 @@ export default function DailyNews() {
 
     {
       id: "advice",
-      title: "Advice",
+      title: "",
       icon: faSeedling,
       fetcher: fetchAdvice,
       bg: bgImages.advice,
@@ -329,7 +329,7 @@ export default function DailyNews() {
             <>
               <div
                 className="card-overlay"
-                style={{ backgroundImage: `url(${cat.bg})`, backgroundOpacity: 0.5 }}
+                style={{ backgroundImage: `url(${cat.bg})` }}
               />
 
                 <div className='top-card-daily'>
@@ -337,11 +337,13 @@ export default function DailyNews() {
                     className="card-icons"
                     icon={cat.icon}
                   />
-                  {cat.title}
+               
                 </div>
              
-              
-                {data.question}
+              <span className='front-senten'>
+            {data.question}
+              </span>
+                
             
 
 
@@ -380,10 +382,12 @@ export default function DailyNews() {
                 icon={cat.icon}
               />
 
-                 Joke
+    
                 </div>
-              
-               {data.setup}
+                 <span className='front-senten'>
+            {data.setup}
+                 </span>
+               
 
             </>
           }
@@ -427,7 +431,6 @@ export default function DailyNews() {
                   icon={cat.icon}
                 />
 
-              {cat.title}
                 </div>
           
 

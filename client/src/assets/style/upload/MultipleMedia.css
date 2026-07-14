@@ -8,7 +8,6 @@
   position: relative;
 
 }
-
 .upload-placeholder {
   border: 2.22px dashed var(--secondary-color);
   width: 100%;
@@ -163,8 +162,6 @@ width: 100%;
   height: auto;
 }
 .remove-all-btn{
-
-
   cursor: pointer;
   opacity: 0.9;
   background: var(--back-con);
@@ -177,7 +174,7 @@ width: 100%;
 }
 .remove-all-btn:hover{
   opacity: 1;
-  background: #b31e1e66;
+  background: tomato;
 }
 
 .remove-all-btn:disabled {

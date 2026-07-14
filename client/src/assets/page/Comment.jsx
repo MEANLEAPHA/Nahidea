@@ -55,7 +55,7 @@ const Comment = () => {
 
   const [lockedAnon, setLockedAnon] = useState(false);
   const [anonIdentity, setAnonIdentity] = useState(null); 
-  const [anonLoading, setAnonLoading] = useState(true);
+  // const [anonLoading, setAnonLoading] = useState(true);
   const [showAnnoy, setShowAnnoy] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -66,6 +66,7 @@ const Comment = () => {
   const hasRestoredDraft = useRef(false);
 
   // --- Bail out early if we truly have nothing to work with ----------
+
   useEffect(() => {
     if (missingState) {
       toast.error("We lost track of which post this comment belongs to.");
@@ -243,8 +244,7 @@ const Comment = () => {
   };
 
   if (missingState) {
-    // We already toast + navigate(-1) in the effect above; render nothing
-    // meaningful in the meantime rather than crashing on state.postId.
+    
     return null;
   }
 
@@ -302,7 +302,7 @@ const Comment = () => {
                     className="gif-button"
                     onClick={() => setShowAnnoy(!showAnnoy)}
                     aria-label="Toggle anonymous mode options"
-                    disabled={anonLoading}
+
                   >
                     <FontAwesomeIcon icon={faMask} />
                   </button>
