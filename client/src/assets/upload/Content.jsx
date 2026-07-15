@@ -11,7 +11,6 @@ import { useAnonymousTokens, AnonymousTokensCoolDown } from "../util/anonymousTo
 import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import NahideaInfo from "../util/upload/NahideaInfo";
-import {AnimatedIcon} from "../util/upload/AnimatedIcon";
 
 
 // data import
@@ -49,7 +48,6 @@ export default function Content() {
 
   const [title, setTitle] = useState("");
   const [selectType, setSelectType] = useState(null);
-  const [selectedIcon, setSelectedIcon] = useState(null);
   const [tags, setTags] = useState([]);
   const [mediaFiles, setMediaFiles] = useState([]);
 
@@ -67,7 +65,6 @@ export default function Content() {
     setMediaFiles([]);
     setIsAnonymous(false);
     setSelectType(null);
-    setSelectedIcon(null);
   }
 
   // handle submit form
@@ -103,7 +100,6 @@ export default function Content() {
       formData.append("content_title", title);
       formData.append("text_body", textBody);
       formData.append("content_type", selectType?.value ?? "general");
-      formData.append("content_type_icon", selectedIcon);
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
       tags.forEach((t) => formData.append("tags[]", t));
       mediaFiles.forEach((f) => formData.append("contentFile", f));
@@ -141,8 +137,7 @@ export default function Content() {
           options={content_options}
           value={selectType}
           onChange={(option) => {
-            setSelectType(option);        // store the whole option
-            setSelectedIcon(option?.icon); // store icon string
+            setSelectType(option);      
           }}
           classNamePrefix="custom"
           placeholder="Select Content Topic"
@@ -154,7 +149,7 @@ export default function Content() {
                 gap: "10px",
               }}
             >
-              <AnimatedIcon src={option.icon} />
+
 
               <span>{option.label}</span>
             </div>
@@ -206,7 +201,7 @@ export default function Content() {
       <article id='preview-article' style={{display: openPreview ? "block" : "none"}}> 
         <PreviewRadio 
           textBody={textBody} title={title} filesMedia= {mediaFiles} postTag={tags} 
-          selectType={selectType?.value} selectTypeIcon={selectedIcon}
+          selectType={selectType?.value} 
           isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} 
           post_type ='content'
 

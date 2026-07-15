@@ -12,7 +12,7 @@ import {TagInput }from "../util/tagInput";
 import { useAnonymousTokens, AnonymousTokensCoolDown, AnonymousName, AnonymousProfile} from "../util/anonymousTokens";
 import toast from "react-hot-toast";
 import { question_options,iconOptions, question_type } from "../data/post_type_data";
-import {AnimatedIcon} from "../util/upload/AnimatedIcon";
+
 
 // util
 import Rule from "../util/upload/Rule";
@@ -56,7 +56,6 @@ export default function Questiion(){
 
   // question topic related
   const [selectType, setSelectType] = useState(null);
-  const [selectedIcon, setSelectedIcon] = useState(null);
 
   // tag state
   const [tags, setTags] = useState([]);
@@ -92,7 +91,7 @@ export default function Questiion(){
   // preview toggle
   const [openPreview, setOpenPreview] = useState(false);
 
-  const resetMain = () => {setAnonymousName(null),setSelectType(null), setSelectedIcon(null), setQuestionType(null), setTitle(""), setTags([])};
+  const resetMain = () => {setAnonymousName(null),setSelectType(null), setQuestionType(null), setTitle(""), setTags([])};
   const resetRange = () => { setMin(0); setMax(100); setStep(1); setRangeValue(0); };
   const resetSingleChoice = () => { setSingleChoices(["", "", ""]); };
   const resetMultipleChoice = () => { setMultipleChoices(["","",""]); setIncludeAllAbove(0); };
@@ -231,7 +230,6 @@ export default function Questiion(){
       tags.forEach((t) => formData.append("tags[]", t));
       formData.append("post_type", "question");
       formData.append("question_related_to", selectType?.value ?? "general");
-      formData.append("question_related_to_icon", selectedIcon);
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
       if(anonymousName) formData.append("anonymousName", anonymousName);
       formData.append("question_title", title);
@@ -315,8 +313,7 @@ export default function Questiion(){
             value={selectType}
             // onChange={setSelectType}
             onChange={(option) => {
-              setSelectType(option);        // store the whole option
-              setSelectedIcon(option?.icon); // store icon string
+              setSelectType(option);        
             }}
             classNamePrefix="custom"
             placeholder="Select Question Topic"
@@ -328,8 +325,6 @@ export default function Questiion(){
                   gap: "10px",
                 }}
               >
-                <AnimatedIcon src={option.icon} />
-
                 <span>{option.label}</span>
               </div>
             )}
@@ -390,7 +385,7 @@ export default function Questiion(){
             <PreviewRadio
               title={title} 
               postTag={tags} selectType={selectType?.value}
-              isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} selectTypeIcon={selectedIcon}
+              isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} 
               post_type='question'
               questionType={questionType?.value}
               singleChoices={singleChoices}

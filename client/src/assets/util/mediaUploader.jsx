@@ -10,10 +10,7 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const BLOCKED_TYPES = ["image/gif"]; // explicit block for GIFs
 const isVideoType = (type = "") => type.startsWith("video/");
 
-/**
- * Validates a single file against type and size rules.
- * Returns { valid: true } or { valid: false, reason: string } for a toast message.
- */
+
 const validateFile = (file) => {
   const type = file.type || "";
 

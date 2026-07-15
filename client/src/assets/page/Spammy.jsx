@@ -9,6 +9,7 @@ import { faInbox, faTriangleExclamation, faX } from "@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { spammy_options } from "../data/post_type_data";
 import { faEnvelope, faEnvelopeOpen, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { Spin } from "antd";
 
 const SEARCH_DEBOUNCE_MS = 300;
 const MIN_SEARCH_LENGTH = 1;
@@ -465,7 +466,7 @@ export default function Spammy() {
               }}
             />
 
-            {searchLoading && <div className="search-loading">Searching…</div>}
+            {searchLoading && <div className="search-loading"> <Spin style={{color: 'var(--primary-color)', marginRight: '5px'}}/>Searching…</div>}
 
             {showDropdown && searchResults.length > 0 && (
               <div className="search-dropdown">
@@ -600,14 +601,15 @@ export default function Spammy() {
       <div className="sent-panel">
         <div className="sent-header">
           <h3 className="spam-h3-label">Your Sent Spam</h3>
-          <button
+           {sentSpam.length > 0 &&   <button
             type="button"
             className="delete-all-spam-btn"
             onClick={() => handleDeleteAll("sent")}
             disabled={deletingAllSent || sentSpam.length === 0}
           >
             {deletingAllSent ? "Clearing…" : "Clear All"}
-          </button>
+          </button>}
+        
         </div>
 
         {sentSpam.length === 0 && <div className="empty-state">No spam sent yet</div>}

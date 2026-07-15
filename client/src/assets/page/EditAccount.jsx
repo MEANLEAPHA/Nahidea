@@ -75,17 +75,17 @@ const EditAccount = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [avatar, setAvatar] = useState(
-    "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+    "https://img.nahidea.com/img/content/1784081044474-nahidea.webp"
   );
   const [avatarType, setAvatarType] = useState('url'); // 'url' or 'file'
   const [avatarFile, setAvatarFile] = useState(null);
 
   const [username, setUsername] = useState('');
   const [banner, setBanner] = useState(
-    "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
+    "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"
   );
   const [bannerFile, setBannerFile] = useState(
-    "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
+    "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"
   );
 
   const [profession, setProfession] =
@@ -193,11 +193,11 @@ const handleSubmit = async (e) => {
   <div 
     id='acc-banner-setup' 
     style={{ 
-      "--preview-url-banner-setup": `url(${banner || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} )` 
+      "--preview-url-banner-setup": `url(${banner || "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"} )` 
     }}
   >
     <img 
-      src={banner || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} 
+      src={banner || "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"} 
       id="img-banner-setup" 
       alt="banner"
     />
@@ -235,7 +235,7 @@ const handleSubmit = async (e) => {
   <div className="profile-card">
     <div className="avatar-wrapper">
       <img
-        src={avatar || nahideaIcon}
+        src={avatar || 'https://img.nahidea.com/img/content/1784081044474-nahidea.webp'}
         alt="avatar"
         className="profile-avatar"
       />

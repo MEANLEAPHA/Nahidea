@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import {useLocation, Outlet, useNavigate, useOutletContext} from 'react-router-dom';
 import "../style/page/Accounts.css";
 import gossiperlogo from "../img/gossiperlogo.png";
+// add at the top of Accounts.jsx
+import toast from "react-hot-toast";
 // antd
 import { List, Card, Avatar, Typography, Tag, Space, Spin, Empty, Button, Dropdown, message} from "antd";
 const { Title, Text } = Typography;
@@ -718,7 +720,7 @@ export default function Accounts() {
          {error ?
                     (  
                       <div className='error-container'>
-                          <Spin style="var(--primary-color)"/>
+                          <Spin style={{color: "var(--primary-color)"}}/>
                           <p>Opps! Failed to load</p>
                       </div>
                     ) 
@@ -726,7 +728,7 @@ export default function Accounts() {
                     posts.length === 0 && !loading ? 
                     (
                         <div className='error-container'>
-                            <Spin style="var(--primary-color)"/>
+                            <Spin style={{color: "var(--primary-color)"}}/>
                             <p>No posts found</p>
                         </div>
                     ) 
@@ -783,12 +785,6 @@ export default function Accounts() {
                             <div className="dot"></div>
                             <div className="category-post-div">
                               <span className="post-type-label">{post?.data?.type}</span>
-                              {post?.data?.cate_icon && (
-                                <DisplayAnimatedIcon
-                                  src={post.data.cate_icon}
-                                  isHovered={hoveredPostId === post.id}
-                                />
-                              )}
                             </div>
                           </p>
                           <p className="post-at">{post.created_at}</p>
@@ -913,7 +909,7 @@ export default function Accounts() {
 
                             {loading && (
                                 <div className="nextPost-load-div">
-                                    <Spin style="var(--primary-color)"/>
+                                    <Spin style={{color: "var(--primary-color)"}}/>
                                 </div>
                             )}
                         </>
@@ -1084,56 +1080,3 @@ const FriendList = ({targetUsername, tagetUserId}) => {
     </div>
   );
 };
-
-let scriptLoaded = false;
-function DisplayAnimatedIcon({ src, isHovered }) {
-  const [isValid, setIsValid] = useState(false);
-  const [iconLoaded, setIconLoaded] = useState(false);
-
-  // Load Lordicon script once globally
-  useEffect(() => {
-    if (!scriptLoaded && typeof window !== 'undefined') {
-      const script = document.createElement("script");
-      script.src = "https://cdn.lordicon.com/lordicon.js";
-      script.async = true;
-      document.body.appendChild(script);
-      scriptLoaded = true;
-    }
-  }, []);
-
-  // Load and validate icon JSON only when needed (on hover)
-  useEffect(() => {
-    if (!src || !isHovered || iconLoaded) return;
-
-    let isMounted = true;
-    
-    fetch(src)
-      .then((res) => {
-        if (!res.ok) throw new Error("Invalid JSON");
-        return res.json();
-      })
-      .then(() => {
-        if (isMounted) {
-          setIsValid(true);
-          setIconLoaded(true);
-        }
-      })
-      .catch(() => {
-        if (isMounted) setIsValid(false);
-      });
-
-    return () => { isMounted = false; };
-  }, [src, isHovered, iconLoaded]);
-
-  // Don't render anything until hovered AND validated
-  if (!isHovered || !isValid) return null;
-
-  return (
-    <lord-icon
-      src={src}
-      trigger="loop"
-      delay="3000"
-      style={{ width: "20px", height: "20px" }}
-    />
-  );
-} 

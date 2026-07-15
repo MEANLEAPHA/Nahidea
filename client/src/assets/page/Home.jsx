@@ -625,7 +625,6 @@ const handleFavorite = async (postId) => {
   }
 };
 
-const [hoveredPostId, setHoveredPostId] = useState(null);
   return (
     <div className='home-container'>
       <article id="feed-article">
@@ -641,7 +640,7 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                   dataSource={posts}
                   renderItem={(post) => (
                     <List.Item key={post.id}>
-                      <div className="posts" onMouseEnter={() => setHoveredPostId(post.id)} onMouseLeave={() => setHoveredPostId(null)}>
+                      <div className="posts" >
 
                         <div className='post-header'>
 
@@ -668,12 +667,6 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
                                 <div className='dot'></div>
                                 <div className='category-post-div'>
                                   <span className="post-type-label">{post?.data?.type}</span> 
-                                   {post?.data?.cate_icon && (
-                                      <DisplayAnimatedIcon 
-                                        src={post?.data?.cate_icon}
-                                        isHovered={hoveredPostId === post.id}
-                                      />
-                                    )}
                                 </div>
                               </p>
                               <p className='post-at'>{post.created_at}</p>
@@ -906,60 +899,6 @@ const [hoveredPostId, setHoveredPostId] = useState(null);
     </div>
   );
 };
-
-
-let scriptLoaded = false;
-function DisplayAnimatedIcon({ src, isHovered }) {
-  const [isValid, setIsValid] = useState(false);
-  const [iconLoaded, setIconLoaded] = useState(false);
-
-  // Load Lordicon script once globally
-  useEffect(() => {
-    if (!scriptLoaded && typeof window !== 'undefined') {
-      const script = document.createElement("script");
-      script.src = "https://cdn.lordicon.com/lordicon.js";
-      script.async = true;
-      document.body.appendChild(script);
-      scriptLoaded = true;
-    }
-  }, []);
-
-  // Load and validate icon JSON only when needed (on hover)
-  useEffect(() => {
-    if (!src || !isHovered || iconLoaded) return;
-
-    let isMounted = true;
-    
-    fetch(src)
-      .then((res) => {
-        if (!res.ok) throw new Error("Invalid JSON");
-        return res.json();
-      })
-      .then(() => {
-        if (isMounted) {
-          setIsValid(true);
-          setIconLoaded(true);
-        }
-      })
-      .catch(() => {
-        if (isMounted) setIsValid(false);
-      });
-
-    return () => { isMounted = false; };
-  }, [src, isHovered, iconLoaded]);
-
-  // Don't render anything until hovered AND validated
-  if (!isHovered || !isValid) return null;
-
-  return (
-    <lord-icon
-      src={src}
-      trigger="loop"
-      delay="3000"
-      style={{ width: "20px", height: "20px" }}
-    />
-  );
-}
 
 function PostAuthorBadge({ userId, isAnonymous }) {
   const { badgeTier, loadings } = useUserRanking(isAnonymous ? null : userId);

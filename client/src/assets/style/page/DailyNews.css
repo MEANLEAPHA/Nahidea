@@ -231,7 +231,7 @@
   font-size: 0.75rem;
 }
 .front-senten{
-  color: var(--font-color);
+  color: black;
   z-index: 3;
  
 }

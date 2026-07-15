@@ -454,12 +454,6 @@ const Trending = () => {
                             <div className="dot"></div>
                             <div className="category-post-div">
                               <span className="post-type-label">{post?.data?.type}</span>
-                              {post?.data?.cate_icon && (
-                                <DisplayAnimatedIcon
-                                  src={post.data.cate_icon}
-                                  isHovered={hoveredPostId === post.id}
-                                />
-                              )}
                             </div>
                           </p>
                           <p className="post-at">{post.created_at}</p>
@@ -604,52 +598,6 @@ const Trending = () => {
 export default Trending;
 
 
-let scriptLoaded = false;
-
-function DisplayAnimatedIcon({ src, isHovered }) {
-  const [isValid, setIsValid] = useState(false);
-  const [iconLoaded, setIconLoaded] = useState(false);
-
-  useEffect(() => {
-    if (!scriptLoaded && typeof window !== "undefined") {
-      const script = document.createElement("script");
-      script.src = "https://cdn.lordicon.com/lordicon.js";
-      script.async = true;
-      document.body.appendChild(script);
-      scriptLoaded = true;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!src || !isHovered || iconLoaded) return;
-
-    let isMounted = true;
-    fetch(src)
-      .then((res) => {
-        if (!res.ok) throw new Error("Invalid JSON");
-        return res.json();
-      })
-      .then(() => {
-        if (isMounted) {
-          setIsValid(true);
-          setIconLoaded(true);
-        }
-      })
-      .catch(() => {
-        if (isMounted) setIsValid(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [src, isHovered, iconLoaded]);
-
-  if (!isHovered || !isValid) return null;
-
-  return (
-    <lord-icon src={src} trigger="loop" delay="3000" style={{ width: "20px", height: "20px" }} />
-  );
-}
 function PostAuthorBadge({ userId, isAnonymous }) {
   const { badgeTier, loadings } = useUserRanking(isAnonymous ? null : userId);
 

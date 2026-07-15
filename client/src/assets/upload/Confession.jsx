@@ -15,7 +15,7 @@ import Rule from "../util/upload/Rule";
 import PreviewRadio from "../util/upload/PreviewRadio";
 import { useAnonymousTokens, AnonymousTokensCoolDown} from "../util/anonymousTokens";
 import NahideaInfo from "../util/upload/NahideaInfo";
-import {AnimatedIcon} from "../util/upload/AnimatedIcon";
+
 
 // ant import
 import {  PlusOutlined,UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined,SearchOutlined, BellOutlined, QuestionOutlined, 
@@ -58,7 +58,6 @@ export default function Confession() {
     setFile(null);
     setIsAnonymous(false);
     setSelectType(null);
-    setSelectedIcon(null);
     setLoading(false);
     if(refFile.current){
       refFile.current.value = "";
@@ -92,7 +91,6 @@ export default function Confession() {
     formData.append("post_type", "confession");
     formData.append("confession_title", title);
     formData.append("confession_type", selectType?.value ?? "general");
-    formData.append("confession_type_icon", selectedIcon);
     formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
     if (confessionFile) {
       formData.append("confessionFile", confessionFile);
@@ -136,7 +134,6 @@ export default function Confession() {
               value={selectType}
               onChange={(option) => {
                 setSelectType(option);       
-                setSelectedIcon(option?.icon); 
               }}
               classNamePrefix="custom"
               placeholder="Select Confession Topic"
@@ -197,7 +194,6 @@ export default function Confession() {
         <PreviewRadio  
           title={title} filesMedia= {confessionFile} postTag={tags} selectType={selectType?.value} 
           isAnonymous={isAnonymous} setOpenPreview={setOpenPreview} post_type='confession'
-          selectTypeIcon={selectedIcon}
           />
       </article>
 

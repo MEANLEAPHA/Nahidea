@@ -17,7 +17,6 @@ import MoreDropDown from "./MoreDropDown";
 import { MarkdownPreview} from "../moreFlieds";
 import {MediaPreview} from "../mediaUploader";
 import{TagsPreview} from "../tagInput";
-import {DisplayAnimatedIcon} from "../../util/upload/AnimatedIcon";
 
 //data
 import { iconOptions } from "../../data/post_type_data";
@@ -192,15 +191,11 @@ export default function PreviewPost ({
                     <div className='user-post-info'>
                         <p className='post-username'>
                             <AnonymousNm enabled={isAnonymousValue} realName={user?.username || 'guest'}/>
-                            {selectTypeIcon && (
                                 <div className='dot'></div>
-                             )}     
-                            {selectTypeIcon && (
                             <div className='category-post-div'>
-                                    <span className="post-type-label">{selectTypeValue}</span> 
-                                    <DisplayAnimatedIcon src={selectTypeIcon || 'https://cdn.lordicon.com/ulnswmkk.json'} />
+                                    <span className="post-type-label">{selectTypeValue}</span>    
                             </div>
-                            )}
+                       
                         </p>
                         <p className='post-at'>Just now</p>
                     </div>

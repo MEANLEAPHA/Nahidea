@@ -75,16 +75,16 @@ const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
 
   const [avatar, setAvatar] = useState(
-    "https://nahidea.picocolor.site/img/content/1781684371148-nahidea-favicon.webp"
+    "https://img.nahidea.com/img/content/1784081044474-nahidea.webp"
   );
   const [avatarType, setAvatarType] = useState('url'); // 'url' or 'file'
   const [avatarFile, setAvatarFile] = useState(null);
 
   const [banner, setBanner] = useState(
-    "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
+    "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"
   );
   const [bannerFile, setBannerFile] = useState(
-    "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"
+    "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"
   );
 
   const [profession, setProfession] =

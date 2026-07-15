@@ -10,7 +10,7 @@ import Rule from "./Rule";
 
 export default function PreviewRadio ({
   // Primary
-  title, filesMedia, postTag, selectType, selectTypeIcon, isAnonymous, setOpenPreview,
+  title, filesMedia, postTag, selectType, isAnonymous, setOpenPreview,
   post_type,
 
   // Content
@@ -65,7 +65,7 @@ export default function PreviewRadio ({
          selected === 1 &&
           <PreviewPost 
             // primary
-            titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} selectTypeIcon={selectTypeIcon} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none" }
+            titleValue={title} filesMediaValues= {filesMedia} postTagsValue={postTag} selectTypeValue={selectType} isAnonymousValue={isAnonymous} displaySelected={selected === 1 ? "block" : "none" }
             post_type={post_type}
 
             // content

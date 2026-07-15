@@ -14,6 +14,11 @@ import {
   faSeedling
 } from "@fortawesome/free-solid-svg-icons";
 
+import jokebanner from "../img/jokebanner.png";
+import didyouknnowbanner from "../img/didyouknnowbanner.png";
+import advicebanner from "../img/advicebanner.png";
+import questionbanner from "../img/questionbanner.png";
+
 /* =========================
    GENERIC CARD
 ========================= */
@@ -64,16 +69,16 @@ export default function DailyNews() {
 
   const bgImages = {
     joke:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQTR4mG-c_--0koi55MVsE-eCNFDJlFz3B9hmrxMX7lZyxbGvSDM4MoDk&s=10",
+      jokebanner,
 
     didyouknow:
-      "https://media.istockphoto.com/id/1190244621/vector/hand-drawn-question-marks-set-graphic-faq-ask-vector-illustration-question-isolated-black.jpg?s=612x612&w=0&k=20&c=gWhK0Un8JT5wJgiYW_FKXE1874oysxpk3Y_ihJ6mNiY=",
+      didyouknnowbanner,
 
     advice:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDiow3plyZwUcHthci46Ll92W_DKcb3TQE8gKG-fzHprD1znLp7GRKup0&s=10",
+      advicebanner,
 
     question:
-      "https://static.vecteezy.com/system/resources/thumbnails/073/060/904/small/question-mark-background-pattern-neobrutalism-vector.jpg",
+      questionbanner,
   };
 
   /* =========================

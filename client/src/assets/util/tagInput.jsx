@@ -90,7 +90,7 @@ export  function TagInput({ value = [], onChange, maxTags = 5 }) {
 
       <div className="tags-controls">
         <button type="button" className="btn-clear" onClick={clearAll} disabled={!value.length}>
-          <ClearOutlined /> Remove all
+    Remove all
         </button>
         <div id="tags-help" className="tags-count">
           {value.length} / {maxTags}

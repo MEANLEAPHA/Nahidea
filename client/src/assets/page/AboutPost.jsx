@@ -26,7 +26,6 @@ import { BorderOutlined, CheckOutlined, CloseOutlined, DeleteOutlined, EditOutli
 const { Text } = Typography;
 
 // util
-import { DisplayAnimatedIcon } from "../util/upload/AnimatedIcon";
 import {iconOptions} from "../data/post_type_data";
 import { MediaPreview } from "../util/mediaUploader";
 import DotDropDown from './util/dotDropDown';
@@ -1401,9 +1400,6 @@ const AboutPost = () => {
                   <div className='dot'></div>
                   <div className='category-post-div'>
                     <span className="post-type-label">{post?.data?.type}</span> 
-                    {post?.data?.cate_icon && (
-                      <DisplayAnimatedIcon src={post?.data?.cate_icon} />
-                    )}
                   </div>
                 </p>
                 <p className='post-at'>{post?.created_at}</p>
