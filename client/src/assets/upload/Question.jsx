@@ -229,7 +229,7 @@ export default function Questiion(){
       const formData = new FormData();
       tags.forEach((t) => formData.append("tags[]", t));
       formData.append("post_type", "question");
-      formData.append("question_related_to", selectType?.value ?? "general");
+      formData.append("question_related_to", selectType?.label ?? "general");
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
       if(anonymousName) formData.append("anonymousName", anonymousName);
       formData.append("question_title", title);
