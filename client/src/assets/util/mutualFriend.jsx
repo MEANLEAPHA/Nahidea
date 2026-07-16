@@ -13,7 +13,7 @@ const MutualFriend = ({ onlineUsers }) => {
         );
         setFriends(res.data.data);
       } catch (err) {
-        console.error("Failed to fetch mutual friends:", err); // 👀 error log
+        console.error("Failed to fetch mutual friends:", err); 
       }
     };
 
@@ -21,7 +21,7 @@ const MutualFriend = ({ onlineUsers }) => {
   }, []);
 
   if (friends.length === 0) {
-    console.log("No mutual friends found."); // 👀 log empty state
+    console.log("No mutual friends found.");
     return null;
   }
 
@@ -47,7 +47,6 @@ const MutualFriend = ({ onlineUsers }) => {
 };
 
 
-// FriendCard.jsx
 const FriendCard = ({ username, avatar_url, isOnline, userId }) => {
   const navigate = useNavigate();
   return (

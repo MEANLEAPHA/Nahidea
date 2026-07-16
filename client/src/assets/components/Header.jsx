@@ -22,7 +22,7 @@ import { useAuth } from '../context/AuthContext';
 import SearchForm from "../page/SearchForm";
 import {SearchBar} from "./SearchBar";
 
-const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
+const Header = ({onToggleAside, onToggleTheme, currentTheme}) => {
   const { unreadCount } = useNotifications();
   const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const Header = ({onToggleAside, onToggleTheme, currentTheme, avatar_url}) => {
                     </span>
                   )}
               </button>
-              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme} avatar_url={avatar_url}/>
+              <ProfileDropDown theme={currentTheme} toggleTheme={onToggleTheme}/>
             </>
          
       </div>
@@ -97,7 +97,7 @@ const CreateDropDownMin = () => {
   );
 };
 
-const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
+const ProfileDropDown = ({ theme, toggleTheme}) => {
    
   const navigate = useNavigate();
 
@@ -186,7 +186,7 @@ const ProfileDropDown = ({ theme, toggleTheme, avatar_url}) => {
       <div style={{position: "relative"}} > 
         <Space>
           <img
-            src={avatar_url || nahideaIcon}
+            src={avatar || nahideaIcon}
             className="profile-div-img button-bar-icon button-bar-icon-pf"
             alt="profile"
           />

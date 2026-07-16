@@ -296,7 +296,7 @@ const Layout = () => {
   
   return (
     <>
-      <Header avatar_url={user?.avatar_url} onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} />
+      <Header onToggleAside={toggleAside} onToggleTheme={toggleTheme} currentTheme={darkMode} />
       <Toaster position="top-right" 
                toastOptions={{
                   style: {
@@ -305,10 +305,9 @@ const Layout = () => {
                   },
                }}
       />
-      {/* <main aria-hidden={isBlocked} style={{ position: "relative",   pointerEvents: isBlocked ? "none" : "auto",
+      <main aria-hidden={isBlocked} style={{ position: "relative",   pointerEvents: isBlocked ? "none" : "auto",
                     filter: isBlocked ? "blur(4px)" : "none",
-                    userSelect: isBlocked ? "none" : "auto",}}> */}
-      <main>
+                    userSelect: isBlocked ? "none" : "auto",}}>
         <Aside append={showMaxAside} />
         <section>
           <Outlet
@@ -320,10 +319,10 @@ const Layout = () => {
           />
         </section>
       </main>
-      {/* {!loading && (!token || !user) && <AuthRequiredModal />}
+      {!loading && (!token || !user) && <AuthRequiredModal />}
       {!isBlockedByAuth && isBlockedByBan && (
         <BannedModal reason={banInfo.reason} bannedAt={banInfo.banned_at} />
-      )} */}
+      )}
     </>
   );
 
