@@ -721,6 +721,7 @@ export default function Accounts() {
                     (  
                       <div className='error-container'>
                           <Spin style={{color: "var(--primary-color)"}}/>
+                          <br />
                           <p>Opps! Failed to load</p>
                       </div>
                     ) 
@@ -735,6 +736,7 @@ export default function Accounts() {
                     : 
                     (
                         <>
+                        
                           <List
               dataSource={posts}
               renderItem={(post) => (
@@ -946,7 +948,7 @@ export default function Accounts() {
             <p id='bio'><FontAwesomeIcon icon={faQuoteLeft} className='q-bio'/> {bios || user?.bio || "N/A"} <FontAwesomeIcon icon={faQuoteRight} className='q-bio'/> - @{nicknames || user?.nickname || "N/A"}</p>
             
             {
-              (user?.id || state?.userId) === 1 && <p id='join-at'>
+              (state?.userId) === 1 && <p id='join-at'>
               <SunFilled style={{ color: "#F59E0B" }}/> Founder
             </p>
             }
@@ -956,6 +958,9 @@ export default function Accounts() {
             <p id='join-at'>  <CalendarOutlined /> Join at: {formatJoinDate(joinAt) || "N/A"}</p>
           </div>
           <FriendList targetUsername={usernames} tagetUserId={state?.userId || user?.id}/>
+
+         
+
         </div>
       </div>
     </div>

@@ -199,7 +199,7 @@ const AllFriends = () => {
         {loading ? (
           <div className='loading-container'>
             <div className='loading-spinner'></div>
-            <p>Loading...</p>
+            <p style={{color: "grey"}}>Loading...</p>
           </div>
         ) : error ? (
           <div className='error-container'>

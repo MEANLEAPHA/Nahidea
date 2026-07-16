@@ -19,6 +19,7 @@ import api from "../api/axiosInstance";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { useNotifications } from "../context/NotificationContext";
 import nahideaIcon from '../img/nahideaIcon.png';
+import nahideaIAuth from '../img/nahideaAuth.png';
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -27,32 +28,48 @@ export default function Notifications() {
   const [followStatuses, setFollowStatuses] = useState({});
   const navigate = useNavigate();
 
-  const getNotificationIcon = (type, avatar) => {
-    const img = () => {
-      return <img src={avatar || nahideaIcon} className='avatar-icon-type-noti' />
+  // const getNotificationIcon = (type, avatar) => {
+  //   const img = () => {
+  //     return <img src={avatar || nahideaIcon} className='avatar-icon-type-noti' />
+  //   }
+  //   switch(type) {
+  //     case 'comment_reply':
+  //     case 'mention':
+  //       return img();
+  //     case 'comment_like':
+  //     case 'post_like':
+  //       return img();
+  //     case 'answer_upvote':
+  //       return img();
+  //     case 'answer_downvote':
+  //       return img();
+  //     case 'answer':
+  //       return img(); 
+  //     case 'follow':
+  //       return img();
+  //     case 'follow_back':
+  //       return img();
+  //     default:
+  //       return null;
+  //   }
+  // };
+  const getNotificationIcon = (notification) => {
+    if (notification.is_anonymous) {
+      return (
+          <img
+            src={nahideaIAuth}
+            className="avatar-icon-type-noti"
+            style={{backgroundColor: notification.anonymous_bg_color || "gold"}}
+          />
+      );
     }
-    switch(type) {
-      case 'comment_reply':
-      case 'mention':
-        return img();
-      case 'comment_like':
-      case 'post_like':
-        return img();
-      case 'answer_upvote':
-        return img();
-      case 'answer_downvote':
-        return img();
-      case 'answer':
-        return img(); 
-      case 'follow':
-        return img();
-      case 'follow_back':
-        return img();
-      default:
-        return null;
-    }
+    return (
+      <img
+        src={notification.sender_avatar || nahideaIcon}
+        className="avatar-icon-type-noti"
+      />
+    );
   };
-
   const getNotificationActionIcon = (type, isViewed) => {
     if (!isViewed) {
       return <FontAwesomeIcon icon={faEnvelopeOpen} />;
@@ -296,34 +313,66 @@ export default function Notifications() {
   // Get notification content text
   const getNotificationContent = (notification) => {
     if (notification.content) {
-      return notification.content;
+      return notification.content; // backend already builds this with the correct display name
     }
-    
-    const senderName = notification.sender_username || 'Someone';
-    
-    switch(notification.type) {
-      case 'comment_reply':
+
+    const senderName = notification.is_anonymous
+      ? notification.anonymous_name || "Anonymous"
+      : notification.sender_username || "Someone";
+
+    switch (notification.type) {
+      case "comment_reply":
         return `${senderName} replied to your comment`;
-      case 'comment_like':
+      case "comment_like":
         return `${senderName} liked your comment`;
-      case 'answer':
+      case "answer":
         return `${senderName} answered your question`;
-      case 'post_like':
+      case "post_like":
         return `${senderName} liked your post`;
-      case 'mention':
+      case "mention":
         return `${senderName} mentioned you`;
-      case 'answer_upvote':
+      case "answer_upvote":
         return `${senderName} upvoted your answer`;
-      case 'answer_downvote':
+      case "answer_downvote":
         return `${senderName} downvoted your answer`;
-      case 'follow':
+      case "follow":
         return `${senderName} started following you`;
-      case 'follow_back':
+      case "follow_back":
         return `${senderName} followed you back`;
       default:
         return `${senderName} interacted with your content`;
     }
   };
+  // const getNotificationContent = (notification) => {
+  //   if (notification.content) {
+  //     return notification.content;
+  //   }
+    
+  //   const senderName = notification.sender_username || 'Someone';
+    
+  //   switch(notification.type) {
+  //     case 'comment_reply':
+  //       return `${senderName} replied to your comment`;
+  //     case 'comment_like':
+  //       return `${senderName} liked your comment`;
+  //     case 'answer':
+  //       return `${senderName} answered your question`;
+  //     case 'post_like':
+  //       return `${senderName} liked your post`;
+  //     case 'mention':
+  //       return `${senderName} mentioned you`;
+  //     case 'answer_upvote':
+  //       return `${senderName} upvoted your answer`;
+  //     case 'answer_downvote':
+  //       return `${senderName} downvoted your answer`;
+  //     case 'follow':
+  //       return `${senderName} started following you`;
+  //     case 'follow_back':
+  //       return `${senderName} followed you back`;
+  //     default:
+  //       return `${senderName} interacted with your content`;
+  //   }
+  // };
 
   return (
     <div className="notification-panel">
@@ -385,7 +434,7 @@ export default function Notifications() {
                 />
                 <div className="notification-body">
                   <div className="notification-title-avatar">
-                    {getNotificationIcon(notification.type, notification.sender_avatar)}
+                    {getNotificationIcon(notification)}
                   </div>
                   <div className="notification-title-div">
                     <div className="notification-title">

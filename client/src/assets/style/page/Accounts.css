@@ -327,8 +327,8 @@
 .fri-img{
   width: 100%;
   object-fit: cover;
-  height: 120px;
-  max-height: 130px;
+  height: 110px;
+
   object-fit: cover;
   border-radius: 5px;
 }
@@ -364,7 +364,30 @@
   overflow: hidden;
 }
 
+@media screen and (max-width: 1200px){
+.friend-list-items{
+      width: calc(100%/2.2);
+  
+}
+.fri-img{
 
+  height: 130px;
+ 
+ 
+}
+}
+@media screen and (max-width: 1100px){
+.friend-list-items{
+      width: calc(100%/2.2);
+  
+}
+.fri-img{
+
+  height: 120px;
+ 
+ 
+}
+}
 
 @media screen and (max-width: 900px){
 .accounts-header{
@@ -444,8 +467,8 @@
 }
 .fri-img{
 
-  height: 140px;
-  max-height: 150px;
+  height: 110px;
+ 
  
 }
 .label-render-stats{
@@ -467,4 +490,9 @@
 .data-render-stats{
          font-size: 17px;
 }
+.friend-list-items{
+      width: calc(100%/4.2);
+  
+}
+
 }

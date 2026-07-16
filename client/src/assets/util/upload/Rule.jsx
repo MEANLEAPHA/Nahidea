@@ -76,8 +76,7 @@ const questionItems = [
         key: "1",
         label: (
           <span style={textStyle}>
-            Treat other users with basic respect, even when you disagree with
-            them.
+            Disagreement is fine. Harassment, hate speech, threats, or personal attacks are not.
           </span>
         ),
         disabled: true,
@@ -86,18 +85,7 @@ const questionItems = [
         key: "2",
         label: (
           <span style={textStyle}>
-            Do not post harassment, hate speech, bullying, threats, or personal
-            attacks toward individuals or groups.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "3",
-        label: (
-          <span style={textStyle}>
-            Healthy debates are welcome. Toxic behavior and intentionally hostile
-            discussions are not.
+            Debate the idea, not the person. Keep it civil even when it gets heated.
           </span>
         ),
         disabled: true,
@@ -111,11 +99,19 @@ const questionItems = [
     icon: <MessageOutlined />,
     children: [
       {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            Write a title that says what you're actually asking — skip "Help" or "Urgent".
+          </span>
+        ),
+        disabled: true,
+      },
+      {
         key: "4",
         label: (
           <span style={textStyle}>
-            Use a clear title that explains your question instead of vague titles
-            like “Help” or “Urgent”.
+            Add enough context so people can actually answer you, and keep it on-topic.
           </span>
         ),
         disabled: true,
@@ -124,27 +120,7 @@ const questionItems = [
         key: "5",
         label: (
           <span style={textStyle}>
-            Include enough context so others can understand your situation and
-            provide meaningful answers.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "6",
-        label: (
-          <span style={textStyle}>
-            Keep posts relevant to the selected topic or category.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "7",
-        label: (
-          <span style={textStyle}>
-            Low-effort, misleading, or spam-style posts may be removed to keep
-            discussions useful.
+            Low-effort, misleading, or spammy posts may be removed.
           </span>
         ),
         disabled: true,
@@ -158,31 +134,19 @@ const questionItems = [
     icon: <BulbOutlined />,
     children: [
       {
-        key: "8",
+        key: "6",
         label: (
           <span style={textStyle}>
-            Do not intentionally spread false information, fake stories, scams,
-            or manipulated content.
+            Don't spread false information, scams, or manipulated content on purpose.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "9",
+        key: "7",
         label: (
           <span style={textStyle}>
-            If you are unsure about something, ask questions openly instead of
-            presenting assumptions as facts.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "10",
-        label: (
-          <span style={textStyle}>
-            When discussing serious topics, providing sources or evidence is
-            encouraged.
+            Not sure about something? Ask, don't assert it as fact. Sources help for serious topics.
           </span>
         ),
         disabled: true,
@@ -196,30 +160,19 @@ const questionItems = [
     icon: <SafetyOutlined />,
     children: [
       {
-        key: "11",
+        key: "8",
         label: (
           <span style={textStyle}>
-            Do not share personal, private, or confidential information about
-            yourself or other people.
+            Don't share private or confidential info — yours or anyone else's.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "12",
+        key: "9",
         label: (
           <span style={textStyle}>
-            Avoid posting content that promotes illegal, dangerous, or harmful
-            activities.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "13",
-        label: (
-          <span style={textStyle}>
-            Report abusive or suspicious content instead of engaging with it.
+            No promoting illegal or dangerous activity. Report bad content instead of engaging it.
           </span>
         ),
         disabled: true,
@@ -233,31 +186,19 @@ const questionItems = [
     icon: <GlobalOutlined />,
     children: [
       {
-        key: "14",
+        key: "10",
         label: (
           <span style={textStyle}>
-            Avoid excessive self-promotion, repetitive posting, or unrelated
-            advertising.
+            Skip the self-promo spam. Help others learn, solve problems, or have a good discussion.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "15",
+        key: "11",
         label: (
           <span style={textStyle}>
-            Contribute in a way that helps others learn, discuss, or solve
-            problems together.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "16",
-        label: (
-          <span style={textStyle}>
-            Content that seriously violates these guidelines may be removed to
-            maintain a safe and high-quality experience.
+            Serious or repeated violations may lead to content removal.
           </span>
         ),
         disabled: true,
@@ -276,7 +217,7 @@ const confessionItems = [
         key: "1",
         label: (
           <span style={textStyle}>
-            Confessions should not be used to attack, shame, humiliate, or harass other people.
+            Confessions aren't a tool to attack, shame, or expose someone.
           </span>
         ),
         disabled: true,
@@ -285,16 +226,7 @@ const confessionItems = [
         key: "2",
         label: (
           <span style={textStyle}>
-            Hate speech, bullying, threats, and abusive language are not allowed.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "3",
-        label: (
-          <span style={textStyle}>
-            Strong emotions are okay. Targeted hostility and toxic behavior are not.
+            Strong feelings are welcome. Hate speech, threats, and targeted hostility aren't.
           </span>
         ),
         disabled: true,
@@ -308,10 +240,19 @@ const confessionItems = [
     icon: <SafetyOutlined />,
     children: [
       {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            No full names, phone numbers, addresses, school info, or private photos — yours or theirs.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
         key: "4",
         label: (
           <span style={textStyle}>
-            Do not share personal information such as full names, phone numbers, addresses, school details, or private photos.
+            Don't identify or expose someone without their consent.
           </span>
         ),
         disabled: true,
@@ -320,16 +261,7 @@ const confessionItems = [
         key: "5",
         label: (
           <span style={textStyle}>
-            Avoid exposing or identifying other people without their permission.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "6",
-        label: (
-          <span style={textStyle}>
-            Anonymous posting is meant for honest expression, not revenge or public targeting.
+            Anonymity is for honest expression — not revenge or public callouts.
           </span>
         ),
         disabled: true,
@@ -343,28 +275,19 @@ const confessionItems = [
     icon: <BulbOutlined />,
     children: [
       {
+        key: "6",
+        label: (
+          <span style={textStyle}>
+            Share what's real — not fabricated stories written to provoke a reaction.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
         key: "7",
         label: (
           <span style={textStyle}>
-            Share real thoughts, experiences, or feelings instead of fake stories made to provoke reactions.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "8",
-        label: (
-          <span style={textStyle}>
-            Avoid spam, trolling, repetitive posting, or intentionally misleading content.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "9",
-        label: (
-          <span style={textStyle}>
-            Sensitive topics are allowed, but posts that encourage harm, violence, or dangerous behavior may be removed.
+            Sensitive topics are okay. Content that encourages harm or dangerous behavior isn't.
           </span>
         ),
         disabled: true,
@@ -378,28 +301,19 @@ const confessionItems = [
     icon: <GlobalOutlined />,
     children: [
       {
-        key: "10",
+        key: "8",
         label: (
           <span style={textStyle}>
-            This space is for open expression, support, and discussion — not personal attacks or conflict escalation.
+            This is a space for support and honest expression — not conflict escalation.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "11",
+        key: "9",
         label: (
           <span style={textStyle}>
-            Content involving illegal activity, exploitation, or harmful behavior may be removed for community safety.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "12",
-        label: (
-          <span style={textStyle}>
-            Repeated or serious violations may result in content removal or account restrictions.
+            Illegal activity or exploitative content will be removed. Repeat violations may restrict your account.
           </span>
         ),
         disabled: true,
@@ -418,8 +332,7 @@ const contentItems = [
         key: "1",
         label: (
           <span style={textStyle}>
-            Share content that is helpful, creative, informative, entertaining,
-            or meaningful to others.
+            Share something helpful, creative, or genuinely worth someone's time.
           </span>
         ),
         disabled: true,
@@ -428,18 +341,7 @@ const contentItems = [
         key: "2",
         label: (
           <span style={textStyle}>
-            Avoid low-effort spam, repetitive posting, or misleading content
-            created only to gain attention.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "3",
-        label: (
-          <span style={textStyle}>
-            Use clear titles, captions, or descriptions so people can understand
-            your content quickly.
+            Skip the spam and engagement bait. Use a clear title or caption.
           </span>
         ),
         disabled: true,
@@ -453,31 +355,19 @@ const contentItems = [
     icon: <SafetyOutlined />,
     children: [
       {
+        key: "3",
+        label: (
+          <span style={textStyle}>
+            No hate speech, harassment, or content designed to harm others.
+          </span>
+        ),
+        disabled: true,
+      },
+      {
         key: "4",
         label: (
           <span style={textStyle}>
-            Do not post hate speech, harassment, bullying, or intentionally
-            harmful content toward others.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "5",
-        label: (
-          <span style={textStyle}>
-            Discussions and criticism are welcome, but personal attacks and toxic
-            behavior are not.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "6",
-        label: (
-          <span style={textStyle}>
-            Respect different opinions, backgrounds, and perspectives within the
-            community.
+            Critique the work, not the person. Respect different opinions and backgrounds.
           </span>
         ),
         disabled: true,
@@ -491,29 +381,19 @@ const contentItems = [
     icon: <MessageOutlined />,
     children: [
       {
-        key: "7",
+        key: "5",
         label: (
           <span style={textStyle}>
-            Do not intentionally spread false information, scams, impersonation,
-            or manipulated content designed to deceive people.
+            Don't spread misinformation, impersonation, or manipulated content meant to deceive.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "8",
+        key: "6",
         label: (
           <span style={textStyle}>
-            Give proper credit when sharing someone else’s work, ideas, or media.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "9",
-        label: (
-          <span style={textStyle}>
-            Avoid reposting the same content repeatedly across the platform.
+            Credit others' work when you share it, and avoid reposting the same thing repeatedly.
           </span>
         ),
         disabled: true,
@@ -527,30 +407,19 @@ const contentItems = [
     icon: <WarningOutlined />,
     children: [
       {
-        key: "10",
+        key: "7",
         label: (
           <span style={textStyle}>
-            Do not share private, personal, or confidential information about
-            yourself or others.
+            Don't share private or confidential info — yours or anyone else's.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "11",
+        key: "8",
         label: (
           <span style={textStyle}>
-            Content promoting illegal, dangerous, exploitative, or harmful
-            activities may be removed.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "12",
-        label: (
-          <span style={textStyle}>
-            Report suspicious or abusive content to help keep the community safe.
+            Illegal, dangerous, or exploitative content may be removed. Report what you see.
           </span>
         ),
         disabled: true,
@@ -564,31 +433,19 @@ const contentItems = [
     icon: <GlobalOutlined />,
     children: [
       {
-        key: "13",
+        key: "9",
         label: (
           <span style={textStyle}>
-            Encourage thoughtful discussions, creativity, learning, and positive
-            interactions within the community.
+            Encourage real discussion and creativity over manipulative posting.
           </span>
         ),
         disabled: true,
       },
       {
-        key: "14",
+        key: "10",
         label: (
           <span style={textStyle}>
-            Excessive advertising, engagement bait, or manipulative posting may
-            be limited or removed.
-          </span>
-        ),
-        disabled: true,
-      },
-      {
-        key: "15",
-        label: (
-          <span style={textStyle}>
-            Content that seriously violates community guidelines may be removed
-            to maintain a high-quality experience for everyone.
+            Serious violations may result in content removal to keep quality high.
           </span>
         ),
         disabled: true,
@@ -596,7 +453,6 @@ const contentItems = [
     ],
   },
 ];
-
 
 const questionCommentItems = [
   {
@@ -608,7 +464,7 @@ const questionCommentItems = [
         key: "1",
         label: (
           <span style={textStyle}>
-            Provide clear, direct answers that address the question. Stay on topic and avoid off-topic responses.
+            Answer the actual question. Stay on topic — skip the tangents.
           </span>
         ),
         disabled: true,
@@ -624,7 +480,7 @@ const questionCommentItems = [
         key: "2",
         label: (
           <span style={textStyle}>
-            Include explanations, steps, or sources to support your answer. Avoid one-word or low-effort responses.
+            Back up your answer with reasoning or a source. One-word replies don't help anyone.
           </span>
         ),
         disabled: true,
@@ -640,7 +496,7 @@ const questionCommentItems = [
         key: "3",
         label: (
           <span style={textStyle}>
-            Disagree constructively by explaining your viewpoint. Don't attack the person or use dismissive language.
+            Disagree by explaining your view — not by attacking or dismissing the person.
           </span>
         ),
         disabled: true,
@@ -656,7 +512,7 @@ const questionCommentItems = [
         key: "4",
         label: (
           <span style={textStyle}>
-            No spam, promotional links, or self-promotion unless relevant. Report helpful answers and flag harmful comments.
+            No spam or unrelated self-promo. Flag harmful comments instead of engaging them.
           </span>
         ),
         disabled: true,
@@ -675,7 +531,7 @@ const contentCommentItems = [
         key: "1",
         label: (
           <span style={textStyle}>
-            Share thoughtful reactions or questions about the content. Avoid generic comments like "Nice" or "Cool."
+            Say something real about the content — "Nice" or "Cool" doesn't add much.
           </span>
         ),
         disabled: true,
@@ -691,7 +547,7 @@ const contentCommentItems = [
         key: "2",
         label: (
           <span style={textStyle}>
-            Explain why you dislike something and suggest improvements. Balance criticism by acknowledging what works well.
+            If something's not working, say why and what could improve it — not just that it's bad.
           </span>
         ),
         disabled: true,
@@ -707,7 +563,7 @@ const contentCommentItems = [
         key: "3",
         label: (
           <span style={textStyle}>
-            No harassment, personal attacks, or disrespectful comments. Encourage creators by highlighting what you appreciate.
+            No harassment or personal attacks. A little encouragement goes a long way.
           </span>
         ),
         disabled: true,
@@ -723,7 +579,7 @@ const contentCommentItems = [
         key: "4",
         label: (
           <span style={textStyle}>
-            No spam, self-promotion, or irrelevant links. Flag inappropriate content to keep the community safe.
+            No spam or irrelevant links. Flag anything that doesn't belong here.
           </span>
         ),
         disabled: true,
@@ -742,7 +598,7 @@ const confessionCommentItems = [
         key: "1",
         label: (
           <span style={textStyle}>
-            Respond with kindness, understanding, and support. Avoid judgmental, dismissive, or harsh language.
+            Lead with kindness. Save the judgment — this isn't the place for it.
           </span>
         ),
         disabled: true,
@@ -758,7 +614,7 @@ const confessionCommentItems = [
         key: "2",
         label: (
           <span style={textStyle}>
-            Offer different viewpoints respectfully. Don't give unsolicited advice unless the confessor asks.
+            Different viewpoints are welcome — unsolicited advice usually isn't.
           </span>
         ),
         disabled: true,
@@ -774,7 +630,7 @@ const confessionCommentItems = [
         key: "3",
         label: (
           <span style={textStyle}>
-            Never attempt to identify or expose the confessor. Don't share personal information in confession threads.
+            Never try to identify or expose who's behind a confession.
           </span>
         ),
         disabled: true,
@@ -790,7 +646,7 @@ const confessionCommentItems = [
         key: "4",
         label: (
           <span style={textStyle}>
-            No harassment, mockery, or hostility toward confessions. Report serious issues through proper channels.
+            No mockery or hostility toward confessions. Report serious issues instead of piling on.
           </span>
         ),
         disabled: true,

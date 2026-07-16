@@ -103,7 +103,7 @@ width: 100%;
   cursor: pointer;
   font-size: 14px;
   line-height: 28px;
-  z-index: 2;
+  z-index: 5 !important;
 }
 .remove-btn:hover{
   color: tomato;

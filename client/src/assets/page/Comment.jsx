@@ -32,7 +32,7 @@ const Comment = () => {
       try {
         sessionStorage.setItem(STATE_KEY, JSON.stringify(location.state));
       } catch {
-        // sessionStorage may be unavailable (private mode / quota) — non-fatal
+       
       }
       return location.state;
     }
@@ -55,7 +55,7 @@ const Comment = () => {
 
   const [lockedAnon, setLockedAnon] = useState(false);
   const [anonIdentity, setAnonIdentity] = useState(null); 
-  // const [anonLoading, setAnonLoading] = useState(true);
+
   const [showAnnoy, setShowAnnoy] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [visible, setVisible] = useState(false);
