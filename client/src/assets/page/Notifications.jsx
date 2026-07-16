@@ -54,7 +54,7 @@ export default function Notifications() {
   //   }
   // };
   const getNotificationIcon = (notification) => {
-    if (notification.is_anonymous) {
+    if (Number(notification.is_anonymous) === 1) {
       return (
           <img
             src={nahideaIAuth}
@@ -192,6 +192,7 @@ export default function Notifications() {
     }
     
     switch(notification.type) {
+      case 'comment':
       case 'comment_reply':
       case 'mention':
         if (notification.post_id) {
@@ -321,6 +322,8 @@ export default function Notifications() {
       : notification.sender_username || "Someone";
 
     switch (notification.type) {
+      case "comment":
+        return `${senderName} comment to your post`;
       case "comment_reply":
         return `${senderName} replied to your comment`;
       case "comment_like":
@@ -343,36 +346,6 @@ export default function Notifications() {
         return `${senderName} interacted with your content`;
     }
   };
-  // const getNotificationContent = (notification) => {
-  //   if (notification.content) {
-  //     return notification.content;
-  //   }
-    
-  //   const senderName = notification.sender_username || 'Someone';
-    
-  //   switch(notification.type) {
-  //     case 'comment_reply':
-  //       return `${senderName} replied to your comment`;
-  //     case 'comment_like':
-  //       return `${senderName} liked your comment`;
-  //     case 'answer':
-  //       return `${senderName} answered your question`;
-  //     case 'post_like':
-  //       return `${senderName} liked your post`;
-  //     case 'mention':
-  //       return `${senderName} mentioned you`;
-  //     case 'answer_upvote':
-  //       return `${senderName} upvoted your answer`;
-  //     case 'answer_downvote':
-  //       return `${senderName} downvoted your answer`;
-  //     case 'follow':
-  //       return `${senderName} started following you`;
-  //     case 'follow_back':
-  //       return `${senderName} followed you back`;
-  //     default:
-  //       return `${senderName} interacted with your content`;
-  //   }
-  // };
 
   return (
     <div className="notification-panel">
