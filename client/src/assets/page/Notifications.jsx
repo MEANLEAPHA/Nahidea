@@ -19,7 +19,7 @@ import api from "../api/axiosInstance";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { useNotifications } from "../context/NotificationContext";
 import nahideaIcon from '../img/nahideaIcon.png';
-import nahideaIAuth from '../img/nahideaAuth.png';
+import nahideaIAuth from '../img/nahIdeaAuth.png';
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
