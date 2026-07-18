@@ -100,13 +100,13 @@ export default function Questiion(){
   
   // resetMap
   const resetMap = {
-    openend:        [ resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating, resetMain],
-    closedend:      [resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating, resetMain],
-    range:          [ resetSingleChoice, resetMultipleChoice, resetRanking, resetRating, resetMain],
-    singlechoice:   [ resetRange, resetMultipleChoice, resetRanking, resetRating, resetMain],
-    multiplechoice: [ resetRange, resetSingleChoice, resetRanking, resetRating, resetMain],
-    rankingorder:   [ resetRange, resetSingleChoice, resetMultipleChoice, resetRating, resetMain],
-    rating:         [ resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetMain],
+    openend:        [ resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+    closedend:      [resetRange, resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+    range:          [ resetSingleChoice, resetMultipleChoice, resetRanking, resetRating],
+    singlechoice:   [ resetRange, resetMultipleChoice, resetRanking, resetRating],
+    multiplechoice: [ resetRange, resetSingleChoice, resetRanking, resetRating],
+    rankingorder:   [ resetRange, resetSingleChoice, resetMultipleChoice, resetRating],
+    rating:         [ resetRange, resetSingleChoice, resetMultipleChoice, resetRanking],
   };
 
   const handlePostType = () => {
@@ -311,7 +311,6 @@ export default function Questiion(){
           <Select
             options={question_options} 
             value={selectType}
-            // onChange={setSelectType}
             onChange={(option) => {
               setSelectType(option);        
             }}
@@ -328,7 +327,9 @@ export default function Questiion(){
                 <span>{option.label}</span>
               </div>
             )}
+            
           />
+        
 
           <div className="title-wrapper">
             <p className="title-label" >Question Text</p>
@@ -346,13 +347,23 @@ export default function Questiion(){
               {title.length}/300
             </div>
           </div>
-
+{/* 
           <Select
             options={question_type} 
             value={questionType}
             onChange={(value) => {
               setQuestionType(value);
-              handlePostType();   
+              handlePostType(value);   
+            }}
+            classNamePrefix="custom"
+            placeholder='Select Question Type'
+          /> */}
+            <Select
+            options={question_type}
+            value={questionType}
+            onChange={(value) => {
+              handlePostType(questionType?.value); // reset fields belonging to the OLD type
+              setQuestionType(value);              // then set the new type
             }}
             classNamePrefix="custom"
             placeholder='Select Question Type'
