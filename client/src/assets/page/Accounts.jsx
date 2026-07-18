@@ -635,7 +635,7 @@ export default function Accounts() {
     <div className="accounts-page">
       <div className="accounts-header">  
         <div id='acc-banner' style={{ "--preview-url-banner": `url(${banner || user?.banner_url || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"})` }}>
-            <img src={banner|| user?.banner_url || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} id="img-banner"/>
+            <img src={banner || user?.banner_url || "https://nahidea.picocolor.site/img/content/1781684161514-Nahidea-Auth-bg.webp"} id="img-banner"/>
         </div>
         <div id='acc-pf-info'>
             <div className='acc-pf-info-child acc-pf-info-child-left'>

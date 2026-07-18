@@ -1312,7 +1312,7 @@ const AboutPost = () => {
               </div>
             </div>
             {
-                post.post_type !== "question" && (
+                post.post_type !== "question" && data.media_url && (
                   <div className="post-thumbnail">
                     <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                       <img src={data.media_url} className="preview-image"/>
