@@ -1194,9 +1194,13 @@ const AboutPost = () => {
                 {post.tags && <div>{tagSplitter(post.tags)}</div>}
               </div>
             </div>
-            <div className='post-thumbnail'>
-              <MediaPreview files={parseJSON(data.media_url)} />
-            </div>
+            {
+              data.media_url &&
+              <div className='post-thumbnail'>
+                <MediaPreview files={parseJSON(data.media_url)} />
+              </div>
+            }
+
           </>
         );
 
@@ -1208,11 +1212,14 @@ const AboutPost = () => {
                 <p>{data.title}</p>
               </div>
             </div>
-            <div className="post-thumbnail">
-              <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
-                <img src={data.media_url} className="preview-image" alt="confession" />
+            {
+              data.media_url &&
+              <div className="post-thumbnail">
+                <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
+                  <img src={data.media_url} className="preview-image"/>
+                </div>
               </div>
-            </div>
+            }
           </>
         );
 
@@ -1314,7 +1321,7 @@ const AboutPost = () => {
             {
                 post.post_type !== "question" && data.media_url && (
                   <div className="post-thumbnail">
-                    <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
+                    <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
                       <img src={data.media_url} className="preview-image"/>
                     </div>
                   </div>
