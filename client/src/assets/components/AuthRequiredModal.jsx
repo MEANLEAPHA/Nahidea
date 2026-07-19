@@ -17,7 +17,7 @@ export default function AuthRequiredModal() {
             className="btn-auth-primary"
             onClick={() => navigate("/login")}
           >
-            Log in
+            Sign in
           </button>
           <button
             className="btn-auth-secondary"

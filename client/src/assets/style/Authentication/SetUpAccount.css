@@ -17,9 +17,7 @@
 
 /* GLOBAL */
 
-* {
-  box-sizing: border-box;
-}
+
 body {
   margin: 0;
   background: var(--background-color);
@@ -66,7 +64,6 @@ body {
     position: absolute;
     inset: 0;
     background: var(--preview-url-banner-setup) center/cover no-repeat;
-    /* object-fit: contain; */
     filter: blur(8px);
     transform: scale(1.1);
     height: 97%;
@@ -99,6 +96,7 @@ body {
 
 
 }
+
 .avatar-wrapper {
   position: relative;
 }
@@ -159,9 +157,9 @@ body {
   border: none;
   border-radius: 50%;
 
-  background: var(--primary-color);
+  background:grey;
   color: white;
-
+ 
   cursor: pointer;
 
   display: flex;
@@ -186,13 +184,11 @@ body {
 
 .setup-right {
   flex: 1;
-
-
   display: flex;
   align-items: start;
   justify-content: center;
  
-  padding: 50px;
+  padding: 25px 50px;
 }
 
 .setup-form {
@@ -213,10 +209,10 @@ body {
   background: var(--back-con);
   color: var(--font-color);
 
-  padding: 18px;
+  padding: 14px 18px;
   border-radius: 10px;
 
-  font-size: 16px;
+  font-size: 14px;
   outline: none;
 }
 
@@ -233,7 +229,7 @@ body {
 .submit-btns {
   width: 100%;
   border: none;
-  background:yellowgreen;
+  background:var(--primary-color);
   color: white;
 
   padding: 18px;

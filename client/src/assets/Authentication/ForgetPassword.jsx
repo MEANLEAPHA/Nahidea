@@ -65,7 +65,15 @@ export const ForgetPassword = () => {
         <div className='toast-feedback'>
         <ToastContainer position="top-right" autoClose={2000} />
         </div>
-
+          <div className="p-page-div">
+          <p className="p-page">nahidea</p>
+          <p className="p2-page">
+           Share content, questions and connect with others 
+          </p>
+          <p className="p2-page">
+            on Nahidea's community
+          </p>
+      </div>
 
 
         <form onSubmit={(e) => { e.preventDefault();  handleSubmit(); }} >        

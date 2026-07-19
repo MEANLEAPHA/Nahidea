@@ -87,6 +87,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
     "https://img.nahidea.com/img/content/1784081044476-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp"
   );
 
+   const [username, setUsername] =
+    useState("");
+
   const [profession, setProfession] =
     useState("");
 
@@ -107,6 +110,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (state) {
       setEmail(state.Email);
+      setUsername(state.Username);
       setUserId(state.UserId);
     }
   }, [state]);
@@ -118,6 +122,7 @@ const handleSubmit = async (e) => {
   try {
     const formData = new FormData();
 
+    formData.append('username', username);
     formData.append('profession', profession);
     formData.append('location', location);
     formData.append('nickname', nickname);
@@ -290,15 +295,30 @@ const handleSubmit = async (e) => {
     <p id="label-info">Build your public identity for Nahidea</p>
       </div>
     </div>
-
-          {/* RIGHT */}
           <div className="setup-right">
 
             <form
               onSubmit={handleSubmit}
               className="setup-form"
             >
+              <div className="input-group">
+                <label className='label-setup'>
+                  Username
+                </label>
 
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  required
+                  title="Enter your nickname"
+                  value={username}
+                  onChange={(e) =>
+                    setNickname(
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
               <div className="input-group">
                 <label className='label-setup'>
                   Profession
@@ -315,7 +335,7 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
+              
                 />
               </div>
 
@@ -335,7 +355,7 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
+             
                 />
               </div>
 
@@ -355,7 +375,6 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
                 />
               </div>
 
@@ -394,10 +413,6 @@ const handleSubmit = async (e) => {
 };
 
 export default SetupAccount;
-
-/* ------------------ */
-/* AVATAR PLAYGROUND */
-/* ------------------ */
 
 function AvatarPlayground({
   setAvatar,

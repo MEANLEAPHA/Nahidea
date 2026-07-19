@@ -24,16 +24,14 @@
     width: 100%;
     height: 100vh;
     margin: 0;
-    padding: 0;
+
     display: flex;
     flex-direction: row;
-    justify-content:center;
+    justify-content:space-around;
     align-items: center;
     position: relative;
-    background-image: url('https://img.nahidea.com/img/confession/1784129249736-Cream-and-Brown-Aesthetic-Quotes-Desktop-Wallpaper.webp');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: rgb(238, 238, 238);
+    flex-wrap: wrap;
 }
 
 .toast-feedback{
@@ -47,7 +45,7 @@ p{
 }
 .container-form form{
     max-width: 50%;
-    width: 40%;
+    width: 35%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -55,6 +53,8 @@ p{
     background: transparent;
     height: auto;
     padding: 0;
+    border-radius: 10px;
+      box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.111);
     
     
 }
@@ -67,7 +67,7 @@ p{
     width: 100%;
     height: 100%;
     margin: 0;
-    border-radius: 50px;
+    border-radius: 10px;
     background: rgba(255, 255, 255, 0.682); /* light glass */
    backdrop-filter: blur(5px);
    -webkit-backdrop-filter: blur(18px); /* Safari/WebKit */
@@ -91,22 +91,28 @@ p{
     font-size: 30px;
     font-family:"Yeseva One", serif;
 }
+.p-page-div{
+    padding:10px;
+    width: 40%;
+}
 .p-page{
     font-family: "Baloo 2", sans-serif;
     color: var(--primary-color);
     font-weight: bold;
-    font-size:35px;
+    font-size:45px;
     margin: 0;
 }
 .p2-page{
     margin: 0;
-    text-align: center;
-    font-family: "Baloo 2", sans-serif;
+    text-align: start;
+    font-family: sans-serif;
     font-weight: bold;
+    margin-top: 5px;
     color:rgb(53, 53, 53);
+   
 }
 .p-page span:first-child{
-    font-size: 30px;
+  
     font-weight: bold;
 
     color: var(--primary-color);
@@ -123,9 +129,7 @@ p{
     opacity: 1;
 }
 .container-input{
-    width: 90%;
-    /* background-color: #FCD999; */
-     
+    width: 100%;
     padding: 5px 0px 5px 0px;
 }
 label{
@@ -143,7 +147,7 @@ label{
     color: rgb(0, 0, 0);
     align-items: center;
      margin-bottom: 15px;
-     border-radius: 10px;
+     border-radius: 5px;
 
     border: 1px solid rgb(62, 62, 62);
 }
@@ -241,24 +245,69 @@ color: rgb(0, 0, 0);
         width: 100%;
         font-size: small;
     }
-    
 
+.div-oauth{
+    border: none;
+    padding: 0;
+}
+.div-or{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border: none;
+}
+.or-line{
+    width:calc(100%/3);
+    height: 1px;
+    background-color: rgb(0, 0, 0);
+    opacity: 0.5;
+    margin: 0;
+    opacity: 0.8;
+    padding: 0;
+    border: none;
+}
+.or-text{
+    color:black;
+    opacity: 0.8;
+    font-size: 15px;
+}
+.oauth-button{
+    border: none;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    width: 280px;
+    position: relative;
+}
+    
+.auth-icon{
+    font-size: 18px;
+    position: absolute;
+    left: 10px;
+  
+}
 
 @media screen and (max-width:1200px){
        .container-form form{
     max-width: 85%;
-    width: 60%;
+    width: 45%;
 
 }
 
 }
-
-
 
 @media screen and (max-width:768px){
 
     .container-form{
         flex-direction: column;
+        gap: 25px;
+        justify-content: start;
+        align-items:center;
+        background-color: white;
        
     }
  
@@ -268,10 +317,13 @@ color: rgb(0, 0, 0);
          height:auto;
     }
        .container-form form{
-    max-width: 98%;
-    width: 95%;
-
-}
+            max-width: 98%;
+            width: 95% ;
+        }
+        .p-page-div{
+                  max-width: 98%;
+            width: 95%;
+        }
 
     .container-image{
         width: 100%;
@@ -282,4 +334,19 @@ color: rgb(0, 0, 0);
         border-top-left-radius: 0px;
     }
     
+    .p-page{
+ 
+    font-size:30px;
+    margin: 0;
+    }
+    .p2-page{
+        margin: 0;
+        text-align: start;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 15px;
+        margin-top: 5px;
+        color:rgb(53, 53, 53);
+    
+    }
 }

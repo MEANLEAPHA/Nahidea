@@ -9,6 +9,7 @@ import "../style/Authentication/SignPage.css";
 import { useAuth } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { loadFacebookSdk } from "../util/loadFacebookSdk";
+import { faFacebook, faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -186,17 +187,19 @@ const Login = () => {
       <div className="toast-feedback">
         <ToastContainer position="top-right" autoClose={2000} />
       </div>
-
+      <div className="p-page-div">
+          <p className="p-page">nahidea</p>
+          <p className="p2-page">
+           Share content, questions and connect with others 
+          </p>
+          <p className="p2-page">
+            on Nahidea's community
+          </p>
+      </div>
       <form onSubmit={(e) => { e.preventDefault(); SubmitLogin(); }}>
         <div className="form-center">
-          <p className="p-page">Nahidea</p>
-          <p className="p2-page">
-            Strength grows when we care beyond ourselves <br />
-            Help others the way you'd want to be helped
-          </p>
-          <br />
           <div className="container-input">
-            <label>Email</label>
+      
             <div className="div-input">
               <input
                 type="email"
@@ -209,7 +212,7 @@ const Login = () => {
                 title="Enter your email account"
               />
             </div>
-            <label>Password</label>
+          
             <div className="div-input">
               <input
                 type={viewPassword}
@@ -229,6 +232,7 @@ const Login = () => {
                   setViewPassword(viewPassword === "password" ? "text" : "password");
                   setEye(viewPassword === "password" ? faEye : faEyeSlash);
                 }}
+                style={{ cursor: "pointer" }}
               />
             </div>
             <div className="div-input div-submit">
@@ -247,49 +251,59 @@ const Login = () => {
                 Forget Password
               </span>
             </div>
-            <div className="div-input" style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+        
+            <div className="div-input div-oauth" style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+              <div className='div-or'>
+                <div className='or-line'></div>
+                <span className='or-text'>Or continue with</span>
+                <div className='or-line'></div>
+              </div>
+     
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => toast.error("Google login failed")}
-              width="100%"
+                width="280"  
+              className='oauth-button'
             />
 
-            <button
+            {/* <button
               type="button"
               onClick={handleFacebookLogin}
               disabled={loading}
               style={{
                 background: "#1877F2",
-                color: "white",
-                border: "none",
-                padding: "10px",
-                borderRadius: "4px",
                 cursor: loading ? "not-allowed" : "pointer",
               }}
               title="Login with Facebook"
+              className='oauth-button'
             >
-              Continue with Facebook
-            </button>
-            <button>
+             <FontAwesomeIcon icon={faFacebook} className='auth-icon'/> Sign in with Facebook
+            </button> */}
+            <button className='oauth-button' 
+              type="button"
+              disabled={loading}
+              style={{
+                background: "#24292e",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+              title="Login with GitHub"
+            >
               <a href={`${API_URL}/api/auth/github`}
                 style={{
                   display: "block",
-                  textAlign: "center",
-                  background: "#24292e",
                   color: "white",
-                  padding: "10px",
-                  borderRadius: "4px",
                   textDecoration: "none",
                 }}
                 title="Login with GitHub"
+                
               >
-                Continue with GitHub
+                <FontAwesomeIcon icon={faGithub} className='auth-icon'/> Sign in with GitHub
               </a>
             </button>
 
           </div>
           </div>
-          <p className="warm-welcome-p">
+          <p className="warm-welcome-p" style={{margin: 0}}>
             Don't have an account?{" "}
             <span onClick={() => navigate("/register")} style={{ color: "green", cursor: "pointer" }} title="Click to create an account">
               Create one

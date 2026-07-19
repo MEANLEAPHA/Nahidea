@@ -324,7 +324,7 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
+             
                 />
               </div>
 
@@ -344,7 +344,7 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
+              
                 />
               </div>
 
@@ -364,7 +364,7 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
+             
                 />
               </div>
 
@@ -381,7 +381,7 @@ const handleSubmit = async (e) => {
                       e.target.value
                     )
                   }
-                  required
+                
                 />
               </div>
 
