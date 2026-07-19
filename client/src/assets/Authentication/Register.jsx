@@ -185,7 +185,7 @@ const Register = () => {
                  Nahidea
               </p>
               <p className="p2-page">
-                Strength grows when we care beyond ourselves <br/>Help others the way you’d want to be helped
+                join and share confessions, questions, and content with the community
               </p>
               <br />
          <div className='container-input'>

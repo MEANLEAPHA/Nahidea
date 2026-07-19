@@ -146,15 +146,16 @@ const handleSubmit = async (e) => {
       }
     );
 
-    if (res.status === 200) {
-      toast.success('Setup successful! Please log in.');
-        navigate("/login");
-      // note: isSubmitting intentionally stays true here — see note below
+   if (res.status === 200) {
+      toast.success('Setup complete!');
+      const hasToken = localStorage.getItem("token"); 
+      navigate(hasToken ? "/home" : "/login");
     }
+
   } catch (err) {
     console.error(err);
     toast.error("Something went wrong, please try again.");
-    setIsSubmitting(false); // only reset on failure, so the button doesn't flash back before navigating away
+    setIsSubmitting(false); 
   }
 };
   return (

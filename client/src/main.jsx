@@ -1,9 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import {AuthProvider} from "./assets/context/AuthContext.jsx";
 import {NotificationProvider} from "./assets/context/NotificationContext.jsx";
 import {RankingProvider} from "./assets/context/RankContext.jsx";
-import App from './App.jsx'
+import App from './App.jsx';
 
 const main = document.getElementById('root');
 const root = createRoot(main);
@@ -13,7 +14,9 @@ root.render(
     <AuthProvider>
       <NotificationProvider>
         <RankingProvider>
-          <App />
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <App />
+          </GoogleOAuthProvider>
         </RankingProvider>
       </NotificationProvider>
     </AuthProvider>
