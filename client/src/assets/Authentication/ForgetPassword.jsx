@@ -44,6 +44,9 @@ export const ForgetPassword = () => {
                   case 404:
                     toast.warning(data.message);
                     break;
+                  case 409:
+                    toast.warning(data.message);
+                    break;
                   case 429:
                     toast.warning(data.message);
                     break;
@@ -116,7 +119,3 @@ export const ForgetPassword = () => {
   
   );
 };
-
-
-
- 
