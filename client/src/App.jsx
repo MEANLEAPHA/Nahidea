@@ -74,6 +74,7 @@ import EditAccount from './assets/page/EditAccount';
 import ReportPost from './assets/page/ReportPost';
 import ReportUser from './assets/page/ReportUser';
 import SearchForm from './assets/page/SearchForm';
+import OAuthCallback from './assets/page/OAuthCallback';
 
 const App = () =>{
     return(
@@ -158,6 +159,7 @@ const App = () =>{
             <Route path='/verifyemailforgetpassword' element={<VerifyEmailForgetPassword/>}></Route>
             <Route path='/newpassword' element={<NewPassword/>}></Route>
             <Route path='/setupaccount' element={<SetupAccount/>}></Route>
+            <Route path="/oauth-callback" element={<OAuthCallback />} />
     
             {/* Not Found page */}
             <Route path='*' element={<NotFound/>}></Route>   

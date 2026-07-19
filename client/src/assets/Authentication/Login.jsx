@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../style/Authentication/SignPage.css";
@@ -149,6 +149,38 @@ const Login = () => {
     }
   };
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (!error) return;
+
+    switch (error) {
+      case "github_no_email":
+        toast.warning("Your GitHub account has no verified email. Please add one on GitHub or register with email instead.");
+        break;
+      case "email_registered_local":
+        toast.warning("This email is already registered. Please log in with your password instead.");
+        break;
+      case "email_registered_other":
+        const provider = searchParams.get("provider");
+        toast.warning(`This email is already registered via ${provider}. Please use that method to log in.`);
+        break;
+      case "github_no_code":
+      case "github_token_failed":
+        toast.error("GitHub login failed, please try again.");
+        break;
+      case "server_error":
+        toast.error("Server error, please try again later.");
+        break;
+      default:
+        toast.warning("Login failed, please try again.");
+    }
+
+    // clean the URL so refreshing doesn't re-trigger the same toast
+    setSearchParams({}, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   return (
     <div className="container-form">
       <div className="toast-feedback">
@@ -238,6 +270,23 @@ const Login = () => {
             >
               Continue with Facebook
             </button>
+            <button>
+              <a href={`${API_URL}/api/auth/github`}
+                style={{
+                  display: "block",
+                  textAlign: "center",
+                  background: "#24292e",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  textDecoration: "none",
+                }}
+                title="Login with GitHub"
+              >
+                Continue with GitHub
+              </a>
+            </button>
+
           </div>
           </div>
           <p className="warm-welcome-p">
