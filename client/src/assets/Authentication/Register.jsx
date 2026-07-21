@@ -9,6 +9,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = import.meta.env.VITE_SERVER_URL; 
+
+import { useAuth } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { loadFacebookSdk } from "../util/loadFacebookSdk";
 import { faFacebook, faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -24,6 +26,8 @@ const checks = {
 
 const Register = () => {
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const [inputUsername, setInputUsername] = useState("");
   const [inputEmail, setInputEmail] = useState("");

@@ -29,10 +29,10 @@
 }
 
 .daily-header {
-  display: flex;
-  justify-content: space-between;
+  display: flex !important;
+  justify-content: space-between !important;
   align-items: center;
-  gap: 1rem;
+  gap: 1rem ! important;
   margin-bottom: 1rem;
 }
 
@@ -71,9 +71,9 @@
 ========================= */
 
 .flip-card {
-  width: 320px;
-  height: 190px;
-  perspective: 1000px;
+  width: 320px !important;
+height: 190px ! important;
+  perspective: 1000px ! important;
   flex-shrink: 0;
 }
 
