@@ -283,14 +283,22 @@ export default function Accounts() {
             <div className="post-caption" onClick={() => openPost(post)}>
               <p>{data.title}</p>
             </div>
-            <div className="post-thumbnail">
+            {/* <div className="post-thumbnail">
               <div
                 className="preview-wrapper"
                 style={{ "--preview-url": `url(${data.media_url})` }}
               >
                 <img src={data.media_url} className="preview-image" alt="confession" />
               </div>
-            </div>
+            </div> */}
+            {
+              data.media_url &&
+              <div className="post-thumbnail">
+                <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
+                  <img src={data.media_url} className="preview-image"/>
+                </div>
+              </div>
+            }
           </>
         );
 

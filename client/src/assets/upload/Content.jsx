@@ -84,11 +84,11 @@ export default function Content() {
       setLoading(false);
       return;
     }
-    if(tags.length === 0 ) {
-      toast("Please add some #hashtags");
-      setLoading(false);
-      return;
-    }
+    // if(tags.length === 0 ) {
+    //   toast("Please add some #hashtags");
+    //   setLoading(false);
+    //   return;
+    // }
     if(selectType === null) {
       toast("Please select content type");
       setLoading(false);
@@ -101,7 +101,7 @@ export default function Content() {
       formData.append("text_body", textBody);
       formData.append("content_type", selectType?.label ?? "general");
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);
-      tags.forEach((t) => formData.append("tags[]", t));
+      tags?.forEach((t) => formData.append("tags[]", t));
       mediaFiles.forEach((f) => formData.append("contentFile", f));
 
     try {

@@ -80,14 +80,14 @@ export default function Confession() {
               setLoading(false);
               return;
     }
-    if(tags.length === 0 ) {
-          toast("Please add some #hashtags");
-          setLoading(false);
-          return;
-    }
+    // if(tags.length === 0 ) {
+    //       toast("Please add some #hashtags");
+    //       setLoading(false);
+    //       return;
+    // }
 
     const formData = new FormData();
-    tags.forEach((t) => formData.append("tags[]", t));
+    tags?.forEach((t) => formData.append("tags[]", t));
     formData.append("post_type", "confession");
     formData.append("confession_title", title);
     formData.append("confession_type", selectType?.label ?? "general");

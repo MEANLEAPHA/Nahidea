@@ -313,7 +313,7 @@ const handleSubmit = async (e) => {
                   title="Enter your nickname"
                   value={username}
                   onChange={(e) =>
-                    setNickname(
+                    setUsername(
                       e.target.value
                     )
                   }

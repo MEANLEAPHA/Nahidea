@@ -273,7 +273,6 @@ function GifCard({ gif }) {
       await api.post(`/api/gifs/favorites/remove`, {gif_id: gif.id},{
         headers: {
           'Content-Type': 'application/json',
-          
         }
       } );
  

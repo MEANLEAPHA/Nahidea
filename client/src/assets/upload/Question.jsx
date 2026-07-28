@@ -197,10 +197,10 @@ export default function Questiion(){
             toast.error("Please select question type");
             return;
       }
-      if(tags.length === 0 ) {
-            toast.error("Please add some #hashtags");
-            return;
-      }
+      // if(tags.length === 0 ) {
+      //       toast.error("Please add some #hashtags");
+      //       return;
+      // }
       if(questionType === null) {
             toast.error("Please select question type");
             return;
@@ -227,7 +227,7 @@ export default function Questiion(){
       }
 
       const formData = new FormData();
-      tags.forEach((t) => formData.append("tags[]", t));
+      tags?.forEach((t) => formData.append("tags[]", t));
       formData.append("post_type", "question");
       formData.append("question_related_to", selectType?.label ?? "general");
       formData.append("isAnonymous", isAnonymous === true ? 1 : 0);

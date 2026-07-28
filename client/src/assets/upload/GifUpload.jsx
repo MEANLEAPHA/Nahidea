@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import api from "../api/axiosInstance";
 import toast from "react-hot-toast";
 import "../style/upload/GifUpload.css";

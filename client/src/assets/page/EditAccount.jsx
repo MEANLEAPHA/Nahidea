@@ -64,7 +64,7 @@ const EditAccount = () => {
 
   const { state } = useLocation();
 
-  if(!state) return navigate(-1);
+  // if(!state) return navigate(-1);
 
   // if(!state?.Email || !state?.UserId) return navigate("/login");
 
@@ -132,6 +132,7 @@ const handleSubmit = async (e) => {
 
     formData.append('profession', profession);
     formData.append('location', location);
+    formData.append('username', username);
     formData.append('nickname', nickname);
     formData.append('userId', Number(userId));
     formData.append('email', email);
@@ -307,6 +308,45 @@ const handleSubmit = async (e) => {
               onSubmit={handleSubmit}
               className="setup-form"
             >
+                            <div className="input-group">
+                <label className='label-setup'>
+                  Username
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="Your username"
+                  required
+                  title="Enter your username"
+                  value={username}
+                  onChange={(e) =>
+                    setUsername(
+                      e.target.value
+                    )
+                  }
+             
+                />
+              </div>
+
+              <div className="input-group">
+                <label className='label-setup'>
+                  Nickname
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="NahideaLover"
+                  required
+                  title="Enter your nickname"
+                  value={nickname}
+                  onChange={(e) =>
+                    setNickname(
+                      e.target.value
+                    )
+                  }
+             
+                />
+              </div>
 
               <div className="input-group">
                 <label className='label-setup'>
@@ -345,26 +385,6 @@ const handleSubmit = async (e) => {
                     )
                   }
               
-                />
-              </div>
-
-              <div className="input-group">
-                <label className='label-setup'>
-                  Nickname
-                </label>
-
-                <input
-                  type="text"
-                  placeholder="NahideaLover"
-                  required
-                  title="Enter your nickname"
-                  value={nickname}
-                  onChange={(e) =>
-                    setNickname(
-                      e.target.value
-                    )
-                  }
-             
                 />
               </div>
 

@@ -376,19 +376,25 @@ export default function Home() {
       case "confession":
         return (
           <>
-                   <div className='post-caption' onClick={ () => { openPost(post) }}>
+              <div className='post-caption' onClick={ () => { openPost(post) }}>
                     <p>{data.title}</p>
+              </div>     
+              {
+                data.media_url &&
+                <div className="post-thumbnail">
+                  <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
+                    <img src={data.media_url} className="preview-image"/>
+                  </div>
                 </div>
-             
-                  
-              <div className="post-thumbnail">
+              }
+              {/* <div className="post-thumbnail">
                 <div className="preview-wrapper"  style={{ "--preview-url": `url(${data.media_url})` }}>
                   <img
                     src={data.media_url}
                     className="preview-image"
                   />
                 </div>
-              </div>
+              </div> */}
 
           </>
         );

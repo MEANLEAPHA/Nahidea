@@ -168,14 +168,22 @@ const Trending = () => {
             <div className="post-caption" onClick={() => openPost(post)}>
               <p>{data.title}</p>
             </div>
-            <div className="post-thumbnail">
+            {
+              data.media_url &&
+              <div className="post-thumbnail">
+                <div className="preview-wrapper" style={{ "--preview-url": `url(${data.media_url})` }}>
+                  <img src={data.media_url} className="preview-image"/>
+                </div>
+              </div>
+            }
+            {/* <div className="post-thumbnail">
               <div
                 className="preview-wrapper"
                 style={{ "--preview-url": `url(${data.media_url})` }}
               >
-                <img src={data.media_url} className="preview-image" alt="confession" />
+                <img src={data.media_url} className="preview-image" />
               </div>
-            </div>
+            </div> */}
           </>
         );
 
