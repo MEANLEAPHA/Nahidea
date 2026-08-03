@@ -19,7 +19,7 @@
 .radio-button-div-chat{
     padding: 0;
     margin-bottom: 10px;
-  
+   width: 100% !important;
 }
 .friend-list-search{
     width: 100%;

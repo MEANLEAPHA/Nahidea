@@ -116,7 +116,7 @@ export default function Accounts() {
       setPage(1);
       fetchFollowStatus();
       handleFetchProfile(targetId); // pass it through
-    }, [state?.userId, user?.id]);
+    }, [targetId]);
 
     const handleFetchProfile = async (targetId) => {
       if (!targetId) return;
@@ -308,7 +308,12 @@ export default function Accounts() {
            <div className="post-caption" onClick={() => openPost(post)}>
               <p>{data.title}</p>
             </div>
-            <div className="post-question-answer-preview" onClick={() => openPost(post)}>
+            <div className="post-question-answer-preview" 
+              onClick={(e) =>{ 
+                e.stopPropagation(); 
+                navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)
+              }}
+            >
               {data.question_type === "closedend" && (
 
                         <div className="yesno-div">

@@ -29,12 +29,15 @@ const SHORTCUTS = [
   { label: "Cycle navigation backward", keys: "SHIFT + TAB" },
 ];
 const VISUAL_ITEMS = [
-  "Responsive layouts for common screen sizes",
-  "Readable light & dark themes",
+  "Responsive layouts for common laptopscreen sizes. We still improving the mobile layout.",
+  "Support readable light & dark themes",
 ];
 const TECH = ["NVDA", "VoiceOver"];
 const LIMITS = [
-  { title: "Rich-text editor", body: "Some toolbar controls don't yet have keyboard shortcuts." },
+  { title: "Better comment nesting", body: "We're working to improve user experience for nested comments." },
+  { title: "Powerful searching", body: "Still collecting the data on hash tags, title, and content." },
+  { title: "Make questions more discoverable", body: "Unsolved questions are still being collected." },
+  { title: "Design a very simple interface for the UX/UI ", body: "Make user experience more simple and comfortable." },
 ];
 export default function Accessibility() {
   return (
@@ -44,7 +47,7 @@ export default function Accessibility() {
         <div className="a11y-nav-right">
           <a href="#feedback" className="a11y-nav-link">Feedback</a>
           <div className="a11y-nav-divider" />
-          <span className="a11y-nav-meta">Last Update: Jan 2026</span>
+          <span className="a11y-nav-meta">Last Update: August 3, 2026</span>
         </div>
       </div>
       <div id="main-content" className="a11y-hero">
@@ -85,46 +88,24 @@ export default function Accessibility() {
             ))}
           </ul>
         </Card>
-        <Card className="span-4" delay={200}>
-          <Eyebrow>03 — Screen Readers</Eyebrow>
-          <h3>Basic Support</h3>
-          <div className="a11y-tech-grid">
-            {TECH.map((name) => <TechPill key={name} name={name} />)}
-          </div>
-          <p className="a11y-tech-note">
-            Basic testing done with common screen readers.
-          </p>
-        </Card>
-        <Card className="span-8 secondary" delay={250}>
-          <div className="a11y-shortcuts-header">
-            <div>
-              <Eyebrow>04 — Navigation</Eyebrow>
-              <h3>Keyboard Shortcuts</h3>
-            </div>
-          </div>
-          <div>
-            {SHORTCUTS.map((s) => <ShortcutRow key={s.label} {...s} />)}
-          </div>
-        </Card>
         <Card className="span-6" delay={300}>
-          <Eyebrow>05 — Future</Eyebrow>
+          <Eyebrow>03 — Future</Eyebrow>
           <h3>What We're Working On</h3>
           <p style={{ marginBottom: 24, fontSize: 14 }}>
-            We're planning improvements to focus indicators and expanding alt-text
-            support for images over time.
+            We're planning improvements responsive to different screen sizes, improve user feed and experience.
           </p>
         </Card>
         <Card className="span-6 brand" delay={350}>
           <div id="feedback" />
-          <Eyebrow tone="on-brand">06 — Help</Eyebrow>
+          <Eyebrow tone="on-brand">04 — Help</Eyebrow>
           <h3>Found a barrier?</h3>
           <p>
             If something isn't accessible for you, let us know and we'll look into it.
           </p>
-          <a href="mailto:support@nahidea.com">support@nahidea.com</a>
+          <a href="https://nahidea.com/Feedback">Feedback</a>
         </Card>
         <Card className="span-12" delay={400}>
-          <Eyebrow>07 — Transparency</Eyebrow>
+          <Eyebrow>05 — Transparency</Eyebrow>
           <h3>Known Limitations</h3>
           <p style={{ marginBottom: 24, fontSize: 14, maxWidth: 720 }}>
             We're being upfront about what still needs work.
@@ -142,7 +123,7 @@ export default function Accessibility() {
       </div>
       <div className="a11y-footer">
         <div className="a11y-footer-note">
-          Nahidea Accessibility Statement. Last updated January 2026.
+          Nahidea Accessibility Statement. Last updated August 3, 2026.
         </div>
         <div className="a11y-footer-status">
           <div className="a11y-status-dot" />

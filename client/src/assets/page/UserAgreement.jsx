@@ -74,7 +74,7 @@ const sections = [
     tag: "SUPPORT",
     title: "Contact Information",
     content:
-      "If you have questions, concerns, or legal inquiries regarding this User Agreement or the platform, you may contact the Nahidea support team through the official support channels provided within the platform.",
+      "If you have questions, concerns, or legal inquiries regarding this User Agreement or the platform, you may give us feedback.",
   },
 ];
 
@@ -142,7 +142,7 @@ export default function UserAgreement() {
         {/* CONTENT */}
         <div className="ua-main">
           <header className="ua-header">
-            <h1 className="ua-title"><FontAwesomeIcon icon={faHandshake} /> User Agreement</h1>
+            <h1 className="ua-title"> User Agreement</h1>
             <p className="ua-effective"> <FontAwesomeIcon icon={faCalendarDays} /> Effective: Jan 06, 2026</p>
           </header>
 
@@ -167,8 +167,8 @@ export default function UserAgreement() {
                     <h3 className="ua-section-title">{sec.title}</h3>
                     <p className="ua-section-text">{sec.content}</p>
                     {isLast && (
-                      <a className="ua-cta" href="mailto:support@nahidea.com">
-                        support@nahidea.com
+                      <a className="ua-cta" href="https://nahidea.com/Feedback">
+                        Feedback
                       </a>
                     )}
                   </div>

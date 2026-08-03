@@ -1230,7 +1230,10 @@ const AboutPost = () => {
               <div className='post-caption'>
                 <p>{data.title}</p>
               </div>
-              <div className="post-question-answer-preview">
+              <div className="post-question-answer-preview"  
+              onClick={(e) =>{ 
+                    e.stopPropagation(); 
+                    navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}}>
                 {data.question_type === "closedend" && (
                   <div className="yesno-div render-qa-post">
                             <div className="yes-chip">

@@ -188,7 +188,6 @@ export default function Rule() {
           <header className="ua-header">
 
             <h1 className="ua-title">
-              <FontAwesomeIcon icon={faShieldHalved} />
               Community Rules
             </h1>
 
@@ -240,9 +239,6 @@ export default function Rule() {
 
                     {isLast && (
                       <div className="ua-rule-note">
-
-                        <FontAwesomeIcon icon={faScaleBalanced} />
-
                         <span>
                           Violations may result in warnings,
                           content removal, account restrictions,

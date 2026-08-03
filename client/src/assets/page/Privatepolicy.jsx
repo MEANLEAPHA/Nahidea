@@ -247,8 +247,6 @@ export default function PrivacyPolicy() {
 
             <h1 className="ua-title">
 
-              <FontAwesomeIcon icon={faShield} />
-
               Privacy Policy
 
             </h1>
@@ -314,7 +312,7 @@ export default function PrivacyPolicy() {
 
                       <div className="ua-rule-note">
 
-                        <FontAwesomeIcon icon={faDatabase} />
+                      
 
                         <span>
                           Nahidea continuously reviews

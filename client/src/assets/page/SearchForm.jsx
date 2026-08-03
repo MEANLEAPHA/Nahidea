@@ -247,7 +247,11 @@ const SearchForm = () => {
            <div className="post-caption" onClick={() => openPost(post)}>
               <p>{data.title}</p>
             </div>
-            <div className="post-question-answer-preview" onClick={() => openPost(post)}>
+            <div className="post-question-answer-preview" 
+             onClick={(e) =>{ 
+                    e.stopPropagation(); 
+                    navigate(`/answer/${post?.id}/${post?.data?.id}/${post?.data?.question_type}`)}}
+            >
               {data.question_type === "closedend" && (
 
                         <div className="yesno-div">
